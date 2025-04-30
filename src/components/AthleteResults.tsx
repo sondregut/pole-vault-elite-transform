@@ -1,23 +1,21 @@
+
 const AthleteResults = () => {
   const athletes = [
     {
       name: "Owen Anderson",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Owen.png",
-      improvement: "+1.2m Improvement",
       quote: "Team Guttormsen took me from an all-time low to achieving a new personal best! After breaking my back, they were at my side educating me on how to work through a fractured back.",
       info: "Collegiate D1 Athlete • 3 months with us"
     },
     {
       name: "Garrett Lynch",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Garrett%20(1).png", 
-      improvement: "+0.3m Improvement",
       quote: "Sondre was always available for questions and concerns on training or technique. The training was tailored to me specifically and had me feeling strong and fast while recovering from injuries!",
       info: "Collegiate Pole Vaulter • Summer 2024"
     },
     {
       name: "Gabriel Thai",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Gabriel.png",
-      improvement: "+0.3m Improvement",
       quote: "In the two months I worked with Sondre over the summer, I added over a foot to my jump. With every video review, Sondre gave me helpful cues that greatly refined my jumps.",
       info: "Brown Track & Field • 2 months with us"
     }
@@ -46,11 +44,8 @@ const AthleteResults = () => {
                 />
               </div>
               <div className="p-6">
-                <div className="flex justify-between items-center mb-4">
+                <div className="mb-4">
                   <h3 className="text-xl font-semibold text-gray-900">{athlete.name}</h3>
-                  <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
-                    {athlete.improvement}
-                  </span>
                 </div>
                 <p className="text-gray-600">"{athlete.quote}"</p>
                 <div className="mt-4 flex items-center">
