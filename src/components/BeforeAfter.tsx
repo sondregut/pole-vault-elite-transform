@@ -1,4 +1,6 @@
 
+import { Check, X } from "lucide-react";
+
 const BeforeAfter = () => {
   const beforeItems = [
     "Hips Sinking",
@@ -34,7 +36,7 @@ const BeforeAfter = () => {
             <ul className="space-y-4">
               {beforeItems.map((item, index) => (
                 <li key={index} className="flex items-center text-gray-700">
-                  <i className="ri-close-circle-line text-red-500 text-xl mr-3"></i>
+                  <X className="text-red-500 mr-3 h-5 w-5" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -54,7 +56,7 @@ const BeforeAfter = () => {
             <ul className="space-y-4">
               {afterItems.map((item, index) => (
                 <li key={index} className="flex items-center text-gray-700">
-                  <i className="ri-checkbox-circle-line text-green-600 text-xl mr-3"></i>
+                  <Check className="text-green-600 mr-3 h-5 w-5" />
                   <span>{item}</span>
                 </li>
               ))}

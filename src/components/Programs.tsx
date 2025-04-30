@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 
 const Programs = () => {
   const programs = [
@@ -82,9 +83,7 @@ const Programs = () => {
                 <ul className="space-y-3">
                   {program.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start">
-                      <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
-                        <i className="ri-check-line"></i>
-                      </div>
+                      <Check className="text-primary h-5 w-5 mt-0.5 flex-shrink-0" />
                       <span className="ml-3 text-gray-600">{feature}</span>
                     </li>
                   ))}
