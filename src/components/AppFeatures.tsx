@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Video, LineChart, MessageCircle } from "lucide-react";
@@ -51,53 +52,16 @@ const AppFeatures = () => {
             </div>
           </div>
           <div className="lg:w-1/2 order-1 lg:order-2">
-            <div className="relative w-full min-h-[700px] bg-gradient-to-b from-blue-50 to-white rounded-3xl p-8">
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/50 rounded-full blur-2xl"></div>
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl"></div>
+            <div className="relative w-full min-h-[700px] flex justify-center items-center p-8">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//6D0EC66B-6190-429D-83D8-39960882D009.jpg"
+                alt="TrainHeroic App Interface"
+                className="w-full h-auto rounded-3xl shadow-2xl max-w-md mx-auto"
+              />
               
-              {/* Device mockups */}
-              <div className="relative w-full h-full flex items-center justify-center">
-                {/* Background devices */}
-                <div className="absolute transform -translate-x-[45%] translate-y-[5%] w-[260px]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-gray-900 to-gray-800 rounded-[38px] blur-sm"></div>
-                    <img
-                      src="/app-screen-1.jpg"
-                      alt="TrainHeroic Exercise Library"
-                      className="relative w-full h-auto rounded-[32px] border-[8px] border-gray-900 shadow-2xl transform -rotate-12"
-                    />
-                  </div>
-                </div>
-                <div className="absolute transform translate-x-[45%] translate-y-[5%] w-[260px]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-gray-900 to-gray-800 rounded-[38px] blur-sm"></div>
-                    <img
-                      src="/app-screen-2.jpg"
-                      alt="TrainHeroic Progress Tracking"
-                      className="relative w-full h-auto rounded-[32px] border-[8px] border-gray-900 shadow-2xl transform rotate-12"
-                    />
-                  </div>
-                </div>
-                
-                {/* Main device */}
-                <div className="relative w-[300px] z-10">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-gray-900 to-gray-800 rounded-[42px] blur-sm"></div>
-                  <img
-                    src="/app-screen-3.jpg"
-                    alt="TrainHeroic Workout Tracking"
-                    className="relative w-full h-auto rounded-[32px] border-[12px] border-gray-900 shadow-2xl"
-                  />
-                  {/* Status bar */}
-                  <div className="absolute top-[12px] left-[12px] right-[12px] h-6 flex items-center justify-between px-4">
-                    <span className="text-white text-xs">9:41</span>
-                    <div className="flex items-center space-x-1">
-                      <i className="ri-signal-wifi-line text-white text-xs"></i>
-                      <i className="ri-battery-line text-white text-xs"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 rounded-full blur-2xl -z-10"></div>
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl -z-10"></div>
             </div>
           </div>
         </div>
