@@ -27,7 +27,7 @@ const CoachProfile = () => {
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/2">
             <img
-              src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Noah%20(1).png"
+              src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre23%20jubel.jpeg"
               alt="Coach Sondre"
               className="w-full h-auto rounded-lg shadow-lg"
             />
