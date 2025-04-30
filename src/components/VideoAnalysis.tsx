@@ -1,20 +1,22 @@
 
+import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Camera, Pencil, MessageSquare } from "lucide-react";
 
 const VideoAnalysis = () => {
   const features = [
     {
-      icon: "ri-camera-line",
+      icon: <Camera className="text-[#3176FF]" />,
       title: "Easy Video Uploads",
       description: "Upload your jumps directly through TrainHeroic or send them via email - whatever works best for you."
     },
     {
-      icon: "ri-edit-line",
+      icon: <Pencil className="text-[#3176FF]" />,
       title: "Detailed Analysis",
       description: "Receive comprehensive feedback with drawn annotations, slow-motion breakdown, and specific cues for improvement."
     },
     {
-      icon: "ri-video-chat-line",
+      icon: <MessageSquare className="text-[#3176FF]" />,
       title: "Follow-up Consultation",
       description: "Schedule a video call to discuss the analysis and get clarity on implementation strategies."
     }
@@ -42,8 +44,8 @@ const VideoAnalysis = () => {
             <div className="space-y-6 mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i className={`${feature.icon} text-primary text-xl`}></i>
+                  <div className="w-12 h-12 bg-[#EBF1FF] rounded-full flex items-center justify-center">
+                    {feature.icon}
                   </div>
                   <div className="ml-4">
                     <h4 className="text-xl font-semibold text-gray-900">{feature.title}</h4>
