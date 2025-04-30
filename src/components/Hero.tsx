@@ -11,7 +11,7 @@ const Hero = () => {
     >
       <div className="w-full min-h-[calc(100vh-5rem)] flex items-center justify-center">
         <div className="hero-content w-full md:w-3/5 p-8 md:p-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-center line-clamp-2 max-h-[2.5em]">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-center">
             Ready to Take Your Pole Vaulting to the Next Level?
           </h1>
           <p className="text-lg md:text-xl text-white/90 mt-6 max-w-2xl mx-auto text-center">
