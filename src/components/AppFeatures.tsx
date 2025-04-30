@@ -1,21 +1,21 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Video, LineChart, MessageCircle } from "lucide-react";
 
 const AppFeatures = () => {
   const features = [
     {
-      icon: "ri-video-line",
+      icon: <Video className="text-primary text-xl" />,
       title: "HD Exercise Demonstrations",
       description: "Watch detailed exercise demos from Sondre and Simen showing perfect technique for every movement."
     },
     {
-      icon: "ri-line-chart-line",
+      icon: <LineChart className="text-primary text-xl" />,
       title: "Progress Tracking",
       description: "Log your weights, sets, reps, and PRs. Track your improvement with detailed analytics and progress charts."
     },
     {
-      icon: "ri-message-3-line",
+      icon: <MessageCircle className="text-primary text-xl" />,
       title: "Direct Coach Communication",
       description: "Message Sondre directly through the app for form checks, questions, or training adjustments."
     }
@@ -37,7 +37,7 @@ const AppFeatures = () => {
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i className={`${feature.icon} text-primary text-xl`}></i>
+                    {feature.icon}
                   </div>
                   <div className="ml-4">
                     <h4 className="text-xl font-semibold text-white">{feature.title}</h4>
