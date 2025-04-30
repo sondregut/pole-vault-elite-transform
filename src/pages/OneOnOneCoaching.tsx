@@ -17,7 +17,7 @@ const OneOnOneCoaching: React.FC = () => {
       <section 
         className="hero-section w-full pt-20 relative bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//BB250322JM040.jpg')` 
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg')` 
         }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
