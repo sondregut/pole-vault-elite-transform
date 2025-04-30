@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -115,7 +114,7 @@ const OneOnOneCoaching: React.FC = () => {
             </div>
             <div className="relative">
               <img
-                src="/coach.jpg"
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//b32b45552903d9cdedfa0a1bfabc437a.png"
                 alt="1:1 Coaching Session"
                 className="w-full h-auto rounded-lg shadow-xl"
               />
