@@ -28,6 +28,7 @@ const Navbar = () => {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Programs", href: "/programs" },
+    { name: "1:1 Coaching", href: "/coaching" },
     { name: "App", href: "/app" },
     { name: "Success Stories", href: "/success-stories" },
     { name: "Shop", href: "/shop" },
