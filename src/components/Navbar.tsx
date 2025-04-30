@@ -29,7 +29,7 @@ const Navbar = () => {
     { name: "About", href: "/about" },
     { name: "Programs", href: "/programs" },
     { name: "1:1 Coaching", href: "/coaching" },
-    { name: "App", href: "/app" },
+    { name: "PVT App", href: "https://g-forcetraining.com/", external: true },
     { name: "Success Stories", href: "/success-stories" },
     { name: "Shop", href: "/shop" },
     { name: "Contact", href: "/contact" },
@@ -43,15 +43,27 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.href}
-              className={`text-gray-800 font-medium hover:text-primary transition ${
-                location.pathname === link.href ? "text-primary" : ""
-              }`}
-            >
-              {link.name}
-            </Link>
+            link.external ? (
+              <a
+                key={link.name}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-800 font-medium hover:text-primary transition"
+              >
+                {link.name}
+              </a>
+            ) : (
+              <Link
+                key={link.name}
+                to={link.href}
+                className={`text-gray-800 font-medium hover:text-primary transition ${
+                  location.pathname === link.href ? "text-primary" : ""
+                }`}
+              >
+                {link.name}
+              </Link>
+            )
           ))}
         </div>
 
@@ -71,16 +83,29 @@ const Navbar = () => {
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-md">
           <div className="container mx-auto py-4 flex flex-col">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className={`py-3 text-gray-900 hover:text-primary border-b border-gray-100 ${
-                  location.pathname === link.href ? "text-primary" : ""
-                }`}
-                onClick={toggleMenu}
-              >
-                {link.name}
-              </Link>
+              link.external ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-3 text-gray-900 hover:text-primary border-b border-gray-100"
+                  onClick={toggleMenu}
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className={`py-3 text-gray-900 hover:text-primary border-b border-gray-100 ${
+                    location.pathname === link.href ? "text-primary" : ""
+                  }`}
+                  onClick={toggleMenu}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
             <div className="mt-4">
               <Button className="w-full">Apply for Coaching</Button>
