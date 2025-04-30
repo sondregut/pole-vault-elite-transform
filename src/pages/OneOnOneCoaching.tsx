@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,10 +9,13 @@ import { Check, Calendar, User, Users, Pencil, MessageSquare, Video } from "luci
 const OneOnOneCoaching: React.FC = () => {
   return (
     <div className="bg-white">
+      {/* Add Navbar component */}
+      <Navbar />
+      
       {/* Hero Section */}
       <section className="hero-section w-full pt-20 relative">
         <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative container mx-auto px-4 py-20">
+        <div className="relative container mx-auto px-8 md:px-16 lg:px-24 py-20">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
               Transform Your Vaulting with Personalized Coaching from an Olympian
@@ -44,7 +48,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* 1:1 Coaching Overview */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               1:1 Coaching Experience
@@ -122,7 +126,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* Coaching Process */}
       <section id="coaching-process" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Coaching Process Overview
@@ -374,7 +378,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* App Features */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Coaching App Features
@@ -491,7 +495,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* App Screenshots */}
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">App Interface</h2>
             <p className="text-lg text-gray-600">
@@ -565,7 +569,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* Testimonials */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               What Our Athletes Say
@@ -663,7 +667,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* Download Section */}
       <section className="py-16 bg-primary">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h2 className="text-3xl font-bold mb-6">Download Our App Today</h2>
@@ -730,7 +734,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* FAQ Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Frequently Asked Questions
@@ -813,7 +817,7 @@ const OneOnOneCoaching: React.FC = () => {
 
       {/* CTA Section */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             Ready to Transform Your Pole Vault Journey?
           </h2>
