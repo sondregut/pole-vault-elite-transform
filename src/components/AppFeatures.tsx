@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Button } from "@/components/ui/button";
 
 const AppFeatures = () => {
@@ -21,7 +21,7 @@ const AppFeatures = () => {
   ];
 
   return (
-    <section className="py-20">
+    <section className="py-20 bg-[#101827] text-white">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/2 order-2 lg:order-1">

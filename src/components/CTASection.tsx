@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 const CTASection = () => {
   return (
-    <section className="py-20 bg-[#3176FF]">
+    <section className="py-20 bg-[#101827]">
       <div className="container mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
           Ready to Transform Your Pole Vaulting?
