@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -33,7 +34,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+    <nav className={`fixed top-0 left-0 right-0 bg-white z-50 transition-shadow ${isScrolled ? "shadow-md" : ""}`}>
       <div className="container mx-auto py-3 flex items-center justify-between">
         <Link to="/" className="text-2xl font-['Pacifico'] text-primary">logo</Link>
 
@@ -43,7 +44,9 @@ const Navbar = () => {
             <Link
               key={link.name}
               to={link.href}
-              className="text-gray-800 font-medium hover:text-primary transition"
+              className={`text-gray-800 font-medium hover:text-primary transition ${
+                location.pathname === link.href ? "text-primary" : ""
+              }`}
             >
               {link.name}
             </Link>
@@ -69,7 +72,9 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.href}
-                className="py-3 text-gray-900 hover:text-primary border-b border-gray-100"
+                className={`py-3 text-gray-900 hover:text-primary border-b border-gray-100 ${
+                  location.pathname === link.href ? "text-primary" : ""
+                }`}
                 onClick={toggleMenu}
               >
                 {link.name}
