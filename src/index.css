@@ -90,17 +90,16 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: 'Inter', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+    @apply font-inter font-semibold tracking-tight text-secondary;
   }
 
   .section-heading {
-    @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4;
+    @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-secondary mb-4;
   }
 
   .section-subheading {
@@ -110,11 +109,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors;
+    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-button transition-colors;
   }
 
   .btn-outline {
-    @apply border-2 border-primary text-primary hover:bg-primary-light font-medium py-3 px-6 rounded-md transition-colors;
+    @apply border-2 border-primary text-primary hover:bg-primary-light font-medium py-3 px-6 rounded-button transition-colors;
   }
 
   .feature-card {
@@ -126,7 +125,7 @@
   }
 
   .nav-link {
-    @apply text-gray-700 hover:text-primary transition-colors relative pb-1;
+    @apply text-gray-700 hover:text-primary transition-colors relative pb-1 font-medium;
   }
 
   .nav-link::after {

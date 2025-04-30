@@ -14,13 +14,13 @@ const Hero = () => {
             Transform your technique, increase your height, and achieve your personal best.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary text-white hover:bg-blue-600">
+            <Button size="lg" className="bg-primary text-white hover:bg-primary-dark rounded-button">
               Apply for Coaching
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
-              className="bg-white/10 text-white border-2 border-white hover:bg-white/20"
+              className="bg-white/10 text-white border-2 border-white hover:bg-white/20 rounded-button"
             >
               Explore Programs
             </Button>

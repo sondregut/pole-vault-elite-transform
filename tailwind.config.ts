@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -30,16 +29,16 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#3B82F6', // Blue-500
+					DEFAULT: '#3176FF', // Updated primary color
 					foreground: '#FFFFFF',
-					light: '#DBEAFE', // Blue-100
-					dark: '#1E40AF', // Blue-800
+					light: '#DBEAFE',
+					dark: '#1E40AF',
 				},
 				secondary: {
-					DEFAULT: '#10B981', // Green-500
+					DEFAULT: '#1E293B', // Secondary color for headings
 					foreground: '#FFFFFF',
-					light: '#D1FAE5', // Green-100
-					dark: '#047857', // Green-800
+					light: '#D1FAE5',
+					dark: '#047857',
 				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
@@ -70,13 +69,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				gray: {
+					300: '#D1D5DB',
+					400: '#9CA3AF',
+					600: '#4B5563',
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)',
-				button: '8px',
+				button: '8px', // Consistent button radius
 			},
 			keyframes: {
 				'accordion-down': {
