@@ -1,9 +1,10 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check } from "lucide-react";
+import { Check, Calendar, User } from "lucide-react";
 
 const OneOnOneCoaching: React.FC = () => {
   return (
@@ -22,18 +23,19 @@ const OneOnOneCoaching: React.FC = () => {
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                size="lg" 
-                className="flex items-center justify-center gap-2"
+                size="xl" 
+                variant="cta"
+                className="rounded-full px-8"
               >
-                <i className="ri-user-star-line text-xl"></i>
+                <User className="text-white" size={24} />
                 Start Training Today
               </Button>
               <Button 
-                size="lg" 
-                variant="outline"
-                className="bg-white text-primary flex items-center justify-center gap-2"
+                size="xl" 
+                variant="cta-outline"
+                className="rounded-full px-8"
               >
-                <i className="ri-calendar-line text-xl"></i>
+                <Calendar className="text-primary" size={24} />
                 Schedule a Call
               </Button>
             </div>
@@ -823,16 +825,19 @@ const OneOnOneCoaching: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              size="lg" 
-              className="flex items-center gap-2"
+              size="xl" 
+              variant="cta"
+              className="rounded-full px-8"
             >
+              <User className="text-white" size={24} />
               Apply for 1:1 Coaching
             </Button>
             <Button 
-              size="lg" 
-              variant="outline"
-              className="bg-white text-gray-800 border-gray-300 hover:bg-gray-50 flex items-center gap-2"
+              size="xl" 
+              variant="cta-outline"
+              className="rounded-full px-8"
             >
+              <Calendar className="text-primary" size={24} />
               Download the App
             </Button>
           </div>

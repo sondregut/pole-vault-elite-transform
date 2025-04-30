@@ -30,10 +30,10 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#3b82f6', // Blue color matching the reference
+					DEFAULT: '#4f7df3', // Updated to match the blue in the image
 					foreground: '#FFFFFF',
 					light: '#DBEAFE',
-					dark: '#2563eb',
+					dark: '#3966d6',
 				},
 				secondary: {
 					DEFAULT: '#10b981',
