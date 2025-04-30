@@ -28,9 +28,9 @@ const VideoAnalysis = () => {
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/2">
             <img
-              src="/video-analysis.jpg"
+              src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//pv%20review%20.png"
               alt="Video Analysis Demo"
-              className="w-full h-auto max-w-[400px] rounded-lg shadow-lg"
+              className="w-full h-auto rounded-lg shadow-lg"
             />
           </div>
           <div className="lg:w-1/2">

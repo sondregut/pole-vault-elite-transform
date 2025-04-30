@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 
@@ -25,10 +26,10 @@ const AppFeatures = () => {
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/2 order-2 lg:order-1">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Access Your Training Through TrainHeroic
             </h2>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-lg text-white mb-8">
               Get instant access to your personalized training program through TrainHeroic - 
               the premier training platform used by elite athletes worldwide.
             </p>
@@ -39,8 +40,8 @@ const AppFeatures = () => {
                     <i className={`${feature.icon} text-primary text-xl`}></i>
                   </div>
                   <div className="ml-4">
-                    <h4 className="text-xl font-semibold text-gray-900">{feature.title}</h4>
-                    <p className="text-gray-600">{feature.description}</p>
+                    <h4 className="text-xl font-semibold text-white">{feature.title}</h4>
+                    <p className="text-white">{feature.description}</p>
                   </div>
                 </div>
               ))}
