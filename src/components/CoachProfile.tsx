@@ -1,20 +1,21 @@
 
 import { Button } from "@/components/ui/button";
+import { Award, Trophy, GraduationCap } from "lucide-react";
 
 const CoachProfile = () => {
   const achievements = [
     {
-      icon: "ri-medal-line",
+      icon: <Award className="text-[#3176FF]" />,
       title: "Olympic Finalist",
       description: "8th place finish at the Olympic Games"
     },
     {
-      icon: "ri-trophy-line",
+      icon: <Trophy className="text-[#3176FF]" />,
       title: "Collegiate Record Holder",
       description: "6.00m personal best and 3x NCAA Champion"
     },
     {
-      icon: "ri-graduation-cap-line",
+      icon: <GraduationCap className="text-[#3176FF]" />,
       title: "Academic Excellence",
       description: "Princeton University graduate with Masters in Sports Management"
     }
@@ -42,8 +43,8 @@ const CoachProfile = () => {
             <div className="space-y-4 mb-8">
               {achievements.map((achievement, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="w-6 h-6 flex items-center justify-center mt-1">
-                    <i className={`${achievement.icon} text-primary`}></i>
+                  <div className="w-12 h-12 bg-[#EBF1FF] rounded-full flex items-center justify-center">
+                    {achievement.icon}
                   </div>
                   <div className="ml-4">
                     <h4 className="font-semibold text-gray-900">{achievement.title}</h4>
