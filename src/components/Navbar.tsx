@@ -1,9 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Logo from "./Logo";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,45 +33,38 @@ const Navbar = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
-      <div className="container mx-auto px-4 flex items-center justify-between">
-        <Logo />
+    <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+      <div className="container mx-auto py-3 flex items-center justify-between">
+        <Link to="/" className="text-2xl font-['Pacifico'] text-primary">logo</Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.href}
-              className="nav-link"
+              className="text-gray-800 font-medium hover:text-primary transition"
             >
               {link.name}
             </Link>
           ))}
-        </nav>
-
-        <div className="hidden md:block">
-          <Button>Apply for Coaching</Button>
         </div>
+
+        <Button className="hidden md:block">Apply for Coaching</Button>
 
         {/* Mobile Navigation Toggle */}
         <button
           onClick={toggleMenu}
-          className="md:hidden p-2 rounded-md"
-          aria-label="Toggle menu"
+          className="md:hidden w-10 h-10 flex items-center justify-center"
         >
-          {isOpen ? (
-            <X className="h-6 w-6 text-gray-900" />
-          ) : (
-            <Menu className="h-6 w-6 text-gray-900" />
-          )}
+          <i className="ri-menu-line text-gray-800 text-2xl"></i>
         </button>
       </div>
 
       {/* Mobile Navigation Menu */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-md animate-fade-in">
-          <div className="container mx-auto px-4 py-4 flex flex-col">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-md">
+          <div className="container mx-auto py-4 flex flex-col">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -90,7 +81,7 @@ const Navbar = () => {
           </div>
         </div>
       )}
-    </header>
+    </nav>
   );
 };
 

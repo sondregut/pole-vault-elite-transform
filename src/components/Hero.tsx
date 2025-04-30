@@ -3,29 +3,25 @@ import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   return (
-    <section className="relative bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen flex items-center">
-      {/* Background Image Overlay */}
-      <div className="absolute inset-0 bg-cover bg-center" style={{ 
-          backgroundImage: "url('/hero-bg.jpg')", 
-          opacity: 0.5,
-          backgroundPosition: "center 30%"
-        }}>
-      </div>
-      
-      {/* Content Container */}
-      <div className="container mx-auto px-4 py-32 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl text-white font-bold mb-6 leading-tight">
+    <section className="hero-section w-full min-h-screen pt-20 relative">
+      <div className="w-full min-h-[calc(100vh-5rem)] flex items-center justify-center">
+        <div className="hero-content w-full md:w-3/5 p-8 md:p-16">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-center">
             Ready to Take Your Pole Vaulting to the Next Level?
           </h1>
-          <p className="text-lg md:text-xl text-white/90 mb-10">
-            Join our elite coaching program designed by professional athletes for athletes of all levels. Transform your technique, increase your height, and achieve your personal best.
+          <p className="text-lg md:text-xl text-white/90 mt-6 max-w-2xl mx-auto text-center">
+            Join our elite coaching program designed by professional athletes for athletes of all levels. 
+            Transform your technique, increase your height, and achieve your personal best.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-base">
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-primary text-white hover:bg-blue-600">
               Apply for Coaching
             </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/20">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="bg-white/10 text-white border-2 border-white hover:bg-white/20"
+            >
               Explore Programs
             </Button>
           </div>
