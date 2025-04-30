@@ -10,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[#3276ff] text-primary-foreground hover:bg-[#101827]",
+        default: "bg-[#3176FF] text-primary-foreground hover:bg-[#1E293B]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -18,10 +18,10 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-[#3276ff] underline-offset-4 hover:underline",
-        cta: "bg-[#3276ff] text-white hover:bg-[#101827]",
-        "cta-outline": "bg-white text-[#3276ff] border border-[#3276ff] hover:bg-gray-50",
-        "app-download": "bg-white text-[#3276ff] border border-white hover:bg-white/90 font-medium",
+        link: "text-[#3176FF] underline-offset-4 hover:underline",
+        cta: "bg-[#3176FF] text-white hover:bg-[#1E293B]",
+        "cta-outline": "bg-white text-[#3176FF] border border-[#3176FF] hover:bg-gray-50",
+        "app-download": "bg-white text-[#3176FF] border border-white hover:bg-white/90 font-medium",
         "app-download-outline": "bg-transparent text-white border border-white hover:bg-white/10 font-medium",
       },
       size: {
