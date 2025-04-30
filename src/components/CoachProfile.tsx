@@ -1,8 +1,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Award, Trophy, GraduationCap } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const CoachProfile = () => {
+  const isMobile = useIsMobile();
+  
   const achievements = [
     {
       icon: <Award className="text-[#3176FF]" />,
@@ -25,7 +28,7 @@ const CoachProfile = () => {
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
-          <div className="lg:w-1/2">
+          <div className={`${isMobile ? 'w-3/4' : 'lg:w-1/2'}`}>
             <img
               src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre23%20jubel.jpeg"
               alt="Coach Sondre"
