@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -29,13 +30,13 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#3176FF', // Updated primary color
+					DEFAULT: '#3b82f6', // Updated to match the reference
 					foreground: '#FFFFFF',
 					light: '#DBEAFE',
-					dark: '#1E40AF',
+					dark: '#2563eb', // Slightly darker blue
 				},
 				secondary: {
-					DEFAULT: '#1E293B', // Secondary color for headings
+					DEFAULT: '#10b981', // Updated to match the reference
 					foreground: '#FFFFFF',
 					light: '#D1FAE5',
 					dark: '#047857',
@@ -80,7 +81,13 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)',
-				button: '8px', // Consistent button radius
+				none: '0px',
+				DEFAULT: '8px',
+				button: '8px',
+				full: '9999px',
+				'xl': '20px',
+				'2xl': '24px',
+				'3xl': '32px',
 			},
 			keyframes: {
 				'accordion-down': {

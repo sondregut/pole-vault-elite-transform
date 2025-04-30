@@ -161,14 +161,67 @@
   input:focus {
     outline: none;
   }
+
+  /* App screenshot styling */
+  .app-screenshot {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* Feature card hover animation */
+  .feature-card {
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Testimonial card hover animation */
+  .testimonial-card {
+    transition: all 0.3s ease;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Step card connector lines */
+  .step-card {
+    position: relative;
+  }
+
+  .step-card:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 3rem;
+    right: -1.5rem;
+    width: 3rem;
+    height: 2px;
+    background-color: #e5e7eb;
+    z-index: 0;
+  }
+
+  @media (max-width: 768px) {
+    .step-card:not(:last-child)::after {
+      top: auto;
+      right: auto;
+      bottom: -1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 3rem;
+    }
+  }
+
+  /* Helper for Remix Icons */
+  :where([class^="ri-"])::before { 
+    content: "\f3c2"; 
+  }
 }
 
 /* Add Inter and Pacifico fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css');
-
-/* Helper for Remix Icons */
-:where([class^="ri-"])::before { 
-  content: "\f3c2"; 
-}
