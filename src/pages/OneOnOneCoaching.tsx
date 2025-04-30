@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check, Calendar, User } from "lucide-react";
+import { Check, Calendar, User, Users, Pencil, MessageSquare, Video } from "lucide-react";
 
 const OneOnOneCoaching: React.FC = () => {
   return (
@@ -291,7 +290,7 @@ const OneOnOneCoaching: React.FC = () => {
                 <div
                   className="w-10 h-10 flex items-center justify-center text-primary mb-3"
                 >
-                  <i className="ri-team-line text-2xl"></i>
+                  <Users size={24} className="text-primary" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">
                   Already have a coach or team
@@ -305,7 +304,7 @@ const OneOnOneCoaching: React.FC = () => {
                 <div
                   className="w-10 h-10 flex items-center justify-center text-primary mb-3"
                 >
-                  <i className="ri-edit-line text-2xl"></i>
+                  <Pencil size={24} className="text-primary" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">
                   Need complete programming
@@ -319,7 +318,7 @@ const OneOnOneCoaching: React.FC = () => {
                 <div
                   className="w-10 h-10 flex items-center justify-center text-primary mb-3"
                 >
-                  <i className="ri-calendar-line text-2xl"></i>
+                  <Calendar size={24} className="text-primary" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">
                   Have other training commitments
@@ -340,7 +339,7 @@ const OneOnOneCoaching: React.FC = () => {
                 <div
                   className="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full text-primary"
                 >
-                  <i className="ri-message-3-line"></i>
+                  <MessageSquare size={24} className="text-primary" />
                 </div>
                 <div className="ml-4">
                   <h4 className="font-semibold text-gray-900 mb-1">
@@ -356,7 +355,7 @@ const OneOnOneCoaching: React.FC = () => {
                 <div
                   className="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full text-primary"
                 >
-                  <i className="ri-vidicon-line"></i>
+                  <Video size={24} className="text-primary" />
                 </div>
                 <div className="ml-4">
                   <h4 className="font-semibold text-gray-900 mb-1">
