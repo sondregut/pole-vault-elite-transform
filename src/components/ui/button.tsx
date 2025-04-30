@@ -21,6 +21,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         cta: "bg-primary text-white hover:bg-primary-dark",
         "cta-outline": "bg-white text-primary border border-primary hover:bg-gray-50",
+        "app-download": "bg-white text-primary border border-white hover:bg-white/90 font-medium",
+        "app-download-outline": "bg-transparent text-white border border-white hover:bg-white/10 font-medium",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check, Calendar, User, Users, Pencil, MessageSquare, Video } from "lucide-react";
+import { Check, Calendar, User, Users, Pencil, MessageSquare, Video, Apple, Smartphone } from "lucide-react";
 
 const OneOnOneCoaching: React.FC = () => {
   return (
@@ -665,68 +665,63 @@ const OneOnOneCoaching: React.FC = () => {
         </div>
       </section>
 
-      {/* Download Section */}
-      <section className="py-16 bg-primary">
+      {/* Download Section - Updated to match the design */}
+      <section className="py-20 bg-primary">
         <div className="container mx-auto px-8 md:px-16 lg:px-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
-              <h2 className="text-3xl font-bold mb-6">Download Our App Today</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Download Our App Today</h2>
               <p className="text-xl mb-8">
                 Take your pole vault coaching experience to the next level with
                 our comprehensive training app.
               </p>
-              <div className="space-y-4 mb-8">
+              <div className="space-y-6 mb-10">
                 <div className="flex items-start">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center mt-0.5 text-white"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="flex-shrink-0 mr-4 text-white">
+                    <Check className="h-6 w-6" />
                   </div>
-                  <span className="ml-3">Available for iOS and Android devices</span>
+                  <span className="text-lg">Available for iOS and Android devices</span>
                 </div>
                 <div className="flex items-start">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center mt-0.5 text-white"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="flex-shrink-0 mr-4 text-white">
+                    <Check className="h-6 w-6" />
                   </div>
-                  <span className="ml-3">Also accessible via web browser</span>
+                  <span className="text-lg">Also accessible via web browser</span>
                 </div>
                 <div className="flex items-start">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center mt-0.5 text-white"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="flex-shrink-0 mr-4 text-white">
+                    <Check className="h-6 w-6" />
                   </div>
-                  <span className="ml-3"
-                    >Free to download, premium features with coaching
-                    subscription</span
-                  >
+                  <span className="text-lg">Free to download, premium features with coaching subscription</span>
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
-                  variant="outline" 
-                  className="bg-white text-primary border-white flex items-center gap-2"
+                  variant="app-download" 
+                  size="lg"
+                  className="flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
-                  <i className="ri-apple-fill text-xl"></i>
+                  <Apple className="h-5 w-5" />
                   Download for iOS
                 </Button>
                 <Button 
-                  variant="outline" 
-                  className="bg-transparent text-white border-white hover:bg-white/10 flex items-center gap-2"
+                  variant="app-download-outline"
+                  size="lg" 
+                  className="flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
-                  <i className="ri-android-fill text-xl"></i>
+                  <Smartphone className="h-5 w-5" />
                   Download for Android
                 </Button>
               </div>
             </div>
-            <div className="flex justify-center">
-              <img
-                src="/app-screen-1.jpg"
-                alt="App on Smartphone"
-                className="max-w-full h-auto rounded-xl shadow-2xl"
-              />
+            <div className="flex justify-center lg:justify-end">
+              <div className="bg-gray-200 rounded-3xl p-4 max-w-md">
+                <img
+                  src="/lovable-uploads/cda86302-61d4-4c15-ac46-686b3496f871.png"
+                  alt="App on Smartphone"
+                  className="max-w-full h-auto rounded-2xl"
+                />
+              </div>
             </div>
           </div>
         </div>
