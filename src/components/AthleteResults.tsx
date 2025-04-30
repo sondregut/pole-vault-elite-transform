@@ -2,25 +2,25 @@
 const AthleteResults = () => {
   const athletes = [
     {
-      name: "Michael Thompson",
+      name: "Owen Anderson",
       image: "https://static.readdy.ai/image/cac8dfb8ebb3b9722f729c6a17eb3793/2d06a10cf356eb9642e53c2a1bc64db9.png",
       improvement: "+1.2m Improvement",
-      quote: "After just 8 weeks of coaching, I improved my PR by over a meter. The technical adjustments made all the difference.",
-      info: "College Athlete • 3 months with us"
+      quote: "Team Guttormsen took me from an all-time low to achieving a new personal best! After breaking my back, they were at my side educating me on how to work through a fractured back.",
+      info: "Collegiate D1 Athlete • 3 months with us"
     },
     {
-      name: "Sarah Johnson",
-      image: "/athlete-1.jpg", 
-      improvement: "+0.8m Improvement",
-      quote: "The personalized feedback on my technique videos helped me identify issues I never knew existed. Game changer!",
-      info: "High School Athlete • 6 months with us"
+      name: "Andrei Iosivas",
+      image: "/testimonial-1.jpg", 
+      improvement: "+0.3m Improvement",
+      quote: "Despite limited training time as a dual-sport athlete, Sondre helped me improve my pole vault from 4.60m to 4.90m, key to my Ivy League Championship victory.",
+      info: "Former D1 All-American Decathlete, NFL Wide Receiver"
     },
     {
-      name: "Robert Miller",
-      image: "/athlete-2.jpg",
-      improvement: "+0.6m Improvement",
-      quote: "Even as a masters athlete, I was able to improve significantly. The strength program was perfectly tailored to my needs.",
-      info: "Masters Athlete • 4 months with us"
+      name: "Gabriel Thai",
+      image: "/testimonial-2.jpg",
+      improvement: "+0.3m Improvement",
+      quote: "In the two months I worked with Sondre over the summer, I added over a foot to my jump. With every video review, Sondre gave me helpful cues that greatly refined my jumps.",
+      info: "Brown Track & Field • 2 months with us"
     }
   ];
 
