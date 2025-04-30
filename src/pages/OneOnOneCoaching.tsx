@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check, Calendar, User, Users, Pencil, MessageSquare, Video, Apple, Smartphone } from "lucide-react";
+import { Check, Calendar, User, Users, Pencil, MessageSquare, Video, Apple, Smartphone, FileVideo, Clock, Search, ListCheck, LineChart } from "lucide-react";
 
 const OneOnOneCoaching: React.FC = () => {
   return (
@@ -398,7 +398,7 @@ const OneOnOneCoaching: React.FC = () => {
               <div
                 className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4"
               >
-                <i className="ri-calendar-check-line text-2xl"></i>
+                <ListCheck className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
                 Program Tracking
@@ -432,7 +432,7 @@ const OneOnOneCoaching: React.FC = () => {
               <div
                 className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4"
               >
-                <i className="ri-movie-line text-2xl"></i>
+                <FileVideo className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Video Analysis</h3>
               <p className="text-gray-600">
@@ -464,7 +464,7 @@ const OneOnOneCoaching: React.FC = () => {
               <div
                 className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4"
               >
-                <i className="ri-bar-chart-line text-2xl"></i>
+                <Calendar className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
                 Workout Logging
