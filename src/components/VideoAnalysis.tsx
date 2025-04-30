@@ -1,22 +1,27 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Camera, Pencil, MessageSquare } from "lucide-react";
+import { Video, FileVideo, Clock, Search, MessageCircle } from "lucide-react";
 
 const VideoAnalysis = () => {
   const features = [
     {
-      icon: <Camera className="text-[#3176FF]" />,
+      icon: <FileVideo className="text-[#3176FF]" />,
       title: "Easy Video Uploads",
       description: "Upload your jumps directly through TrainHeroic or send them via email - whatever works best for you."
     },
     {
-      icon: <Pencil className="text-[#3176FF]" />,
+      icon: <Search className="text-[#3176FF]" />,
       title: "Detailed Analysis",
       description: "Receive comprehensive feedback with drawn annotations, slow-motion breakdown, and specific cues for improvement."
     },
     {
-      icon: <MessageSquare className="text-[#3176FF]" />,
+      icon: <Clock className="text-[#3176FF]" />,
+      title: "Quick Turnaround",
+      description: "Get expert feedback within 24-48 hours so you can immediately implement technique corrections."
+    },
+    {
+      icon: <MessageCircle className="text-[#3176FF]" />,
       title: "Follow-up Consultation",
       description: "Schedule a video call to discuss the analysis and get clarity on implementation strategies."
     }

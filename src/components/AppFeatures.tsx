@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Video, LineChart, MessageCircle } from "lucide-react";
+import { Video, LineChart, MessageCircle, Calendar, FileText, ListCheck } from "lucide-react";
 
 const AppFeatures = () => {
   const features = [
@@ -11,9 +11,19 @@ const AppFeatures = () => {
       description: "Watch detailed exercise demos from Sondre and Simen showing perfect technique for every movement."
     },
     {
+      icon: <ListCheck className="text-primary text-xl" />,
+      title: "Program Tracker",
+      description: "Follow your personalized program with an easy-to-use tracker that guides you through each workout session."
+    },
+    {
       icon: <LineChart className="text-primary text-xl" />,
       title: "Progress Tracking",
       description: "Log your weights, sets, reps, and PRs. Track your improvement with detailed analytics and progress charts."
+    },
+    {
+      icon: <Calendar className="text-primary text-xl" />,
+      title: "Workout Logging",
+      description: "Record all your training sessions with detailed notes, performance metrics, and recovery feedback."
     },
     {
       icon: <MessageCircle className="text-primary text-xl" />,
