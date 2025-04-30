@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Plane, Dumbbell, UserRound } from "lucide-react";
 
 const Programs = () => {
   const programs = [
@@ -8,7 +8,7 @@ const Programs = () => {
       title: "Flight Mode: 10-Week Program",
       subtitle: "Complete 10-week program to transform your technique and performance.",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg",
-      icon: "ri-flight-takeoff-line",
+      icon: <Plane className="text-primary text-xl" />,
       features: [
         "Structured 10-week progression",
         "Video technique library",
@@ -23,7 +23,7 @@ const Programs = () => {
       title: "Power Strength Program",
       subtitle: "Specialized strength training to develop explosive power for vaulters.",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//weights.jpeg",
-      icon: "ri-boxing-line",
+      icon: <Dumbbell className="text-primary text-xl" />,
       features: [
         "8-week strength progression",
         "Exercise video demonstrations",
@@ -38,7 +38,7 @@ const Programs = () => {
       title: "1-on-1 Online Coaching",
       subtitle: "Personalized coaching with direct access to your dedicated coach.",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg",
-      icon: "ri-user-line",
+      icon: <UserRound className="text-primary text-xl" />,
       features: [
         "Custom weekly training plans",
         "Unlimited video technique analysis",
@@ -74,7 +74,7 @@ const Programs = () => {
               </div>
               <div className="p-6 border-b border-gray-100">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <i className={`${program.icon} text-primary text-xl`}></i>
+                  {program.icon}
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900">{program.title}</h3>
                 <p className="text-gray-600 mt-2">{program.subtitle}</p>

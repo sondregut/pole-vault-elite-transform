@@ -1,23 +1,25 @@
 
+import { Video, Calendar, Users, Smartphone } from "lucide-react";
+
 const Features = () => {
   const features = [
     {
-      icon: "ri-video-line",
+      icon: <Video className="text-primary text-2xl" />,
       title: "Video Analysis",
       description: "Detailed breakdown of your technique with frame-by-frame analysis and personalized feedback."
     },
     {
-      icon: "ri-calendar-line",
+      icon: <Calendar className="text-primary text-2xl" />,
       title: "Custom Training Plans",
       description: "Personalized weekly training schedules based on your current level, goals, and available equipment."
     },
     {
-      icon: "ri-chat-1-line",
+      icon: <Users className="text-primary text-2xl" />,
       title: "1-on-1 Coaching",
       description: "Regular Zoom sessions with your coach to discuss progress, answer questions, and adjust your training."
     },
     {
-      icon: "ri-smartphone-line",
+      icon: <Smartphone className="text-primary text-2xl" />,
       title: "Mobile App Access",
       description: "Track your progress, access your training plans, and communicate with your coach on the go."
     }
@@ -36,7 +38,7 @@ const Features = () => {
           {features.map((feature, index) => (
             <div key={index} className="bg-white p-8 rounded shadow-md border border-gray-100 flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                <i className={`${feature.icon} text-primary text-2xl`}></i>
+                {feature.icon}
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
               <p className="text-gray-600">{feature.description}</p>
