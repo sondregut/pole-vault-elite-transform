@@ -26,7 +26,7 @@ const BeforeAfter = () => {
             <h3 className="text-3xl font-bold text-red-500 mb-8">Before joining us</h3>
             <div className="mb-8 rounded-lg overflow-hidden">
               <img 
-                src="/before-technique.jpg" 
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//owen%20before.jpg" 
                 alt="Before Training" 
                 className="w-full h-auto"
               />
@@ -46,7 +46,7 @@ const BeforeAfter = () => {
             <h3 className="text-3xl font-bold text-green-600 mb-8">After joining us</h3>
             <div className="mb-8 rounded-lg overflow-hidden">
               <img 
-                src="/after-technique.jpg" 
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//owen%20after.jpg" 
                 alt="After Training" 
                 className="w-full h-auto"
               />

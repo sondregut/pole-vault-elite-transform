@@ -1,23 +1,22 @@
-
 const AthleteResults = () => {
   const athletes = [
     {
       name: "Owen Anderson",
-      image: "https://static.readdy.ai/image/cac8dfb8ebb3b9722f729c6a17eb3793/2d06a10cf356eb9642e53c2a1bc64db9.png",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Owen.png",
       improvement: "+1.2m Improvement",
       quote: "Team Guttormsen took me from an all-time low to achieving a new personal best! After breaking my back, they were at my side educating me on how to work through a fractured back.",
       info: "Collegiate D1 Athlete • 3 months with us"
     },
     {
-      name: "Andrei Iosivas",
-      image: "/testimonial-1.jpg", 
+      name: "Garrett Lynch",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Garrett%20(1).png", 
       improvement: "+0.3m Improvement",
-      quote: "Despite limited training time as a dual-sport athlete, Sondre helped me improve my pole vault from 4.60m to 4.90m, key to my Ivy League Championship victory.",
-      info: "Former D1 All-American Decathlete, NFL Wide Receiver"
+      quote: "Sondre was always available for questions and concerns on training or technique. The training was tailored to me specifically and had me feeling strong and fast while recovering from injuries!",
+      info: "Collegiate Pole Vaulter • Summer 2024"
     },
     {
       name: "Gabriel Thai",
-      image: "/testimonial-2.jpg",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Gabriel.png",
       improvement: "+0.3m Improvement",
       quote: "In the two months I worked with Sondre over the summer, I added over a foot to my jump. With every video review, Sondre gave me helpful cues that greatly refined my jumps.",
       info: "Brown Track & Field • 2 months with us"
@@ -42,7 +41,7 @@ const AthleteResults = () => {
               <div className="h-64 overflow-hidden">
                 <img
                   src={athlete.image}
-                  alt={`${athlete.name} Before/After`}
+                  alt={`${athlete.name}`}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
