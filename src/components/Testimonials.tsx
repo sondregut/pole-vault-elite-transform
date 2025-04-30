@@ -1,5 +1,5 @@
 
-import { Star, MessageCircle } from "lucide-react";
+import { Star, MessageCircle, ChevronUp, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -128,17 +128,27 @@ const Testimonials = () => {
           ))}
         </div>
         
-        {!showAllTestimonials && testimonials.length > 3 && (
-          <div className="mt-12 text-center">
+        <div className="mt-12 text-center">
+          {!showAllTestimonials && testimonials.length > 3 ? (
             <Button 
               onClick={() => setShowAllTestimonials(true)}
               variant="outline"
-              className="px-8"
+              className="px-8 gap-2"
             >
               See All Testimonials
+              <ChevronDown className="h-4 w-4" />
             </Button>
-          </div>
-        )}
+          ) : showAllTestimonials && (
+            <Button 
+              onClick={() => setShowAllTestimonials(false)}
+              variant="outline"
+              className="px-8 gap-2"
+            >
+              Hide Testimonials
+              <ChevronUp className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
     </section>
   );
