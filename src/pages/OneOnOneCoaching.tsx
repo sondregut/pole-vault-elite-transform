@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import { Check } from "lucide-react";
 
 const OneOnOneCoaching: React.FC = () => {
   return (
@@ -66,44 +65,28 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <div className="space-y-4 mb-8">
                 <div className="flex items-start">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-5 w-5 text-primary" strokeWidth={3} />
                   </div>
-                  <span className="ml-3 text-gray-600"
-                    >Weekly communication with Coach Sondre</span
-                  >
+                  <span className="ml-3 text-gray-600">Weekly communication with Coach Sondre</span>
                 </div>
                 <div className="flex items-start">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-5 w-5 text-primary" strokeWidth={3} />
                   </div>
-                  <span className="ml-3 text-gray-600"
-                    >Regular Zoom calls for in-depth technique review</span
-                  >
+                  <span className="ml-3 text-gray-600">Regular Zoom calls for in-depth technique review</span>
                 </div>
                 <div className="flex items-start">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-5 w-5 text-primary" strokeWidth={3} />
                   </div>
-                  <span className="ml-3 text-gray-600"
-                    >Custom training programs delivered through our app</span
-                  >
+                  <span className="ml-3 text-gray-600">Custom training programs delivered through our app</span>
                 </div>
                 <div className="flex items-start">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-6 h-6 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-5 w-5 text-primary" strokeWidth={3} />
                   </div>
-                  <span className="ml-3 text-gray-600"
-                    >Detailed video analysis and feedback</span
-                  >
+                  <span className="ml-3 text-gray-600">Detailed video analysis and feedback</span>
                 </div>
               </div>
               <p className="text-gray-600 mb-6">
@@ -165,18 +148,14 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Brief overview of your goals</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Select preferred coaching package</span>
                 </li>
@@ -198,18 +177,14 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">One-on-one call with Sondre</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Review coaching process</span>
                 </li>
@@ -231,18 +206,14 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Training history</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Equipment access</span>
                 </li>
@@ -262,18 +233,14 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Download training app</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Download video review app</span>
                 </li>
@@ -295,18 +262,14 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Customized training plan</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Exercise demonstrations</span>
                 </li>
@@ -436,33 +399,25 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Daily workout schedules</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Exercise completion tracking</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Progress visualization</span>
                 </li>
               </ul>
             </div>
-            {/* More feature cards... */}
-            {/* Continue with similar structure for other features */}
             <div className="bg-white p-6 rounded-lg shadow-md feature-card">
               <div
                 className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4"
@@ -476,26 +431,20 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Easy video uploads</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Frame-by-frame analysis</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Coach annotations and feedback</span>
                 </li>
@@ -516,26 +465,20 @@ const OneOnOneCoaching: React.FC = () => {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Performance metrics tracking</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Training load monitoring</span>
                 </li>
                 <li className="flex items-start">
-                  <div
-                    className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary"
-                  >
-                    <i className="ri-check-line"></i>
+                  <div className="w-5 h-5 flex items-center justify-center mt-0.5 text-primary">
+                    <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                   </div>
                   <span className="ml-2">Personal records tracking</span>
                 </li>
