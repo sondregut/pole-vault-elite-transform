@@ -26,14 +26,14 @@ const VideoAnalysis = () => {
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
-          <div className="lg:w-1/2">
+          <div className="lg:w-1/3">
             <img
               src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//pv%20review%20.png"
               alt="Video Analysis Demo"
               className="w-full h-auto rounded-lg shadow-lg"
             />
           </div>
-          <div className="lg:w-1/2">
+          <div className="lg:w-2/3">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Professional Video Analysis
             </h2>
