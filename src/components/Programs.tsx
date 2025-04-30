@@ -6,7 +6,7 @@ const Programs = () => {
     {
       title: "Flight Mode: 10-Week Program",
       subtitle: "Complete 10-week program to transform your technique and performance.",
-      image: "/program-1.jpg",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg",
       icon: "ri-flight-takeoff-line",
       features: [
         "Structured 10-week progression",
@@ -21,7 +21,7 @@ const Programs = () => {
     {
       title: "Power Strength Program",
       subtitle: "Specialized strength training to develop explosive power for vaulters.",
-      image: "/program-2.jpg",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//weights.jpeg",
       icon: "ri-boxing-line",
       features: [
         "8-week strength progression",
@@ -36,7 +36,7 @@ const Programs = () => {
     {
       title: "1-on-1 Online Coaching",
       subtitle: "Personalized coaching with direct access to your dedicated coach.",
-      image: "/program-3.jpg",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg",
       icon: "ri-user-line",
       features: [
         "Custom weekly training plans",
