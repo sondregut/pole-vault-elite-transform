@@ -2,7 +2,10 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Award, Trophy, GraduationCap } from "lucide-react";
+import { Award, Trophy, GraduationCap, Briefcase, Book } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 const About = () => {
   const careerHighlights = [
@@ -106,6 +109,68 @@ const About = () => {
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16">
+          <div className="container mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Meet The Team</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Sondre's Card */}
+              <Card className="hover:shadow-lg transition-all">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-xl space-y-1">
+                    <div>SONDRE GUTTORMSEN, OLY</div>
+                    <div className="text-sm font-medium text-primary">OLYMPIC POLE VAULTER & COACH</div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-gray-700">
+                  <p>I am a Princeton University alum and professional pole vaulter for Adidas and Norway. I currently split my time between Durham, North Carolina and my home town Ski, Norway. My proudest accomplishments are 2023 European Champion, three-time NCAA champion, and being the Collegiate record holder with 6 meters / 19'8.25".</p>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                  <Button variant="cta-outline" size="sm" className="gap-2">
+                    <Book size={16} /> Read Bio
+                  </Button>
+                </CardFooter>
+              </Card>
+
+              {/* Simen's Card */}
+              <Card className="hover:shadow-lg transition-all">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-xl space-y-1">
+                    <div>SIMEN GUTTORMSEN</div>
+                    <div className="text-sm font-medium text-primary">COLLEGIATE ATHLETE & COACH</div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-gray-700">
+                  <p>I am a current Duke University Graduate student and Princeton University Operational Research & Financial Engineering alum. My personal best is 5.72 meters / 18'9", and I am a 15th place finisher at the 2022 World Championships in Eugene and a two-time NCAA all-American (4th place).</p>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                  <Button variant="cta-outline" size="sm" className="gap-2">
+                    <Book size={16} /> Read Bio
+                  </Button>
+                </CardFooter>
+              </Card>
+
+              {/* Atle's Card */}
+              <Card className="hover:shadow-lg transition-all">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-xl space-y-1">
+                    <div>ATLE GUTTORMSEN, PHD</div>
+                    <div className="text-sm font-medium text-primary">COACH, AGENT & ECONOMIC PROFESSOR</div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-gray-700">
+                  <p>I'm a professor in economics, head coach for Team Guttormsen, and a certified Athlete Representative. In addition, I am a former track and field athlete.</p>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                  <Button variant="cta-outline" size="sm" className="gap-2">
+                    <Book size={16} /> Read Bio
+                  </Button>
+                </CardFooter>
+              </Card>
             </div>
           </div>
         </section>
