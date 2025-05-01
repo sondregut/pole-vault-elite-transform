@@ -23,10 +23,20 @@ const About = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
-        <div className="bg-gray-50 py-16 md:py-24">
-          <div className="container mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">About Us</h1>
-            <p className="text-lg text-gray-600 text-center max-w-3xl mx-auto mb-16">
+        <div className="relative bg-gray-50 py-16 md:py-24">
+          {/* Hero image background */}
+          <div className="absolute inset-0 z-0 overflow-hidden">
+            <img 
+              src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-04-14%20at%202.10.32%20PM.png"
+              alt="About Us Hero"
+              className="w-full h-full object-cover opacity-20"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+          </div>
+          
+          <div className="container mx-auto relative z-10">
+            <h1 className="text-4xl md:text-5xl font-bold text-center mb-8 text-white">About Us</h1>
+            <p className="text-lg text-gray-100 text-center max-w-3xl mx-auto mb-16">
               Team Guttormsen's journey from beginners to elite pole vaulters
             </p>
           </div>
