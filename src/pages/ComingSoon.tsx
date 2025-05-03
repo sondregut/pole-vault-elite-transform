@@ -50,11 +50,11 @@ const ComingSoon = () => {
               <div className="inline-block py-1 px-3 bg-primary/20 rounded-full text-primary text-sm font-medium mb-4">
                 Coming Soon
               </div>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-white">
                 Something Big Is Coming <br className="hidden md:block" />
                 to Pole Vault
               </h1>
-              <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto">
+              <p className="text-xl md:text-2xl text-white max-w-2xl mx-auto">
                 Built by an Olympic vaulter.
                 <br />
                 Tested by elites.
