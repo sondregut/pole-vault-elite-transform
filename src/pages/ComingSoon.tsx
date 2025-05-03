@@ -91,14 +91,14 @@ const ComingSoon = () => {
           </motion.div>
 
           {/* App Icon Image */}
-          <div className="mt-16 relative">
+          <div className="mt-16 relative flex justify-center">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0F1116] to-transparent z-10"></div>
-            <div className="bg-[#1A1D25] rounded-xl flex justify-center items-center max-w-xl mx-auto overflow-hidden">
-              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30">
+            <div className="w-32 h-32 relative z-20">
+              <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30 w-full h-full">
                 <img 
                   src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
-                  alt="G Force Training App Interface" 
-                  className="w-full h-auto"
+                  alt="G Force Training App Icon" 
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
