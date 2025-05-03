@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { Instagram } from "lucide-react";
 
 const ComingSoon = () => {
   const [email, setEmail] = useState("");
@@ -125,8 +126,16 @@ const ComingSoon = () => {
       </div>
       
       <footer className="py-6 mt-auto">
-        <div className="container mx-auto text-center text-xs text-gray-600">
-          © 2025 Pole Vault Tracker
+        <div className="container mx-auto text-center">
+          <a 
+            href="https://www.instagram.com/g_forcetraining/" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            aria-label="Follow us on Instagram"
+          >
+            <Instagram className="w-6 h-6 text-white" />
+          </a>
         </div>
       </footer>
     </div>
