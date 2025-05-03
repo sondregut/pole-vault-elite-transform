@@ -30,14 +30,14 @@ const ComingSoon = () => {
     <div className="min-h-screen bg-[#0F1116] text-white flex flex-col justify-center">
       <div className="container mx-auto px-4 py-24 max-w-5xl">
         <div className="relative z-10">
-          {/* Classified stamp */}
+          {/* App under development stamp */}
           <motion.div
             initial={{ opacity: 0, rotate: -10 }}
             animate={{ opacity: 0.15, rotate: -10 }}
             transition={{ duration: 1 }}
             className="absolute -top-10 right-0 text-6xl md:text-8xl font-bold text-red-600 border-8 border-red-600 px-4 py-2 rounded-lg transform -rotate-12 hidden md:block"
           >
-            CLASSIFIED
+            APP UNDER DEVELOPMENT
           </motion.div>
 
           {/* Main content */}
@@ -93,7 +93,7 @@ const ComingSoon = () => {
           {/* App Icon Image */}
           <div className="mt-16 relative">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0F1116] to-transparent z-10"></div>
-            <div className="bg-[#1A1D25] rounded-xl p-8 flex justify-center items-center max-w-xl mx-auto overflow-hidden">
+            <div className="bg-[#1A1D25] rounded-xl flex justify-center items-center max-w-xl mx-auto overflow-hidden">
               <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30">
                 <img 
                   src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
