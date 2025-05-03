@@ -93,12 +93,14 @@ const ComingSoon = () => {
           {/* App Icon Image */}
           <div className="mt-16 relative">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0F1116] to-transparent z-10"></div>
-            <div className="bg-[#1A1D25] rounded-xl p-8 flex justify-center items-center max-w-3xl mx-auto overflow-hidden">
-              <img 
-                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
-                alt="G Force Training App Interface" 
-                className="w-full h-auto rounded-lg shadow-xl"
-              />
+            <div className="bg-[#1A1D25] rounded-xl p-8 flex justify-center items-center max-w-xl mx-auto overflow-hidden">
+              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30">
+                <img 
+                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
+                  alt="G Force Training App Interface" 
+                  className="w-full h-auto"
+                />
+              </div>
             </div>
           </div>
         </div>
