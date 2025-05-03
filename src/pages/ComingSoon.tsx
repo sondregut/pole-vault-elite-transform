@@ -55,7 +55,7 @@ const ComingSoon = () => {
                 to Pole Vault
               </h1>
               <p className="text-xl md:text-2xl text-white max-w-2xl mx-auto">
-                Built by an Olympic vaulter.
+                Built by Olympic pole vaulters Sondre and Simen Guttormsen.
                 <br />
                 Tested by elites.
                 <br />
