@@ -32,6 +32,7 @@ const Navbar = () => {
     { name: "PVT App", href: "https://g-forcetraining.com/", external: true },
     { name: "Success Stories", href: "/success-stories" },
     { name: "Shop", href: "/shop" },
+    { name: "Test", href: "/test" },
     { name: "Contact", href: "/contact" },
   ];
 
