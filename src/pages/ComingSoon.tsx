@@ -35,7 +35,7 @@ const ComingSoon = () => {
             initial={{ opacity: 0, rotate: -10 }}
             animate={{ opacity: 0.15, rotate: -10 }}
             transition={{ duration: 1 }}
-            className="absolute -top-10 right-0 text-6xl md:text-8xl font-bold text-red-600 border-8 border-red-600 px-4 py-2 rounded-lg transform -rotate-12 hidden md:block"
+            className="absolute -top-10 right-0 text-6xl md:text-8xl font-bold text-red-600 border-8 border-red-600 px-4 py-2 rounded-lg transform -rotate-12 md:block"
           >
             APP UNDER DEVELOPMENT
           </motion.div>
