@@ -29,7 +29,6 @@ const Navbar = () => {
     { name: "About", href: "/about" },
     { name: "Programs", href: "/programs" },
     { name: "1:1 Coaching", href: "/coaching" },
-    { name: "Test", href: "/test" },
     { name: "PVT App", href: "https://g-forcetraining.com/", external: true },
     { name: "Success Stories", href: "/success-stories" },
     { name: "Shop", href: "/shop" },
