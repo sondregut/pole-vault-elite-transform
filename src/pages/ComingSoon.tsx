@@ -90,36 +90,15 @@ const ComingSoon = () => {
             </div>
           </motion.div>
 
-          {/* Background elements */}
+          {/* App Icon Image */}
           <div className="mt-16 relative">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0F1116] to-transparent z-10"></div>
-            <div className="bg-[#1A1D25] rounded-xl p-8 flex justify-center items-center max-w-3xl mx-auto aspect-video relative overflow-hidden">
-              {/* Blurred UI mockup */}
-              <div className="absolute inset-0 filter blur-xl opacity-30">
-                <div className="absolute top-1/4 left-1/4 w-1/2 h-12 bg-primary/50 rounded-lg"></div>
-                <div className="absolute top-1/3 left-1/3 w-1/3 h-24 bg-white/30 rounded-lg"></div>
-                <div className="absolute bottom-1/3 right-1/4 w-1/4 h-16 bg-primary/40 rounded-lg"></div>
-                <div className="absolute bottom-1/4 left-1/5 w-3/5 h-10 bg-white/20 rounded-lg"></div>
-              </div>
-              
-              {/* Redacted content */}
-              <div className="relative z-20 text-center">
-                <div className="w-48 h-12 bg-[#2A2D35] rounded-lg mb-6 mx-auto"></div>
-                <div className="w-64 h-8 bg-[#2A2D35] rounded-lg mb-4 mx-auto"></div>
-                <div className="w-32 h-8 bg-[#2A2D35] rounded-lg mb-8 mx-auto"></div>
-                <div className="flex justify-center gap-4">
-                  <div className="w-16 h-16 bg-[#2A2D35] rounded-lg"></div>
-                  <div className="w-16 h-16 bg-[#2A2D35] rounded-lg"></div>
-                  <div className="w-16 h-16 bg-[#2A2D35] rounded-lg"></div>
-                </div>
-              </div>
-              
-              {/* Classified overlay */}
-              <div className="absolute inset-0 flex items-center justify-center z-30">
-                <p className="text-white/10 text-[120px] md:text-[200px] font-bold rotate-12 select-none">
-                  REDACTED
-                </p>
-              </div>
+            <div className="bg-[#1A1D25] rounded-xl p-8 flex justify-center items-center max-w-3xl mx-auto overflow-hidden">
+              <img 
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
+                alt="G Force Training App Interface" 
+                className="w-full h-auto rounded-lg shadow-xl"
+              />
             </div>
           </div>
         </div>
