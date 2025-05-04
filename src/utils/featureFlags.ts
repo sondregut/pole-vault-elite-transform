@@ -1,4 +1,3 @@
-
 /**
  * Simple feature flag system to toggle sections of the website
  * This can be expanded later to fetch flags from a remote config or backend
@@ -6,15 +5,15 @@
 
 // Add sections that should be hidden to this list
 const HIDDEN_SECTIONS = [
-  // 'AthleteResults',
-  // 'Features',
-  // 'CoachProfile',
-  // 'Testimonials',
-  // 'Programs',
-  // 'AppFeatures',
-  // 'VideoAnalysis',
-  // 'BeforeAfter',
-  // 'CTASection',
+  'AthleteResults',
+  'Features',
+  'CoachProfile',
+  'Testimonials',
+  'Programs',
+  // 'AppFeatures', // Keeping this visible
+  'VideoAnalysis',
+  'BeforeAfter',
+  'CTASection',
 ];
 
 /**
