@@ -5,25 +5,50 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Instagram } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const ComingSoon = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Add email to Supabase waitlist table
+      const { error } = await supabase
+        .from('waitlist')
+        .insert({ email });
+      
+      if (error) {
+        if (error.code === '23505') {
+          // Unique constraint violation (email already exists)
+          toast({
+            title: "Already registered",
+            description: "This email is already on our waitlist.",
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        toast({
+          title: "Success!",
+          description: "You've been added to the waitlist. We'll notify you when we launch.",
+        });
+        setEmail("");
+      }
+    } catch (error) {
+      console.error("Error adding to waitlist:", error);
       toast({
-        title: "Success!",
-        description: "You've been added to the waitlist. We'll notify you when we launch.",
+        title: "Something went wrong",
+        description: "There was an error adding you to the waitlist. Please try again.",
+        variant: "destructive",
       });
-      setEmail("");
-    }, 1000);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,21 +72,23 @@ const ComingSoon = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <div className="mb-6">
-              {/* App Icon Image with solid background */}
-              <div className="inline-block mb-4">
-                <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30 bg-[#0F1116]">
+            <div className="mb-6 flex flex-col items-center">
+              {/* App Icon Image with solid background - positioned on top with z-index */}
+              <div className="relative z-20 mb-3">
+                <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30" style={{backgroundColor: "#0F1116"}}>
                   <img 
                     src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
                     alt="G Force Training App Icon" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>
-              {/* Adding "Coming Soon" text below the app icon */}
-              <div className="inline-block py-1 px-3 bg-primary/20 rounded-full text-primary text-sm font-medium mb-4">
+              
+              {/* "Coming Soon" text directly below the app icon */}
+              <div className="py-1 px-3 bg-primary/20 rounded-full text-primary text-sm font-medium mb-6">
                 Coming Soon
               </div>
+              
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-white">
                 Something Big Is Coming <br className="hidden md:block" />
                 to Pole Vault
@@ -99,7 +126,7 @@ const ComingSoon = () => {
             </div>
           </motion.div>
 
-          {/* Empty div to maintain spacing, but without the "Launching soon" text */}
+          {/* Empty div to maintain spacing */}
           <div className="mt-8 relative flex justify-center">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0F1116] to-transparent z-10"></div>
             <div className="relative z-20"></div>
