@@ -52,15 +52,12 @@ const ComingSoon = () => {
                 Coming Soon
               </div>
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-white">
-                Something Big Is Coming <br className="hidden md:block" />
-                to Pole Vault
+                A game-changing mobile app<br className="hidden md:block" /> 
+                by Olympic pole vaulters<br className="hidden md:block" />
+                Sondre & Simen Guttormsen
               </h1>
               <p className="text-xl md:text-2xl text-white max-w-2xl mx-auto">
-                Built by Olympic pole vaulters Sondre and Simen Guttormsen.
-                <br />
-                Tested by elites.
-                <br />
-                Designed to change the game.
+                Designed to change the game!
               </p>
             </div>
 
@@ -103,7 +100,7 @@ const ComingSoon = () => {
                   />
                 </div>
               </div>
-              <p className="text-sm text-gray-400 mt-4">Coming soon to iOS and Android</p>
+              <p className="text-sm text-gray-400 mt-4">Launching soon on iOS and Android</p>
             </div>
           </div>
         </div>
