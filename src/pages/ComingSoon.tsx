@@ -48,8 +48,15 @@ const ComingSoon = () => {
             className="text-center mb-12"
           >
             <div className="mb-6">
-              <div className="inline-block py-1 px-3 bg-primary/20 rounded-full text-primary text-sm font-medium mb-4">
-                Coming Soon
+              {/* App Icon Image - replacing the "Coming Soon" badge */}
+              <div className="inline-block mb-4">
+                <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30">
+                  <img 
+                    src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
+                    alt="G Force Training App Icon" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-white">
                 Something Big Is Coming <br className="hidden md:block" />
@@ -88,20 +95,11 @@ const ComingSoon = () => {
             </div>
           </motion.div>
 
-          {/* App Icon Image - positioned higher */}
+          {/* Removed App Icon from here since we moved it to top */}
           <div className="mt-8 relative flex justify-center">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0F1116] to-transparent z-10"></div>
             <div className="relative z-20 flex flex-col items-center">
-              <div className="w-32 h-32">
-                <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2A2D35]/30 w-full h-full">
-                  <img 
-                    src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png" 
-                    alt="G Force Training App Icon" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-              <p className="text-sm text-gray-400 mt-4">Coming soon to iOS and Android</p>
+              <p className="text-sm text-gray-400">Launching soon on iOS and Android</p>
             </div>
           </div>
         </div>
