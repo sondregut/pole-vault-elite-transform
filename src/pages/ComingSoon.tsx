@@ -56,9 +56,7 @@ const ComingSoon = () => {
                 to Pole Vault
               </h1>
               <p className="text-xl md:text-2xl text-white max-w-2xl mx-auto">
-                Built by Olympic pole vaulters Sondre and Simen Guttormsen.
-                <br />
-                Tested by elites.
+                A game-changing mobile app by Olympic pole vaulters Sondre & Simen Guttormsen.
                 <br />
                 Designed to change the game.
               </p>
