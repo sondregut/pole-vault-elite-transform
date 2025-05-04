@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -94,9 +93,7 @@ const ComingSoon = () => {
                 to Pole Vault
               </h1>
               <p className="text-xl md:text-2xl text-white max-w-2xl mx-auto">
-                A game-changing mobile app by Olympic pole vaulters Sondre & Simen Guttormsen.
-                <br />
-                Designed to change the game.
+                A game-changing mobile app by Olympic pole vaulters Sondre & Simen Guttormsen — built to transform how vaulters train, track, and improve.
               </p>
             </div>
 
