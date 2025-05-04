@@ -9,7 +9,6 @@ import Programs from "./pages/Programs";
 import NotFound from "./pages/NotFound";
 import OneOnOneCoaching from "./pages/OneOnOneCoaching";
 import About from "./pages/About";
-import Test from "./pages/Test";
 import ComingSoon from "./pages/ComingSoon";
 import RedirectToApp from "./components/RedirectToApp";
 
@@ -28,7 +27,6 @@ const App = () => (
           <Route path="/programs" element={<RedirectToApp />} />
           <Route path="/coaching" element={<RedirectToApp />} />
           <Route path="/about" element={<RedirectToApp />} />
-          <Route path="/test" element={<RedirectToApp />} />
           <Route path="/coming-soon" element={<RedirectToApp />} />
           <Route path="*" element={<RedirectToApp />} />
         </Routes>

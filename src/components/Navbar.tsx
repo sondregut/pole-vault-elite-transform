@@ -37,9 +37,7 @@ const Navbar = () => {
     { name: "Programs", href: "/programs" },
     { name: "1:1 Coaching", href: "/coaching" },
     { name: "App", href: "/app" },
-    { name: "Success Stories", href: "/success-stories" },
     { name: "Shop", href: "/shop" },
-    { name: "Test", href: "/test" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -121,6 +119,15 @@ const Navbar = () => {
           </div>
         </div>
       )}
+      
+      {/* Global logo at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center transform translate-y-full">
+        <img 
+          src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//app%20icon%20tracker.png" 
+          alt="StavHopp Logo" 
+          className="h-12 w-12 -mb-2" 
+        />
+      </div>
     </nav>
   );
 };

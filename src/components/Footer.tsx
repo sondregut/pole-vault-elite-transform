@@ -35,7 +35,6 @@ const Footer = () => {
               <li><Link to="/" className="text-gray-400 hover:text-white transition">Home</Link></li>
               <li><Link to="/about" className="text-gray-400 hover:text-white transition">About</Link></li>
               <li><Link to="/programs" className="text-gray-400 hover:text-white transition">Programs</Link></li>
-              <li><Link to="/success-stories" className="text-gray-400 hover:text-white transition">Success Stories</Link></li>
               <li><Link to="/shop" className="text-gray-400 hover:text-white transition">Shop</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white transition">Contact</Link></li>
             </ul>
@@ -59,13 +58,13 @@ const Footer = () => {
                 <div className="w-5 h-5 flex items-center justify-center mt-0.5">
                   <i className="ri-mail-line text-primary"></i>
                 </div>
-                <span className="ml-3 text-gray-400">coach@polevaultcoaching.com</span>
+                <span className="ml-3 text-gray-400">sondre@stavhopp.no</span>
               </li>
               <li className="flex items-start">
                 <div className="w-5 h-5 flex items-center justify-center mt-0.5">
                   <i className="ri-phone-line text-primary"></i>
                 </div>
-                <span className="ml-3 text-gray-400">+1 (555) 123-4567</span>
+                <span className="ml-3 text-gray-400">424-535-8644</span>
               </li>
             </ul>
             
