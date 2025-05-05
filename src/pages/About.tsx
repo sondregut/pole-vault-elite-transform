@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -113,8 +114,8 @@ const About = () => {
               </div>
               <div className="lg:w-1/2">
                 <img 
-                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20simen%20coaching.jpg" 
-                  alt="Sondre and Simen Coaching" 
+                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg" 
+                  alt="Team Guttormsen Coaching" 
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </div>
@@ -206,7 +207,7 @@ const About = () => {
             <div className="flex flex-col lg:flex-row gap-12 items-start">
               <div className="lg:w-1/3">
                 <img 
-                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre23%20jump.jpeg" 
+                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20adidas.jpg" 
                   alt="Sondre Guttormsen" 
                   className="w-full h-auto rounded-xl shadow-lg mb-8"
                 />
