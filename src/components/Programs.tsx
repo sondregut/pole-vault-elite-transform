@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Check, Plane, Dumbbell, UserRound } from "lucide-react";
+import { Check, Plane, Dumbbell, UserRound, ArrowRight } from "lucide-react";
 
 const Programs = () => {
   const programs = [
@@ -121,9 +121,9 @@ const Programs = () => {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <a href="/programs" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center">
+          <a href="/programs" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center gap-2">
             View all programs
-            <i className="ri-arrow-right-line ml-1"></i>
+            <ArrowRight className="w-5 h-5" />
           </a>
         </div>
       </div>
