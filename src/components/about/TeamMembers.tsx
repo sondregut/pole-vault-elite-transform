@@ -12,14 +12,16 @@ const TeamMembers = ({ teamImageSrc }: TeamMembersProps) => {
       <div className="container mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Meet The Team</h2>
         
-        {/* Team photo */}
-        <div className="mb-12">
-          <img 
-            src={teamImageSrc}
-            alt="Team Guttormsen" 
-            className="w-full max-w-3xl h-auto rounded-xl shadow-lg mx-auto"
-          />
-          <p className="text-center text-gray-600 mt-3 italic">Team Guttormsen - Atle, Simen and Sondre</p>
+        {/* Team photo - significantly reduced size */}
+        <div className="mb-12 flex justify-center">
+          <div className="w-full max-w-md">
+            <img 
+              src={teamImageSrc}
+              alt="Team Guttormsen" 
+              className="w-full h-auto rounded-xl shadow-lg"
+            />
+            <p className="text-center text-gray-600 mt-3 italic">Team Guttormsen - Atle, Simen and Sondre</p>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
