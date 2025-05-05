@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -64,10 +63,10 @@ const Shop = () => {
       id: 6,
       name: "Zoom / Phone Call Consultation",
       price: "from $50.00",
-      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//zoom%20.jpg",
       category: "coaching",
       hasOptions: true,
-      options: ["30 Minutes", "60 Minutes", "90 Minutes"]
+      options: ["30 Minutes - $50", "60 Minutes - $90", "3x 30 Minutes - $130"]
     },
     {
       id: 7,
