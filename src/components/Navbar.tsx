@@ -33,6 +33,11 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const navLinks: NavLink[] = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
@@ -42,6 +47,13 @@ const Navbar = () => {
     { name: "Contact", href: "/contact" },
     { name: "Apply for Coaching", href: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform", external: true },
   ];
+
+  const handleLinkClick = () => {
+    window.scrollTo(0, 0);
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  };
 
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-white z-50 transition-shadow ${isScrolled ? "shadow-md" : ""}`}>
@@ -68,6 +80,7 @@ const Navbar = () => {
                 className={`text-gray-800 font-medium hover:text-primary transition ${
                   location.pathname === link.href ? "text-primary" : ""
                 }`}
+                onClick={handleLinkClick}
               >
                 {link.name}
               </Link>
@@ -112,7 +125,7 @@ const Navbar = () => {
                   className={`py-3 text-gray-900 hover:text-primary border-b border-gray-100 ${
                     location.pathname === link.href ? "text-primary" : ""
                   }`}
-                  onClick={toggleMenu}
+                  onClick={handleLinkClick}
                 >
                   {link.name}
                 </Link>

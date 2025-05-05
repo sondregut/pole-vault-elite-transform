@@ -63,11 +63,7 @@ const AppFeatures = () => {
           </div>
           <div className="lg:w-1/2 order-1 lg:order-2">
             <div className="relative w-full min-h-[650px] flex justify-center items-start p-8">
-              <img
-                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//6D0EC66B-6190-429D-83D8-39960882D009.jpg"
-                alt="TrainHeroic App Interface"
-                className="w-full h-auto rounded-3xl shadow-2xl max-w-md mx-auto mt-0"
-              />
+              {/* TrainHeroic app interface image removed as requested */}
               
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 rounded-full blur-2xl -z-10"></div>
