@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Award, Trophy, GraduationCap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -26,9 +25,9 @@ const CoachProfile = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-16 bg-gray-50">
       <div className="container mx-auto">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
+        <div className="flex flex-col lg:flex-row items-center gap-10">
           <div className={`${isMobile ? 'w-3/4' : 'lg:w-1/2'}`}>
             <img
               src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre23%20jubel.jpeg"
@@ -37,14 +36,14 @@ const CoachProfile = () => {
             />
           </div>
           <div className="lg:w-1/2">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
               Meet Your Coach: Sondre
             </h2>
-            <p className="text-lg text-gray-600 mb-6">
+            <p className="text-lg text-gray-600 mb-5">
               Two-time Olympian and collegiate record holder with extensive coaching experience 
               helping athletes reach their full potential.
             </p>
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-6">
               {achievements.map((achievement, index) => (
                 <div key={index} className="flex items-start">
                   <div className="w-12 h-12 bg-[#EBF1FF] rounded-full flex items-center justify-center">
@@ -57,7 +56,7 @@ const CoachProfile = () => {
                 </div>
               ))}
             </div>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-lg text-gray-600 mb-6">
               "My coaching philosophy is about developing complete athletes. We focus on building 
               explosive speed, raw strength, and dynamic power, while perfecting technical execution. 
               Every training session is designed to transform you into a more powerful, faster, 

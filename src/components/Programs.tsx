@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Check, Plane, Dumbbell, UserRound, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -58,9 +57,9 @@ const Programs = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-12 bg-gray-50">
       <div className="container mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
             Our Coaching Programs
           </h2>
@@ -121,7 +120,7 @@ const Programs = () => {
             </div>
           ))}
         </div>
-        <div className="mt-8 text-center">
+        <div className="mt-6 text-center">
           <Link to="/shop" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center gap-2">
             View all programs
             <ArrowRight className="w-5 h-5" />

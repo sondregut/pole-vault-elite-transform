@@ -1,4 +1,3 @@
-
 import { Star, MessageCircle, ChevronUp, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -83,9 +82,9 @@ const Testimonials = () => {
   const isExpanded = (index: number) => expandedTestimonials.includes(index);
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-14 bg-gray-50">
       <div className="container mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
             What Our Athletes Say
           </h2>
@@ -154,7 +153,7 @@ const Testimonials = () => {
           ))}
         </div>
         
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center">
           {!showAllTestimonials && testimonials.length > 3 ? (
             <Button 
               onClick={() => setShowAllTestimonials(true)}
