@@ -2,6 +2,13 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Video, LineChart, MessageCircle, Calendar, FileText, ListCheck } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const AppFeatures = () => {
   const features = [
@@ -30,6 +37,17 @@ const AppFeatures = () => {
       title: "Direct Coach Communication",
       description: "Message Sondre directly through the app for form checks, questions, or training adjustments."
     }
+  ];
+
+  const appImages = [
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7584-left.png",
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7585-left.png",
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7587-left.png",
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7588-left.png",
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7589-left.png",
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7590-left.png",
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7591-left.png",
+    "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/trainheroic/IMG_7592-left.png",
   ];
 
   return (
@@ -62,7 +80,28 @@ const AppFeatures = () => {
             </div>
           </div>
           <div className="lg:w-1/2 order-1 lg:order-2">
-            <div className="relative w-full min-h-[650px] flex justify-center items-start p-8">
+            <div className="relative w-full min-h-[650px] flex justify-center items-start">
+              {/* App carousel */}
+              <Carousel className="w-full max-w-[340px] mx-auto">
+                <CarouselContent>
+                  {appImages.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <div className="p-1">
+                        <div className="overflow-hidden rounded-xl border border-white/10 shadow-xl">
+                          <img 
+                            src={image} 
+                            alt={`App screenshot ${index + 1}`}
+                            className="w-full h-auto object-cover"
+                          />
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-0 text-white border-white" />
+                <CarouselNext className="right-0 text-white border-white" />
+              </Carousel>
+              
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 rounded-full blur-2xl -z-10"></div>
               <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl -z-10"></div>
