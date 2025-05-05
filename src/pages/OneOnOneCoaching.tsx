@@ -1,10 +1,11 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check, Calendar, User, Users, Pencil, MessageSquare, Video, Apple, Smartphone, FileVideo, Clock, Search, ListCheck, LineChart } from "lucide-react";
+import { Check, Calendar, User, Users, Pencil, MessageSquare, Video, FileVideo, Clock, Search, ListCheck, LineChart, ArrowRight } from "lucide-react";
 
 const OneOnOneCoaching: React.FC = () => {
   return (
@@ -109,7 +110,7 @@ const OneOnOneCoaching: React.FC = () => {
                 className="inline-flex items-center text-primary font-medium hover:text-blue-700 transition"
               >
                 Learn more about our coaching process
-                <i className="ri-arrow-right-line ml-2"></i>
+                <ArrowRight className="ml-2 h-4 w-4" />
               </a>
             </div>
             <div className="relative">
@@ -492,80 +493,6 @@ const OneOnOneCoaching: React.FC = () => {
         </div>
       </section>
 
-      {/* App Screenshots */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-8 md:px-16 lg:px-24">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">App Interface</h2>
-            <p className="text-lg text-gray-600">
-              Explore our intuitive and powerful coaching application designed for
-              pole vaulters.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="app-screenshot">
-              <img
-                src="/app-screen-1.jpg"
-                alt="Training Program Calendar"
-                className="w-full h-auto"
-              />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-gray-900">Training Calendar</h3>
-                <p className="text-sm text-gray-600">
-                  View your weekly training schedule
-                </p>
-              </div>
-            </div>
-            <div className="app-screenshot">
-              <img
-                src="/app-screen-2.jpg"
-                alt="Video Analysis Screen"
-                className="w-full h-auto"
-              />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-gray-900">Video Analysis</h3>
-                <p className="text-sm text-gray-600">
-                  Frame-by-frame technique review
-                </p>
-              </div>
-            </div>
-            <div className="app-screenshot">
-              <img
-                src="/app-screen-3.jpg"
-                alt="Performance Metrics"
-                className="w-full h-auto"
-              />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-gray-900">Performance Dashboard</h3>
-                <p className="text-sm text-gray-600">Track your progress metrics</p>
-              </div>
-            </div>
-            <div className="app-screenshot">
-              <img
-                src="/app-screen-1.jpg"
-                alt="Coach Messaging"
-                className="w-full h-auto"
-              />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-gray-900">Coach Messaging</h3>
-                <p className="text-sm text-gray-600">
-                  Direct communication with your coach
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="mt-12 text-center">
-            <a
-              href="#"
-              className="inline-flex items-center text-primary font-medium hover:text-blue-700 transition"
-            >
-              View more screenshots
-              <i className="ri-arrow-right-line ml-2"></i>
-            </a>
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials */}
       <section className="py-16">
         <div className="container mx-auto px-8 md:px-16 lg:px-24">
@@ -658,68 +585,6 @@ const OneOnOneCoaching: React.FC = () => {
                     Masters Athlete • Using app for 12 months
                   </p>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Download Section - Updated to match the design */}
-      <section className="py-20 bg-primary">
-        <div className="container mx-auto px-8 md:px-16 lg:px-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Download Our App Today</h2>
-              <p className="text-xl mb-8">
-                Take your pole vault coaching experience to the next level with
-                our comprehensive training app.
-              </p>
-              <div className="space-y-6 mb-10">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 mr-4 text-white">
-                    <Check className="h-6 w-6" />
-                  </div>
-                  <span className="text-lg">Available for iOS and Android devices</span>
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 mr-4 text-white">
-                    <Check className="h-6 w-6" />
-                  </div>
-                  <span className="text-lg">Also accessible via web browser</span>
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 mr-4 text-white">
-                    <Check className="h-6 w-6" />
-                  </div>
-                  <span className="text-lg">Free to download, premium features with coaching subscription</span>
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  variant="app-download" 
-                  size="lg"
-                  className="flex items-center gap-2 w-full sm:w-auto justify-center"
-                >
-                  <Apple className="h-5 w-5" />
-                  Download for iOS
-                </Button>
-                <Button 
-                  variant="app-download-outline"
-                  size="lg" 
-                  className="flex items-center gap-2 w-full sm:w-auto justify-center"
-                >
-                  <Smartphone className="h-5 w-5" />
-                  Download for Android
-                </Button>
-              </div>
-            </div>
-            <div className="flex justify-center lg:justify-end">
-              <div className="bg-gray-200 rounded-3xl p-4 max-w-md">
-                <img
-                  src="/lovable-uploads/cda86302-61d4-4c15-ac46-686b3496f871.png"
-                  alt="App on Smartphone"
-                  className="max-w-full h-auto rounded-2xl"
-                />
               </div>
             </div>
           </div>
@@ -825,26 +690,14 @@ const OneOnOneCoaching: React.FC = () => {
               size="xl" 
               variant="cta"
               className="rounded-full px-8"
+              asChild
             >
-              <User className="text-white" size={24} />
-              Apply for 1:1 Coaching
-            </Button>
-            <Button 
-              size="xl" 
-              variant="cta-outline"
-              className="rounded-full px-8"
-            >
-              <Calendar className="text-primary" size={24} />
-              Download the App
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform" target="_blank" rel="noopener noreferrer">
+                <User className="text-white" size={24} />
+                Apply for 1:1 Coaching
+              </a>
             </Button>
           </div>
-          <p className="text-gray-500 mt-8">
-            Not sure which option is right for you?
-            <a href="#" className="text-primary font-medium ml-1">
-              Schedule a free consultation
-            </a>
-            .
-          </p>
         </div>
       </section>
 
@@ -892,12 +745,6 @@ const OneOnOneCoaching: React.FC = () => {
           
           .feature-card:hover, .testimonial-card:hover {
             transform: translateY(-5px);
-          }
-          
-          .app-screenshot {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border-radius: 16px;
-            overflow: hidden;
           }
         `}
       </style>
