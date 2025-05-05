@@ -42,7 +42,7 @@ const Navbar = () => {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "1:1 Coaching", href: "/coaching" },
-    { name: "App", href: "/app" },
+    { name: "App", href: "/coming-soon" },
     { name: "Shop", href: "/shop" },
     { name: "Contact", href: "/contact" },
     { name: "Apply for Coaching", href: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform", external: true },
