@@ -45,10 +45,16 @@ serve(async (req) => {
       apiVersion: '2023-10-16',
     });
 
-    // Initialize Supabase client
-    const supabaseUrl = 'https://qmasltemgjtbwrwscxtj.supabase.co';
-    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY') || '';
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    // Initialize Supabase client with SERVICE ROLE KEY for bypassing RLS
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
+    
+    // Create a service role client that can bypass RLS
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Initialize regular client for user auth checks
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') || '';
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
     // Get user info if authenticated
     let user = null;
@@ -83,8 +89,8 @@ serve(async (req) => {
       return sum + (item.price_data.unit_amount * item.quantity);
     }, 0);
 
-    // Create a new order in the database
-    const { data: orderData, error: orderError } = await supabase
+    // Create a new order in the database using service role client to bypass RLS
+    const { data: orderData, error: orderError } = await supabaseAdmin
       .from('orders')
       .insert({
         user_id: user?.id || null,
@@ -103,7 +109,7 @@ serve(async (req) => {
       );
     }
 
-    // Insert order items
+    // Insert order items using service role client to bypass RLS
     const orderItems = lineItems.map(item => ({
       order_id: orderData.id,
       product_id: item.productId,
@@ -113,7 +119,7 @@ serve(async (req) => {
       quantity: item.quantity
     }));
 
-    const { error: itemsError } = await supabase
+    const { error: itemsError } = await supabaseAdmin
       .from('order_items')
       .insert(orderItems);
 
@@ -134,8 +140,8 @@ serve(async (req) => {
       },
     });
 
-    // Update order with Stripe session ID
-    await supabase
+    // Update order with Stripe session ID using service role client to bypass RLS
+    await supabaseAdmin
       .from('orders')
       .update({ stripe_session_id: session.id })
       .eq('id', orderData.id);
