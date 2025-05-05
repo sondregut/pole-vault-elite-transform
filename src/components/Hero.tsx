@@ -29,7 +29,7 @@ const Hero = () => {
                 Apply for Coaching
               </Button>
             </a>
-            <Link to="/programs">
+            <Link to="/shop">
               <Button 
                 size="lg" 
                 variant="outline" 
