@@ -1,4 +1,3 @@
-
 export const products = [
   {
     id: 1,
@@ -8,7 +7,8 @@ export const products = [
     category: "training",
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214",
     hasOptions: false,
-    options: []
+    options: [],
+    description: "A comprehensive 10-week program designed to build strength and power for athletes."
   },
   {
     id: 2,
@@ -18,7 +18,8 @@ export const products = [
     category: "training",
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932",
     hasOptions: false,
-    options: []
+    options: [],
+    description: "An expert-crafted 10-week pole vault program to elevate your technique and performance."
   },
   {
     id: 3,
@@ -27,7 +28,8 @@ export const products = [
     image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//jumpers%20knee.png",
     category: "training",
     hasOptions: false,
-    options: []
+    options: [],
+    description: "A comprehensive rehabilitation protocol for jumper's knee (patellar tendinopathy), designed by elite pole vaulter and coach Sondre Guttormsen. This evidence-based program takes you through three stages of recovery, from managing pain to returning to sport. Perfect for athletes struggling with persistent knee pain from jumping."
   },
   {
     id: 4,
@@ -37,7 +39,9 @@ export const products = [
     category: "coaching",
     hasOptions: false,
     options: [],
-    externalLink: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform"
+    externalLink: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform",
+    description: "Personalized online coaching tailored to your specific needs and goals. Work directly with Sondre to improve your technique, strength, and overall performance.",
+    productLink: "https://g-forcetraining.com/coaching"
   },
   {
     id: 5,
@@ -46,7 +50,9 @@ export const products = [
     image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//video%20review%20image.png",
     category: "coaching",
     hasOptions: false,
-    options: []
+    options: [],
+    description: "By using the video coaching platform Onform, Sondre will give you a detailed video analysis of your pole vault technique as well as provide useful links to drills and exercises to work on your specific problem.",
+    youtubeVideo: "https://www.youtube.com/watch?v=vWH7UsJTQgE&t=27s"
   },
   {
     id: 6,
@@ -55,7 +61,8 @@ export const products = [
     image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//zoom%20.jpg",
     category: "coaching",
     hasOptions: true,
-    options: ["30 Minutes - $50", "60 Minutes - $90", "3x 30 Minutes - $130"]
+    options: ["30 Minutes - $50", "60 Minutes - $90", "3x 30 Minutes - $130"],
+    description: "Engage in a comprehensive online consultation with Sondre to elevate your pole vaulting technique. This session includes a detailed review of your jump videos, personalized feedback on your technique, training tips, and speed training strategies. Ideal for athletes seeking in-depth analysis and improvement advice."
   },
   {
     id: 7,
@@ -65,7 +72,8 @@ export const products = [
     category: "training",
     hasOptions: false,
     options: [],
-    comingSoon: true
+    comingSoon: true,
+    description: "Try a free 1-week sample of our comprehensive training programs to see if they're right for you."
   },
   {
     id: 8,

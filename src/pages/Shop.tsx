@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { products } from "@/data/products";
 
 const Shop = () => {
+  const navigate = useNavigate();
   // State for category filter
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
@@ -24,6 +25,15 @@ const Shop = () => {
   const filteredProducts = activeCategory === "all" 
     ? products 
     : products.filter(product => product.category === activeCategory);
+    
+  // Handle product click
+  const handleProductClick = (product: any) => {
+    if (product.productLink) {
+      window.open(product.productLink, '_blank');
+    } else {
+      navigate(`/shop/product/${product.id}`);
+    }
+  };
 
   return (
     <>
@@ -54,8 +64,8 @@ const Shop = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map(product => (
                 <Card key={product.id} className="overflow-hidden h-full flex flex-col">
-                  <Link 
-                    to={`/shop/product/${product.id}`}
+                  <div 
+                    onClick={() => handleProductClick(product)}
                     className="cursor-pointer group flex flex-col flex-grow"
                   >
                     <div className="aspect-square w-full overflow-hidden">
@@ -71,7 +81,7 @@ const Shop = () => {
                     </CardHeader>
                     <CardContent className="flex-grow">
                       {product.hasOptions && (
-                        <div className="mb-4" onClick={(e) => e.preventDefault()}>
+                        <div className="mb-4" onClick={(e) => e.stopPropagation()}>
                           <label className="text-sm text-gray-500 mb-1 block">
                             {product.category === "apparel" ? "Select Size" : "Select Option"}
                           </label>
@@ -88,7 +98,7 @@ const Shop = () => {
                         </div>
                       )}
                     </CardContent>
-                  </Link>
+                  </div>
                   <CardFooter>
                     {product.externalLink ? (
                       <Button asChild className="w-full" onClick={(e) => e.stopPropagation()}>

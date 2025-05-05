@@ -24,6 +24,22 @@ const ProductDetail = () => {
     );
   }
 
+  // YouTube Video Embedding
+  const youtubeEmbed = product.youtubeVideo ? (
+    <div className="mt-8 aspect-video">
+      <h3 className="text-xl font-bold mb-4">Watch Demo</h3>
+      <div className="relative pb-[56.25%] h-0">
+        <iframe 
+          className="absolute top-0 left-0 w-full h-full rounded-lg"
+          src={product.youtubeVideo.replace('watch?v=', 'embed/')}
+          title={`${product.name} Demo`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+    </div>
+  ) : null;
+
   // Special content for Jumpers Knee Protocol
   const jumpersKneeContent = product.id === 3 ? (
     <>
@@ -101,8 +117,127 @@ const ProductDetail = () => {
     </>
   ) : null;
 
+  // Video Review specific content
+  const videoReviewContent = product.id === 5 ? (
+    <div className="mt-12 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">Video Analysis Service</h2>
+      <p className="mb-6">
+        By using the video coaching platform Onform, Sondre will give you a detailed video analysis of your pole vault technique as well as provide useful links to drills and exercises to work on your specific problem.
+      </p>
+      
+      <h3 className="text-xl font-bold mt-8 mb-3">How It Works</h3>
+      <ol className="list-decimal pl-6 mb-6 space-y-2">
+        <li>Upload your jump or technique videos to the Onform platform</li>
+        <li>Sondre reviews your submission within 48 hours</li>
+        <li>Receive detailed analysis with frame-by-frame breakdown</li>
+        <li>Get customized drill recommendations and specific technique corrections</li>
+        <li>Implement the feedback and track your improvement</li>
+      </ol>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">What You'll Get</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Frame-by-frame analysis of your technique</li>
+        <li>Detailed visual annotations highlighting key points</li>
+        <li>Voice-over explanations of technical aspects</li>
+        <li>Customized drill recommendations</li>
+        <li>Links to complementary training resources</li>
+      </ul>
+
+      {youtubeEmbed}
+    </div>
+  ) : null;
+
+  // Zoom Consultation specific content
+  const zoomConsultationContent = product.id === 6 ? (
+    <div className="mt-12 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">Online Consultation Sessions</h2>
+      <p className="mb-6">
+        Engage in a comprehensive online consultation with Sondre to elevate your pole vaulting technique. These sessions include a detailed review of your jump videos, personalized feedback on your technique, training tips, and speed training strategies. Ideal for athletes seeking in-depth analysis and improvement advice.
+      </p>
+      
+      <h3 className="text-xl font-bold mt-8 mb-3">Session Options</h3>
+      <div className="space-y-4 mb-6">
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold">30 Minutes - $50</h4>
+          <p>Perfect for addressing specific technical issues or getting quick feedback on recent progress.</p>
+        </div>
+        <div className="p-4 border rounded-lg bg-gray-50">
+          <h4 className="font-bold">60 Minutes - $90</h4>
+          <p>Comprehensive session allowing for in-depth analysis, detailed technique review, and extensive Q&A time.</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold">3x 30 Minutes - $130</h4>
+          <p>Series of three shorter sessions, ideal for ongoing development and progress tracking over time.</p>
+        </div>
+      </div>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">What To Prepare</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Recent training or competition videos</li>
+        <li>Specific questions or concerns you'd like to address</li>
+        <li>Training log or recent progress summary (optional)</li>
+        <li>Goals and objectives for your upcoming season</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Technical Requirements</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Stable internet connection</li>
+        <li>Zoom or similar video conferencing platform</li>
+        <li>Ability to share screen for video review</li>
+      </ul>
+    </div>
+  ) : null;
+
+  // Online Coaching specific content
+  const onlineCoachingContent = product.id === 4 ? (
+    <div className="mt-12 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">1:1 Online Coaching</h2>
+      <p className="mb-6">
+        Work directly with Sondre through personalized online coaching tailored to your specific needs and goals. Receive custom training programs, regular technique analysis, and ongoing support to maximize your athletic performance.
+      </p>
+      
+      <h3 className="text-xl font-bold mt-8 mb-3">What's Included</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Customized training programs based on your goals and ability level</li>
+        <li>Regular video analysis and technique feedback</li>
+        <li>Weekly check-ins and program adjustments</li>
+        <li>Direct communication through messaging platform</li>
+        <li>Performance tracking and goal setting</li>
+        <li>Nutrition and recovery guidance</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Coaching Process</h3>
+      <ol className="list-decimal pl-6 mb-6 space-y-4">
+        <li>
+          <span className="font-bold">Initial Assessment</span>
+          <p>Comprehensive evaluation of your current abilities, goals, and training environment</p>
+        </li>
+        <li>
+          <span className="font-bold">Custom Program Design</span>
+          <p>Development of your personalized training program with specific focuses</p>
+        </li>
+        <li>
+          <span className="font-bold">Ongoing Support</span>
+          <p>Regular check-ins, technique analysis, and program adjustments based on your progress</p>
+        </li>
+        <li>
+          <span className="font-bold">Performance Review</span>
+          <p>Periodic comprehensive reviews of your development and goal achievement</p>
+        </li>
+      </ol>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Ideal For</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Athletes serious about improving their pole vault performance</li>
+        <li>Jumpers looking for expert guidance and personalized attention</li>
+        <li>Competitors preparing for important meets or championships</li>
+        <li>Athletes with limited local coaching resources</li>
+      </ul>
+    </div>
+  ) : null;
+
   // Generic content for other products
-  const genericContent = product.id !== 3 ? (
+  const genericContent = !jumpersKneeContent && !videoReviewContent && !zoomConsultationContent && !onlineCoachingContent ? (
     <div className="mt-12 bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Product Description</h2>
       <p className="mb-6">
@@ -147,6 +282,8 @@ const ProductDetail = () => {
           </ul>
         </div>
       )}
+
+      {youtubeEmbed}
     </div>
   ) : null;
 
@@ -177,28 +314,8 @@ const ProductDetail = () => {
                 <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
                 <p className="text-2xl font-bold mb-6">{product.price}</p>
                 
-                {product.category === "training" && product.id !== 3 && (
-                  <p className="mb-4">
-                    A comprehensive training program designed to improve your athletic performance in specific areas.
-                  </p>
-                )}
-
-                {product.id === 3 && (
-                  <p className="mb-4">
-                    A comprehensive rehabilitation protocol for jumper's knee (patellar tendinopathy), designed by elite pole vaulter and coach Sondre Guttormsen. This evidence-based program takes you through three stages of recovery, from managing pain to returning to sport. Perfect for athletes struggling with persistent knee pain from jumping.
-                  </p>
-                )}
-
-                {product.category === "coaching" && (
-                  <p className="mb-4">
-                    Professional coaching services to help you achieve your athletic goals through personalized guidance and expertise.
-                  </p>
-                )}
-
-                {product.category === "apparel" && (
-                  <p className="mb-4">
-                    High-quality apparel that combines style with performance for athletes and supporters.
-                  </p>
+                {product.description && (
+                  <p className="mb-4">{product.description}</p>
                 )}
 
                 {product.hasOptions && (
@@ -235,6 +352,9 @@ const ProductDetail = () => {
 
             {/* Product specific content */}
             {jumpersKneeContent}
+            {videoReviewContent}
+            {zoomConsultationContent}
+            {onlineCoachingContent}
             {genericContent}
           </div>
         </div>
