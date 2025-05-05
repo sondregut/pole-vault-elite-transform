@@ -39,6 +39,7 @@ const Navbar = () => {
     { name: "App", href: "/app" },
     { name: "Shop", href: "/shop" },
     { name: "Contact", href: "/contact" },
+    { name: "Apply for Coaching", href: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform", external: true },
   ];
 
   return (
@@ -72,8 +73,6 @@ const Navbar = () => {
             )
           ))}
         </div>
-
-        <Button className="hidden md:block">Apply for Coaching</Button>
 
         {/* Mobile Navigation Toggle - Updated with Lucide Menu icon */}
         <button
@@ -114,9 +113,6 @@ const Navbar = () => {
                 </Link>
               )
             ))}
-            <div className="mt-4">
-              <Button className="w-full">Apply for Coaching</Button>
-            </div>
           </div>
         </div>
       )}
