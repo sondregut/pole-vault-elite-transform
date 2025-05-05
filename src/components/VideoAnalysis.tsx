@@ -37,34 +37,39 @@ const VideoAnalysis = () => {
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/4 md:w-1/3">
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <div className="relative cursor-pointer group">
-                  <img
-                    src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//pv%20review%20.png"
-                    alt="Video Analysis Demo"
-                    className="w-full h-auto rounded-lg shadow-lg"
-                  />
-                  <div className="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="bg-white/90 rounded-full p-3">
-                      <Play className="w-8 h-8 text-[#3176FF]" />
+            <div className="relative cursor-pointer rounded-lg shadow-lg w-full overflow-hidden">
+              <HoverCard openDelay={0} closeDelay={300}>
+                <HoverCardTrigger asChild>
+                  <div className="relative group">
+                    <img
+                      src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//pv%20review%20.png"
+                      alt="Video Analysis Demo"
+                      className="w-full h-auto rounded-lg"
+                    />
+                    <div className="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="bg-white/90 rounded-full p-3">
+                        <Play className="w-8 h-8 text-[#3176FF]" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </HoverCardTrigger>
-              <HoverCardContent className="p-0 w-[560px] border-none shadow-xl">
-                <iframe 
-                  width="560" 
-                  height="315" 
-                  src="https://www.youtube.com/embed/vWH7UsJTQgE?si=_hj2bq5aQ4Afk7MJ&autoplay=1" 
-                  title="YouTube video player" 
-                  frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                  referrerPolicy="strict-origin-when-cross-origin" 
-                  allowFullScreen>
-                </iframe>
-              </HoverCardContent>
-            </HoverCard>
+                </HoverCardTrigger>
+                <HoverCardContent className="p-0 border-none shadow-xl w-auto" side="right">
+                  <div className="w-full h-full rounded-lg overflow-hidden" style={{ width: "100%", minWidth: "300px" }}>
+                    <iframe 
+                      width="100%" 
+                      height="auto"
+                      style={{ aspectRatio: "16/9" }}
+                      src="https://www.youtube.com/embed/vWH7UsJTQgE?si=_hj2bq5aQ4Afk7MJ&autoplay=1" 
+                      title="YouTube video player" 
+                      frameBorder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                      referrerPolicy="strict-origin-when-cross-origin" 
+                      allowFullScreen>
+                    </iframe>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            </div>
           </div>
           <div className="lg:w-3/4 md:w-2/3">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
