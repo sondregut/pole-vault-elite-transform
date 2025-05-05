@@ -1,5 +1,6 @@
+
 import { Button } from "@/components/ui/button";
-import { Award, Trophy, GraduationCap } from "lucide-react";
+import { Award, Trophy, GraduationCap, Instagram } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Link } from "react-router-dom";
 
@@ -34,6 +35,17 @@ const CoachProfile = () => {
               alt="Coach Sondre"
               className="w-full h-auto rounded-lg shadow-lg"
             />
+            <div className="mt-4 flex justify-center">
+              <a 
+                href="https://www.instagram.com/sondre_pv" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-gray-700 hover:text-[#3176FF] transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
+                <span className="font-medium">@sondre_pv</span>
+              </a>
+            </div>
           </div>
           <div className="lg:w-1/2">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
@@ -62,9 +74,38 @@ const CoachProfile = () => {
               Every training session is designed to transform you into a more powerful, faster, 
               and technically sound athlete."
             </p>
-            <Button asChild>
-              <Link to="/about#sondre">Learn More About Sondre</Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button asChild>
+                <Link to="/about#sondre">Learn More About Sondre</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <a 
+                  href="https://www.instagram.com/sondre_pv" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <Instagram className="h-5 w-5" />
+                  Follow on Instagram
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+        
+        {/* Instagram Embed Section */}
+        <div className="mt-12 pt-6 border-t border-gray-200">
+          <h3 className="text-2xl font-bold text-center mb-8">Follow Sondre on Instagram</h3>
+          <div className="flex justify-center">
+            <iframe
+              src="https://www.instagram.com/sondre_pv/embed"
+              width={isMobile ? "100%" : "500"}
+              height="600"
+              frameBorder="0"
+              scrolling="no"
+              allowTransparency={true}
+              className="rounded-lg shadow-lg"
+            ></iframe>
           </div>
         </div>
       </div>
