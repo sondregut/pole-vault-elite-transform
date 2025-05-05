@@ -119,15 +119,6 @@ const Navbar = () => {
           </div>
         </div>
       )}
-      
-      {/* Logo at the bottom of navbar */}
-      <div className="flex justify-center py-2 border-t mt-1">
-        <img 
-          src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//app%20icon%20tracker.png" 
-          alt="StavHopp Logo" 
-          className="h-8 w-auto"
-        />
-      </div>
     </nav>
   );
 };
