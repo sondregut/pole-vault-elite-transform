@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -694,63 +693,3 @@ const OneOnOneCoaching: React.FC = () => {
             >
               <a href="https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform" target="_blank" rel="noopener noreferrer">
                 <User className="text-white" size={24} />
-                Apply for 1:1 Coaching
-              </a>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-
-      {/* This is the correct way to add styles, without jsx or global props */}
-      <style>
-        {`
-          .hero-section {
-            min-height: 80vh;
-            background-size: cover;
-            background-position: center;
-          }
-          
-          .step-card {
-            position: relative;
-          }
-          
-          .step-card:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            top: 3rem;
-            right: -1.5rem;
-            width: 3rem;
-            height: 2px;
-            background-color: #e5e7eb;
-            z-index: 0;
-          }
-          
-          @media (max-width: 768px) {
-            .step-card:not(:last-child)::after {
-              top: auto;
-              right: auto;
-              bottom: -1.5rem;
-              left: 50%;
-              transform: translateX(-50%);
-              width: 2px;
-              height: 3rem;
-            }
-          }
-          
-          .feature-card, .testimonial-card {
-            transition: all 0.3s ease;
-          }
-          
-          .feature-card:hover, .testimonial-card:hover {
-            transform: translateY(-5px);
-          }
-        `}
-      </style>
-    </div>
-  );
-};
-
-export default OneOnOneCoaching;
-
