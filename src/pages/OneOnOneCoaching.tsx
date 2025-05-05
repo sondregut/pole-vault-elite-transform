@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check, Calendar, User, Users, Pencil, MessageSquare, Video, FileVideo, Clock, Search, ListCheck, LineChart, ArrowRight } from "lucide-react";
+import { Check, Calendar, User, Users, Pencil, MessageSquare, Video, FileVideo, Clock, Search, ListCheck, LineChart, ArrowRight, Info } from "lucide-react";
 
 const OneOnOneCoaching: React.FC = () => {
   return (
@@ -110,7 +110,7 @@ const OneOnOneCoaching: React.FC = () => {
                 className="inline-flex items-center text-primary font-medium hover:text-blue-700 transition"
               >
                 Learn more about our coaching process
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <Info className="ml-2 h-4 w-4" />
               </a>
             </div>
             <div className="relative">
@@ -753,3 +753,4 @@ const OneOnOneCoaching: React.FC = () => {
 };
 
 export default OneOnOneCoaching;
+
