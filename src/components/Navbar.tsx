@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
+import { Menu } from "lucide-react";
 
 // Update the interface to include the external property
 interface NavLink {
@@ -74,12 +75,13 @@ const Navbar = () => {
 
         <Button className="hidden md:block">Apply for Coaching</Button>
 
-        {/* Mobile Navigation Toggle */}
+        {/* Mobile Navigation Toggle - Updated with Lucide Menu icon */}
         <button
           onClick={toggleMenu}
-          className="md:hidden w-10 h-10 flex items-center justify-center"
+          className="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"
+          aria-label="Toggle menu"
         >
-          <i className="ri-menu-line text-gray-800 text-2xl"></i>
+          <Menu className="h-6 w-6 text-gray-800" />
         </button>
       </div>
 
