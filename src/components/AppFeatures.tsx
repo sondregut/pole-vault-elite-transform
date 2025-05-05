@@ -32,24 +32,6 @@ const AppFeatures = () => {
     }
   ];
 
-  const testimonials = [
-    {
-      quote: "The video analysis feature completely transformed my technique. Being able to get frame-by-frame feedback from my coach and see the progress in my vaults over time has been invaluable.",
-      name: "Rebecca Anderson",
-      role: "College Athlete • Using app for 8 months"
-    },
-    {
-      quote: "Having my training program right on my phone has made it so much easier to stay consistent. I love being able to log my workouts and see my progress charts improving week after week.",
-      name: "Michael Trevino",
-      role: "High School Athlete • Using app for 6 months"
-    },
-    {
-      quote: "The direct messaging with Coach Sondre has been a game-changer. Being able to get quick answers to my questions and share videos between our scheduled calls keeps me on track.",
-      name: "Sophia Martinez",
-      role: "Masters Athlete • Using app for 12 months"
-    }
-  ];
-
   return (
     <section className="py-20 bg-[#101827] text-white">
       <div className="container mx-auto">
@@ -81,23 +63,6 @@ const AppFeatures = () => {
           </div>
           <div className="lg:w-1/2 order-1 lg:order-2">
             <div className="relative w-full min-h-[650px] flex justify-center items-start p-8">
-              <div className="w-full max-w-md space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                    <p className="text-white italic mb-4">"{testimonial.quote}"</p>
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
-                        {testimonial.name.charAt(0)}
-                      </div>
-                      <div className="ml-3">
-                        <h4 className="font-semibold text-white">{testimonial.name}</h4>
-                        <p className="text-sm text-gray-300">{testimonial.role}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 rounded-full blur-2xl -z-10"></div>
               <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl -z-10"></div>
