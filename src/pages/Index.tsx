@@ -1,7 +1,6 @@
 
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import AthleteResults from '@/components/AthleteResults';
 import Features from '@/components/Features';
 import CoachProfile from '@/components/CoachProfile';
 import Testimonials from '@/components/Testimonials';
@@ -17,7 +16,6 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <Navbar />
       <Hero />
-      <AthleteResults />
       <Features />
       <CoachProfile />
       <Testimonials />
