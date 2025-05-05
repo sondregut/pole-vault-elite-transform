@@ -53,16 +53,16 @@ const AppFeatures = () => {
   return (
     <section className="py-20 bg-[#101827] text-white">
       <div className="container mx-auto">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          <div className="lg:w-1/2 order-2 lg:order-1">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+          <div className="lg:w-1/2 order-2 lg:order-1 pt-4 lg:pt-0">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 lg:mb-6">
               Access Your Training Through Our Coaching App
             </h2>
-            <p className="text-lg text-white mb-8">
+            <p className="text-lg text-white mb-6 lg:mb-8">
               Get instant access to your personalized training program through our premium coaching app 
               designed for serious pole vaulters and athletes.
             </p>
-            <div className="space-y-6 mb-8">
+            <div className="space-y-4 lg:space-y-6 mb-6 lg:mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -79,8 +79,8 @@ const AppFeatures = () => {
               <Button>Apply for Coaching</Button>
             </div>
           </div>
-          <div className="lg:w-1/2 order-1 lg:order-2">
-            <div className="relative w-full min-h-[650px] flex justify-center items-start">
+          <div className="lg:w-1/2 order-1 lg:order-2 mb-2 lg:mb-0">
+            <div className="relative w-full min-h-[550px] lg:min-h-[650px] flex justify-center items-start">
               {/* App carousel */}
               <Carousel className="w-full max-w-[340px] mx-auto">
                 <CarouselContent>
