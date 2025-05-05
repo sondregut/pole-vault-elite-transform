@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Award, Trophy, GraduationCap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Link } from "react-router-dom";
 
 const CoachProfile = () => {
   const isMobile = useIsMobile();
@@ -62,7 +63,9 @@ const CoachProfile = () => {
               Every training session is designed to transform you into a more powerful, faster, 
               and technically sound athlete."
             </p>
-            <Button>Learn More About Sondre</Button>
+            <Button asChild>
+              <Link to="/about#sondre">Learn More About Sondre</Link>
+            </Button>
           </div>
         </div>
       </div>
