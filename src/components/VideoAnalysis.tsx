@@ -1,7 +1,12 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Video, FileVideo, Clock, Search, MessageCircle } from "lucide-react";
+import { FileVideo, Clock, Search, MessageCircle, Play } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const VideoAnalysis = () => {
   const features = [
@@ -32,11 +37,34 @@ const VideoAnalysis = () => {
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/4 md:w-1/3">
-            <img
-              src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//pv%20review%20.png"
-              alt="Video Analysis Demo"
-              className="w-full h-auto rounded-lg shadow-lg"
-            />
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <div className="relative cursor-pointer group">
+                  <img
+                    src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//pv%20review%20.png"
+                    alt="Video Analysis Demo"
+                    className="w-full h-auto rounded-lg shadow-lg"
+                  />
+                  <div className="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="bg-white/90 rounded-full p-3">
+                      <Play className="w-8 h-8 text-[#3176FF]" />
+                    </div>
+                  </div>
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="p-0 w-[560px] border-none shadow-xl">
+                <iframe 
+                  width="560" 
+                  height="315" 
+                  src="https://www.youtube.com/embed/vWH7UsJTQgE?si=_hj2bq5aQ4Afk7MJ" 
+                  title="YouTube video player" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen>
+                </iframe>
+              </HoverCardContent>
+            </HoverCard>
           </div>
           <div className="lg:w-3/4 md:w-2/3">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
