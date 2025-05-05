@@ -114,16 +114,10 @@ const OneOnOneCoaching: React.FC = () => {
             </div>
             <div className="relative">
               <img
-                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//b32b45552903d9cdedfa0a1bfabc437a.png"
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20norway%20get%20ready%20pic.png"
                 alt="1:1 Coaching Session"
                 className="w-full h-auto rounded-lg shadow-xl"
               />
-              <div
-                className="absolute -bottom-6 -right-6 bg-primary text-white p-4 rounded-lg shadow-lg"
-              >
-                <div className="text-xl font-bold">97%</div>
-                <div className="text-sm">Performance Improvement</div>
-              </div>
             </div>
           </div>
         </div>
