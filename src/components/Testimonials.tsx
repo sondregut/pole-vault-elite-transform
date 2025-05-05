@@ -14,7 +14,7 @@ const Testimonials = () => {
       author: "Sara Guttormsen",
       title: "Norwegian U20 Champion",
       subtitle: "A key to my progress",
-      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Gabriel.png",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Sara.png",
     },
     {
       quote: "Back in early 2023, I broke my back hyperextending it and didn't know if I would ever pole vault again. Once I found Team Guttormsen they were at my side, step by step, educating me on how to work through a fractured back. This gave me the confidence I needed to see myself back on the runway. They taught me how to stop my injury from happening again. They gave me specific workout programs, drills, and stretches tailored to my body's movement, taking into account my current and past injuries. One of my biggest issues was taking off with poor posture. This was a three-year problem, and with video analysis from Sondre and the Team Guttormsen, I have significantly improved my technique. Team Guttormsen took me from an all-time low to achieving a new personal best! Thanks to the experiences and wisdom of Team Guttormsen, I am a safer vaulter and better athlete.",
@@ -28,7 +28,7 @@ const Testimonials = () => {
       author: "Andy Jung",
       title: "Masters Vaulter, Coach at UNCW",
       subtitle: "Incredibly valuable",
-      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Gabriel.png",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Andy.png",
     },
     {
       quote: "I purchased the 3-month training program over the summer of 2024, which also happened to be an Olympic year for Sondre, but that did not affect the training provided. He was always available for questions and concerns on training or technique. The training was tailored to me specifically and had me feeling strong and fast while recovering from injuries! The video reviews were in depth and had great suggestions that elevated my technique. Overall, Sondre provided far more value than I paid for, and it was a great experience!",
@@ -56,7 +56,7 @@ const Testimonials = () => {
       author: "Andrei Iosivas",
       title: "Former D1 All-American Decathlete, NFL Wide Receiver",
       subtitle: "Improved from 15 to 16 feet",
-      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Noah%20(1).png",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Andrei.png",
     },
     {
       quote: "Sondre's knowledge of pole vault technique, biomechanics, and cutting edge training methods to increase sprint speed and reduce injury risk has benefitted me significantly the past few years training not only for pole vault but for sprints and hurdles as well. Sondre is super receptive to each athlete's needs and extremely empathetic to the challenges they face. You will not find better for online coaching in track and field!",
