@@ -8,12 +8,12 @@ interface TeamMembersProps {
 
 const TeamMembers = ({ teamImageSrc }: TeamMembersProps) => {
   return (
-    <section className="py-16">
+    <section className="py-8 md:py-16">
       <div className="container mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Meet The Team</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-12 text-center">Meet The Team</h2>
         
         {/* Team photo - significantly reduced size */}
-        <div className="mb-12 flex justify-center">
+        <div className="mb-6 md:mb-12 flex justify-center">
           <div className="w-full max-w-md">
             <img 
               src={teamImageSrc}
@@ -24,7 +24,7 @@ const TeamMembers = ({ teamImageSrc }: TeamMembersProps) => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Sondre's Card */}
           <TeamMemberCard 
             name="SONDRE GUTTORMSEN, OLY"

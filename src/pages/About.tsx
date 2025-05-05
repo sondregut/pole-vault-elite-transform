@@ -38,14 +38,18 @@ const About = () => {
           imageSrc="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg"
         />
         
-        <TeamMembers 
-          teamImageSrc="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//dad%20simen%20sondre.JPG"
-        />
+        <div className="pt-0 md:pt-6">
+          <TeamMembers 
+            teamImageSrc="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//dad%20simen%20sondre.JPG"
+          />
+        </div>
         
-        <SondreProfile 
-          profileImageSrc="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20adidas.jpg"
-          careerHighlights={careerHighlights}
-        />
+        <div className="pt-0 md:pt-8">
+          <SondreProfile 
+            profileImageSrc="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20adidas.jpg"
+            careerHighlights={careerHighlights}
+          />
+        </div>
       </main>
       <Footer />
     </div>

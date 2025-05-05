@@ -7,11 +7,11 @@ interface TeamPhilosophyProps {
 
 const TeamPhilosophy = ({ imageSrc }: TeamPhilosophyProps) => {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8 md:py-16 bg-gray-50">
       <div className="container mx-auto">
-        <div className="flex flex-col lg:flex-row-reverse gap-12 items-center">
+        <div className="flex flex-col lg:flex-row-reverse gap-6 md:gap-12 items-center">
           <div className="lg:w-1/2">
-            <h2 className="text-3xl font-bold mb-6">Team Training Philosophy</h2>
+            <h2 className="text-3xl font-bold mb-4 md:mb-6">Team Training Philosophy</h2>
             <div className="space-y-4 text-gray-700">
               <p>
                 Sondre, Simen, and Sara have trained together for the last 15 years with father Atle in 
