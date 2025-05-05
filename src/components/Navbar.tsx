@@ -34,7 +34,6 @@ const Navbar = () => {
   const navLinks: NavLink[] = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
-    { name: "Programs", href: "/programs" },
     { name: "1:1 Coaching", href: "/coaching" },
     { name: "App", href: "/app" },
     { name: "Shop", href: "/shop" },
