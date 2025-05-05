@@ -36,26 +36,26 @@ const Shop = () => {
       id: 3,
       name: "Jumpers Knee Rehab Protocol",
       price: "$19",
-      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//jumpers%20knee.png",
       category: "training",
       hasOptions: false,
       options: []
     },
     {
       id: 4,
-      name: "Standard Online Coaching",
+      name: "1:1 Online Coaching",
       price: "from $299.00",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg",
       category: "coaching",
-      hasOptions: true,
-      options: ["1 Month", "3 Months", "6 Months", "12 Months"],
+      hasOptions: false,
+      options: [],
       externalLink: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform"
     },
     {
       id: 5,
       name: "Video Review",
       price: "$20.00",
-      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//video-analysis.jpg",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//video%20review%20image.png",
       category: "coaching",
       hasOptions: false,
       options: []
