@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -76,8 +77,8 @@ const About = () => {
               </div>
               <div className="lg:w-1/2">
                 <img 
-                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//simen.jpeg" 
-                  alt="Team Guttormsen" 
+                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20and%20simen.jpg" 
+                  alt="Sondre and Simen Guttormsen" 
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </div>
@@ -113,8 +114,8 @@ const About = () => {
               </div>
               <div className="lg:w-1/2">
                 <img 
-                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sara%20simen%20sondre.jpeg" 
-                  alt="Team Training" 
+                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20simen%20coaching.jpg" 
+                  alt="Sondre and Simen Coaching" 
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </div>
@@ -299,3 +300,4 @@ const About = () => {
 };
 
 export default About;
+
