@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -127,14 +126,14 @@ const About = () => {
           <div className="container mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Meet The Team</h2>
             
-            {/* Team photo - newly added */}
+            {/* Team photo - updated with new image */}
             <div className="mb-12">
               <img 
-                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//56AE6F13-5AA0-477F-880D-C6616340F115.jpg"
-                alt="Sondre and Simen Guttormsen" 
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//dad%20simen%20sondre.JPG"
+                alt="Team Guttormsen" 
                 className="w-full max-w-3xl h-auto rounded-xl shadow-lg mx-auto"
               />
-              <p className="text-center text-gray-600 mt-3 italic">Sondre and Simen Guttormsen - Team Guttormsen</p>
+              <p className="text-center text-gray-600 mt-3 italic">Team Guttormsen - Atle, Simen and Sondre</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -300,4 +299,3 @@ const About = () => {
 };
 
 export default About;
-
