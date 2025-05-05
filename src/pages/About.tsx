@@ -23,15 +23,15 @@ const About = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
-        <div className="relative bg-gray-50 py-16 md:py-24">
-          {/* Hero image background */}
+        <div className="relative bg-gray-800 py-16 md:py-24">
+          {/* Hero image background with dark overlay */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <img 
               src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-04-14%20at%202.10.32%20PM.png"
               alt="About Us Hero"
-              className="w-full h-full object-cover opacity-20"
+              className="w-full h-full object-cover opacity-50 object-center object-bottom"
             />
-            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+            <div className="absolute inset-0 bg-black bg-opacity-70"></div>
           </div>
           
           <div className="container mx-auto relative z-10">
