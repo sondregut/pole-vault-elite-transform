@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -45,14 +44,6 @@ const OneOnOneCoaching: React.FC = () => {
                   Start Training Today
                 </Button>
               </a>
-              <Button 
-                size="xl" 
-                variant="cta-outline"
-                className="rounded-full px-8"
-              >
-                <Calendar className="text-primary" size={24} />
-                Schedule a Call
-              </Button>
             </div>
           </div>
         </div>
