@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,7 +34,9 @@ const Programs = () => {
       timeCommitment: "5-7 hrs/week",
       price: "$249/month",
       priceDetail: "Starting at",
+      applyNowLink: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform",
       image: "/program-3.jpg",
+      hasLearnMore: false,
     },
     {
       id: "flight",
@@ -55,7 +56,10 @@ const Programs = () => {
       timeCommitment: "3-5 hrs/week",
       price: "$349",
       priceDetail: "One-time purchase",
+      buyNowLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932",
+      learnMoreLink: "https://marketplace.trainheroic.com/workout-plan/program/guttormsen-program-1733159932?attrib=591046-web",
       image: "/program-1.jpg",
+      hasLearnMore: true,
     },
     {
       id: "power",
@@ -75,7 +79,10 @@ const Programs = () => {
       timeCommitment: "2-3 hrs/week",
       price: "$149",
       priceDetail: "One-time purchase",
+      buyNowLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214",
+      learnMoreLink: "https://marketplace.trainheroic.com/workout-plan/program/guttormsen-program-1735674214?attrib=591046-web",
       image: "/program-2.jpg",
+      hasLearnMore: true,
     },
   ];
 
@@ -337,10 +344,21 @@ const Programs = () => {
           <span className="text-xl font-bold text-primary">{program.price}</span>
         </div>
         <div className="flex gap-2 w-full">
-          <Button className="flex-1 bg-primary hover:bg-primary-dark">
-            {program.priceDetail.includes("Starting") ? "Apply Now" : "Buy Now"}
-          </Button>
-          <Button variant="outline" className="flex-1">Learn More</Button>
+          {program.priceDetail.includes("Starting") ? (
+            <Button className="flex-1 bg-primary hover:bg-primary-dark" asChild>
+              <a href={program.applyNowLink} target="_blank" rel="noopener noreferrer">Apply Now</a>
+            </Button>
+          ) : (
+            <Button className="flex-1 bg-primary hover:bg-primary-dark" asChild>
+              <a href={program.buyNowLink} target="_blank" rel="noopener noreferrer">Buy Now</a>
+            </Button>
+          )}
+          
+          {program.hasLearnMore && (
+            <Button variant="outline" className="flex-1" asChild>
+              <a href={program.learnMoreLink} target="_blank" rel="noopener noreferrer">Learn More</a>
+            </Button>
+          )}
         </div>
       </CardFooter>
     </Card>
@@ -401,7 +419,7 @@ const Programs = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">Athlete Testimonials</h2>
           <p className="text-gray-600 text-center mb-12">

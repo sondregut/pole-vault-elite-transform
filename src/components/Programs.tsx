@@ -17,7 +17,9 @@ const Programs = () => {
         "Standard app access"
       ],
       price: "$59",
-      priceDetail: "One-time purchase"
+      priceDetail: "One-time purchase",
+      buyNowLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932",
+      learnMoreLink: "https://marketplace.trainheroic.com/workout-plan/program/guttormsen-program-1733159932?attrib=591046-web"
     },
     {
       title: "Power Strength Program",
@@ -32,7 +34,9 @@ const Programs = () => {
         "Basic app access"
       ],
       price: "$39",
-      priceDetail: "One-time purchase"
+      priceDetail: "One-time purchase",
+      buyNowLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214",
+      learnMoreLink: "https://marketplace.trainheroic.com/workout-plan/program/guttormsen-program-1735674214?attrib=591046-web"
     },
     {
       title: "1-on-1 Online Coaching",
@@ -47,12 +51,13 @@ const Programs = () => {
         "Premium app access"
       ],
       price: "$249/month",
-      priceDetail: "Starting at"
+      priceDetail: "Starting at",
+      applyNowLink: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform"
     }
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-16 bg-gray-50">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -95,19 +100,28 @@ const Programs = () => {
                   <span className="text-2xl font-bold text-gray-900">{program.price}</span>
                 </div>
                 <div className="flex gap-2">
-                  <Button className="flex-1">
-                    {index === 2 ? "Apply Now" : "Buy Now"}
-                  </Button>
-                  <Button variant="outline" className="flex-1">
-                    Learn More
-                  </Button>
+                  {index === 2 ? (
+                    <Button className="flex-1" asChild>
+                      <a href={program.applyNowLink} target="_blank" rel="noopener noreferrer">Apply Now</a>
+                    </Button>
+                  ) : (
+                    <Button className="flex-1" asChild>
+                      <a href={program.buyNowLink} target="_blank" rel="noopener noreferrer">Buy Now</a>
+                    </Button>
+                  )}
+                  
+                  {index !== 2 && (
+                    <Button variant="outline" className="flex-1" asChild>
+                      <a href={program.learnMoreLink} target="_blank" rel="noopener noreferrer">Learn More</a>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-12 text-center">
-          <a href="#" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center">
+        <div className="mt-8 text-center">
+          <a href="/programs" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center">
             View all programs
             <i className="ri-arrow-right-line ml-1"></i>
           </a>

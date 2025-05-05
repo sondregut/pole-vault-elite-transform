@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import { Mail, Phone } from "lucide-react";
+import Logo from "./Logo";
 
 const Footer = () => {
   return (
@@ -9,8 +11,8 @@ const Footer = () => {
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <Link to="/" className="text-2xl font-['Pacifico'] text-white mb-6 block">logo</Link>
-            <p className="text-gray-400 mb-6">
+            <Logo />
+            <p className="text-gray-400 mb-6 mt-4">
               Elevating athletes to new heights through expert coaching and personalized training programs.
             </p>
             <div className="flex space-x-4">
@@ -56,13 +58,13 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <div className="w-5 h-5 flex items-center justify-center mt-0.5">
-                  <i className="ri-mail-line text-primary"></i>
+                  <Mail size={16} className="text-primary" />
                 </div>
                 <span className="ml-3 text-gray-400">sondre@stavhopp.no</span>
               </li>
               <li className="flex items-start">
                 <div className="w-5 h-5 flex items-center justify-center mt-0.5">
-                  <i className="ri-phone-line text-primary"></i>
+                  <Phone size={16} className="text-primary" />
                 </div>
                 <span className="ml-3 text-gray-400">424-535-8644</span>
               </li>
@@ -81,7 +83,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400">© 2025 Pole Vault Coaching. All rights reserved.</p>
+          <p className="text-gray-400">© 2025 STAVHOPP.NO LLC. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-gray-400 hover:text-white transition">Privacy Policy</Link>
             <Link to="/terms" className="text-gray-400 hover:text-white transition">Terms of Service</Link>
