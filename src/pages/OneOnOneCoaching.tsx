@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -30,14 +31,20 @@ const OneOnOneCoaching: React.FC = () => {
               world-class guidance from an Olympic pole vault champion.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="xl" 
-                variant="cta"
-                className="rounded-full px-8"
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform" 
+                target="_blank" 
+                rel="noopener noreferrer"
               >
-                <User className="text-white" size={24} />
-                Start Training Today
-              </Button>
+                <Button 
+                  size="xl" 
+                  variant="cta"
+                  className="rounded-full px-8"
+                >
+                  <User className="text-white" size={24} />
+                  Start Training Today
+                </Button>
+              </a>
               <Button 
                 size="xl" 
                 variant="cta-outline"
