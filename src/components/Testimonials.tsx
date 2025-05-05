@@ -6,6 +6,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 
 const Testimonials = () => {
   const [showAllTestimonials, setShowAllTestimonials] = useState(false);
+  const [expandedTestimonials, setExpandedTestimonials] = useState<number[]>([]);
 
   const testimonials = [
     {
@@ -69,6 +70,18 @@ const Testimonials = () => {
   // Get the first 3 testimonials to show initially
   const displayedTestimonials = showAllTestimonials ? testimonials : testimonials.slice(0, 3);
 
+  // Toggle expanded state for a testimonial
+  const toggleExpand = (index: number) => {
+    setExpandedTestimonials(prev => 
+      prev.includes(index) 
+        ? prev.filter(i => i !== index) 
+        : [...prev, index]
+    );
+  };
+
+  // Check if a testimonial is expanded
+  const isExpanded = (index: number) => expandedTestimonials.includes(index);
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto">
@@ -90,23 +103,36 @@ const Testimonials = () => {
                 </div>
               </div>
               
-              <HoverCard>
-                <HoverCardTrigger asChild>
-                  <div className="relative">
-                    <p className="text-gray-700 mb-6 line-clamp-4 cursor-pointer">
-                      "{testimonial.quote}"
-                    </p>
-                    {testimonial.quote.length > 200 && (
-                      <div className="absolute bottom-0 right-0 bg-gradient-to-l from-white to-transparent px-2 flex items-center">
-                        <MessageCircle className="h-4 w-4 text-gray-400" />
-                      </div>
+              <div className="relative">
+                <p className={`text-gray-700 mb-6 ${isExpanded(index) ? "" : "line-clamp-4"}`}>
+                  "{testimonial.quote}"
+                </p>
+                
+                {testimonial.quote.length > 200 && !isExpanded(index) && (
+                  <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+                )}
+                
+                {testimonial.quote.length > 200 && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => toggleExpand(index)}
+                    className="mt-1 text-primary hover:text-primary/80 hover:bg-primary/5 px-0 h-auto font-medium flex items-center gap-1"
+                  >
+                    {isExpanded(index) ? (
+                      <>
+                        Read less
+                        <ChevronUp className="h-4 w-4" />
+                      </>
+                    ) : (
+                      <>
+                        Read more
+                        <ChevronDown className="h-4 w-4" />
+                      </>
                     )}
-                  </div>
-                </HoverCardTrigger>
-                <HoverCardContent className="w-80">
-                  <p className="text-sm text-gray-700">"{testimonial.quote}"</p>
-                </HoverCardContent>
-              </HoverCard>
+                  </Button>
+                )}
+              </div>
               
               <div className="flex items-center mt-4">
                 <img
