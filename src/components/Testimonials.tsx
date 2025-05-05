@@ -63,7 +63,7 @@ const Testimonials = () => {
       author: "August Kiles",
       title: "Princeton Alum, PR: 5.42m",
       subtitle: "Sondre is super receptive to each athlete's needs",
-      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Garrett%20(1).png",
+      image: "https://images.sidearmdev.com/resize?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Fprinceton.sidearmsports.com%2Fimages%2F2017%2F1%2F29%2FKiles_HEPS_Sat128.jpg&height=1100&type=webp",
     },
   ];
 
