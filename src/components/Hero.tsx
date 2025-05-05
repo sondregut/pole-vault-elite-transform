@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -19,16 +20,24 @@ const Hero = () => {
             Transform your technique, increase your height, and achieve your personal best.
           </p>
           <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary text-white hover:bg-primary-dark rounded-button">
-              Apply for Coaching
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="bg-white/10 text-white border-2 border-white hover:bg-white/20 rounded-button"
+            <a 
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform" 
+              target="_blank" 
+              rel="noopener noreferrer"
             >
-              Explore Programs
-            </Button>
+              <Button size="lg" className="bg-primary text-white hover:bg-primary-dark rounded-button w-full">
+                Apply for Coaching
+              </Button>
+            </a>
+            <Link to="/programs">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="bg-white/10 text-white border-2 border-white hover:bg-white/20 rounded-button w-full"
+              >
+                Explore Programs
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
