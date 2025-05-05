@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, Home, Info, ShoppingCart, MessageSquare, LayoutGrid } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => {
@@ -34,11 +34,36 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-gray-400 hover:text-white transition">Home</Link></li>
-              <li><Link to="/about" className="text-gray-400 hover:text-white transition">About</Link></li>
-              <li><Link to="/programs" className="text-gray-400 hover:text-white transition">Programs</Link></li>
-              <li><Link to="/shop" className="text-gray-400 hover:text-white transition">Shop</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white transition">Contact</Link></li>
+              <li>
+                <Link to="/" className="text-gray-400 hover:text-white transition flex items-center gap-2">
+                  <Home size={16} className="text-primary" />
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-gray-400 hover:text-white transition flex items-center gap-2">
+                  <Info size={16} className="text-primary" />
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to="/programs" className="text-gray-400 hover:text-white transition flex items-center gap-2">
+                  <LayoutGrid size={16} className="text-primary" />
+                  Programs
+                </Link>
+              </li>
+              <li>
+                <Link to="/shop" className="text-gray-400 hover:text-white transition flex items-center gap-2">
+                  <ShoppingCart size={16} className="text-primary" />
+                  Shop
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-400 hover:text-white transition flex items-center gap-2">
+                  <MessageSquare size={16} className="text-primary" />
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
           
