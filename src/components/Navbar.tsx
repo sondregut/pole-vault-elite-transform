@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
 import { Menu } from "lucide-react";
+import CartIcon from "./CartIcon";
 
 // Update the interface to include the external property
 interface NavLink {
@@ -72,16 +73,20 @@ const Navbar = () => {
               </Link>
             )
           ))}
+          <CartIcon />
         </div>
 
         {/* Mobile Navigation Toggle - Updated with Lucide Menu icon */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"
-          aria-label="Toggle menu"
-        >
-          <Menu className="h-6 w-6 text-gray-800" />
-        </button>
+        <div className="md:hidden flex items-center">
+          <CartIcon />
+          <button
+            onClick={toggleMenu}
+            className="p-2 ml-2 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Toggle menu"
+          >
+            <Menu className="h-6 w-6 text-gray-800" />
+          </button>
+        </div>
       </div>
 
       {/* Mobile Navigation Menu */}

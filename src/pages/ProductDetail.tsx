@@ -4,10 +4,14 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { products } from "@/data/products";
+import { useState } from "react";
+import { useCart } from "@/context/CartContext";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const product = products.find(p => p.id === Number(productId));
+  const { addToCart } = useCart();
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
   if (!product) {
     return (
@@ -43,6 +47,22 @@ const ProductDetail = () => {
       </div>
     </div>
   ) : null;
+
+  const handleAddToCart = () => {
+    if (product.hasOptions && !selectedOption) {
+      alert("Please select an option");
+      return;
+    }
+
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+      option: selectedOption || undefined
+    });
+  };
 
   // Special content for Jumpers Knee Protocol
   const jumpersKneeContent = product.id === 3 ? (
@@ -327,7 +347,11 @@ const ProductDetail = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {product.category === "apparel" ? "Size" : "Options"}:
                     </label>
-                    <select className="w-full border border-gray-300 rounded-md p-2">
+                    <select 
+                      className="w-full border border-gray-300 rounded-md p-2"
+                      value={selectedOption}
+                      onChange={(e) => setSelectedOption(e.target.value)}
+                    >
                       <option value="">Select {product.category === "apparel" ? "a size" : "an option"}</option>
                       {product.options.map((option, index) => (
                         <option key={index} value={option}>{option}</option>
@@ -349,7 +373,7 @@ const ProductDetail = () => {
                     Coming Soon
                   </Button>
                 ) : (
-                  <Button className="w-full">Add To Cart</Button>
+                  <Button className="w-full" onClick={handleAddToCart}>Add To Cart</Button>
                 )}
               </div>
             </div>

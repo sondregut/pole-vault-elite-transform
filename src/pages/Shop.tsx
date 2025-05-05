@@ -7,11 +7,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { products } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 
 const Shop = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   // State for category filter
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  // State for selected options
+  const [selectedOptions, setSelectedOptions] = useState<Record<number, string>>({});
 
   // Categories
   const categories = [
@@ -33,6 +37,34 @@ const Shop = () => {
     } else {
       navigate(`/shop/product/${product.id}`);
     }
+  };
+
+  // Handle add to cart
+  const handleAddToCart = (e: React.MouseEvent, product: any) => {
+    e.stopPropagation();
+    
+    // Check if this product requires an option and if one is selected
+    if (product.hasOptions && !selectedOptions[product.id]) {
+      alert(`Please select a ${product.category === "apparel" ? "size" : "option"} for ${product.name}`);
+      return;
+    }
+
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+      option: product.hasOptions ? selectedOptions[product.id] : undefined
+    });
+  };
+
+  // Handle option change
+  const handleOptionChange = (productId: number, option: string) => {
+    setSelectedOptions(prev => ({
+      ...prev,
+      [productId]: option
+    }));
   };
 
   return (
@@ -85,7 +117,10 @@ const Shop = () => {
                           <label className="text-sm text-gray-500 mb-1 block">
                             {product.category === "apparel" ? "Select Size" : "Select Option"}
                           </label>
-                          <Select>
+                          <Select
+                            value={selectedOptions[product.id] || ""}
+                            onValueChange={(value) => handleOptionChange(product.id, value)}
+                          >
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder={`Choose ${product.category === "apparel" ? "size" : "option"}`} />
                             </SelectTrigger>
@@ -111,7 +146,7 @@ const Shop = () => {
                         Coming Soon
                       </Button>
                     ) : (
-                      <Button className="w-full" onClick={(e) => e.stopPropagation()}>Add to Cart</Button>
+                      <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</Button>
                     )}
                   </CardFooter>
                 </Card>
