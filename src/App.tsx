@@ -19,6 +19,7 @@ import DigitalDownloads from "./pages/DigitalDownloads";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Programs from "./pages/Programs";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/coaching" element={<OneOnOneCoaching />} />
             <Route path="/about" element={<About />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/programs" element={<Programs />} />
             <Route path="/shop/product/:productId" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout/success" element={<CheckoutSuccess />} />

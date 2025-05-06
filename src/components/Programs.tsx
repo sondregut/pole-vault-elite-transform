@@ -72,7 +72,16 @@ const Programs = () => {
           {programs.map((program, index) => (
             <div 
               key={index} 
-              className="bg-white rounded shadow-md overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-primary hover:border"
+              className="bg-white rounded shadow-md overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-primary hover:border cursor-pointer"
+              onClick={() => {
+                if (index === 2) {
+                  // For 1-on-1 coaching, open the application form
+                  window.open(program.applyNowLink, "_blank", "noopener,noreferrer");
+                } else {
+                  // For other programs, open the learn more page
+                  window.open(program.learnMoreLink, "_blank", "noopener,noreferrer");
+                }
+              }}
             >
               <div className="h-48 overflow-hidden">
                 <img
