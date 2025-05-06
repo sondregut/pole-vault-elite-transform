@@ -1,13 +1,28 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { blogPosts } from '@/data/blogPosts';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
 
 const BlogPostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = blogPosts.find(post => post.slug === slug);
+  const [email, setEmail] = useState('');
+  const { toast } = useToast();
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Here you would typically send this to a backend API
+    toast({
+      title: "Success!",
+      description: "Thank you for subscribing to our newsletter.",
+    });
+    setEmail('');
+  };
 
   if (!post) {
     return (
@@ -58,6 +73,30 @@ const BlogPostDetail = () => {
         {/* Blog content */}
         <div className="prose prose-lg max-w-none">
           <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        </div>
+        
+        {/* Newsletter subscription */}
+        <div className="mt-16 p-8 bg-gray-50 rounded-xl border border-gray-100">
+          <div className="flex flex-col items-center text-center">
+            <Mail className="h-10 w-10 text-primary mb-4" />
+            <h3 className="text-xl font-bold mb-2">Subscribe to our Newsletter</h3>
+            <p className="text-gray-600 mb-6 max-w-md">
+              Get the latest pole vaulting tips, training programs, and exclusive content delivered straight to your inbox.
+            </p>
+            <form onSubmit={handleSubscribe} className="w-full max-w-md flex flex-col sm:flex-row gap-3">
+              <Input 
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1" 
+                required
+              />
+              <Button type="submit" className="whitespace-nowrap">
+                Subscribe
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
