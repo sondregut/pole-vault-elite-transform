@@ -27,6 +27,7 @@ const PrintfulProducts = () => {
             product => product && product.sync_variants && product.sync_variants.length > 0
           );
           setProducts(validProducts);
+          console.log('Fetched Printful products:', validProducts);
         } else {
           setError("Could not fetch products from Printful");
         }
@@ -146,13 +147,21 @@ const PrintfulProducts = () => {
           return null;
         }
         
+        // Safely access product data with fallbacks
+        const productName = product.name || "Unnamed Product";
+        const thumbnail = product.thumbnail_url || "/placeholder.svg";
+        const productId = product.id?.toString() || "";
+        const firstVariant = product.sync_variants[0] || {};
+        const price = firstVariant.retail_price || "Price unavailable";
+        const description = product.sync_product?.description || "Custom printed product";
+        
         return (
-          <Card key={product.id} className="overflow-hidden h-full flex flex-col">
+          <Card key={productId} className="overflow-hidden h-full flex flex-col">
             <div className="cursor-pointer group flex flex-col flex-grow">
               <div className="aspect-square w-full overflow-hidden relative">
                 <img
-                  src={product.thumbnail_url || "/placeholder.svg"}
-                  alt={product.name || "Product"}
+                  src={thumbnail}
+                  alt={productName}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "/placeholder.svg";
@@ -166,10 +175,10 @@ const PrintfulProducts = () => {
               </div>
               <CardHeader className="pb-2">
                 <div className="font-medium group-hover:text-primary transition-colors">
-                  {product.name || "Unnamed Product"}
+                  {productName}
                 </div>
                 <div className="text-lg font-semibold">
-                  {product.sync_variants[0]?.retail_price || 'Price varies'}
+                  {price}
                 </div>
               </CardHeader>
               <CardContent className="flex-grow">
@@ -179,31 +188,35 @@ const PrintfulProducts = () => {
                       Select Option
                     </label>
                     <Select
-                      value={selectedVariants[product.id] || ""}
-                      onValueChange={(value) => handleVariantChange(product.id, value)}
+                      value={selectedVariants[productId] || ""}
+                      onValueChange={(value) => handleVariantChange(productId, value)}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Choose option" />
                       </SelectTrigger>
                       <SelectContent>
-                        {product.sync_variants.map((variant: any) => (
-                          <SelectItem key={variant.id} value={variant.id.toString()}>
-                            {variant.name} - {variant.retail_price}
-                          </SelectItem>
-                        ))}
+                        {product.sync_variants.map((variant: any) => {
+                          // Add extra safety check for variant
+                          if (!variant || !variant.id) return null;
+                          return (
+                            <SelectItem key={variant.id} value={variant.id.toString()}>
+                              {variant.name} - {variant.retail_price}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   </div>
                 )}
                 <p className="text-sm text-gray-600 line-clamp-2">
-                  {product.sync_product?.description || 'Custom printed product'}
+                  {description}
                 </p>
               </CardContent>
             </div>
             <CardFooter>
               <Button 
                 className="w-full" 
-                onClick={() => handleAddToCart(product, selectedVariants[product.id])}
+                onClick={() => handleAddToCart(product, selectedVariants[productId])}
               >
                 Add to Cart
               </Button>
