@@ -40,9 +40,9 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
     
     const cartItem = {
       ...product,
-      price: price, // This will now always be a number
+      price: price.toString(), // Convert to string as required by CartItem type
       quantity: 1,
-      image: product.images?.[0] || "placeholder.svg" // Add the required image property
+      image: product.images?.[0] || "placeholder.svg"
     };
 
     setTimeout(() => {

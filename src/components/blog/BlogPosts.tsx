@@ -1,11 +1,17 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { blogPosts } from '@/data/blogPosts';
 import { Badge } from '@/components/ui/badge';
 import { BookText } from 'lucide-react';
 
 const BlogPosts = () => {
+  const navigate = useNavigate();
+  
+  const handleCardClick = (slug: string) => {
+    navigate(`/blog/${slug}`);
+  };
+  
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto">
@@ -13,7 +19,8 @@ const BlogPosts = () => {
           {blogPosts.map((post) => (
             <div 
               key={post.id} 
-              className="flex flex-col rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              className="flex flex-col rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+              onClick={() => handleCardClick(post.slug)}
             >
               <div className="h-48 overflow-hidden">
                 <img 
@@ -36,13 +43,10 @@ const BlogPosts = () => {
                   {post.excerpt}
                 </p>
                 <div className="mt-auto">
-                  <Link 
-                    to={`/blog/${post.slug}`} 
-                    className="flex items-center gap-2 text-primary font-medium hover:underline"
-                  >
+                  <div className="flex items-center gap-2 text-primary font-medium">
                     <BookText className="h-4 w-4" />
                     Read Article
-                  </Link>
+                  </div>
                 </div>
               </div>
             </div>
