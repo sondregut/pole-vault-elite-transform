@@ -8,7 +8,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214",
     hasOptions: false,
     options: [],
-    description: "A comprehensive 10-week program designed to build strength and power for athletes."
+    description: "10-week strength-focused program (2–3 sessions/week) with Olympic lifts, compound and accessory work. Boost speed, explosiveness, and athleticism. Includes video demos for every exercise, delivered through TrainHeroic app with lifetime access."
   },
   {
     id: 2,

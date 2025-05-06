@@ -24,15 +24,15 @@ const Programs = () => {
     },
     {
       title: "Power Strength Program",
-      subtitle: "Specialized strength training to develop explosive power for vaulters.",
+      subtitle: "10-week strength program to develop explosive power and athleticism.",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//weights.jpeg",
       icon: <Dumbbell className="text-primary text-xl" />,
       features: [
-        "8-week strength progression",
-        "Exercise video demonstrations",
-        "Equipment alternatives",
-        "Progress tracking tools",
-        "Basic app access"
+        "10-week strength program (2-3 sessions/week)",
+        "Olympic lifts, compound and accessory work",
+        "Video demos for every exercise",
+        "Boost speed, explosiveness, and athleticism",
+        "Lifetime access through TrainHeroic"
       ],
       price: "$39",
       priceDetail: "One-time purchase",
