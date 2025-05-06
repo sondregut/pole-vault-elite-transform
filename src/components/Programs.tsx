@@ -70,16 +70,19 @@ const Programs = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {programs.map((program, index) => (
-            <div key={index} className="bg-white rounded shadow-md overflow-hidden flex flex-col h-full">
+            <div 
+              key={index} 
+              className="bg-white rounded shadow-md overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-primary hover:border"
+            >
               <div className="h-48 overflow-hidden">
                 <img
                   src={program.image}
                   alt={program.title}
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-110"
                 />
               </div>
               <div className="p-6 border-b border-gray-100">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 transition-colors duration-300 hover:bg-primary hover:text-white">
                   {program.icon}
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900">{program.title}</h3>
@@ -89,7 +92,7 @@ const Programs = () => {
                 <ul className="space-y-3">
                   {program.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start">
-                      <Check className="text-primary h-5 w-5 mt-0.5 flex-shrink-0" />
+                      <Check className="text-primary h-5 w-5 mt-0.5 flex-shrink-0 transition-transform duration-300 hover:scale-125" />
                       <span className="ml-3 text-gray-600">{feature}</span>
                     </li>
                   ))}
@@ -102,17 +105,17 @@ const Programs = () => {
                 </div>
                 <div className="flex gap-2">
                   {index === 2 ? (
-                    <Button className="flex-1" asChild>
+                    <Button className="flex-1 transition-all duration-300 hover:bg-opacity-90 hover:scale-105" asChild>
                       <a href={program.applyNowLink} target="_blank" rel="noopener noreferrer">Apply Now</a>
                     </Button>
                   ) : (
-                    <Button className="flex-1" asChild>
+                    <Button className="flex-1 transition-all duration-300 hover:bg-opacity-90 hover:scale-105" asChild>
                       <a href={program.buyNowLink} target="_blank" rel="noopener noreferrer">Buy Now</a>
                     </Button>
                   )}
                   
                   {index !== 2 && (
-                    <Button variant="outline" className="flex-1" asChild>
+                    <Button variant="outline" className="flex-1 transition-all duration-300 hover:bg-primary hover:text-white hover:scale-105" asChild>
                       <a href={program.learnMoreLink} target="_blank" rel="noopener noreferrer">Learn More</a>
                     </Button>
                   )}
@@ -122,9 +125,9 @@ const Programs = () => {
           ))}
         </div>
         <div className="mt-6 text-center">
-          <Link to="/shop" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center gap-2">
+          <Link to="/shop" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center gap-2 group transition-all duration-300">
             View all programs
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
       </div>

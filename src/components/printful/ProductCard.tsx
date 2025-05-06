@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
     addToCart({
       id: `printful-${product.id}-${variant.id}`,
       name: `${product.name} - ${variant.name}`,
-      price: priceAsNumber.toString(),
+      price: priceAsNumber,
       image: variant.files?.find((f: any) => f.type === 'preview')?.preview_url || product.thumbnail_url,
       quantity: 1,
       printfulData: {
@@ -96,12 +96,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
   };
 
   return (
-    <Card key={product.id} className="overflow-hidden h-full flex flex-col">
+    <Card key={product.id} className="overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-primary">
       <div className="aspect-square w-full overflow-hidden">
         <img
           src={product.thumbnail_url || "/placeholder.svg"}
           alt={product.name}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "/placeholder.svg";
           }}
@@ -138,7 +138,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
       </CardContent>
       <CardFooter>
         <Button 
-          className="w-full"
+          className="w-full transition-all duration-300 hover:bg-opacity-90 hover:scale-105"
           onClick={handleAddToCart}
           disabled={product.sync_variants?.length > 1 && !selectedVariant}
         >
