@@ -1,4 +1,3 @@
-
 export interface BlogPost {
   id: number;
   title: string;
@@ -12,6 +11,181 @@ export interface BlogPost {
 }
 
 export const blogPosts: BlogPost[] = [
+  {
+    id: 4,
+    title: "Tempo Runs: the Low-Key Keystone of Sprint & Jump Training",
+    slug: "tempo-runs-sprint-jump-training",
+    author: "Sondre Guttormsen",
+    date: "June 6, 2025",
+    excerpt: "When people picture a 'speed' workout they see explosive block starts or razor-sharp fly sprints. Yet the late Charlie Francis sprinkled tempo into almost every world-class program he wrote.",
+    content: `
+      <p>When people picture a "speed" workout they see explosive block starts or razor-sharp fly sprints. Yet the late Charlie Francis sprinkled <em>tempo</em> into almost every world-class program he wrote, from Ben Johnson's 9.79 season to today's elite copy-cats. Below is a deeper look at what tempo really is, the two main flavours, common use-cases, and how <em>I, Sondre</em> fold it into my training week.</p>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">1 | What exactly counts as "tempo"?</h3>
+      
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border p-2 text-left">Tempo type</th>
+              <th class="border p-2 text-left">Speed band</th>
+              <th class="border p-2 text-left">Typical rep & rest</th>
+              <th class="border p-2 text-left">Session volume</th>
+              <th class="border p-2 text-left">Primary purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border p-2"><strong>Extensive</strong></td>
+              <td class="border p-2">≈ 65–75% of max</td>
+              <td class="border p-2">100–200m, walk-back/30–90s</td>
+              <td class="border p-2">≤ 2000m</td>
+              <td class="border p-2">Active recovery, capillarisation, technique rehearsal</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Intensive</strong></td>
+              <td class="border p-2">≈ 80–89%</td>
+              <td class="border p-2">120–300m, 1–3 min</td>
+              <td class="border p-2">≤ 1400m</td>
+              <td class="border p-2">Aerobic-speed bridge, early special endurance</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <p>Francis insisted the intensity be low enough that "the last rep is the same speed as the first," because once fatigue alters mechanics the session stops benefiting recovery and starts <em>stealing</em> from tomorrow's speed. He also capped extensive work at ~2 km to avoid the slow-twitch creep he saw in programs that made sprinters jog laps.</p>
+      
+      <blockquote class="border-l-4 border-primary pl-4 italic my-6">
+        <p><strong>Quick test:</strong> if you can't speak a full sentence while running, you're too fast for extensive tempo.</p>
+      </blockquote>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">2 | Why tempo pays off for sprinters & jumpers</h3>
+      
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>Metabolic flush without CNS cost</strong> – Reps at 65–75% raise heart-rate and pump fresh blood through spilled-glycogen muscle, yet the central nervous system stays untouched, leaving you fresh for next-day speed.</li>
+        <li><strong>Aerobic "battery" for round-to-round recovery</strong> – Sub-max work expands capillary density and mitochondrial enzymes in fast-twitch fibres so you bounce back quicker between heats, plyo sets or strength circuits.</li>
+        <li><strong>Low-impact tendon seasoning</strong> – Grass or turf surfaces plus trainers offer thousands of gentle contacts that armour the plantar fascia, Achilles and patellar tendon against the violent spikes days bring.</li>
+        <li><strong>Technical rehearsal</strong> – Relaxed upright running lets you groove front-side mechanics minus the white-noise of maximal effort. Francis often placed tempo the day <em>after</em> pure speed so athletes could "write the movement they just learned in pen".</li>
+        <li><strong>Body-composition & general fitness</strong> – Forty-plus seconds of running at ~70% HRmax burns calories and improves cardiac stroke volume without risking fibre-type shift.</li>
+      </ul>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">3 | My weekly dose (Sondre's template)</h3>
+      
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border p-2 text-left">Day</th>
+              <th class="border p-2 text-left">Main theme</th>
+              <th class="border p-2 text-left">Example session</th>
+              <th class="border p-2 text-left">Why here?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border p-2">Mon</td>
+              <td class="border p-2">Max-acceleration + lift</td>
+              <td class="border p-2">Blocks & cleans</td>
+              <td class="border p-2">Heavy CNS</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="border p-2"><strong>Tue</strong></td>
+              <td class="border p-2"><strong>Tempo (recovery)</strong></td>
+              <td class="border p-2">10 × 100m on grass, walk-back (~70%)</td>
+              <td class="border p-2">Flush hamstrings, reinforce upright mechanics</td>
+            </tr>
+            <tr>
+              <td class="border p-2">Thu</td>
+              <td class="border p-2">Max-velocity flys</td>
+              <td class="border p-2">4 × 60m fly-20s</td>
+              <td class="border p-2">Speed focus</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="border p-2"><strong>Fri</strong></td>
+              <td class="border p-2"><strong>Tempo</strong></td>
+              <td class="border p-2">6 × 150m, 2′ rest (≈ 1000m total)</td>
+              <td class="border p-2">Aerobic top-up before weekend jump session</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <p>Both Tuesday's 100s and Friday's 150s land at ~1000m—about half Francis's ceiling—so I stay fresh yet consistently rack up >2 km of low-cost running every week.</p>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">4 | Progressions & variations</h3>
+      
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>Short‐to‑long extensive:</strong> start with 8 × 100m, add 1–2 reps weekly until 12 × 100m, then switch to 6 × 150m.</li>
+        <li><strong>Grass turns to Mondo:</strong> begin on thick in‑field turf early GPP; move to trainers on the track as competition nears.</li>
+        <li><strong>Intensive bridge (pre‑SPP):</strong> 2 × 4 × 150m at ~80% with 3′ recoveries, borrowed from Simon Hansen's elite 100m plan.</li>
+        <li><strong>Tempo circuits:</strong> interleave 100m strides with core or medicine‑ball throws (Francis's "tempo + core" days) to pack more work into 40 min.</li>
+      </ul>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">5 | Common pitfalls</h3>
+      
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border p-2 text-left">Mistake</th>
+              <th class="border p-2 text-left">Fix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border p-2"><strong>Running 80%+ and calling it recovery</strong></td>
+              <td class="border p-2">Use a stopwatch: 100m time × 1.33 ≈ 75% pace (e.g., 11s sprinter → 14.7s tempo)</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Too much volume too soon</strong></td>
+              <td class="border p-2">Start at 600–800m, add 10% weekly; stop when pace drops >2%.</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Racing on concrete</strong></td>
+              <td class="border p-2">Keep it soft: grass, finely-rubbered Mondo in flats, or astro-turf.</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Skipping tempo in taper</strong></td>
+              <td class="border p-2">Keep one micro-dose (6 × 100m) for blood flow—volume, not intensity, fattigues you.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">6 | Placing tempo in a full micro-cycle</h3>
+      
+      <pre class="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
+Mon   Speed/accel  | heavy weights
+Tue   Extensive tempo (900–1200m) + core
+Wed   Jumps / plyos | light weights
+Thu   Max-velocity / flys
+Fri   Extensive or early-season intensive tempo
+Sat   Off or drills / mobility
+Sun   Rest
+      </pre>
+      
+      <p>This high-low model—hard CNS one day, easy metabolic the next—was the backbone of Francis's entire Training System and is still copied in modern elite templates.</p>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">7 | Take-away</h3>
+      
+      <p>Tempo looks boring on Instagram, but its return on time is huge:</p>
+      
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>Faster recovery</strong>,</li>
+        <li><strong>Lower injury risk</strong>,</li>
+        <li><strong>Cleaner mechanics</strong>, and</li>
+        <li><strong>Deeper gas-tank</strong> between heats and sets.</li>
+      </ul>
+      
+      <p>Work it once or twice a week, stay under that ~75% threshold, and your next <em>real</em> speed day will feel like you swapped legs with Usain Bolt.</p>
+      
+      <blockquote class="border-l-4 border-primary pl-4 italic mt-8 mb-6">
+        <p>"Tempo does not affect the CNS—so you can train hard again tomorrow." — Charlie Francis</p>
+      </blockquote>
+    `,
+    coverImage: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg",
+    category: "Training"
+  },
   {
     id: 1,
     title: "How to Improve Your Takeoff in Pole Vault",
