@@ -17,6 +17,7 @@ serve(async (req) => {
     const PRINTFUL_API_KEY = Deno.env.get('PRINTFUL_API_KEY');
     
     if (!PRINTFUL_API_KEY) {
+      console.error('Printful API key not configured');
       throw new Error('Printful API key not configured');
     }
 
@@ -27,6 +28,7 @@ serve(async (req) => {
     // Forward request to Printful API
     const printfulUrl = `https://api.printful.com/${printfulEndpoint}`;
     console.log(`Forwarding request to Printful: ${printfulUrl}`);
+    console.log(`API Key configured: ${PRINTFUL_API_KEY ? 'Yes (length: ' + PRINTFUL_API_KEY.length + ')' : 'No'}`);
 
     // Parse the request body if it exists
     let requestBody = null;
@@ -47,6 +49,26 @@ serve(async (req) => {
     const data = await response.json();
     
     console.log(`Response from Printful (status ${response.status})`);
+    
+    // Add more debugging for sync/products endpoint
+    if (printfulEndpoint === 'sync/products') {
+      if (data.result) {
+        console.log(`Received ${data.result.length} products from Printful`);
+        
+        if (data.result.length === 0) {
+          console.log('No products found in Printful store');
+        } else {
+          console.log('First product name:', data.result[0]?.name || 'Unnamed');
+          console.log('Has sync_variants:', data.result[0]?.sync_variants ? 'Yes' : 'No');
+        }
+      } else {
+        console.log('No result property in Printful response');
+      }
+      
+      if (data.error) {
+        console.error('Printful API error:', data.error);
+      }
+    }
 
     return new Response(JSON.stringify(data), {
       status: response.status,
