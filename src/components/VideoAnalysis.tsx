@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { FileVideo, Clock, Search, MessageCircle, Play } from "lucide-react";
@@ -13,7 +12,7 @@ const VideoAnalysis = () => {
     {
       icon: <FileVideo className="text-[#3176FF]" />,
       title: "Easy Video Uploads",
-      description: "Upload your jumps directly through TrainHeroic or send them via email - whatever works best for you."
+      description: "Upload your jumps directly through the Onform app or send them via text - whatever works best for you."
     },
     {
       icon: <Search className="text-[#3176FF]" />,
@@ -23,7 +22,7 @@ const VideoAnalysis = () => {
     {
       icon: <Clock className="text-[#3176FF]" />,
       title: "Quick Turnaround",
-      description: "Get expert feedback within 24-48 hours so you can immediately implement technique corrections."
+      description: "Get expert feedback that helps you immediately implement technique corrections."
     },
     {
       icon: <MessageCircle className="text-[#3176FF]" />,
