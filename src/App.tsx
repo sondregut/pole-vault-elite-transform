@@ -17,6 +17,8 @@ import CheckoutSuccess from "./pages/CheckoutSuccess";
 import CheckoutCancel from "./pages/CheckoutCancel";
 import DigitalDownloads from "./pages/DigitalDownloads";
 import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +40,8 @@ const App = () => (
             <Route path="/checkout/cancel" element={<CheckoutCancel />} />
             <Route path="/downloads" element={<DigitalDownloads />} />
             <Route path="/contact" element={<Contact />} />
-            {/* <Route path="/app" element={<ComingSoon />} /> */}
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
