@@ -31,7 +31,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
     addToCart({
       id: `printful-${product.id}-${variant.id}`,
       name: `${product.name} - ${variant.name}`,
-      price: parseFloat(variant.retail_price),
+      price: variant.retail_price, // Store the price as a string
       image: variant.files?.find((f: any) => f.type === 'preview')?.preview_url || product.thumbnail_url,
       quantity: 1,
       printfulData: {

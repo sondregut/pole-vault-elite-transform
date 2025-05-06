@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Download, FileDown, CheckCircle } from "lucide-react";
 import * as z from "zod";
 
 // Form schema for validation
@@ -30,6 +31,7 @@ const CheckoutSuccess = () => {
   const [hasPoleVaultDrills, setHasPoleVaultDrills] = useState(false);
   const [downloadDialogOpen, setDownloadDialogOpen] = useState(false);
   const [downloadType, setDownloadType] = useState<string>("");
+  const [isDownloading, setIsDownloading] = useState<Record<string, boolean>>({});
   
   // Form definition
   const form = useForm<DownloadFormValues>({
@@ -79,18 +81,44 @@ const CheckoutSuccess = () => {
     checkDigitalProducts();
   }, [clearCart]);
 
-  const handleJumpersKneeDownload = () => {
-    const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/Jumper%20Knee%20Protocol%20.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0p1bXBlciBLbmVlIFByb3RvY29sIC5wZGYiLCJpYXQiOjE3NDY1MDExMzksImV4cCI6MjA2MTg2MTEzOX0.VReJcr2d90Av7LHa31owYY-q8fk-6DDP5whzq3-7HmM";
+  const handleDownload = (type: string) => {
+    setIsDownloading(prev => ({ ...prev, [type]: true }));
+    
+    let pdfUrl = '';
+    let fileName = '';
+    
+    if (type === 'jumpersKnee') {
+      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/Jumper%20Knee%20Protocol%20.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0p1bXBlciBLbmVlIFByb3RvY29sIC5wZGYiLCJpYXQiOjE3NDY1MDExMzksImV4cCI6MjA2MTg2MTEzOX0.VReJcr2d90Av7LHa31owYY-q8fk-6DDP5whzq3-7HmM";
+      fileName = "Jumpers Knee Protocol.pdf";
+    } else if (type === 'poleVaultDrills') {
+      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
+      fileName = "Best Pole Vault Drills.pdf";
+    }
     
     // Create a hidden anchor element and click it
     const a = document.createElement('a');
     a.href = pdfUrl;
-    a.download = "Jumpers Knee Protocol.pdf";
+    a.download = fileName;
+    a.style.display = 'none';
     document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
     
-    toast.success("Jumpers Knee Protocol PDF downloaded successfully");
+    // Add event listeners to track download completion
+    a.addEventListener('error', () => {
+      toast.error(`Failed to download ${fileName}. Please try again.`);
+      setIsDownloading(prev => ({ ...prev, [type]: false }));
+      document.body.removeChild(a);
+    });
+    
+    // Use timeout as a fallback since download success isn't reliably detectable
+    setTimeout(() => {
+      setIsDownloading(prev => ({ ...prev, [type]: false }));
+      toast.success(`${fileName} download initiated`);
+      if (document.body.contains(a)) {
+        document.body.removeChild(a);
+      }
+    }, 3000);
+    
+    a.click();
   };
 
   // Open the download dialog
@@ -102,6 +130,8 @@ const CheckoutSuccess = () => {
   // Process download after form submission
   const onSubmitDownloadForm = async (data: DownloadFormValues) => {
     try {
+      setIsDownloading(prev => ({ ...prev, "formSubmit": true }));
+      
       // Store customer information in the waitlist table
       const { error } = await supabase
         .from('waitlist')
@@ -120,29 +150,16 @@ const CheckoutSuccess = () => {
       setDownloadDialogOpen(false);
       
       // Download the PDF based on type
-      downloadPoleVaultDrillsPDF();
+      handleDownload('poleVaultDrills');
       
       // Reset form
       form.reset();
+      setIsDownloading(prev => ({ ...prev, "formSubmit": false }));
     } catch (error) {
       console.error("Error processing download:", error);
       toast.error("There was an error processing your download. Please try again.");
+      setIsDownloading(prev => ({ ...prev, "formSubmit": false }));
     }
-  };
-
-  const downloadPoleVaultDrillsPDF = () => {
-    // Updated URL for the Pole Vault Drills PDF
-    const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
-    
-    // Create a hidden anchor element and click it
-    const a = document.createElement('a');
-    a.href = pdfUrl;
-    a.download = "Best Pole Vault Drills.pdf";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    
-    toast.success("Best Pole Vault Drills PDF downloaded successfully");
   };
   
   return (
@@ -152,9 +169,7 @@ const CheckoutSuccess = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+              <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h1>
             <p className="text-gray-600 mb-6">
@@ -168,10 +183,18 @@ const CheckoutSuccess = () => {
                   Your Jumpers Knee Protocol PDF is now ready for download.
                 </p>
                 <Button 
-                  onClick={handleJumpersKneeDownload}
+                  onClick={() => handleDownload('jumpersKnee')}
                   className="w-full mb-3 bg-blue-600 hover:bg-blue-700"
+                  disabled={isDownloading['jumpersKnee']}
                 >
-                  Download Jumpers Knee Protocol PDF
+                  {isDownloading['jumpersKnee'] ? (
+                    <>Downloading...</>
+                  ) : (
+                    <>
+                      <FileDown className="mr-2 h-4 w-4" />
+                      Download Jumpers Knee Protocol PDF
+                    </>
+                  )}
                 </Button>
               </div>
             )}
@@ -183,10 +206,18 @@ const CheckoutSuccess = () => {
                   Your Best Pole Vault Drills PDF is now ready for download.
                 </p>
                 <Button 
-                  onClick={downloadPoleVaultDrillsPDF}
+                  onClick={() => handleDownload('poleVaultDrills')}
                   className="w-full mb-3 bg-green-600 hover:bg-green-700"
+                  disabled={isDownloading['poleVaultDrills']}
                 >
-                  Download Best Pole Vault Drills PDF
+                  {isDownloading['poleVaultDrills'] ? (
+                    <>Downloading...</>
+                  ) : (
+                    <>
+                      <FileDown className="mr-2 h-4 w-4" />
+                      Download Best Pole Vault Drills PDF
+                    </>
+                  )}
                 </Button>
               </div>
             )}
@@ -205,6 +236,7 @@ const CheckoutSuccess = () => {
                 onClick={() => openDownloadDialog("poleVaultDrills")} 
                 className="w-full mb-3 bg-primary text-white"
               >
+                <Download className="mr-2 h-4 w-4" />
                 Download Free Pole Vault Drills
               </Button>
               
@@ -273,7 +305,13 @@ const CheckoutSuccess = () => {
               />
               
               <DialogFooter className="pt-4">
-                <Button type="submit" className="w-full">Download PDF</Button>
+                <Button 
+                  type="submit" 
+                  className="w-full"
+                  disabled={isDownloading['formSubmit']}
+                >
+                  {isDownloading['formSubmit'] ? 'Processing...' : 'Download PDF'}
+                </Button>
               </DialogFooter>
             </form>
           </Form>

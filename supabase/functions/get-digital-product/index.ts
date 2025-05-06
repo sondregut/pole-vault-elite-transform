@@ -91,10 +91,11 @@ serve(async (req) => {
       })
       .eq('id', userDownload.id);
 
-    // Return file for download
+    // Return file for download with improved headers for better download experience
     const headers = new Headers(corsHeaders);
-    headers.set('Content-Type', 'application/octet-stream');
-    headers.set('Content-Disposition', `attachment; filename="${userDownload.product_files.file_name}"`);
+    headers.set('Content-Type', 'application/pdf');
+    headers.set('Content-Disposition', `attachment; filename="${encodeURIComponent(userDownload.product_files.file_name)}"`);
+    headers.set('Cache-Control', 'no-cache');
     
     return new Response(fileData, { headers });
   } catch (error) {
