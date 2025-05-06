@@ -55,10 +55,6 @@ export const blogPosts: BlogPost[] = [
       
       <p>Francis insisted the intensity be low enough that "the last rep is the same speed as the first," because once fatigue alters mechanics the session stops benefiting recovery and starts <em>stealing</em> from tomorrow's speed. He also capped extensive work at ~2 km to avoid the slow-twitch creep he saw in programs that made sprinters jog laps.</p>
       
-      <blockquote class="border-l-4 border-primary pl-4 italic my-6">
-        <p><strong>Quick test:</strong> if you can't speak a full sentence while running, you're too fast for extensive tempo.</p>
-      </blockquote>
-      
       <h3 class="text-xl font-bold mt-8 mb-4">2 | Why tempo pays off for sprinters & jumpers</h3>
       
       <ul class="list-disc pl-6 mb-6 space-y-2">
