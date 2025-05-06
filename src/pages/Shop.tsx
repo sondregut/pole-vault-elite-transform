@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -9,6 +8,25 @@ import Footer from "@/components/Footer";
 import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
+// Import UI components for the form
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+// Form schema for validation
+const downloadFormSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+});
+
+type DownloadFormValues = z.infer<typeof downloadFormSchema>;
+
 const Shop = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -16,6 +34,19 @@ const Shop = () => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   // State for selected options
   const [selectedOptions, setSelectedOptions] = useState<Record<number, string>>({});
+  // State for download dialog
+  const [downloadDialogOpen, setDownloadDialogOpen] = useState(false);
+  const [selectedProductForDownload, setSelectedProductForDownload] = useState<any>(null);
+
+  // Form definition
+  const form = useForm<DownloadFormValues>({
+    resolver: zodResolver(downloadFormSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+    },
+  });
 
   // Categories
   const categories = [
@@ -65,7 +96,34 @@ const Shop = () => {
     
     // For product with ID 13 (Best Pole Vault Drills)
     if (product.id === 13) {
-      const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/Best_Pole_Vault_Drills.pdf";
+      // Open the download form dialog
+      setSelectedProductForDownload(product);
+      setDownloadDialogOpen(true);
+    }
+  };
+  
+  // Process download after form submission
+  const onSubmitDownloadForm = async (data: DownloadFormValues) => {
+    try {
+      // Store customer information in the waitlist table
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([{ 
+          email: data.email,
+          metadata: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            product: selectedProductForDownload?.name || "Best Pole Vault Drills"
+          }
+        }]);
+
+      if (error) throw error;
+      
+      // Close the dialog
+      setDownloadDialogOpen(false);
+      
+      // Trigger the download
+      const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
       
       const a = document.createElement('a');
       a.href = pdfUrl;
@@ -74,8 +132,13 @@ const Shop = () => {
       a.click();
       document.body.removeChild(a);
       
-      // Show success message
-      alert("Your free PDF is being downloaded!");
+      toast.success("Thank you! Your free PDF is being downloaded.");
+      
+      // Reset form
+      form.reset();
+    } catch (error) {
+      console.error("Error processing download:", error);
+      toast.error("There was an error processing your download. Please try again.");
     }
   };
 
@@ -184,6 +247,69 @@ const Shop = () => {
           </div>
         </div>
       </div>
+      
+      {/* Download form dialog */}
+      <Dialog open={downloadDialogOpen} onOpenChange={setDownloadDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Get Your Free PDF</DialogTitle>
+            <DialogDescription>
+              Enter your information below to download the free Best Pole Vault Drills PDF.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmitDownloadForm)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your first name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your last name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="Enter your email address" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter className="pt-4">
+                <Button type="submit" className="w-full">Download PDF</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      
       <Footer />
     </>
   );
