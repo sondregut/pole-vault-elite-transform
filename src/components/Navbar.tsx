@@ -58,7 +58,10 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-white z-50 transition-shadow ${isScrolled ? "shadow-md" : ""}`}>
       <div className="container mx-auto py-3 flex items-center justify-between">
-        <Logo />
+        <div className="flex items-center space-x-3">
+          <Logo />
+          <h1 className="font-medium text-gray-800 text-lg">G-Force Training</h1>
+        </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
