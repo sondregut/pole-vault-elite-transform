@@ -128,6 +128,35 @@ serve(async (req) => {
       // Continue with checkout even if order items fail to be inserted
     }
 
+    // Check if any of the products are digital products
+    const productIds = lineItems.map(item => item.productId);
+    const { data: digitalProducts, error: digitalProductsError } = await supabaseAdmin
+      .from('product_files')
+      .select('*')
+      .in('product_id', productIds);
+
+    if (digitalProductsError) {
+      console.error('Error checking for digital products:', digitalProductsError);
+    }
+
+    // If digital products exist, create user_downloads entries
+    if (digitalProducts && digitalProducts.length > 0 && user?.id) {
+      const userDownloads = digitalProducts.map(product => ({
+        user_id: user.id,
+        order_id: orderData.id,
+        product_file_id: product.id,
+        download_count: 0
+      }));
+
+      const { error: downloadsError } = await supabaseAdmin
+        .from('user_downloads')
+        .insert(userDownloads);
+
+      if (downloadsError) {
+        console.error('Error creating user downloads:', downloadsError);
+      }
+    }
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

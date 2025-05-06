@@ -28,3 +28,9 @@ enabled = true
 
 [functions.create-checkout]
 verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.get-digital-product]
+verify_jwt = true

@@ -1,17 +1,36 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const CheckoutSuccess = () => {
   const { clearCart } = useCart();
+  const [hasDigitalProducts, setHasDigitalProducts] = useState(false);
   
   // Clear the cart when successfully checked out
   useEffect(() => {
     clearCart();
+    
+    // Check if the user has digital products
+    const checkDigitalProducts = async () => {
+      const { data: session } = await supabase.auth.getSession();
+      
+      if (session?.session?.user) {
+        const { data } = await supabase
+          .from('user_downloads')
+          .select('id')
+          .eq('user_id', session.session.user.id)
+          .limit(1);
+          
+        setHasDigitalProducts(data && data.length > 0);
+      }
+    };
+    
+    checkDigitalProducts();
   }, [clearCart]);
   
   return (
@@ -30,8 +49,15 @@ const CheckoutSuccess = () => {
               Thank you for your purchase. Your order has been received and is now being processed.
             </p>
             <div className="space-y-3">
+              {hasDigitalProducts && (
+                <Link to="/downloads">
+                  <Button className="w-full mb-3">
+                    Access Your Downloads
+                  </Button>
+                </Link>
+              )}
               <Link to="/shop">
-                <Button className="w-full">
+                <Button className="w-full" variant={hasDigitalProducts ? "outline" : "default"}>
                   Continue Shopping
                 </Button>
               </Link>

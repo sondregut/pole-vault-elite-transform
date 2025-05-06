@@ -55,6 +55,7 @@ export type Database = {
           amount: number
           created_at: string
           currency: string
+          fulfilled: boolean | null
           id: string
           status: string
           stripe_payment_intent_id: string | null
@@ -66,6 +67,7 @@ export type Database = {
           amount: number
           created_at?: string
           currency?: string
+          fulfilled?: boolean | null
           id?: string
           status?: string
           stripe_payment_intent_id?: string | null
@@ -77,6 +79,7 @@ export type Database = {
           amount?: number
           created_at?: string
           currency?: string
+          fulfilled?: boolean | null
           id?: string
           status?: string
           stripe_payment_intent_id?: string | null
@@ -85,6 +88,78 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      product_files: {
+        Row: {
+          created_at: string | null
+          file_name: string
+          file_path: string
+          file_type: string
+          id: string
+          product_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          file_name: string
+          file_path: string
+          file_type: string
+          id?: string
+          product_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          file_name?: string
+          file_path?: string
+          file_type?: string
+          id?: string
+          product_id?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      user_downloads: {
+        Row: {
+          download_count: number | null
+          downloaded_at: string | null
+          id: string
+          order_id: string | null
+          product_file_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          download_count?: number | null
+          downloaded_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_file_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          download_count?: number | null
+          downloaded_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_file_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_downloads_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_downloads_product_file_id_fkey"
+            columns: ["product_file_id"]
+            isOneToOne: false
+            referencedRelation: "product_files"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       waitlist: {
         Row: {
