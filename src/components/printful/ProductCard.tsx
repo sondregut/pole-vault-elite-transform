@@ -33,14 +33,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
     }
 
     // Add item to cart - convert the retail price string to a number
-    const priceAsNumber = typeof variant.retail_price === 'string' ? 
-      parseFloat(variant.retail_price.replace(/[^0-9.]/g, '')) : 
-      Number(variant.retail_price);
+    const priceAsString = variant.retail_price || "0"; 
+    const priceAsNumber = typeof priceAsString === 'string' ? 
+      parseFloat(priceAsString.replace(/[^0-9.]/g, '')) : 
+      Number(priceAsString);
     
     addToCart({
       id: `printful-${product.id}-${variant.id}`,
       name: `${product.name} - ${variant.name}`,
-      price: priceAsNumber,
+      price: priceAsNumber.toString(),
       image: variant.files?.find((f: any) => f.type === 'preview')?.preview_url || product.thumbnail_url,
       quantity: 1,
       printfulData: {
