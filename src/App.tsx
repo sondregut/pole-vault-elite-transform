@@ -16,6 +16,7 @@ import Cart from "./pages/Cart";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import CheckoutCancel from "./pages/CheckoutCancel";
 import DigitalDownloads from "./pages/DigitalDownloads";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/checkout/success" element={<CheckoutSuccess />} />
             <Route path="/checkout/cancel" element={<CheckoutCancel />} />
             <Route path="/downloads" element={<DigitalDownloads />} />
+            <Route path="/contact" element={<Contact />} />
             {/* <Route path="/app" element={<ComingSoon />} /> */}
             <Route path="/coming-soon" element={<ComingSoon />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
