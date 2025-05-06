@@ -7,21 +7,35 @@ import { ArrowLeft, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { subscribeToNewsletter } from '@/utils/newsletterSubscription';
 
 const BlogPostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = blogPosts.find(post => post.slug === slug);
   const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send this to a backend API
+    
+    if (!email) return;
+    
+    setSubmitting(true);
+    
+    const result = await subscribeToNewsletter(email, 'blog_post');
+    
     toast({
-      title: "Success!",
-      description: "Thank you for subscribing to our newsletter.",
+      title: result.success ? "Success!" : "Notice",
+      description: result.message,
+      variant: result.success ? "default" : "destructive",
     });
-    setEmail('');
+    
+    if (result.success) {
+      setEmail('');
+    }
+    
+    setSubmitting(false);
   };
 
   if (!post) {
@@ -91,9 +105,10 @@ const BlogPostDetail = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1" 
                 required
+                disabled={submitting}
               />
-              <Button type="submit" className="whitespace-nowrap">
-                Subscribe
+              <Button type="submit" className="whitespace-nowrap" disabled={submitting}>
+                {submitting ? "Subscribing..." : "Subscribe"}
               </Button>
             </form>
           </div>

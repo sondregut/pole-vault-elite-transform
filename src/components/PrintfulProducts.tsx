@@ -27,7 +27,7 @@ const PrintfulProducts = () => {
         <ProductCard
           key={product.id}
           product={product}
-          variant={selectedVariants[product.id]}
+          selectedVariant={selectedVariants[product.id]}
           onSelectVariant={(variantId) => handleSelectVariant(product.id, variantId)}
         />
       ))}

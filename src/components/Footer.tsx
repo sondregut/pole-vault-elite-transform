@@ -1,11 +1,40 @@
 
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Mail, Phone, Home, Info, ShoppingCart, MessageSquare, LayoutGrid, Instagram, Youtube, Facebook, Twitter } from "lucide-react";
 import Logo from "./Logo";
+import { useToast } from "@/hooks/use-toast";
+import { subscribeToNewsletter } from "@/utils/newsletterSubscription";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) return;
+    
+    setSubmitting(true);
+    
+    const result = await subscribeToNewsletter(email, 'footer');
+    
+    toast({
+      title: result.success ? "Success!" : "Notice",
+      description: result.message,
+      variant: result.success ? "default" : "destructive",
+    });
+    
+    if (result.success) {
+      setEmail('');
+    }
+    
+    setSubmitting(false);
+  };
+
   return (
     <footer className="bg-[#1f2937] text-white py-12">
       <div className="container mx-auto">
@@ -96,14 +125,20 @@ const Footer = () => {
             </ul>
             
             <h3 className="text-lg font-semibold mt-8 mb-4">Subscribe to Our Newsletter</h3>
-            <div className="flex">
+            <form onSubmit={handleSubscribe} className="flex">
               <Input 
                 type="email" 
                 placeholder="Your email address" 
                 className="bg-gray-800 text-white border-none rounded-r-none focus:ring-primary"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={submitting}
               />
-              <Button className="rounded-l-none">Subscribe</Button>
-            </div>
+              <Button type="submit" className="rounded-l-none" disabled={submitting}>
+                {submitting ? "..." : "Subscribe"}
+              </Button>
+            </form>
           </div>
         </div>
         
