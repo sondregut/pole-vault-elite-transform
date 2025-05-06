@@ -32,11 +32,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
       return;
     }
 
-    // Add item to cart - fixing type error by parsing the price string to a number
+    // Add item to cart - convert the retail price string to a number if needed
+    const priceAsNumber = typeof variant.retail_price === 'string' ? 
+      parseFloat(variant.retail_price.replace(/[^0-9.]/g, '')) : 
+      variant.retail_price;
+    
     addToCart({
       id: `printful-${product.id}-${variant.id}`,
       name: `${product.name} - ${variant.name}`,
-      price: variant.retail_price, // Store the price as a string
+      price: priceAsNumber,
       image: variant.files?.find((f: any) => f.type === 'preview')?.preview_url || product.thumbnail_url,
       quantity: 1,
       printfulData: {
@@ -46,7 +50,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
     });
 
     // Instead of showing a toast, we'll show the confirmation UI
-    // The toast is removed because we're adding a custom notification
     showAddedToCartPopup(`${product.name} - ${variant.name}`);
   };
 
