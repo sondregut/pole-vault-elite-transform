@@ -74,7 +74,7 @@ const PrintfulProducts = () => {
     addToCart({
       id: `printful-${product.id}-${variant.id}`,
       name: `${product.name} - ${variant.name}`,
-      price: variant.retail_price,
+      price: parseFloat(variant.retail_price),
       image: variant.files?.find((f: any) => f.type === 'preview')?.preview_url || product.thumbnail_url,
       quantity: 1,
       printfulData: {
