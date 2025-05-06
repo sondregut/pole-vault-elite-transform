@@ -16,8 +16,7 @@ const Hero = () => {
             Ready to Take Your Pole Vaulting to the Next Level?
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-white/90 mt-6 max-w-2xl mx-auto text-center">
-            Join our elite coaching program designed by professional athletes for athletes of all levels. 
-            Transform your technique, increase your height, and achieve your personal best.
+            If you're serious about jumping higher, getting faster, and building real confidence in your vault — you're in the right place.
           </p>
           <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <a 

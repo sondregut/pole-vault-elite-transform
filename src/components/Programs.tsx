@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Check, Plane, Dumbbell, UserRound, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -64,7 +65,7 @@ const Programs = () => {
             Our Coaching Programs
           </h2>
           <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
-            Starting at $299/month
+            Choose the program that best fits your goals, schedule, and experience level.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

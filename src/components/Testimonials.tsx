@@ -1,11 +1,23 @@
-import { Star, MessageCircle, ChevronUp, ChevronDown } from "lucide-react";
-import { useState } from "react";
+
+import { Star, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselPrevious, 
+  CarouselNext 
+} from "@/components/ui/carousel";
+import useEmblaCarousel from "embla-carousel-react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 const Testimonials = () => {
-  const [showAllTestimonials, setShowAllTestimonials] = useState(false);
-  const [expandedTestimonials, setExpandedTestimonials] = useState<number[]>([]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true,
+    align: "start",
+    skipSnaps: false
+  });
 
   const testimonials = [
     {
@@ -66,8 +78,7 @@ const Testimonials = () => {
     },
   ];
 
-  // Get the first 3 testimonials to show initially
-  const displayedTestimonials = showAllTestimonials ? testimonials : testimonials.slice(0, 3);
+  const [expandedTestimonials, setExpandedTestimonials] = useState<number[]>([]);
 
   // Toggle expanded state for a testimonial
   const toggleExpand = (index: number) => {
@@ -81,6 +92,21 @@ const Testimonials = () => {
   // Check if a testimonial is expanded
   const isExpanded = (index: number) => expandedTestimonials.includes(index);
 
+  const SLIDE_COUNT = testimonials.length;
+  
+  // Auto scroll the carousel
+  useEffect(() => {
+    if (!emblaApi) return;
+    
+    const autoplayInterval = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 5000);
+    
+    return () => {
+      clearInterval(autoplayInterval);
+    };
+  }, [emblaApi]);
+
   return (
     <section className="py-14 bg-gray-50">
       <div className="container mx-auto">
@@ -93,86 +119,88 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {displayedTestimonials.map((testimonial, index) => (
-            <div key={index} className="bg-white p-8 rounded-lg shadow-md border border-gray-100 transition-all duration-300 hover:shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
-                  {testimonial.subtitle}
-                </div>
-              </div>
-              
-              <div className="relative">
-                <p className={`text-gray-700 mb-6 ${isExpanded(index) ? "" : "line-clamp-4"}`}>
-                  "{testimonial.quote}"
-                </p>
-                
-                {testimonial.quote.length > 200 && !isExpanded(index) && (
-                  <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-                )}
-                
-                {testimonial.quote.length > 200 && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => toggleExpand(index)}
-                    className="mt-1 text-primary hover:text-primary/80 hover:bg-primary/5 px-0 h-auto font-medium flex items-center gap-1"
-                  >
-                    {isExpanded(index) ? (
-                      <>
-                        Read less
-                        <ChevronUp className="h-4 w-4" />
-                      </>
-                    ) : (
-                      <>
-                        Read more
-                        <ChevronDown className="h-4 w-4" />
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
-              
-              <div className="flex items-center mt-4">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.author}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-primary"
-                />
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-900">{testimonial.author}</h4>
-                  <p className="text-sm text-gray-500">{testimonial.title}</p>
-                  <div className="flex items-center mt-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
-                    ))}
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.33%] pl-4">
+                  <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 transition-all duration-300 hover:shadow-lg h-full">
+                    <div className="flex items-center mb-4">
+                      <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
+                        {testimonial.subtitle}
+                      </div>
+                    </div>
+                    
+                    <div className="relative">
+                      <p className={`text-gray-700 mb-6 ${isExpanded(index) ? "" : "line-clamp-4"}`}>
+                        "{testimonial.quote}"
+                      </p>
+                      
+                      {testimonial.quote.length > 200 && !isExpanded(index) && (
+                        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+                      )}
+                      
+                      {testimonial.quote.length > 200 && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => toggleExpand(index)}
+                          className="mt-1 text-primary hover:text-primary/80 hover:bg-primary/5 px-0 h-auto font-medium flex items-center gap-1"
+                        >
+                          {isExpanded(index) ? (
+                            <>
+                              Read less
+                              <ChevronLeft className="h-4 w-4" />
+                            </>
+                          ) : (
+                            <>
+                              Read more
+                              <ChevronRight className="h-4 w-4" />
+                            </>
+                          )}
+                        </Button>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center mt-4">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.author}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+                      />
+                      <div className="ml-4">
+                        <h4 className="font-semibold text-gray-900">{testimonial.author}</h4>
+                        <p className="text-sm text-gray-500">{testimonial.title}</p>
+                        <div className="flex items-center mt-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-        
-        <div className="mt-8 text-center">
-          {!showAllTestimonials && testimonials.length > 3 ? (
-            <Button 
-              onClick={() => setShowAllTestimonials(true)}
-              variant="outline"
-              className="px-8 gap-2"
-            >
-              See All Testimonials
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          ) : showAllTestimonials && (
-            <Button 
-              onClick={() => setShowAllTestimonials(false)}
-              variant="outline"
-              className="px-8 gap-2"
-            >
-              Hide Testimonials
-              <ChevronUp className="h-4 w-4" />
-            </Button>
-          )}
+          </div>
+          
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white"
+            onClick={() => emblaApi?.scrollPrev()}
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
+          
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white"
+            onClick={() => emblaApi?.scrollNext()}
+          >
+            <ChevronRight className="h-6 w-6" />
+          </Button>
         </div>
       </div>
     </section>
