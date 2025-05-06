@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,6 +42,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
       ...product,
       price: price, // This will now always be a number
       quantity: 1,
+      image: product.images?.[0] || "placeholder.svg" // Add the required image property
     };
 
     setTimeout(() => {
