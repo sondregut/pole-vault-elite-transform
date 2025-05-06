@@ -15,6 +15,7 @@ interface LineItem {
   quantity: number;
   option?: string;
   image: string;
+  printfulId?: number; // New field for Printful products
 }
 
 interface CheckoutBody {
@@ -77,6 +78,7 @@ serve(async (req) => {
             name: item.productName,
             description: item.option ? `Option: ${item.option}` : undefined,
             images: [item.image],
+            metadata: item.printfulId ? { printfulId: item.printfulId.toString() } : undefined,
           },
           unit_amount: priceInCents,
         },
@@ -166,6 +168,7 @@ serve(async (req) => {
       cancel_url: cancelUrl,
       metadata: {
         order_id: orderData.id,
+        has_printful_items: lineItems.some(item => !!item.printfulId) ? 'true' : 'false',
       },
     });
 

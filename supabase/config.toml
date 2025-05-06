@@ -34,3 +34,6 @@ verify_jwt = false
 
 [functions.get-digital-product]
 verify_jwt = true
+
+[functions.printful]
+verify_jwt = false

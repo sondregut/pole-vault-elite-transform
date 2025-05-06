@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import PrintfulProducts from "@/components/PrintfulProducts";
 
 // Import UI components for the form
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -53,7 +55,8 @@ const Shop = () => {
     { id: "all", name: "All Products" },
     { id: "training", name: "Training Programs" },
     { id: "coaching", name: "Coaching" },
-    { id: "apparel", name: "Apparel" }
+    { id: "apparel", name: "Apparel" },
+    { id: "printful", name: "Printful Products" }
   ];
 
   // Filter products by category
@@ -175,75 +178,79 @@ const Shop = () => {
               ))}
             </div>
             
-            {/* Products grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProducts.map(product => (
-                <Card key={product.id} className="overflow-hidden h-full flex flex-col">
-                  <div 
-                    onClick={() => handleProductClick(product)}
-                    className="cursor-pointer group flex flex-col flex-grow"
-                  >
-                    <div className="aspect-square w-full overflow-hidden relative">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      {product.price === "$0.00" && (
-                        <div className="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 font-bold">
-                          FREE
-                        </div>
-                      )}
+            {/* Products grid - show different content based on active category */}
+            {activeCategory === "printful" ? (
+              <PrintfulProducts />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredProducts.map(product => (
+                  <Card key={product.id} className="overflow-hidden h-full flex flex-col">
+                    <div 
+                      onClick={() => handleProductClick(product)}
+                      className="cursor-pointer group flex flex-col flex-grow"
+                    >
+                      <div className="aspect-square w-full overflow-hidden relative">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        {product.price === "$0.00" && (
+                          <div className="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 font-bold">
+                            FREE
+                          </div>
+                        )}
+                      </div>
+                      <CardHeader className="pb-2">
+                        <div className="font-medium group-hover:text-primary transition-colors">{product.name}</div>
+                        <div className="text-lg font-semibold">{product.price}</div>
+                      </CardHeader>
+                      <CardContent className="flex-grow">
+                        {product.hasOptions && (
+                          <div className="mb-4" onClick={(e) => e.stopPropagation()}>
+                            <label className="text-sm text-gray-500 mb-1 block">
+                              {product.category === "apparel" ? "Select Size" : "Select Option"}
+                            </label>
+                            <Select
+                              value={selectedOptions[product.id] || ""}
+                              onValueChange={(value) => handleOptionChange(product.id, value)}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder={`Choose ${product.category === "apparel" ? "size" : "option"}`} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {product.options.map(option => (
+                                  <SelectItem key={option} value={option}>{option}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+                      </CardContent>
                     </div>
-                    <CardHeader className="pb-2">
-                      <div className="font-medium group-hover:text-primary transition-colors">{product.name}</div>
-                      <div className="text-lg font-semibold">{product.price}</div>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                      {product.hasOptions && (
-                        <div className="mb-4" onClick={(e) => e.stopPropagation()}>
-                          <label className="text-sm text-gray-500 mb-1 block">
-                            {product.category === "apparel" ? "Select Size" : "Select Option"}
-                          </label>
-                          <Select
-                            value={selectedOptions[product.id] || ""}
-                            onValueChange={(value) => handleOptionChange(product.id, value)}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder={`Choose ${product.category === "apparel" ? "size" : "option"}`} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {product.options.map(option => (
-                                <SelectItem key={option} value={option}>{option}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                    <CardFooter>
+                      {product.externalLink ? (
+                        <Button asChild className="w-full" onClick={(e) => e.stopPropagation()}>
+                          <a href={product.externalLink} target="_blank" rel="noopener noreferrer">
+                            {product.category === "training" ? "Buy Now" : "Apply Now"}
+                          </a>
+                        </Button>
+                      ) : product.comingSoon ? (
+                        <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700" onClick={(e) => e.stopPropagation()}>
+                          Coming Soon
+                        </Button>
+                      ) : product.price === "$0.00" ? (
+                        <Button className="w-full bg-green-600 hover:bg-green-700" onClick={(e) => handleFreeDownload(e, product)}>
+                          Download Free
+                        </Button>
+                      ) : (
+                        <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</Button>
                       )}
-                    </CardContent>
-                  </div>
-                  <CardFooter>
-                    {product.externalLink ? (
-                      <Button asChild className="w-full" onClick={(e) => e.stopPropagation()}>
-                        <a href={product.externalLink} target="_blank" rel="noopener noreferrer">
-                          {product.category === "training" ? "Buy Now" : "Apply Now"}
-                        </a>
-                      </Button>
-                    ) : product.comingSoon ? (
-                      <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700" onClick={(e) => e.stopPropagation()}>
-                        Coming Soon
-                      </Button>
-                    ) : product.price === "$0.00" ? (
-                      <Button className="w-full bg-green-600 hover:bg-green-700" onClick={(e) => handleFreeDownload(e, product)}>
-                        Download Free
-                      </Button>
-                    ) : (
-                      <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</Button>
-                    )}
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

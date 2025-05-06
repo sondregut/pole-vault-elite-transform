@@ -1,0 +1,158 @@
+
+import React, { useEffect, useState } from 'react';
+import { printful } from '@/integrations/printful/client';
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/CartContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
+
+const PrintfulProducts = () => {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+  const { addToCart } = useCart();
+
+  useEffect(() => {
+    async function fetchPrintfulProducts() {
+      try {
+        setLoading(true);
+        const response = await printful.getProducts();
+        
+        if (response.result) {
+          setProducts(response.result);
+        } else {
+          setError("Could not fetch products from Printful");
+        }
+      } catch (err) {
+        console.error("Error fetching Printful products:", err);
+        setError("Failed to load products from Printful");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPrintfulProducts();
+  }, []);
+
+  const handleVariantChange = (productId: string, variantId: string) => {
+    setSelectedVariants(prev => ({
+      ...prev,
+      [productId]: variantId
+    }));
+  };
+
+  const handleAddToCart = (product: any, variantId?: string) => {
+    try {
+      // Find the selected variant
+      const selectedVariant = product.sync_variants.find(
+        (v: any) => v.id === Number(variantId)
+      );
+      
+      if (!selectedVariant && product.sync_variants.length > 1) {
+        toast.error(`Please select a variant for ${product.name}`);
+        return;
+      }
+      
+      // If no variant is selected but there is only one variant, use that
+      const variant = selectedVariant || product.sync_variants[0];
+      
+      // Add to cart
+      addToCart({
+        id: variant.id, // Use variant ID as the cart item ID
+        name: `${product.name} - ${variant.name}`,
+        price: (variant.retail_price || "0").toString(),
+        image: variant.files.find((f: any) => f.type === "preview")?.preview_url || product.thumbnail_url,
+        quantity: 1,
+        option: variant.name
+      });
+      
+      toast.success(`${product.name} - ${variant.name} added to cart`);
+    } catch (err) {
+      console.error("Error adding Printful product to cart:", err);
+      toast.error("Failed to add product to cart");
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center py-12">Loading Printful products...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12 text-red-500">
+        {error}
+        <Button onClick={() => window.location.reload()} className="mt-4">
+          Try Again
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {products.map((product) => (
+        <Card key={product.id} className="overflow-hidden h-full flex flex-col">
+          <div className="cursor-pointer group flex flex-col flex-grow">
+            <div className="aspect-square w-full overflow-hidden relative">
+              <img
+                src={product.thumbnail_url}
+                alt={product.name}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              {product.is_new && (
+                <div className="absolute top-0 right-0 bg-blue-500 text-white px-3 py-1 font-bold">
+                  NEW
+                </div>
+              )}
+            </div>
+            <CardHeader className="pb-2">
+              <div className="font-medium group-hover:text-primary transition-colors">{product.name}</div>
+              <div className="text-lg font-semibold">
+                {product.sync_variants[0]?.retail_price || 'Price varies'}
+              </div>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              {product.sync_variants.length > 1 && (
+                <div className="mb-4" onClick={(e) => e.stopPropagation()}>
+                  <label className="text-sm text-gray-500 mb-1 block">
+                    Select Option
+                  </label>
+                  <Select
+                    value={selectedVariants[product.id] || ""}
+                    onValueChange={(value) => handleVariantChange(product.id, value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Choose option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {product.sync_variants.map((variant: any) => (
+                        <SelectItem key={variant.id} value={variant.id.toString()}>
+                          {variant.name} - {variant.retail_price}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <p className="text-sm text-gray-600 line-clamp-2">
+                {product.sync_product?.description || 'Custom printed product'}
+              </p>
+            </CardContent>
+          </div>
+          <CardFooter>
+            <Button 
+              className="w-full" 
+              onClick={() => handleAddToCart(product, selectedVariants[product.id])}
+            >
+              Add to Cart
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
+};
+
+export default PrintfulProducts;
