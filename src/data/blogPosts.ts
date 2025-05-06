@@ -13,173 +13,195 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     id: 4,
-    title: "Tempo Runs: the Low-Key Keystone of Sprint & Jump Training",
+    title: "Tempo Runs: A Practical Cornerstone for Speed‑Power Athletes",
     slug: "tempo-runs-sprint-jump-training",
     author: "Sondre Guttormsen",
     date: "June 6, 2025",
-    excerpt: "When people picture a 'speed' workout they see explosive block starts or razor-sharp fly sprints. Yet the late Charlie Francis sprinkled tempo into almost every world-class program he wrote.",
+    excerpt: "Tempo running—sub‑maximal sprints of 100 – 400 m with short, incomplete recoveries—has been part of high‑level speed training since the 1980s.",
     content: `
-      <p>When people picture a "speed" workout they see explosive block starts or razor-sharp fly sprints. Yet the late Charlie Francis sprinkled <em>tempo</em> into almost every world-class program he wrote, from Ben Johnson's 9.79 season to today's elite copy-cats. Below is a deeper look at what tempo really is, the two main flavours, common use-cases, and how <em>I, Sondre</em> fold it into my training week.</p>
+      <p>Tempo running—sub‑maximal sprints of 100 – 400 m with short, incomplete recoveries—has been part of high‑level speed training since the 1980s. Yet debate persists: some modern coaches insist that only acceleration and maximal‑velocity work matter; others, following Charlie Francis, Clyde Hart, or the Jamaican sprint camps, keep at least one tempo session in the weekly plan. Recent pieces by Ryan Banta and Joel Smith offer fresh perspective on why this "middle‑gear" work still deserves attention.</p>
       
-      <h3 class="text-xl font-bold mt-8 mb-4">1 | What exactly counts as "tempo"?</h3>
+      <h3 class="text-xl font-bold mt-8 mb-4">1 | What exactly is tempo?</h3>
       
       <div class="overflow-x-auto mb-6">
         <table class="w-full border-collapse">
           <thead>
             <tr class="bg-gray-100">
-              <th class="border p-2 text-left">Tempo type</th>
-              <th class="border p-2 text-left">Speed band</th>
-              <th class="border p-2 text-left">Typical rep & rest</th>
-              <th class="border p-2 text-left">Session volume</th>
-              <th class="border p-2 text-left">Primary purpose</th>
+              <th class="border p-2 text-left">Category</th>
+              <th class="border p-2 text-left">Typical intensity</th>
+              <th class="border p-2 text-left">Usual rep length</th>
+              <th class="border p-2 text-left">Recovery</th>
+              <th class="border p-2 text-left">Common purpose</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="border p-2"><strong>Extensive</strong></td>
-              <td class="border p-2">≈ 65–75% of max</td>
-              <td class="border p-2">100–200m, walk-back/30–90s</td>
-              <td class="border p-2">≤ 2000m</td>
-              <td class="border p-2">Active recovery, capillarisation, technique rehearsal</td>
+              <td class="border p-2"><strong>Extensive tempo</strong></td>
+              <td class="border p-2">65-75% v<sub>max</sub></td>
+              <td class="border p-2">100-200 m</td>
+              <td class="border p-2">Walk-back / 30-90 s</td>
+              <td class="border p-2">Active recovery, capillary development, technical rhythm</td>
             </tr>
             <tr>
-              <td class="border p-2"><strong>Intensive</strong></td>
-              <td class="border p-2">≈ 80–89%</td>
-              <td class="border p-2">120–300m, 1–3 min</td>
-              <td class="border p-2">≤ 1400m</td>
-              <td class="border p-2">Aerobic-speed bridge, early special endurance</td>
+              <td class="border p-2"><strong>Intensive tempo</strong></td>
+              <td class="border p-2">80-89%</td>
+              <td class="border p-2">120-300 m</td>
+              <td class="border p-2">1-3 min</td>
+              <td class="border p-2">Lactate buffering, 400 m race rhythm</td>
             </tr>
           </tbody>
         </table>
       </div>
       
-      <p>Francis insisted the intensity be low enough that "the last rep is the same speed as the first," because once fatigue alters mechanics the session stops benefiting recovery and starts <em>stealing</em> from tomorrow's speed. He also capped extensive work at ~2 km to avoid the slow-twitch creep he saw in programs that made sprinters jog laps.</p>
+      <p>Charlie Francis capped extensive sessions at roughly 2 000 m to "flush, not fry" the CNS and kept the pace strict—about 100 m PB × 1.33 seconds <a href="https://www.charliefrancis.com/products/the-charlie-francis-training-system-cfts" class="text-primary hover:underline">Francis 1985</a>.</p>
       
-      <h3 class="text-xl font-bold mt-8 mb-4">2 | Why tempo pays off for sprinters & jumpers</h3>
+      <div class="my-8 rounded-xl overflow-hidden">
+        <video 
+          src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//tempo.MP4" 
+          controls 
+          class="w-full h-auto max-h-[500px]"
+          poster="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//tempo%202.PNG"
+        >
+          Your browser does not support the video tag.
+        </video>
+      </div>
       
-      <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li><strong>Metabolic flush without CNS cost</strong> – Reps at 65–75% raise heart-rate and pump fresh blood through spilled-glycogen muscle, yet the central nervous system stays untouched, leaving you fresh for next-day speed.</li>
-        <li><strong>Aerobic "battery" for round-to-round recovery</strong> – Sub-max work expands capillary density and mitochondrial enzymes in fast-twitch fibres so you bounce back quicker between heats, plyo sets or strength circuits.</li>
-        <li><strong>Low-impact tendon seasoning</strong> – Grass or turf surfaces plus trainers offer thousands of gentle contacts that armour the plantar fascia, Achilles and patellar tendon against the violent spikes days bring.</li>
-        <li><strong>Technical rehearsal</strong> – Relaxed upright running lets you groove front-side mechanics minus the white-noise of maximal effort. Francis often placed tempo the day <em>after</em> pure speed so athletes could "write the movement they just learned in pen".</li>
-        <li><strong>Body-composition & general fitness</strong> – Forty-plus seconds of running at ~70% HRmax burns calories and improves cardiac stroke volume without risking fibre-type shift.</li>
-      </ul>
+      <h3 class="text-xl font-bold mt-8 mb-4">2 | Why many coaches skip tempo (and why that can be short‑sighted)</h3>
       
-      <h3 class="text-xl font-bold mt-8 mb-4">3 | My weekly dose (Sondre's template)</h3>
+      <p><strong>"It isn't specific."</strong><br />
+      High‑intensity purists argue that long runs teach slow mechanics. Banta counters that when tempo is broken into shorter chunks—say 5 × (100+100+100)—athletes keep posture, ground contact and rhythm intact <a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">Banta 2021</a>.</p>
+      
+      <p><strong>Fear of technique breakdown.</strong><br />
+      Technique does suffer if reps are too long (for example, 5 × 300 m). Reducing segment length or running on grass preserves form while still delivering the aerobic and tendon stimulus.</p>
+      
+      <p><strong>"General fitness can come from circuits."</strong><br />
+      True, but tempo delivers work‑capacity, tendon loading and technical rehearsal simultaneously—one session instead of several <a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">Banta 2021</a>.</p>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">3 | Documented benefits</h3>
+      
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border p-2 text-left">System / quality</th>
+              <th class="border p-2 text-left">Evidence & rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border p-2"><strong>Lower‑leg stiffness</strong></td>
+              <td class="border p-2">Long‑stride calf loading in sets like 6 × 200 m creates tendon resilience valuable to single‑leg jumpers <a href="https://www.just-fly-sports.com/speed-training-interview-with-ryan-banta/" class="text-primary hover:underline">Smith 2013 via Banta interview</a>.</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Circulatory efficiency</strong></td>
+              <td class="border p-2">Francis considered expanded capillary beds a "hidden secret" that speeds recovery between hard sessions <a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">Banta 2021</a>.</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Lactate buffering</strong></td>
+              <td class="border p-2">Intensive tempo at 80‑85 % raises sodium‑bicarbonate levels, delaying acidosis in 200/400 m events <a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">Banta 2021</a>.</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Work‑capacity and robustness</strong></td>
+              <td class="border p-2">Adding one tempo day per week yields ~ +13 extra sessions over a 13‑week season—effectively two more micro‑cycles of training volume <a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">Banta 2021</a>.</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Session‑to‑session freshness</strong></td>
+              <td class="border p-2">Extensive tempo elevates HR without heavy CNS cost, allowing high‑quality lifts or speed the following day <a href="https://www.charliefrancis.com/products/the-charlie-francis-training-system-cfts" class="text-primary hover:underline">Francis 1985</a>.</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Weather insurance</strong></td>
+              <td class="border p-2">Moderate‑intensity runs on turf are a safe fallback when lightning or cold cancels max‑velocity work <a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">Banta 2021</a>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">4 | Building tempo into a high‑/low week</h3>
       
       <div class="overflow-x-auto mb-6">
         <table class="w-full border-collapse">
           <thead>
             <tr class="bg-gray-100">
               <th class="border p-2 text-left">Day</th>
-              <th class="border p-2 text-left">Main theme</th>
-              <th class="border p-2 text-left">Example session</th>
-              <th class="border p-2 text-left">Why here?</th>
+              <th class="border p-2 text-left">Primary focus</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="border p-2">Mon</td>
-              <td class="border p-2">Max-acceleration + lift</td>
-              <td class="border p-2">Blocks & cleans</td>
-              <td class="border p-2">Heavy CNS</td>
+              <td class="border p-2"><strong>Mon</strong></td>
+              <td class="border p-2">Short‑approach vault and power throws</td>
             </tr>
-            <tr class="bg-gray-50">
+            <tr>
               <td class="border p-2"><strong>Tue</strong></td>
-              <td class="border p-2"><strong>Tempo (recovery)</strong></td>
-              <td class="border p-2">10 × 100m on grass, walk-back (~70%)</td>
-              <td class="border p-2">Flush hamstrings, reinforce upright mechanics</td>
+              <td class="border p-2">Acceleration sprints + weight‑room strength</td>
             </tr>
             <tr>
-              <td class="border p-2">Thu</td>
-              <td class="border p-2">Max-velocity flys</td>
-              <td class="border p-2">4 × 60m fly-20s</td>
-              <td class="border p-2">Speed focus</td>
+              <td class="border p-2"><strong>Wed</strong></td>
+              <td class="border p-2">Technical drills and gymnastics‑based core</td>
             </tr>
-            <tr class="bg-gray-50">
+            <tr>
+              <td class="border p-2"><strong>Thu</strong></td>
+              <td class="border p-2">Full‑approach vault + mixed lifting</td>
+            </tr>
+            <tr>
               <td class="border p-2"><strong>Fri</strong></td>
-              <td class="border p-2"><strong>Tempo</strong></td>
-              <td class="border p-2">6 × 150m, 2′ rest (≈ 1000m total)</td>
-              <td class="border p-2">Aerobic top-up before weekend jump session</td>
+              <td class="border p-2">Extensive tempo (e.g., 6 × 200 m @ 70 % on grass)</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Sat</strong></td>
+              <td class="border p-2">Hill sprints (moderate intensity) + high‑bar strength</td>
+            </tr>
+            <tr>
+              <td class="border p-2"><strong>Sun</strong></td>
+              <td class="border p-2">Rest / mobility work</td>
             </tr>
           </tbody>
         </table>
       </div>
       
-      <p>Both Tuesday's 100s and Friday's 150s land at ~1000m—about half Francis's ceiling—so I stay fresh yet consistently rack up >2 km of low-cost running every week.</p>
+      <p>This alternation mirrors Francis's high‑low blueprint: neural‑max days are buffered by metabolic‑low days, keeping injury risk down while maintaining output.</p>
       
-      <h3 class="text-xl font-bold mt-8 mb-4">4 | Progressions & variations</h3>
+      <h3 class="text-xl font-bold mt-8 mb-4">5 | Selecting the right format</h3>
       
-      <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li><strong>Short‐to‑long extensive:</strong> start with 8 × 100m, add 1–2 reps weekly until 12 × 100m, then switch to 6 × 150m.</li>
-        <li><strong>Grass turns to Mondo:</strong> begin on thick in‑field turf early GPP; move to trainers on the track as competition nears.</li>
-        <li><strong>Intensive bridge (pre‑SPP):</strong> 2 × 4 × 150m at ~80% with 3′ recoveries, borrowed from Simon Hansen's elite 100m plan.</li>
-        <li><strong>Tempo circuits:</strong> interleave 100m strides with core or medicine‑ball throws (Francis's "tempo + core" days) to pack more work into 40 min.</li>
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>Jump‑centric stiffness:</strong> 8 × 200 m @ 75 %, 3′ rest (grass)</li>
+        <li><strong>400 m rhythm & buffering:</strong> 3 × 4 × 150 m @ 82 %, 2′ between reps / 6′ between sets</li>
+        <li><strong>Recovery flush:</strong> 10 × 100 m @ 70 %, walk‑back (barefoot on turf if weather allows)</li>
+        <li><strong>Cooldown option:</strong> 6-8 × 100 m descending 90 → 50 % to reduce calf cramps <a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">Banta 2021</a></li>
       </ul>
       
-      <h3 class="text-xl font-bold mt-8 mb-4">5 | Common pitfalls</h3>
+      <h3 class="text-xl font-bold mt-8 mb-4">6 | Implementation guidelines</h3>
       
-      <div class="overflow-x-auto mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="bg-gray-100">
-              <th class="border p-2 text-left">Mistake</th>
-              <th class="border p-2 text-left">Fix</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="border p-2"><strong>Running 80%+ and calling it recovery</strong></td>
-              <td class="border p-2">Use a stopwatch: 100m time × 1.33 ≈ 75% pace (e.g., 11s sprinter → 14.7s tempo)</td>
-            </tr>
-            <tr>
-              <td class="border p-2"><strong>Too much volume too soon</strong></td>
-              <td class="border p-2">Start at 600–800m, add 10% weekly; stop when pace drops >2%.</td>
-            </tr>
-            <tr>
-              <td class="border p-2"><strong>Racing on concrete</strong></td>
-              <td class="border p-2">Keep it soft: grass, finely-rubbered Mondo in flats, or astro-turf.</td>
-            </tr>
-            <tr>
-              <td class="border p-2"><strong>Skipping tempo in taper</strong></td>
-              <td class="border p-2">Keep one micro-dose (6 × 100m) for blood flow—volume, not intensity, fattigues you.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <h3 class="text-xl font-bold mt-8 mb-4">6 | Placing tempo in a full micro-cycle</h3>
-      
-      <pre class="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-Mon   Speed/accel  | heavy weights
-Tue   Extensive tempo (900–1200m) + core
-Wed   Jumps / plyos | light weights
-Thu   Max-velocity / flys
-Fri   Extensive or early-season intensive tempo
-Sat   Off or drills / mobility
-Sun   Rest
-      </pre>
-      
-      <p>This high-low model—hard CNS one day, easy metabolic the next—was the backbone of Francis's entire Training System and is still copied in modern elite templates.</p>
-      
-      <h3 class="text-xl font-bold mt-8 mb-4">7 | Take-away</h3>
-      
-      <p>Tempo looks boring on Instagram, but its return on time is huge:</p>
-      
-      <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li><strong>Faster recovery</strong>,</li>
-        <li><strong>Lower injury risk</strong>,</li>
-        <li><strong>Cleaner mechanics</strong>, and</li>
-        <li><strong>Deeper gas-tank</strong> between heats and sets.</li>
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>Measure, don't guess.</strong><br /> A 10.9 s sprinter should hit ~ 14.5 s for 100 m tempo—not 13.0 s.</li>
+        <li><strong>Surface choice matters.</strong><br /> Grass or turf reduces joint stress and maximises tendon stimulus.</li>
+        <li><strong>Split reps before form disintegrates.</strong><br /> Replace 300 m slogging with 100‑m splits if posture falters.</li>
+        <li><strong>Positioning in the micro‑cycle.</strong><br /> Banta prefers Tuesday tempo following a high‑intensity Monday, avoiding heavy CNS work after large tempo volume <a href="https://www.just-fly-sports.com/speed-training-interview-with-ryan-banta/" class="text-primary hover:underline">Banta interview</a>.</li>
+        <li><strong>Progress conservatively.</strong><br /> Start at 600‑800 m total, add 10 % weekly, and unload every fourth week.</li>
       </ul>
       
-      <p>Work it once or twice a week, stay under that ~75% threshold, and your next <em>real</em> speed day will feel like you swapped legs with Usain Bolt.</p>
+      <h3 class="text-xl font-bold mt-8 mb-4">Closing thoughts</h3>
       
-      <blockquote class="border-l-4 border-primary pl-4 italic mt-8 mb-6">
-        <p>"Tempo does not affect the CNS—so you can train hard again tomorrow." — Charlie Francis</p>
-      </blockquote>
+      <p>Tempo running is neither old‑fashioned nor a cure‑all—but used judiciously, it:</p>
+      
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li>protects connective tissue,</li>
+        <li>sharpens technical rhythm in low‑stress conditions,</li>
+        <li>boosts aerobic support for sprint repeatability, and</li>
+        <li>adds flexible training volume without compromising peak speed.</li>
+      </ul>
+      
+      <p>If you coach or train for speed‑power events, a well‑timed tempo session can be the difference between arriving at race day ready or merely recovered. As Francis put it three decades ago, tempo lets you "flush today so you can sprint tomorrow."</p>
+      
+      <h3 class="text-xl font-bold mt-8 mb-4">Further reading</h3>
+      
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li>C. Francis – The Charlie Francis Training System<br /><a href="https://www.charliefrancis.com/products/the-charlie-francis-training-system-cfts" class="text-primary hover:underline">https://www.charliefrancis.com/products/the-charlie-francis-training-system-cfts</a></li>
+        <li>R. Banta – "Ending the War on Tempo Running with Sprinters"<br /><a href="https://simplifaster.com/articles/tempo-running-sprinters-training/" class="text-primary hover:underline">https://simplifaster.com/articles/tempo-running-sprinters-training/</a></li>
+        <li>J. Smith – "Speed Training Interview with Ryan Banta"<br /><a href="https://www.just-fly-sports.com/speed-training-interview-with-ryan-banta/" class="text-primary hover:underline">https://www.just-fly-sports.com/speed-training-interview-with-ryan-banta/</a></li>
+      </ul>
     `,
-    coverImage: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg",
+    coverImage: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//tempo%202.PNG",
     category: "Training"
   },
   {
