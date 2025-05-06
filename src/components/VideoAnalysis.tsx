@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { FileVideo, Clock, Search, MessageCircle, Play } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   HoverCard,
   HoverCardContent,
@@ -92,7 +93,9 @@ const VideoAnalysis = () => {
                 </div>
               ))}
             </div>
-            <Button>Try Video Analysis</Button>
+            <Button asChild>
+              <Link to="/shop/product/5">Try Video Analysis</Link>
+            </Button>
           </div>
         </div>
       </div>
