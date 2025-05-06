@@ -59,6 +59,26 @@ const Shop = () => {
     });
   };
 
+  // Handle direct download for free products
+  const handleFreeDownload = (e: React.MouseEvent, product: any) => {
+    e.stopPropagation();
+    
+    // For product with ID 13 (Best Pole Vault Drills)
+    if (product.id === 13) {
+      const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/Best_Pole_Vault_Drills.pdf";
+      
+      const a = document.createElement('a');
+      a.href = pdfUrl;
+      a.download = "Best Pole Vault Drills.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      // Show success message
+      alert("Your free PDF is being downloaded!");
+    }
+  };
+
   // Handle option change
   const handleOptionChange = (productId: number, option: string) => {
     setSelectedOptions(prev => ({
@@ -100,12 +120,17 @@ const Shop = () => {
                     onClick={() => handleProductClick(product)}
                     className="cursor-pointer group flex flex-col flex-grow"
                   >
-                    <div className="aspect-square w-full overflow-hidden">
+                    <div className="aspect-square w-full overflow-hidden relative">
                       <img
                         src={product.image}
                         alt={product.name}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
+                      {product.price === "$0.00" && (
+                        <div className="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 font-bold">
+                          FREE
+                        </div>
+                      )}
                     </div>
                     <CardHeader className="pb-2">
                       <div className="font-medium group-hover:text-primary transition-colors">{product.name}</div>
@@ -144,6 +169,10 @@ const Shop = () => {
                     ) : product.comingSoon ? (
                       <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700" onClick={(e) => e.stopPropagation()}>
                         Coming Soon
+                      </Button>
+                    ) : product.price === "$0.00" ? (
+                      <Button className="w-full bg-green-600 hover:bg-green-700" onClick={(e) => handleFreeDownload(e, product)}>
+                        Download Free
                       </Button>
                     ) : (
                       <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</Button>

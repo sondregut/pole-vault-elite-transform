@@ -12,6 +12,7 @@ const CheckoutSuccess = () => {
   const { clearCart } = useCart();
   const [hasDigitalProducts, setHasDigitalProducts] = useState(false);
   const [hasJumpersKneeProtocol, setHasJumpersKneeProtocol] = useState(false);
+  const [hasPoleVaultDrills, setHasPoleVaultDrills] = useState(false);
   
   // Clear the cart when successfully checked out
   useEffect(() => {
@@ -38,13 +39,20 @@ const CheckoutSuccess = () => {
         );
         
         setHasJumpersKneeProtocol(hasJumpersKnee);
+
+        // Check specifically for Pole Vault Drills (product ID 13)
+        const hasPoleVaultDrills = downloads?.some(
+          download => download.product_files?.product_id === 13
+        );
+        
+        setHasPoleVaultDrills(hasPoleVaultDrills);
       }
     };
     
     checkDigitalProducts();
   }, [clearCart]);
 
-  const handleDirectDownload = () => {
+  const handleJumpersKneeDownload = () => {
     const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/Jumper%20Knee%20Protocol%20.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0p1bXBlciBLbmVlIFByb3RvY29sIC5wZGYiLCJpYXQiOjE3NDY1MDExMzksImV4cCI6MjA2MTg2MTEzOX0.VReJcr2d90Av7LHa31owYY-q8fk-6DDP5whzq3-7HmM";
     
     // Create a hidden anchor element and click it
@@ -56,6 +64,22 @@ const CheckoutSuccess = () => {
     document.body.removeChild(a);
     
     toast.success("Jumpers Knee Protocol PDF downloaded successfully");
+  };
+
+  const handlePoleVaultDrillsDownload = () => {
+    // For now, we'll use a placeholder PDF URL
+    // In a real scenario, this would be linked to an actual PDF in the storage bucket
+    const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/Best_Pole_Vault_Drills.pdf";
+    
+    // Create a hidden anchor element and click it
+    const a = document.createElement('a');
+    a.href = pdfUrl;
+    a.download = "Best Pole Vault Drills.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    toast.success("Best Pole Vault Drills PDF downloaded successfully");
   };
   
   return (
@@ -81,10 +105,25 @@ const CheckoutSuccess = () => {
                   Your Jumpers Knee Protocol PDF is now ready for download.
                 </p>
                 <Button 
-                  onClick={handleDirectDownload}
+                  onClick={handleJumpersKneeDownload}
                   className="w-full mb-3 bg-blue-600 hover:bg-blue-700"
                 >
                   Download Jumpers Knee Protocol PDF
+                </Button>
+              </div>
+            )}
+
+            {hasPoleVaultDrills && (
+              <div className="mb-6 p-4 bg-green-50 rounded-md">
+                <h2 className="text-lg font-medium text-green-800 mb-2">Best Pole Vault Drills</h2>
+                <p className="text-green-700 mb-3">
+                  Your Best Pole Vault Drills PDF is now ready for download.
+                </p>
+                <Button 
+                  onClick={handlePoleVaultDrillsDownload}
+                  className="w-full mb-3 bg-green-600 hover:bg-green-700"
+                >
+                  Download Best Pole Vault Drills PDF
                 </Button>
               </div>
             )}
@@ -97,6 +136,15 @@ const CheckoutSuccess = () => {
                   </Button>
                 </Link>
               )}
+              
+              {/* Always show this free product download option */}
+              <Button 
+                onClick={handlePoleVaultDrillsDownload} 
+                className="w-full mb-3 bg-primary text-white"
+              >
+                Download Free Pole Vault Drills
+              </Button>
+              
               <Link to="/shop">
                 <Button className="w-full" variant={hasDigitalProducts ? "outline" : "default"}>
                   Continue Shopping

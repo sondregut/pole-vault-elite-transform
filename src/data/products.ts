@@ -77,6 +77,16 @@ export const products = [
     description: "Try a free 1-week sample of our comprehensive training programs to see if they're right for you."
   },
   {
+    id: 13,
+    name: "Best Pole Vault Drills",
+    price: "$0.00", 
+    image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg",
+    category: "training",
+    hasOptions: false,
+    options: [],
+    description: "A free collection of the most effective pole vault drills to improve your technique and performance. Compiled by elite pole vaulter and coach Sondre Guttormsen, these drills focus on key aspects of the vault including run-up, plant, takeoff, and swing techniques."
+  },
+  {
     id: 8,
     name: "Stavhopp.no Vintage Hat",
     price: "$35.00",
