@@ -10,7 +10,6 @@ import VideoAnalysis from '@/components/VideoAnalysis';
 import BeforeAfter from '@/components/BeforeAfter';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
-import GoogleFormEmbed from '@/components/GoogleFormEmbed';
 
 const Index = () => {
   return (
@@ -25,7 +24,6 @@ const Index = () => {
       <VideoAnalysis />
       <BeforeAfter />
       <CTASection />
-      <GoogleFormEmbed />
       <Footer />
     </div>
   );

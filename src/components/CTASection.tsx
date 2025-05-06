@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import GoogleFormEmbed from "./GoogleFormEmbed";
 
 const CTASection = () => {
   return (
@@ -12,15 +13,7 @@ const CTASection = () => {
           Join our community of athletes who are breaking personal records and reaching new heights.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a 
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform" 
-            target="_blank" 
-            rel="noopener noreferrer"
-          >
-            <Button variant="outline" className="bg-white text-[#3176FF] hover:bg-gray-100 rounded-button">
-              Apply for Coaching
-            </Button>
-          </a>
+          <GoogleFormEmbed />
           <a href="/shop">
             <Button variant="ghost" className="bg-transparent text-white border-2 border-white hover:bg-white/10 rounded-button">
               Explore Programs

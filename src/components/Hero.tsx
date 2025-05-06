@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import GoogleFormEmbed from "./GoogleFormEmbed";
 
 const Hero = () => {
   return (
@@ -19,15 +20,7 @@ const Hero = () => {
             If you're serious about jumping higher, getting faster, and building real confidence in your vault — you're in the right place.
           </p>
           <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform" 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              <Button size="lg" className="bg-primary text-white hover:bg-primary-dark rounded-button w-full">
-                Apply for Coaching
-              </Button>
-            </a>
+            <GoogleFormEmbed />
             <Link to="/shop">
               <Button 
                 size="lg" 
