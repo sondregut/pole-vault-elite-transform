@@ -1,4 +1,3 @@
-
 export const products = [
   {
     id: 1,
@@ -20,7 +19,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932",
     hasOptions: false,
     options: [],
-    description: "An expert-crafted 10-week pole vault program to elevate your technique and performance."
+    description: "10-week, 6-day/week training plan with pole vault drills, sprint work, and lifting. Includes video library with demos for every movement and lifetime access through TrainHeroic."
   },
   {
     id: 3,

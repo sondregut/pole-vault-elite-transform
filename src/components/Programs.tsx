@@ -11,10 +11,10 @@ const Programs = () => {
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg",
       icon: <Plane className="text-primary text-xl" />,
       features: [
-        "Structured 10-week progression",
-        "Video technique library",
-        "Two video analysis reviews",
-        "One Zoom coaching session",
+        "10-week, 6-day/week training plan",
+        "Pole vault drills, sprint work, and lifting",
+        "Video library with demos for every movement",
+        "Lifetime access through TrainHeroic",
         "Standard app access"
       ],
       price: "$59",
