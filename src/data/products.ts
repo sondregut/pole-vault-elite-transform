@@ -85,50 +85,5 @@ export const products = [
     hasOptions: false,
     options: [],
     description: "A free collection of the most effective pole vault drills to improve your technique and performance. Compiled by elite pole vaulter and coach Sondre Guttormsen, these drills focus on key aspects of the vault including run-up, plant, takeoff, and swing techniques."
-  },
-  {
-    id: 8,
-    name: "Stavhopp.no Vintage Hat",
-    price: "$35.00",
-    image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hat.jpg",
-    category: "apparel",
-    hasOptions: false,
-    options: []
-  },
-  {
-    id: 9,
-    name: "STAVHOPP.NO Hoodie",
-    price: "$60.00",
-    image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hoodie.jpg",
-    category: "apparel",
-    hasOptions: true,
-    options: ["S", "M", "L", "XL", "XXL"]
-  },
-  {
-    id: 10,
-    name: "STAVHOPP.NO T-shirt",
-    price: "$38.00",
-    image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//tshirt.jpg",
-    category: "apparel",
-    hasOptions: true,
-    options: ["S", "M", "L", "XL", "XXL"]
-  },
-  {
-    id: 11,
-    name: "TrackTech premium hoodie (black)",
-    price: "$87.00",
-    image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//premium-hoodie.jpg",
-    category: "apparel",
-    hasOptions: true,
-    options: ["S", "M", "L", "XL", "XXL"]
-  },
-  {
-    id: 12,
-    name: "Stavhopp.no Trucker Hat",
-    price: "$29.00",
-    image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//trucker-hat.jpg",
-    category: "apparel",
-    hasOptions: false,
-    options: []
   }
 ];
