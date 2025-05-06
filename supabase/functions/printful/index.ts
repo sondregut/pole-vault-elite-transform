@@ -25,8 +25,16 @@ serve(async (req) => {
     const path = url.pathname.split('/').pop();
     const printfulEndpoint = path || 'stores';
 
-    // Forward request to Printful API
-    const printfulUrl = `https://api.printful.com/${printfulEndpoint}`;
+    // Full path including query parameters if any
+    const fullPath = url.pathname.replace('/printful/', '');
+    const queryParams = url.search;
+
+    // Forward request to Printful API with the correct endpoint structure
+    let printfulUrl = `https://api.printful.com/${fullPath}${queryParams}`;
+    if (!fullPath || fullPath === 'printful') {
+      printfulUrl = 'https://api.printful.com/stores';
+    }
+
     console.log(`Forwarding request to Printful: ${printfulUrl}`);
     console.log(`API Key configured: ${PRINTFUL_API_KEY ? 'Yes (length: ' + PRINTFUL_API_KEY.length + ')' : 'No'}`);
 
@@ -51,7 +59,9 @@ serve(async (req) => {
     console.log(`Response from Printful (status ${response.status})`);
     
     // Add more debugging for sync/products endpoint
-    if (printfulEndpoint === 'sync/products') {
+    if (printfulEndpoint === 'sync/products' || fullPath.includes('sync/products')) {
+      console.log(`Full endpoint path: ${fullPath}`);
+      
       if (data.result) {
         console.log(`Received ${data.result.length} products from Printful`);
         
@@ -60,9 +70,15 @@ serve(async (req) => {
         } else {
           console.log('First product name:', data.result[0]?.name || 'Unnamed');
           console.log('Has sync_variants:', data.result[0]?.sync_variants ? 'Yes' : 'No');
+          
+          // Log the structure of the first product to help debugging
+          if (data.result[0]) {
+            console.log('First product structure:', JSON.stringify(data.result[0]).substring(0, 500) + '...');
+          }
         }
       } else {
         console.log('No result property in Printful response');
+        console.log('Full Printful response:', JSON.stringify(data).substring(0, 500) + '...');
       }
       
       if (data.error) {

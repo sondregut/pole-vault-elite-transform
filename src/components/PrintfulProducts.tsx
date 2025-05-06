@@ -50,122 +50,153 @@ const PrintfulProducts = () => {
     fetchPrintfulProducts();
   }, []);
 
-  // Let's also modify the edge function to provide more debugging information
-  // Now updating the client file to add more detailed logging:
-  <lov-write file_path="src/integrations/printful/client.ts">
-import { supabase } from "@/integrations/supabase/client";
+  const handleSelectVariant = (productId: string, variantId: string) => {
+    setSelectedVariants(prev => ({
+      ...prev,
+      [productId]: variantId
+    }));
+  };
 
-const BASE_URL = 'https://qmasltemgjtbwrwscxtj.supabase.co/functions/v1/printful';
-
-/**
- * Printful API client - uses Supabase Edge Function to make secure API calls
- */
-export const printful = {
-  /**
-   * Get store information
-   */
-  getStore: async () => {
-    return await fetchPrintful('stores');
-  },
-
-  /**
-   * Get all products from Printful
-   */
-  getProducts: async () => {
-    console.log('Calling Printful API for products...');
-    try {
-      const data = await fetchPrintful('sync/products');
-      console.log('Printful API products response received');
-      return data;
-    } catch (error) {
-      console.error('Error in getProducts:', error);
-      throw error;
+  const handleAddToCart = (product: any) => {
+    if (!selectedVariants[product.id]) {
+      toast.error(`Please select a variant for ${product.name}`);
+      return;
     }
-  },
 
-  /**
-   * Get a specific product by ID
-   */
-  getProduct: async (productId: string) => {
-    return await fetchPrintful(`sync/products/${productId}`);
-  },
+    const selectedVariantId = selectedVariants[product.id];
+    const variant = product.sync_variants.find((v: any) => v.id === selectedVariantId);
 
-  /**
-   * Get product variants
-   */
-  getVariants: async (productId: string) => {
-    return await fetchPrintful(`sync/products/${productId}/variants`);
-  },
+    if (!variant) {
+      toast.error("Selected variant not found");
+      return;
+    }
 
-  /**
-   * Create a Printful order
-   */
-  createOrder: async (orderData: any) => {
-    return await fetchPrintful('orders', {
-      method: 'POST',
-      body: JSON.stringify(orderData),
+    addToCart({
+      id: `printful-${product.id}-${variant.id}`,
+      name: `${product.name} - ${variant.name}`,
+      price: variant.retail_price,
+      image: variant.files?.find((f: any) => f.type === 'preview')?.preview_url || product.thumbnail_url,
+      quantity: 1,
+      printfulData: {
+        productId: product.id,
+        variantId: variant.id
+      }
     });
-  },
 
-  /**
-   * Estimate shipping costs for an order
-   */
-  estimateShipping: async (shipmentData: any) => {
-    return await fetchPrintful('shipping/rates', {
-      method: 'POST',
-      body: JSON.stringify(shipmentData),
-    });
-  },
+    toast.success(`Added ${product.name} to cart!`);
+  };
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map(i => (
+          <Card key={i}>
+            <div className="aspect-square w-full">
+              <Skeleton className="h-full w-full" />
+            </div>
+            <CardHeader>
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-5 w-20" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-5 w-full" />
+            </CardContent>
+            <CardFooter>
+              <Skeleton className="h-10 w-full" />
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center p-10 text-center">
+        <div className="text-red-500 mb-4 text-xl">
+          <i className="ri-error-warning-line text-3xl"></i>
+        </div>
+        <h3 className="font-semibold text-lg mb-2">Error Loading Products</h3>
+        <p className="text-gray-500 mb-6">{error}</p>
+        <p className="text-sm text-gray-500 max-w-md">
+          Please verify that your Printful API key is correctly configured in Supabase and 
+          that you have products set up in your Printful store.
+        </p>
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center p-10 text-center">
+        <div className="text-amber-500 mb-4 text-xl">
+          <i className="ri-store-2-line text-3xl"></i>
+        </div>
+        <h3 className="font-semibold text-lg mb-2">No Products Found</h3>
+        <p className="text-gray-500 mb-6">No products were found in your Printful store.</p>
+        <p className="text-sm text-gray-500 max-w-md">
+          Please make sure you have added products in your Printful dashboard and that they have been properly synchronized.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {products.map(product => (
+        <Card key={product.id} className="overflow-hidden h-full flex flex-col">
+          <div className="aspect-square w-full overflow-hidden">
+            <img
+              src={product.thumbnail_url || "/placeholder.svg"}
+              alt={product.name}
+              className="h-full w-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/placeholder.svg";
+              }}
+            />
+          </div>
+          <CardHeader className="pb-2">
+            <h3 className="font-medium text-lg">{product.name}</h3>
+            {product.sync_variants && product.sync_variants[0] && (
+              <div className="text-lg font-semibold">
+                {product.sync_variants[0].retail_price}
+              </div>
+            )}
+          </CardHeader>
+          <CardContent className="flex-grow">
+            {product.sync_variants && product.sync_variants.length > 1 && (
+              <div className="mb-4">
+                <Select 
+                  value={selectedVariants[product.id] || ""} 
+                  onValueChange={(value) => handleSelectVariant(product.id, value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select variant" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {product.sync_variants.map((variant: any) => (
+                      <SelectItem key={variant.id} value={variant.id}>
+                        {variant.name} - {variant.retail_price}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </CardContent>
+          <CardFooter>
+            <Button 
+              className="w-full"
+              onClick={() => handleAddToCart(product)}
+              disabled={product.sync_variants?.length > 1 && !selectedVariants[product.id]}
+            >
+              Add to Cart
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
 };
 
-/**
- * Helper function to make fetch requests to Printful via the Supabase Edge Function
- */
-async function fetchPrintful(endpoint: string, options: RequestInit = {}) {
-  try {
-    console.log(`Fetching Printful endpoint: ${endpoint}`);
-    
-    // Get the current user's session
-    const { data: sessionData } = await supabase.auth.getSession();
-    const token = sessionData?.session?.access_token;
-    
-    // Set up headers
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
-    
-    // Add authorization if user is logged in
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    // Build the URL
-    const url = `${BASE_URL}/${endpoint}`;
-    console.log(`Making request to: ${url}`);
-
-    // Make the request
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        ...headers,
-        ...(options.headers || {}),
-      },
-    });
-
-    if (!response.ok) {
-      console.error(`HTTP error from Printful Edge function: ${response.status}`);
-    }
-
-    const data = await response.json();
-    
-    if (!response.ok) {
-      console.error('Error response from Printful:', data);
-      throw new Error(data.error || 'An error occurred when connecting to Printful');
-    }
-    
-    return data;
-  } catch (error) {
-    console.error('Error fetching from Printful:', error);
-    throw error;
-  }
-}
+export default PrintfulProducts;

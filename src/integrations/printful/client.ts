@@ -11,6 +11,7 @@ export const printful = {
    * Get store information
    */
   getStore: async () => {
+    console.log('Calling Printful API for store info...');
     return await fetchPrintful('stores');
   },
 
@@ -18,7 +19,15 @@ export const printful = {
    * Get all products from Printful
    */
   getProducts: async () => {
-    return await fetchPrintful('sync/products');
+    console.log('Calling Printful API for products...');
+    try {
+      const data = await fetchPrintful('sync/products');
+      console.log('Printful API products response received');
+      return data;
+    } catch (error) {
+      console.error('Error in getProducts:', error);
+      throw error;
+    }
   },
 
   /**
@@ -61,6 +70,8 @@ export const printful = {
  */
 async function fetchPrintful(endpoint: string, options: RequestInit = {}) {
   try {
+    console.log(`Fetching Printful endpoint: ${endpoint}`);
+    
     // Get the current user's session
     const { data: sessionData } = await supabase.auth.getSession();
     const token = sessionData?.session?.access_token;
@@ -75,8 +86,12 @@ async function fetchPrintful(endpoint: string, options: RequestInit = {}) {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    // Build the URL
+    const url = `${BASE_URL}/${endpoint}`;
+    console.log(`Making request to: ${url}`);
+
     // Make the request
-    const response = await fetch(`${BASE_URL}/${endpoint}`, {
+    const response = await fetch(url, {
       ...options,
       headers: {
         ...headers,
@@ -84,9 +99,16 @@ async function fetchPrintful(endpoint: string, options: RequestInit = {}) {
       },
     });
 
+    if (!response.ok) {
+      console.error(`HTTP error from Printful Edge function: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`Error response: ${errorText}`);
+    }
+
     const data = await response.json();
     
     if (!response.ok) {
+      console.error('Error response from Printful:', data);
       throw new Error(data.error || 'An error occurred when connecting to Printful');
     }
     
