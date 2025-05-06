@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ShoppingCart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
   product: any;
@@ -14,6 +17,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onSelectVariant }) => {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
     if (!selectedVariant) {
@@ -28,6 +32,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
       return;
     }
 
+    // Add item to cart - fixing type error by parsing the price string to a number
     addToCart({
       id: `printful-${product.id}-${variant.id}`,
       name: `${product.name} - ${variant.name}`,
@@ -40,7 +45,50 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, selectedVariant, onS
       }
     });
 
-    toast.success(`Added ${product.name} to cart!`);
+    // Instead of showing a toast, we'll show the confirmation UI
+    // The toast is removed because we're adding a custom notification
+    showAddedToCartPopup(`${product.name} - ${variant.name}`);
+  };
+
+  // Function to show the added to cart popup using Sonner toast with custom UI
+  const showAddedToCartPopup = (productName: string) => {
+    toast.custom((t) => (
+      <div className="bg-white rounded-lg shadow-lg p-4 border border-gray-200 max-w-md w-full">
+        <div className="flex items-start gap-3">
+          <div className="bg-green-100 p-2 rounded-full">
+            <svg className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div className="flex-1">
+            <h3 className="font-medium">Added to Cart!</h3>
+            <p className="text-sm text-gray-500 mt-1">{productName} has been added to your cart</p>
+          </div>
+        </div>
+        <div className="mt-4 flex gap-2 justify-end">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => toast.dismiss(t)}
+          >
+            Continue Shopping
+          </Button>
+          <Button 
+            size="sm" 
+            onClick={() => {
+              toast.dismiss(t);
+              navigate('/cart');
+            }}
+            className="flex items-center gap-1"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            View Cart
+          </Button>
+        </div>
+      </div>
+    ), {
+      duration: 5000, // Show for 5 seconds
+    });
   };
 
   return (
