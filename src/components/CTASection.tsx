@@ -27,9 +27,6 @@ const CTASection = () => {
             </Button>
           </a>
         </div>
-        <p className="text-white/80 mt-8 font-medium">
-          Not sure which program is right for you? Try our <a href="#" className="underline font-medium">free 7-day demo</a>.
-        </p>
       </div>
     </section>
   );

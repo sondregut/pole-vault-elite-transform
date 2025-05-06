@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Mail, Phone, Home, Info, ShoppingCart, MessageSquare, LayoutGrid } from "lucide-react";
+import { Mail, Phone, Home, Info, ShoppingCart, MessageSquare, LayoutGrid, Instagram, Youtube, Facebook, Twitter } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => {
@@ -17,16 +17,16 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition">
-                <i className="ri-instagram-line"></i>
+                <Instagram size={20} className="text-white" />
               </a>
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition">
-                <i className="ri-youtube-line"></i>
+                <Youtube size={20} className="text-white" />
               </a>
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition">
-                <i className="ri-facebook-line"></i>
+                <Facebook size={20} className="text-white" />
               </a>
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition">
-                <i className="ri-twitter-x-line"></i>
+                <Twitter size={20} className="text-white" />
               </a>
             </div>
           </div>

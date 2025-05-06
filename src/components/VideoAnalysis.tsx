@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { FileVideo, Clock, Search, MessageCircle, Play } from "lucide-react";
@@ -27,7 +28,7 @@ const VideoAnalysis = () => {
     {
       icon: <MessageCircle className="text-[#3176FF]" />,
       title: "Follow-up Consultation",
-      description: "Schedule a video call to discuss the analysis and get clarity on implementation strategies."
+      description: "Schedule a video call to discuss technique or the overall training program."
     }
   ];
 
