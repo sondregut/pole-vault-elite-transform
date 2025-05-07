@@ -1,5 +1,9 @@
 
+import { useIsMobile } from "@/hooks/use-mobile";
+
 const AthleteResults = () => {
+  const isMobile = useIsMobile();
+  
   const athletes = [
     {
       name: "Owen Anderson",
@@ -22,34 +26,34 @@ const AthleteResults = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className={`py-10 md:py-20 bg-gray-50`}>
       <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className={`${isMobile ? 'text-2xl' : 'text-3xl md:text-4xl'} font-bold text-gray-900`}>
             Athlete Results That Speak for Themselves
           </h2>
-          <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
+          <p className={`${isMobile ? 'text-sm' : 'text-lg'} text-gray-600 mt-2 md:mt-4 max-w-3xl mx-auto`}>
             Our athletes consistently improve their personal records and technique 
             through our specialized coaching programs.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
           {athletes.map((athlete, index) => (
             <div key={index} className="bg-white rounded shadow-md overflow-hidden">
-              <div className="h-64 overflow-hidden">
+              <div className={`${isMobile ? 'h-48' : 'h-64'} overflow-hidden`}>
                 <img
                   src={athlete.image}
                   alt={`${athlete.name}`}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="p-6">
-                <div className="mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900">{athlete.name}</h3>
+              <div className={`p-4 md:p-6`}>
+                <div className="mb-2 md:mb-4">
+                  <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold text-gray-900`}>{athlete.name}</h3>
                 </div>
-                <p className="text-gray-600">"{athlete.quote}"</p>
-                <div className="mt-4 flex items-center">
-                  <span className="text-sm text-gray-500">{athlete.info}</span>
+                <p className={`text-gray-600 ${isMobile ? 'text-xs' : ''}`}>"{athlete.quote}"</p>
+                <div className="mt-3 md:mt-4 flex items-center">
+                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-500`}>{athlete.info}</span>
                 </div>
               </div>
             </div>

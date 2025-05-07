@@ -10,6 +10,7 @@ import VideoAnalysis from '@/components/VideoAnalysis';
 import BeforeAfter from '@/components/BeforeAfter';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
+import AthleteResults from '@/components/AthleteResults';
 
 const Index = () => {
   return (
@@ -17,8 +18,8 @@ const Index = () => {
       <Navbar />
       <Hero />
       <Programs />
-      <Features />
       <CoachProfile />
+      <AthleteResults />
       <Testimonials />
       <AppFeatures />
       <VideoAnalysis />

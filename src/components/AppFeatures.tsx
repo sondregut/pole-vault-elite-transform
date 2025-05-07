@@ -9,8 +9,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const AppFeatures = () => {
+  const isMobile = useIsMobile();
   const features = [
     {
       icon: <Video className="text-primary text-xl" />,
@@ -51,38 +53,38 @@ const AppFeatures = () => {
   ];
 
   return (
-    <section className="py-20 bg-[#101827] text-white">
+    <section className={`py-10 md:py-20 bg-[#101827] text-white`}>
       <div className="container mx-auto">
-        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-          <div className="lg:w-1/2 order-2 lg:order-1 pt-4 lg:pt-0">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 lg:mb-6">
+        <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
+          <div className="lg:w-1/2 order-2 lg:order-1 pt-2 lg:pt-0">
+            <h2 className={`${isMobile ? 'text-xl' : 'text-3xl md:text-4xl'} font-bold text-white mb-2 lg:mb-6`}>
               Access Your Training Through Our Coaching App
             </h2>
-            <p className="text-lg text-white mb-6 lg:mb-8">
+            <p className={`${isMobile ? 'text-sm' : 'text-lg'} text-white mb-4 lg:mb-8`}>
               Get instant access to your personalized training program through our premium coaching app 
               designed for serious pole vaulters and athletes.
             </p>
-            <div className="space-y-4 lg:space-y-6 mb-6 lg:mb-8">
+            <div className={`space-y-3 lg:space-y-6 mb-4 lg:mb-8`}>
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <div className={`${isMobile ? 'w-8 h-8' : 'w-12 h-12'} bg-blue-100 rounded-full flex items-center justify-center`}>
                     {feature.icon}
                   </div>
-                  <div className="ml-4">
-                    <h4 className="text-xl font-semibold text-white">{feature.title}</h4>
-                    <p className="text-white">{feature.description}</p>
+                  <div className="ml-3 md:ml-4">
+                    <h4 className={`${isMobile ? 'text-base' : 'text-xl'} font-semibold text-white`}>{feature.title}</h4>
+                    <p className={`text-white ${isMobile ? 'text-xs' : ''}`}>{feature.description}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button>Apply for Coaching</Button>
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+              <Button className={isMobile ? 'text-sm py-1' : ''}>Apply for Coaching</Button>
             </div>
           </div>
           <div className="lg:w-1/2 order-1 lg:order-2 mb-2 lg:mb-0">
-            <div className="relative w-full min-h-[550px] lg:min-h-[650px] flex justify-center items-start">
+            <div className={`relative w-full ${isMobile ? 'min-h-[400px]' : 'min-h-[550px] lg:min-h-[650px]'} flex justify-center items-start`}>
               {/* App carousel */}
-              <Carousel className="w-full max-w-[340px] mx-auto">
+              <Carousel className={`w-full ${isMobile ? 'max-w-[250px]' : 'max-w-[340px]'} mx-auto`}>
                 <CarouselContent>
                   {appImages.map((image, index) => (
                     <CarouselItem key={index}>
@@ -98,13 +100,13 @@ const AppFeatures = () => {
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="left-0 text-white border-white" />
-                <CarouselNext className="right-0 text-white border-white" />
+                <CarouselPrevious className={`left-0 text-white border-white ${isMobile ? 'w-6 h-6' : ''}`} />
+                <CarouselNext className={`right-0 text-white border-white ${isMobile ? 'w-6 h-6' : ''}`} />
               </Carousel>
               
               {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 rounded-full blur-2xl -z-10"></div>
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+              <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-blue-100/20 rounded-full blur-2xl -z-10"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 md:w-40 md:h-40 bg-primary/10 rounded-full blur-3xl -z-10"></div>
             </div>
           </div>
         </div>

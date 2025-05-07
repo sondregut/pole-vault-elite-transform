@@ -2,8 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Check, Plane, Dumbbell, UserRound, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Programs = () => {
+  const isMobile = useIsMobile();
   const programs = [
     {
       title: "Flight Mode: 10-Week Program",
@@ -58,17 +60,17 @@ const Programs = () => {
   ];
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className={`py-6 md:py-12 bg-gray-50`}>
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+        <div className="text-center mb-6 md:mb-12">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900">
             Our Coaching Programs
           </h2>
-          <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
+          <p className={`${isMobile ? 'text-sm' : 'text-lg'} text-gray-600 mt-2 md:mt-4 max-w-3xl mx-auto`}>
             Choose the program that best fits your goals, schedule, and experience level.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
           {programs.map((program, index) => (
             <div 
               key={index} 
@@ -83,48 +85,48 @@ const Programs = () => {
                 }
               }}
             >
-              <div className="h-48 overflow-hidden">
+              <div className={`${isMobile ? 'h-32' : 'h-48'} overflow-hidden`}>
                 <img
                   src={program.image}
                   alt={program.title}
                   className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-110"
                 />
               </div>
-              <div className="p-6 border-b border-gray-100">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 transition-colors duration-300 hover:bg-primary hover:text-white">
+              <div className={`p-3 md:p-6 border-b border-gray-100`}>
+                <div className={`${isMobile ? 'w-8 h-8' : 'w-12 h-12'} bg-blue-100 rounded-full flex items-center justify-center mb-2 md:mb-4 transition-colors duration-300 hover:bg-primary hover:text-white`}>
                   {program.icon}
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">{program.title}</h3>
-                <p className="text-gray-600 mt-2">{program.subtitle}</p>
+                <h3 className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-gray-900`}>{program.title}</h3>
+                <p className={`${isMobile ? 'text-xs' : 'text-base'} text-gray-600 mt-1 md:mt-2`}>{program.subtitle}</p>
               </div>
-              <div className="p-6 flex-grow">
-                <ul className="space-y-3">
+              <div className={`p-3 md:p-6 flex-grow`}>
+                <ul className="space-y-1 md:space-y-3">
                   {program.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start">
-                      <Check className="text-primary h-5 w-5 mt-0.5 flex-shrink-0 transition-transform duration-300 hover:scale-125" />
-                      <span className="ml-3 text-gray-600">{feature}</span>
+                      <Check className="text-primary h-4 w-4 mt-0.5 flex-shrink-0 transition-transform duration-300 hover:scale-125" />
+                      <span className={`ml-2 md:ml-3 text-gray-600 ${isMobile ? 'text-xs' : 'text-base'}`}>{feature}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="p-6 bg-gray-50">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-gray-600">{program.priceDetail}</span>
-                  <span className="text-2xl font-bold text-gray-900">{program.price}</span>
+              <div className={`p-3 md:p-6 bg-gray-50`}>
+                <div className="flex items-center justify-between mb-2 md:mb-4">
+                  <span className={`text-gray-600 ${isMobile ? 'text-xs' : 'text-base'}`}>{program.priceDetail}</span>
+                  <span className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-gray-900`}>{program.price}</span>
                 </div>
                 <div className="flex gap-2">
                   {index === 2 ? (
-                    <Button className="flex-1 transition-all duration-300 hover:bg-opacity-90 hover:scale-105" asChild>
+                    <Button className={`flex-1 transition-all duration-300 hover:bg-opacity-90 hover:scale-105 ${isMobile ? 'text-xs py-1' : ''}`} asChild>
                       <a href={program.applyNowLink} target="_blank" rel="noopener noreferrer">Apply Now</a>
                     </Button>
                   ) : (
-                    <Button className="flex-1 transition-all duration-300 hover:bg-opacity-90 hover:scale-105" asChild>
+                    <Button className={`flex-1 transition-all duration-300 hover:bg-opacity-90 hover:scale-105 ${isMobile ? 'text-xs py-1' : ''}`} asChild>
                       <a href={program.buyNowLink} target="_blank" rel="noopener noreferrer">Buy Now</a>
                     </Button>
                   )}
                   
                   {index !== 2 && (
-                    <Button variant="outline" className="flex-1 transition-all duration-300 hover:bg-primary hover:text-white hover:scale-105" asChild>
+                    <Button variant="outline" className={`flex-1 transition-all duration-300 hover:bg-primary hover:text-white hover:scale-105 ${isMobile ? 'text-xs py-1' : ''}`} asChild>
                       <a href={program.learnMoreLink} target="_blank" rel="noopener noreferrer">Learn More</a>
                     </Button>
                   )}
@@ -133,10 +135,10 @@ const Programs = () => {
             </div>
           ))}
         </div>
-        <div className="mt-6 text-center">
+        <div className="mt-4 md:mt-6 text-center">
           <Link to="/shop" className="text-primary font-medium hover:text-blue-700 flex items-center justify-center gap-2 group transition-all duration-300">
-            View all programs
-            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+            <span className={isMobile ? 'text-sm' : ''}>View all programs</span>
+            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
