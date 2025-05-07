@@ -37,7 +37,7 @@ const Hero = () => {
           <p className="text-sm md:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl mx-auto text-center">
             {isMobile 
               ? 'Build strength and achieve advanced skills with personalized programs and a supportive community.'
-              : 'If you're serious about jumping higher, getting faster, and building real confidence in your vault — you're in the right place.'
+              : "If you're serious about jumping higher, getting faster, and building real confidence in your vault — you're in the right place."
             }
           </p>
           
