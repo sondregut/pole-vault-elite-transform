@@ -1,7 +1,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import GoogleFormEmbed from "./GoogleFormEmbed";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Hero = () => {
@@ -31,24 +30,20 @@ const Hero = () => {
           )}
           
           <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-center mb-3 md:mb-4">
-            {isMobile ? 'Get Better At Pole Vaulting With Sondre' : 'Ready to Take Your Pole Vaulting to the Next Level?'}
+            Ready to Take Your Pole Vaulting to the Next Level?
           </h1>
           
           <p className="text-sm md:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl mx-auto text-center">
-            {isMobile 
-              ? 'Build strength and achieve advanced skills with personalized programs and a supportive community.'
-              : "If you're serious about jumping higher, getting faster, and building real confidence in your vault — you're in the right place."
-            }
+            If you're serious about jumping higher, getting faster, and building real confidence in your vault — you're in the right place.
           </p>
           
           <div className="flex flex-col gap-3 justify-center">
-            <GoogleFormEmbed />
             <Link to="/shop" className="w-full">
               <Button 
                 size={isMobile ? "default" : "lg"} 
-                className="bg-[#D19B37] hover:bg-[#BE8B2F] text-white w-full border-none"
+                className="bg-primary hover:bg-secondary text-white w-full"
               >
-                START FREE TRIAL NOW
+                EXPLORE PROGRAMS
               </Button>
             </Link>
           </div>
