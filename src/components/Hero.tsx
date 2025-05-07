@@ -30,7 +30,7 @@ const Hero = () => {
               <Button 
                 size={isMobile ? "default" : "lg"} 
                 variant="app-download-outline"
-                className="w-full"
+                className="w-full hover:bg-transparent"
               >
                 EXPLORE ALL PROGRAMS
               </Button>
