@@ -7,8 +7,10 @@ import OurStory from "@/components/about/OurStory";
 import TeamPhilosophy from "@/components/about/TeamPhilosophy";
 import TeamMembers from "@/components/about/TeamMembers";
 import SondreProfile from "@/components/about/SondreProfile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const About = () => {
+  const isMobile = useIsMobile();
   const careerHighlights = [
     "Personal Best: 6.00 meters (19'8.25\")",
     "2x Olympian – Tokyo 2020 & Paris 2024 (8th Place)",
@@ -26,7 +28,7 @@ const About = () => {
       <main className="flex-grow">
         <AboutHero 
           title="About Us"
-          subtitle="Team Guttormsen's journey from beginners to elite pole vaulters"
+          subtitle={isMobile ? "" : "Team Guttormsen's journey from beginners to elite pole vaulters"}
           backgroundImage="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-04-14%20at%202.10.32%20PM.png"
         />
         

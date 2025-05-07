@@ -8,7 +8,9 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <BlogPostDetail />
+      <div className="pt-16 md:pt-24">
+        <BlogPostDetail />
+      </div>
       <Footer />
     </div>
   );
