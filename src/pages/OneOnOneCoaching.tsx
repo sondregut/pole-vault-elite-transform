@@ -12,35 +12,35 @@ const OneOnOneCoaching: React.FC = () => {
       {/* Add Navbar component */}
       <Navbar />
       
-      {/* Hero Section */}
+      {/* Hero Section - Made Smaller */}
       <section 
-        className="hero-section w-full pt-20 relative bg-cover bg-center bg-no-repeat"
+        className="hero-section w-full pt-10 relative bg-cover bg-center bg-no-repeat"
         style={{ 
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg')` 
         }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative container mx-auto px-8 md:px-16 lg:px-24 py-20">
+        <div className="relative container mx-auto px-8 md:px-16 lg:px-24 py-12">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+            <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">
               Transform Your Vaulting with Personalized Coaching from an Olympian
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mt-6">
+            <p className="text-base md:text-lg text-white/90 mt-4">
               Elevate your technique, achieve new heights, and train with
               world-class guidance from an Olympic pole vault champion.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform" 
                 target="_blank" 
                 rel="noopener noreferrer"
               >
                 <Button 
-                  size="xl" 
+                  size="lg" 
                   variant="cta"
                   className="rounded-full px-8"
                 >
-                  <User className="text-white" size={24} />
+                  <User className="text-white" size={20} />
                   Start Training Today
                 </Button>
               </a>
@@ -490,104 +490,6 @@ const OneOnOneCoaching: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16">
-        <div className="container mx-auto px-8 md:px-16 lg:px-24">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              What Our Athletes Say
-            </h2>
-            <p className="text-lg text-gray-600">
-              Hear from vaulters who have transformed their performance with our
-              coaching app.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md testimonial-card">
-              <div className="flex items-center mb-4 text-yellow-400">
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-              </div>
-              <p className="text-gray-600 mb-6">
-                "The video analysis feature completely transformed my technique.
-                Being able to get frame-by-frame feedback from my coach and see
-                the progress in my vaults over time has been invaluable."
-              </p>
-              <div className="flex items-center">
-                <img
-                  src="/testimonial-1.jpg"
-                  alt="Athlete"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-900">Rebecca Anderson</h4>
-                  <p className="text-sm text-gray-500">
-                    College Athlete • Using app for 8 months
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md testimonial-card">
-              <div className="flex items-center mb-4 text-yellow-400">
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-              </div>
-              <p className="text-gray-600 mb-6">
-                "Having my training program right on my phone has made it so much
-                easier to stay consistent. I love being able to log my workouts
-                and see my progress charts improving week after week."
-              </p>
-              <div className="flex items-center">
-                <img
-                  src="/testimonial-2.jpg"
-                  alt="Athlete"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-900">Michael Trevino</h4>
-                  <p className="text-sm text-gray-500">
-                    High School Athlete • Using app for 6 months
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md testimonial-card">
-              <div className="flex items-center mb-4 text-yellow-400">
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-fill"></i>
-                <i className="ri-star-half-fill"></i>
-              </div>
-              <p className="text-gray-600 mb-6">
-                "The direct messaging with Coach Sondre has been a game-changer.
-                Being able to get quick answers to my questions and share videos
-                between our scheduled calls keeps me on track."
-              </p>
-              <div className="flex items-center">
-                <img
-                  src="/testimonial-3.jpg"
-                  alt="Athlete"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-900">Sophia Martinez</h4>
-                  <p className="text-sm text-gray-500">
-                    Masters Athlete • Using app for 12 months
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ Section */}
       <section className="py-16">
         <div className="container mx-auto px-8 md:px-16 lg:px-24">
@@ -704,7 +606,7 @@ const OneOnOneCoaching: React.FC = () => {
       <style>
         {`
           .hero-section {
-            min-height: 80vh;
+            min-height: 60vh;
             background-size: cover;
             background-position: center;
           }
@@ -736,11 +638,11 @@ const OneOnOneCoaching: React.FC = () => {
             }
           }
           
-          .feature-card, .testimonial-card {
+          .feature-card {
             transition: all 0.3s ease;
           }
           
-          .feature-card:hover, .testimonial-card:hover {
+          .feature-card:hover {
             transform: translateY(-5px);
           }
         `}
