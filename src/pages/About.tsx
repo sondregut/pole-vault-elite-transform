@@ -14,12 +14,12 @@ const About = () => {
   const careerHighlights = [
     "Personal Best: 6.00 meters (19'8.25\")",
     "2x Olympian – Tokyo 2020 & Paris 2024 (8th Place)",
-    "European Champion (2023), European Bronze Medalist",
+    "European Champion (2023), European Bronze Medalist (2025)",
     "3x NCAA Champion",
     "Collegiate Indoor Record Holder",
     "Norwegian Champion & National Record Holder",
     "B.A. in Psychology – Princeton University",
-    "M.S. in Sport Management – University of Texas"
+    "M.Ed. in Sport Management – University of Texas"
   ];
 
   return (

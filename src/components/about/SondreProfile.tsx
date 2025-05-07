@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Award, Trophy, GraduationCap } from "lucide-react";
 import CareerHighlight from "./CareerHighlight";
@@ -48,7 +47,7 @@ const SondreProfile = ({ profileImageSrc, careerHighlights }: SondreProfileProps
                 After finishing high school in Norway, I pursued my athletic dreams in the U.S., first at 
                 UCLA, then transferring to Princeton—a decision that shaped both my career and identity. 
                 Competing alongside Simen, I earned a degree in Psychology from Princeton in 2023, then 
-                continued my studies with a Master's in Sport Management at the University of Texas.
+                continued my studies with a Master's in Education (M.Ed.) in Sport Management at the University of Texas.
               </p>
             </SectionWithIcon>
 
