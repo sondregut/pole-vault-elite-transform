@@ -29,7 +29,8 @@ const Hero = () => {
             <Link to="/shop" className="w-full">
               <Button 
                 size={isMobile ? "default" : "lg"} 
-                className="bg-primary hover:bg-secondary text-white w-full"
+                variant="app-download-outline"
+                className="w-full"
               >
                 EXPLORE ALL PROGRAMS
               </Button>
