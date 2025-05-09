@@ -65,9 +65,9 @@ const PVT = () => {
   const plans = [
     {
       name: "Athlete",
-      bgColor: "bg-blue-100",
-      textColor: "text-blue-600",
-      borderColor: "border-blue-300",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-600",
+      borderColor: "border-gray-300",
       price: "€8.99/month",
       yearPrice: "€75.99/year (save 30%)",
       description: "Best for vaulters who want to log everything and stay consistent.",
@@ -122,17 +122,17 @@ const PVT = () => {
       <Navbar />
       
       <main className="flex-grow pt-16">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-b from-blue-900 to-indigo-900 text-white py-16 md:py-24">
+        {/* Hero Section - Changed from blue gradient to neutral dark gradient */}
+        <section className="bg-gradient-to-b from-gray-800 to-gray-900 text-white py-16 md:py-24">
           <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
             <div className="lg:w-1/2 space-y-6">
-              <div className="inline-block bg-indigo-500 px-3 py-1 rounded-full text-sm font-medium mb-2">
+              <div className="inline-block bg-gray-700 px-3 py-1 rounded-full text-sm font-medium mb-2">
                 New App Release
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 Pole Vault Tracker
               </h1>
-              <h2 className="text-xl md:text-2xl text-blue-200">
+              <h2 className="text-xl md:text-2xl text-gray-200">
                 Track Every Jump. Level Up Your Vault.
               </h2>
               <p className="text-lg text-gray-200">
@@ -153,7 +153,7 @@ const PVT = () => {
             
             <div className="lg:w-1/2 mt-8 lg:mt-0">
               <div className="relative mx-auto max-w-md">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 blur-xl opacity-50 rounded-3xl transform rotate-3"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 blur-xl opacity-50 rounded-3xl transform rotate-3"></div>
                 <div className="relative p-2 bg-gray-900 rounded-3xl shadow-2xl border border-gray-700">
                   <img 
                     src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hero-section-image.jpg" 
@@ -166,7 +166,7 @@ const PVT = () => {
           </div>
         </section>
 
-        {/* Built For Section */}
+        {/* Built For Section - Already white */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
@@ -195,7 +195,7 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Features Section */}
+        {/* Features Section - Already gray-50 */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -217,7 +217,7 @@ const PVT = () => {
               ))}
             </div>
             
-            <div className="mt-12 bg-gradient-to-r from-purple-100 to-blue-100 p-6 md:p-8 rounded-2xl">
+            <div className="mt-12 bg-gradient-to-r from-gray-100 to-gray-200 p-6 md:p-8 rounded-2xl">
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="md:w-1/2">
                   <h3 className="text-2xl font-bold mb-4">Coming Soon: Vault Feed & Coach Dashboard</h3>
@@ -248,8 +248,8 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Built for Performance */}
-        <section className="py-16 bg-blue-900 text-white">
+        {/* Built for Performance - Changed from blue to dark gray */}
+        <section className="py-16 bg-gray-800 text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-8">
@@ -257,23 +257,23 @@ const PVT = () => {
               </h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="bg-blue-800/50 p-5 rounded-xl">
+                <div className="bg-gray-700/50 p-5 rounded-xl">
                   <h3 className="font-semibold mb-2">Platform</h3>
                   <p>Native iOS & Android app (built in React Native)</p>
                 </div>
-                <div className="bg-blue-800/50 p-5 rounded-xl">
+                <div className="bg-gray-700/50 p-5 rounded-xl">
                   <h3 className="font-semibold mb-2">Secure Backend</h3>
                   <p>Supabase (PostgreSQL + Auth + Storage)</p>
                 </div>
-                <div className="bg-blue-800/50 p-5 rounded-xl">
+                <div className="bg-gray-700/50 p-5 rounded-xl">
                   <h3 className="font-semibold mb-2">Design</h3>
                   <p>Clean, dark-mode interface with gold/blue/purple accents</p>
                 </div>
-                <div className="bg-blue-800/50 p-5 rounded-xl">
+                <div className="bg-gray-700/50 p-5 rounded-xl">
                   <h3 className="font-semibold mb-2">Storage</h3>
                   <p>Supabase cloud storage (video-ready)</p>
                 </div>
-                <div className="bg-blue-800/50 p-5 rounded-xl sm:col-span-2">
+                <div className="bg-gray-700/50 p-5 rounded-xl sm:col-span-2">
                   <h3 className="font-semibold mb-2">Privacy</h3>
                   <p>Full row-level security — only you (or your coach) can access your data</p>
                 </div>
@@ -282,7 +282,7 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Pricing Section */}
+        {/* Pricing Section - Already white */}
         <section className="py-16 bg-white" id="pricing">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
@@ -350,7 +350,7 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Achievements Section */}
+        {/* Achievements Section - Already changing from gray-100 to white gradient */}
         <section className="py-16 bg-gradient-to-b from-gray-100 to-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
@@ -413,14 +413,14 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Security Section */}
-        <section className="py-16 bg-blue-50">
+        {/* Security Section - Changed from blue-50 to gray-50 */}
+        <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <div className="flex flex-col md:flex-row gap-8 items-center">
                 <div className="md:w-1/3 flex justify-center">
                   <div className="bg-white w-32 h-32 rounded-full flex items-center justify-center shadow-lg">
-                    <Shield className="w-16 h-16 text-blue-500" />
+                    <Shield className="w-16 h-16 text-primary" />
                   </div>
                 </div>
                 
@@ -453,8 +453,8 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Summary Section */}
-        <section className="py-16 bg-gradient-to-b from-blue-900 to-indigo-900 text-white">
+        {/* Summary Section - Changed from blue gradient to dark gray gradient */}
+        <section className="py-16 bg-gradient-to-b from-gray-800 to-gray-900 text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-8">
