@@ -127,7 +127,7 @@ const PVT = () => {
           <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
             <div className="lg:w-1/2 space-y-6">
               <div className="inline-block bg-indigo-500 px-3 py-1 rounded-full text-sm font-medium mb-2">
-                🪁 New App Release
+                New App Release
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 Pole Vault Tracker
@@ -155,23 +155,11 @@ const PVT = () => {
               <div className="relative mx-auto max-w-md">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 blur-xl opacity-50 rounded-3xl transform rotate-3"></div>
                 <div className="relative p-2 bg-gray-900 rounded-3xl shadow-2xl border border-gray-700">
-                  <Carousel className="w-full">
-                    <CarouselContent>
-                      {appScreenshots.map((screenshot, index) => (
-                        <CarouselItem key={index}>
-                          <div className="p-1">
-                            <img 
-                              src={screenshot.src} 
-                              alt={screenshot.alt} 
-                              className="rounded-2xl object-cover w-full h-[500px]"
-                            />
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <CarouselPrevious className="-left-4 bg-white/20 hover:bg-white/30" />
-                    <CarouselNext className="-right-4 bg-white/20 hover:bg-white/30" />
-                  </Carousel>
+                  <img 
+                    src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hero-section-image.jpg" 
+                    alt="Pole Vault Tracker App" 
+                    className="rounded-2xl w-full"
+                  />
                 </div>
               </div>
             </div>
@@ -182,7 +170,7 @@ const PVT = () => {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              🚀 Built for Every Vaulter
+              Built for Every Vaulter
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -211,7 +199,7 @@ const PVT = () => {
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              🧱 What You Can Do
+              What You Can Do
             </h2>
             <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
               Powerful features designed specifically for pole vault training and performance tracking
@@ -265,7 +253,7 @@ const PVT = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-8">
-                💡 Built for Performance
+                Built for Performance
               </h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -299,7 +287,7 @@ const PVT = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                💸 Pricing — Start Free for 30 Days
+                Pricing — Start Free for 30 Days
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 All plans start with a 30-day free trial.
@@ -367,7 +355,7 @@ const PVT = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                🏅 Motivation That Builds Over Time
+                Motivation That Builds Over Time
               </h2>
               <p className="text-xl text-gray-700 max-w-3xl mx-auto">
                 Pole Vault Tracker includes Achievement Milestones to keep you engaged:
@@ -438,7 +426,7 @@ const PVT = () => {
                 
                 <div className="md:w-2/3">
                   <h2 className="text-3xl font-bold mb-6">
-                    🔒 Safe, Secure & Athlete-First
+                    Safe, Secure & Athlete-First
                   </h2>
                   
                   <ul className="space-y-3">
@@ -470,7 +458,7 @@ const PVT = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-8">
-                🎯 Ready to Transform Your Vault?
+                Ready to Transform Your Vault?
               </h2>
               
               <div className="bg-white/10 backdrop-blur-sm p-8 rounded-xl mb-10">
