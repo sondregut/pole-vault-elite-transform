@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -122,20 +121,20 @@ const PVT = () => {
       <Navbar />
       
       <main className="flex-grow pt-16">
-        {/* Hero Section - Changed from blue gradient to neutral dark gradient */}
-        <section className="bg-gradient-to-b from-gray-800 to-gray-900 text-white py-16 md:py-24">
+        {/* Hero Section - Improved text visibility with lighter text color */}
+        <section className="bg-gradient-to-b from-gray-800 to-gray-900 text-gray-100 py-16 md:py-24">
           <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
             <div className="lg:w-1/2 space-y-6">
               <div className="inline-block bg-gray-700 px-3 py-1 rounded-full text-sm font-medium mb-2">
                 New App Release
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
                 Pole Vault Tracker
               </h1>
-              <h2 className="text-xl md:text-2xl text-gray-200">
+              <h2 className="text-xl md:text-2xl text-gray-100">
                 Track Every Jump. Level Up Your Vault.
               </h2>
-              <p className="text-lg text-gray-200">
+              <p className="text-lg text-gray-100">
                 A powerful app for pole vaulters to log sessions, track poles, analyze performance, 
                 and keep improving—built by vaulters, for vaulters.
               </p>
@@ -248,34 +247,34 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Built for Performance - Changed from blue to dark gray */}
+        {/* Built for Performance - Improved text visibility */}
         <section className="py-16 bg-gray-800 text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
                 Built for Performance
               </h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2">Platform</h3>
-                  <p>Native iOS & Android app (built in React Native)</p>
+                  <h3 className="font-semibold mb-2 text-gray-100">Platform</h3>
+                  <p className="text-gray-200">Native iOS & Android app (built in React Native)</p>
                 </div>
                 <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2">Secure Backend</h3>
-                  <p>Supabase (PostgreSQL + Auth + Storage)</p>
+                  <h3 className="font-semibold mb-2 text-gray-100">Secure Backend</h3>
+                  <p className="text-gray-200">Supabase (PostgreSQL + Auth + Storage)</p>
                 </div>
                 <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2">Design</h3>
-                  <p>Clean, dark-mode interface with gold/blue/purple accents</p>
+                  <h3 className="font-semibold mb-2 text-gray-100">Design</h3>
+                  <p className="text-gray-200">Clean, dark-mode interface with gold/blue/purple accents</p>
                 </div>
                 <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2">Storage</h3>
-                  <p>Supabase cloud storage (video-ready)</p>
+                  <h3 className="font-semibold mb-2 text-gray-100">Storage</h3>
+                  <p className="text-gray-200">Supabase cloud storage (video-ready)</p>
                 </div>
                 <div className="bg-gray-700/50 p-5 rounded-xl sm:col-span-2">
-                  <h3 className="font-semibold mb-2">Privacy</h3>
-                  <p>Full row-level security — only you (or your coach) can access your data</p>
+                  <h3 className="font-semibold mb-2 text-gray-100">Privacy</h3>
+                  <p className="text-gray-200">Full row-level security — only you (or your coach) can access your data</p>
                 </div>
               </div>
             </div>
@@ -453,50 +452,50 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Summary Section - Changed from blue gradient to dark gray gradient */}
+        {/* Summary Section - Improved text visibility */}
         <section className="py-16 bg-gradient-to-b from-gray-800 to-gray-900 text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
                 Ready to Transform Your Vault?
               </h2>
               
               <div className="bg-white/10 backdrop-blur-sm p-8 rounded-xl mb-10">
-                <h3 className="text-2xl font-semibold mb-6">Pole Vault Tracker helps you:</h3>
+                <h3 className="text-2xl font-semibold mb-6 text-white">Pole Vault Tracker helps you:</h3>
                 
                 <ul className="space-y-4 text-left mb-8">
                   <li className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg">Log every jump and vault session</span>
+                    <span className="text-lg text-gray-100">Log every jump and vault session</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg">Track pole use and performance over time</span>
+                    <span className="text-lg text-gray-100">Track pole use and performance over time</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg">Upload video and analyze form</span>
+                    <span className="text-lg text-gray-100">Upload video and analyze form</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg">See progress with clear, clean stats</span>
+                    <span className="text-lg text-gray-100">See progress with clear, clean stats</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg">Stay motivated with achievements</span>
+                    <span className="text-lg text-gray-100">Stay motivated with achievements</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg">Share highlights with friends and coaches</span>
+                    <span className="text-lg text-gray-100">Share highlights with friends and coaches</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg">Keep improving consistently, with purpose</span>
+                    <span className="text-lg text-gray-100">Keep improving consistently, with purpose</span>
                   </li>
                 </ul>
               </div>
               
-              <p className="text-xl mb-8">
+              <p className="text-xl mb-8 text-gray-100">
                 Start your free trial today and take control of your training.
               </p>
               
