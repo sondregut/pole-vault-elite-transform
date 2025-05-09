@@ -21,6 +21,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Programs from "./pages/Programs";
 import MediaKit from "./pages/MediaKit";
+import PVT from "./pages/PVT";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/mediakit" element={<MediaKit />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/pvt" element={<PVT />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
