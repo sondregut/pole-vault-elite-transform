@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -280,7 +279,7 @@ const PVT = () => {
           </div>
         </section>
 
-        {/* Demo Section - Added from Demo.tsx */}
+        {/* Demo Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -291,43 +290,39 @@ const PVT = () => {
             </p>
             
             <div className="max-w-md mx-auto">
-              {/* iPhone frame */}
-              <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
-                {/* iPhone notch */}
-                <div className="absolute top-0 inset-x-0">
-                  <div className="mx-auto bg-black w-[40%] h-[25px] rounded-b-3xl"></div>
-                </div>
+              {/* Custom iPhone image with the form inside */}
+              <div className="relative mx-auto w-[320px] h-[650px]">
+                <img 
+                  src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//phone_14_01-removebg-preview.png"
+                  alt="iPhone frame"
+                  className="absolute top-0 left-0 w-full h-full z-10 pointer-events-none"
+                />
                 
-                {/* iPhone screen */}
-                <div className="w-full h-full bg-white overflow-y-auto p-4">
+                {/* App content inside the iPhone */}
+                <div className="absolute top-[14px] left-[22px] right-[22px] bottom-[14px] overflow-y-auto bg-gray-50 rounded-[32px] z-0 p-4">
                   {/* App header */}
                   <div className="flex justify-between items-center mb-2">
                     <div className="text-xs text-gray-500">9:41 AM</div>
-                    <div className="flex items-center">
-                      <div className="w-4 h-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-gray-500">
-                          <path fillRule="evenodd" d="M1.371 10.393c.58-1.735 1.502-3.346 2.707-4.734a1 1 0 0 1 1.497.117l2.913 3.597a1 1 0 0 1-.136 1.428 6 6 0 0 0-1.99 1.99 1 1 0 0 1-1.428.136L1.277 11.89a1 1 0 0 1 .094-1.498ZM20.922 10.393c-.58-1.735-1.502-3.346-2.707-4.734a1 1 0 0 0-1.497.117l-2.913 3.597a1 1 0 0 0 .136 1.428 6 6 0 0 1 1.99 1.99 1 1 0 0 0 1.428.136l3.657-2.937a1 1 0 0 0-.094-1.498Z" clipRule="evenodd" />
-                          <path fillRule="evenodd" d="M7.484 18.968a8.968 8.968 0 0 0 9.032 0 1 1 0 0 1 .496-.132H19a2 2 0 0 0 2-2v-3a1 1 0 0 0-.629-.928l-.385-.154a1 1 0 0 0-1.197.371 4 4 0 0 1-6.579 0 1 1 0 0 0-1.197-.37l-.385.154A1 1 0 0 0 10 13.965v4.87a1 1 0 0 0 1 1h.01a1 1 0 0 1 .474.132Z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="w-4 h-4 ml-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-gray-500">
-                          <path fillRule="evenodd" d="M3.75 6.75a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-.037c.856-.174 1.5-.93 1.5-1.838v-2.25c0-.907-.644-1.664-1.5-1.837V9.75a3 3 0 0 0-3-3h-15Zm15 1.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-6a1.5 1.5 0 0 1 1.5-1.5h15Z" clipRule="evenodd" />
-                        </svg>
-                      </div>
+                    <div className="flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-gray-500">
+                        <path fillRule="evenodd" d="M1.371 10.393c.58-1.735 1.502-3.346 2.707-4.734a1 1 0 0 1 1.497.117l2.913 3.597a1 1 0 0 1-.136 1.428 6 6 0 0 0-1.99 1.99 1 1 0 0 1-1.428.136L1.277 11.89a1 1 0 0 1 .094-1.498ZM20.922 10.393c-.58-1.735-1.502-3.346-2.707-4.734a1 1 0 0 0-1.497.117l-2.913 3.597a1 1 0 0 0 .136 1.428 6 6 0 0 1 1.99 1.99 1 1 0 0 0 1.428.136l3.657-2.937a1 1 0 0 0-.094-1.498Z" clipRule="evenodd" />
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-gray-500">
+                        <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.035-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
+                      </svg>
                     </div>
                   </div>
                   
-                  <div className="bg-gray-50 rounded-xl p-4 mb-2">
+                  <div className="bg-white rounded-xl p-4 mb-2 shadow-sm">
                     {/* Jump form */}
-                    <h2 className="text-2xl font-bold mb-1">Jump Details</h2>
-                    <p className="text-sm text-gray-500 mb-4">Record the details of your jump</p>
+                    <h2 className="text-lg font-bold mb-1">Jump Details</h2>
+                    <p className="text-xs text-gray-500 mb-3">Record the details of your jump</p>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
-                        <label className="text-sm font-medium block mb-1">Pole</label>
+                        <label className="text-xs font-medium block mb-1">Pole</label>
                         <Select defaultValue={poles[0]}>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full text-xs h-8">
                             <SelectValue placeholder="Select a pole" />
                           </SelectTrigger>
                           <SelectContent>
@@ -342,23 +337,23 @@ const PVT = () => {
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Number of Steps</label>
+                        <label className="text-xs font-medium block mb-1">Number of Steps</label>
                         <div className="flex items-center">
                           <Button 
                             type="button" 
                             variant="outline" 
-                            className="h-10 w-10 p-0"
+                            className="h-8 w-8 p-0"
                             onClick={() => handleStepChange(-1)}
                           >
                             -
                           </Button>
-                          <div className="h-10 w-20 flex items-center justify-center border-y border-input">
+                          <div className="h-8 w-14 flex items-center justify-center border-y border-input">
                             {steps}
                           </div>
                           <Button 
                             type="button" 
                             variant="outline" 
-                            className="h-10 w-10 p-0"
+                            className="h-8 w-8 p-0"
                             onClick={() => handleStepChange(1)}
                           >
                             +
@@ -368,89 +363,85 @@ const PVT = () => {
                       
                       <div>
                         <div className="flex justify-between items-center mb-1">
-                          <label className="text-sm font-medium">Bar Height</label>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xs">Units:</span>
-                            <span className="text-xs">m</span>
+                          <label className="text-xs font-medium">Bar Height</label>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-[10px]">Units:</span>
+                            <span className="text-[10px]">m</span>
                             <Switch 
+                              className="scale-75"
                               checked={unitType === "ft"} 
                               onCheckedChange={() => setUnitType(unitType === "m" ? "ft" : "m")}
                             />
-                            <span className="text-xs">ft</span>
+                            <span className="text-[10px]">ft</span>
                           </div>
                         </div>
                         <Input 
                           type="text"
+                          className="h-8 text-xs"
                           placeholder={`Height in ${unitType === "m" ? "meters (e.g., 4.75)" : "feet (e.g., 15.5)"}`}
                         />
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Grip Height</label>
-                        <Input type="text" placeholder={`Grip in ${unitType}`} />
+                        <label className="text-xs font-medium block mb-1">Grip Height</label>
+                        <Input type="text" className="h-8 text-xs" placeholder={`Grip in ${unitType}`} />
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Run Up Length</label>
-                        <Input type="text" placeholder={`Length in ${unitType}`} />
+                        <label className="text-xs font-medium block mb-1">Run Up Length</label>
+                        <Input type="text" className="h-8 text-xs" placeholder={`Length in ${unitType}`} />
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Take Off</label>
+                        <label className="text-xs font-medium block mb-1">Take Off</label>
                         <Input type="text" placeholder={`Distance in ${unitType}`} />
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Mid Mark</label>
+                        <label className="text-xs font-medium block mb-1">Mid Mark</label>
                         <Input type="text" placeholder={`Distance in ${unitType}`} />
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Jump Rating</label>
+                        <label className="text-xs font-medium block mb-1">Jump Rating</label>
                         <RadioGroup 
                           value={jumpRating} 
                           onValueChange={setJumpRating} 
                           className="flex justify-between"
                         >
                           <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="run_thru" id="run_thru" />
-                            <Label htmlFor="run_thru" className="text-sm text-red-500">Run Thru</Label>
+                            <RadioGroupItem value="run_thru" id="run_thru" className="h-3 w-3" />
+                            <Label htmlFor="run_thru" className="text-[10px] text-red-500">Run Thru</Label>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="glider" id="glider" />
-                            <Label htmlFor="glider" className="text-sm text-orange-500">Glider</Label>
+                            <RadioGroupItem value="ok" id="ok" className="h-3 w-3" />
+                            <Label htmlFor="ok" className="text-[10px] text-amber-500">OK</Label>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="ok" id="ok" />
-                            <Label htmlFor="ok" className="text-sm text-amber-500">OK</Label>
+                            <RadioGroupItem value="good" id="good" className="h-3 w-3" />
+                            <Label htmlFor="good" className="text-[10px] text-green-500">Good</Label>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="good" id="good" />
-                            <Label htmlFor="good" className="text-sm text-green-500">Good</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="great" id="great" />
-                            <Label htmlFor="great" className="text-sm text-blue-500">Great</Label>
+                            <RadioGroupItem value="great" id="great" className="h-3 w-3" />
+                            <Label htmlFor="great" className="text-[10px] text-blue-500">Great</Label>
                           </div>
                         </RadioGroup>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Jump Notes</label>
-                        <Textarea placeholder="Add any notes about this jump (e.g., 'late plant', 'good takeoff')" />
+                        <label className="text-xs font-medium block mb-1">Jump Notes</label>
+                        <Textarea 
+                          placeholder="Add notes about this jump" 
+                          className="text-xs min-h-[60px]" 
+                        />
                       </div>
                       
                       <div className="flex justify-between pt-2">
-                        <Button variant="outline">Cancel</Button>
-                        <Button className="px-6">Add Jump</Button>
+                        <Button variant="outline" className="text-xs h-8">Cancel</Button>
+                        <Button className="text-xs h-8">Add Jump</Button>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* iPhone home indicator */}
-                <div className="absolute bottom-0 inset-x-0 h-[5px]">
-                  <div className="mx-auto bg-black w-[30%] h-[5px] rounded-full"></div>
                 </div>
               </div>
             </div>
