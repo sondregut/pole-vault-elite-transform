@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Toggle } from "@/components/ui/toggle";
 
 const PVT = () => {
   // App screenshots for carousel
@@ -76,61 +76,118 @@ const PVT = () => {
     }
   ];
 
-  const plans = [
-    {
-      name: "Athlete",
-      bgColor: "bg-gray-100",
-      textColor: "text-gray-600",
-      borderColor: "border-gray-300",
-      price: "€8.99/month",
-      yearPrice: "€75.99/year (save 30%)",
-      description: "Best for vaulters who want to log everything and stay consistent.",
-      features: [
-        "Unlimited jump & session logging",
-        "Pole inventory management",
-        "Session summaries & goal tracking",
-        "1 highlight video upload per session",
-        "Basic PR tracker and session count",
-        "Single-device sync"
-      ]
-    },
-    {
-      name: "Athlete+",
-      bgColor: "bg-amber-100",
-      textColor: "text-amber-600",
-      borderColor: "border-amber-300",
-      popular: true,
-      price: "€14.99/month",
-      yearPrice: "€125.99/year (save 30%)",
-      description: "Best for vaulters who want deep insights and full video tracking.",
-      features: [
-        "Everything in Athlete, plus:",
-        "Upload video to each jump (30 GB/month storage)",
-        "Grip height and jump-quality trend analytics",
-        "Pole usage heatmaps",
-        "Session comparison tools",
-        "CSV export for custom tracking",
-        "Multi-device sync and cloud backup",
-        "Priority in-app support",
-        "Feed sharing with friends (coming soon)"
-      ]
-    },
-    {
-      name: "Coach Plan",
-      bgColor: "bg-red-100",
-      textColor: "text-red-600",
-      borderColor: "border-red-300",
-      comingSoon: true,
-      description: "For vault coaches managing athletes or teams.",
-      features: [
-        "Multi-athlete dashboards",
-        "Team analytics",
-        "Drill assignment",
-        "Competition planning tools"
-      ]
-    }
-  ];
-
+  // Add pricing plans with monthly and yearly options
+  const [isYearlyBilling, setIsYearlyBilling] = useState(false);
+  
+  const pricingPlans = {
+    monthly: [
+      {
+        name: "Athlete",
+        bgColor: "bg-gray-100",
+        textColor: "text-gray-600",
+        borderColor: "border-gray-300",
+        price: "€8.99/month",
+        description: "Best for vaulters who want to log everything and stay consistent.",
+        features: [
+          "Unlimited jump & session logging",
+          "Pole inventory management",
+          "Session summaries & goal tracking",
+          "1 highlight video upload per session",
+          "Basic PR tracker and session count",
+          "Single-device sync"
+        ]
+      },
+      {
+        name: "Athlete+",
+        bgColor: "bg-amber-100",
+        textColor: "text-amber-600",
+        borderColor: "border-amber-300",
+        popular: true,
+        price: "€14.99/month",
+        description: "Best for vaulters who want deep insights and full video tracking.",
+        features: [
+          "Everything in Athlete, plus:",
+          "Upload video to each jump (30 GB/month storage)",
+          "Grip height and jump-quality trend analytics",
+          "Pole usage heatmaps",
+          "Session comparison tools",
+          "CSV export for custom tracking",
+          "Multi-device sync and cloud backup",
+          "Priority in-app support",
+          "Feed sharing with friends (coming soon)"
+        ]
+      },
+      {
+        name: "Coach Plan",
+        bgColor: "bg-red-100",
+        textColor: "text-red-600",
+        borderColor: "border-red-300",
+        comingSoon: true,
+        description: "For vault coaches managing athletes or teams.",
+        features: [
+          "Multi-athlete dashboards",
+          "Team analytics",
+          "Drill assignment",
+          "Competition planning tools"
+        ]
+      }
+    ],
+    yearly: [
+      {
+        name: "Athlete",
+        bgColor: "bg-gray-100",
+        textColor: "text-gray-600",
+        borderColor: "border-gray-300",
+        price: "€75.99/year",
+        savingsText: "Save 30%",
+        description: "Best for vaulters who want to log everything and stay consistent.",
+        features: [
+          "Unlimited jump & session logging",
+          "Pole inventory management",
+          "Session summaries & goal tracking",
+          "1 highlight video upload per session",
+          "Basic PR tracker and session count",
+          "Single-device sync"
+        ]
+      },
+      {
+        name: "Athlete+",
+        bgColor: "bg-amber-100",
+        textColor: "text-amber-600",
+        borderColor: "border-amber-300",
+        popular: true,
+        price: "€125.99/year",
+        savingsText: "Save 30%",
+        description: "Best for vaulters who want deep insights and full video tracking.",
+        features: [
+          "Everything in Athlete, plus:",
+          "Upload video to each jump (30 GB/month storage)",
+          "Grip height and jump-quality trend analytics",
+          "Pole usage heatmaps",
+          "Session comparison tools",
+          "CSV export for custom tracking",
+          "Multi-device sync and cloud backup",
+          "Priority in-app support",
+          "Feed sharing with friends (coming soon)"
+        ]
+      },
+      {
+        name: "Coach Plan",
+        bgColor: "bg-red-100",
+        textColor: "text-red-600",
+        borderColor: "border-red-300",
+        comingSoon: true,
+        description: "For vault coaches managing athletes or teams.",
+        features: [
+          "Multi-athlete dashboards",
+          "Team analytics",
+          "Drill assignment",
+          "Competition planning tools"
+        ]
+      }
+    ]
+  };
+  
   // Demo component state
   const [steps, setSteps] = useState(16);
   const [unitType, setUnitType] = useState("m");
@@ -148,6 +205,8 @@ const PVT = () => {
   const handleStepChange = (change: number) => {
     setSteps(prev => Math.max(1, prev + change));
   };
+
+  const activePlans = isYearlyBilling ? pricingPlans.yearly : pricingPlans.monthly;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -482,10 +541,24 @@ const PVT = () => {
                 All plans start with a 30-day free trial.
                 No commitment. Cancel any time before day 30.
               </p>
+              
+              {/* Billing toggle */}
+              <div className="flex items-center justify-center mt-8 space-x-3">
+                <span className={`text-sm font-medium ${!isYearlyBilling ? 'text-gray-900' : 'text-gray-500'}`}>Monthly</span>
+                <div 
+                  className="relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-gray-200 cursor-pointer"
+                  onClick={() => setIsYearlyBilling(!isYearlyBilling)}
+                >
+                  <div className={`absolute mx-1 h-4 w-4 rounded-full bg-white transition-transform ${isYearlyBilling ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+                <span className={`text-sm font-medium ${isYearlyBilling ? 'text-gray-900' : 'text-gray-500'}`}>
+                  Yearly <span className="text-green-600 ml-1">Save 30%</span>
+                </span>
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              {plans.map((plan, index) => (
+              {activePlans.map((plan, index) => (
                 <div 
                   key={index}
                   className={`rounded-2xl border-2 ${plan.borderColor} overflow-hidden shadow-sm hover:shadow-md transition-shadow relative ${plan.popular ? 'transform md:-translate-y-4' : ''}`}
@@ -502,7 +575,9 @@ const PVT = () => {
                         <div className="mt-3">
                           <span className="text-3xl font-bold">{plan.price}</span>
                         </div>
-                        <div className="text-sm mt-1">{plan.yearPrice}</div>
+                        {plan.savingsText && isYearlyBilling && (
+                          <div className="text-sm mt-1 text-green-600 font-medium">{plan.savingsText}</div>
+                        )}
                       </>
                     ) : (
                       <div className="mt-3 inline-block bg-red-200 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
