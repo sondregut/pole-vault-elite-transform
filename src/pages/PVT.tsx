@@ -75,118 +75,86 @@ const PVT = () => {
       icon: <CheckCircle className="h-6 w-6 text-primary" />
     }
   ];
-
+  
   // Add pricing plans with monthly and yearly options
   const [isYearlyBilling, setIsYearlyBilling] = useState(false);
   
-  const pricingPlans = {
-    monthly: [
-      {
-        name: "Athlete",
-        bgColor: "bg-gray-100",
-        textColor: "text-gray-600",
-        borderColor: "border-gray-300",
-        price: "€8.99/month",
-        description: "Best for vaulters who want to log everything and stay consistent.",
-        features: [
-          "Unlimited jump & session logging",
-          "Pole inventory management",
-          "Session summaries & goal tracking",
-          "1 highlight video upload per session",
-          "Basic PR tracker and session count",
-          "Single-device sync"
-        ]
-      },
-      {
-        name: "Athlete+",
-        bgColor: "bg-amber-100",
-        textColor: "text-amber-600",
-        borderColor: "border-amber-300",
-        popular: true,
-        price: "€14.99/month",
-        description: "Best for vaulters who want deep insights and full video tracking.",
-        features: [
-          "Everything in Athlete, plus:",
-          "Upload video to each jump (30 GB/month storage)",
-          "Grip height and jump-quality trend analytics",
-          "Pole usage heatmaps",
-          "Session comparison tools",
-          "CSV export for custom tracking",
-          "Multi-device sync and cloud backup",
-          "Priority in-app support",
-          "Feed sharing with friends (coming soon)"
-        ]
-      },
-      {
-        name: "Coach Plan",
-        bgColor: "bg-red-100",
-        textColor: "text-red-600",
-        borderColor: "border-red-300",
-        comingSoon: true,
-        description: "For vault coaches managing athletes or teams.",
-        features: [
-          "Multi-athlete dashboards",
-          "Team analytics",
-          "Drill assignment",
-          "Competition planning tools"
-        ]
-      }
-    ],
-    yearly: [
-      {
-        name: "Athlete",
-        bgColor: "bg-gray-100",
-        textColor: "text-gray-600",
-        borderColor: "border-gray-300",
-        price: "€75.99/year",
-        savingsText: "Save 30%",
-        description: "Best for vaulters who want to log everything and stay consistent.",
-        features: [
-          "Unlimited jump & session logging",
-          "Pole inventory management",
-          "Session summaries & goal tracking",
-          "1 highlight video upload per session",
-          "Basic PR tracker and session count",
-          "Single-device sync"
-        ]
-      },
-      {
-        name: "Athlete+",
-        bgColor: "bg-amber-100",
-        textColor: "text-amber-600",
-        borderColor: "border-amber-300",
-        popular: true,
-        price: "€125.99/year",
-        savingsText: "Save 30%",
-        description: "Best for vaulters who want deep insights and full video tracking.",
-        features: [
-          "Everything in Athlete, plus:",
-          "Upload video to each jump (30 GB/month storage)",
-          "Grip height and jump-quality trend analytics",
-          "Pole usage heatmaps",
-          "Session comparison tools",
-          "CSV export for custom tracking",
-          "Multi-device sync and cloud backup",
-          "Priority in-app support",
-          "Feed sharing with friends (coming soon)"
-        ]
-      },
-      {
-        name: "Coach Plan",
-        bgColor: "bg-red-100",
-        textColor: "text-red-600",
-        borderColor: "border-red-300",
-        comingSoon: true,
-        description: "For vault coaches managing athletes or teams.",
-        features: [
-          "Multi-athlete dashboards",
-          "Team analytics",
-          "Drill assignment",
-          "Competition planning tools"
-        ]
-      }
-    ]
-  };
+  const pricingPlans = [
+    {
+      name: "Athlete",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-600",
+      borderColor: "border-gray-300",
+      monthlyPrice: 8.99,
+      yearlyDiscount: 0.3, // 30% discount
+      description: "Best for vaulters who want to log everything and stay consistent.",
+      features: [
+        "Unlimited jump & session logging",
+        "Pole inventory management",
+        "Session summaries & goal tracking",
+        "1 highlight video upload per session",
+        "Basic PR tracker and session count",
+        "Single-device sync"
+      ]
+    },
+    {
+      name: "Athlete+",
+      bgColor: "bg-amber-100",
+      textColor: "text-amber-600",
+      borderColor: "border-amber-300",
+      popular: true,
+      monthlyPrice: 14.99,
+      yearlyDiscount: 0.3, // 30% discount
+      description: "Best for vaulters who want deep insights and full video tracking.",
+      features: [
+        "Everything in Athlete, plus:",
+        "Upload video to each jump (30 GB/month storage)",
+        "Grip height and jump-quality trend analytics",
+        "Pole usage heatmaps",
+        "Session comparison tools",
+        "CSV export for custom tracking",
+        "Multi-device sync and cloud backup",
+        "Priority in-app support",
+        "Feed sharing with friends (coming soon)"
+      ]
+    },
+    {
+      name: "Coach Plan",
+      bgColor: "bg-red-100",
+      textColor: "text-red-600",
+      borderColor: "border-red-300",
+      comingSoon: true,
+      description: "For vault coaches managing athletes or teams.",
+      features: [
+        "Multi-athlete dashboards",
+        "Team analytics",
+        "Drill assignment",
+        "Competition planning tools"
+      ]
+    }
+  ];
+
+  // Calculate pricing based on billing period
+  const plansWithPricing = pricingPlans.map(plan => {
+    if (plan.comingSoon) return plan;
+    
+    const discountedMonthlyPrice = isYearlyBilling 
+      ? (plan.monthlyPrice * (1 - plan.yearlyDiscount)).toFixed(2)
+      : null;
+    
+    const yearlyTotalPrice = isYearlyBilling
+      ? (plan.monthlyPrice * (1 - plan.yearlyDiscount) * 12).toFixed(2)
+      : null;
+    
+    return {
+      ...plan,
+      displayPrice: isYearlyBilling
+        ? `€${discountedMonthlyPrice}/mo`
+        : `€${plan.monthlyPrice.toFixed(2)}/mo`,
+      yearlyTotal: yearlyTotalPrice ? `€${yearlyTotalPrice}/year` : null,
+      savings: isYearlyBilling ? `Save ${plan.yearlyDiscount * 100}%` : null
+    };
+  });
   
   // Demo component state
   const [steps, setSteps] = useState(16);
@@ -558,7 +526,7 @@ const PVT = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              {activePlans.map((plan, index) => (
+              {plansWithPricing.map((plan, index) => (
                 <div 
                   key={index}
                   className={`rounded-2xl border-2 ${plan.borderColor} overflow-hidden shadow-sm hover:shadow-md transition-shadow relative ${plan.popular ? 'transform md:-translate-y-4' : ''}`}
@@ -573,10 +541,13 @@ const PVT = () => {
                     {!plan.comingSoon ? (
                       <>
                         <div className="mt-3">
-                          <span className="text-3xl font-bold">{plan.price}</span>
+                          <span className="text-3xl font-bold">{plan.displayPrice}</span>
                         </div>
-                        {plan.savingsText && isYearlyBilling && (
-                          <div className="text-sm mt-1 text-green-600 font-medium">{plan.savingsText}</div>
+                        {isYearlyBilling && (
+                          <>
+                            <div className="text-sm mt-1 text-green-600 font-medium">{plan.savings}</div>
+                            <div className="text-sm mt-1">{plan.yearlyTotal}</div>
+                          </>
                         )}
                       </>
                     ) : (
@@ -671,120 +642,4 @@ const PVT = () => {
               ))}
             </div>
             
-            <p className="text-center mt-8 text-gray-700">
-              All milestones include in-app icons and encouragement to gamify your grind.
-            </p>
-          </div>
-        </section>
-        
-        {/* Security Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="md:w-1/3 flex justify-center">
-                  <div className="bg-white w-32 h-32 rounded-full flex items-center justify-center shadow-lg">
-                    <Shield className="w-16 h-16 text-primary" />
-                  </div>
-                </div>
-                
-                <div className="md:w-2/3">
-                  <h2 className="text-3xl font-bold mb-6">
-                    Safe, Secure & Athlete-First
-                  </h2>
-                  
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Your logs, poles, and sessions are private and encrypted</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Only you and your assigned coach can access your data</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>All video/media is backed up and secured in the cloud</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Built with privacy-first policies in mind</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        
-        {/* Summary Section */}
-        <section className="py-16 bg-gradient-to-b from-gray-800 to-gray-900 text-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
-                Ready to Transform Your Vault?
-              </h2>
-              
-              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-xl mb-10">
-                <h3 className="text-2xl font-semibold mb-6 text-white">Pole Vault Tracker helps you:</h3>
-                
-                <ul className="space-y-4 text-left mb-8">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Log every jump and vault session</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Track pole use and performance over time</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Upload video and analyze form</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">See progress with clear, clean stats</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Stay motivated with achievements</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Share highlights with friends and coaches</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Keep improving consistently, with purpose</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <p className="text-xl mb-8 text-gray-100">
-                Start your free trial today and take control of your training.
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg" className="gap-2">
-                  <Download size={20} />
-                  Download Now
-                </Button>
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10 gap-2">
-                  <Play size={20} />
-                  Watch Demo
-                </Button>
-                <Button size="lg" variant="secondary">
-                  Start Free Trial
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-      
-      <Footer />
-    </div>
-  );
-};
-
-export default PVT;
+            <p className="text-center mt-8 text-gray-700
