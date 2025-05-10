@@ -138,19 +138,25 @@ const PVT = () => {
   const plansWithPricing = pricingPlans.map(plan => {
     if (plan.comingSoon) return plan;
     
+    // Keep monthly price as the display price, even when yearly is selected
+    const monthlyPrice = plan.monthlyPrice.toFixed(2);
+    
+    // Calculate discounted monthly price (only for display when yearly is selected)
     const discountedMonthlyPrice = isYearlyBilling 
       ? (plan.monthlyPrice * (1 - plan.yearlyDiscount)).toFixed(2)
       : null;
     
+    // Calculate yearly total (only relevant when yearly is selected)
     const yearlyTotalPrice = isYearlyBilling
       ? (plan.monthlyPrice * (1 - plan.yearlyDiscount) * 12).toFixed(2)
       : null;
     
     return {
       ...plan,
-      displayPrice: isYearlyBilling
-        ? `€${discountedMonthlyPrice}/mo`
-        : `€${plan.monthlyPrice.toFixed(2)}/mo`,
+      // Always show monthly price, even when yearly is selected
+      displayPrice: `€${monthlyPrice}/mo`,
+      // Add discounted price for yearly
+      discountedMonthlyPrice: discountedMonthlyPrice ? `€${discountedMonthlyPrice}/mo` : null,
       yearlyTotal: yearlyTotalPrice ? `€${yearlyTotalPrice}/year` : null,
       savings: isYearlyBilling ? `Save ${plan.yearlyDiscount * 100}%` : null
     };
@@ -173,8 +179,6 @@ const PVT = () => {
   const handleStepChange = (change: number) => {
     setSteps(prev => Math.max(1, prev + change));
   };
-
-  const activePlans = isYearlyBilling ? pricingPlans.yearly : pricingPlans.monthly;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -545,6 +549,11 @@ const PVT = () => {
                         </div>
                         {isYearlyBilling && (
                           <>
+                            <div className="text-sm mt-1">
+                              <span className="line-through opacity-75">{plan.displayPrice}</span>
+                              {" "}
+                              <span className="font-medium">{plan.discountedMonthlyPrice}</span>
+                            </div>
                             <div className="text-sm mt-1 text-green-600 font-medium">{plan.savings}</div>
                             <div className="text-sm mt-1">{plan.yearlyTotal}</div>
                           </>
@@ -642,4 +651,16 @@ const PVT = () => {
               ))}
             </div>
             
-            <p className="text-center mt-8 text-gray-700
+            <p className="text-center mt-8 text-gray-700">
+              More achievements are added with every app update!
+            </p>
+          </div>
+        </section>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default PVT;
