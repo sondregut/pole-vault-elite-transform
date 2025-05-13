@@ -43,7 +43,7 @@ export async function syncSubscriberToBeehiiv(email: string) {
 }
 
 /**
- * This would be enhanced with proper admin auth in a future phase
+ * Sync all subscribers to Beehiiv
  */
 export async function syncAllSubscribersToBeehiiv() {
   try {

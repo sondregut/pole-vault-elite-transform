@@ -1,8 +1,12 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 
 const BEEHIIV_API_KEY = Deno.env.get("BEEHIIV_API_KEY");
 const BEEHIIV_API_URL = "https://api.beehiiv.com/v2";
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -69,8 +73,14 @@ async function syncSubscriberToBeehiiv(subscriber: SyncSubscriberRequest) {
   return await createBeehiivSubscriber(subscriber.email, subscriber.name);
 }
 
-async function syncAllSubscribersToBeehiiv(supabase: any) {
+async function syncAllSubscribersToBeehiiv() {
   try {
+    // Create a Supabase client with the service role key
+    const supabase = createClient(
+      SUPABASE_URL!,
+      SUPABASE_SERVICE_ROLE_KEY!
+    );
+
     const { data: subscribers, error } = await supabase
       .from("newsletter_subscribers")
       .select("*");
@@ -135,15 +145,13 @@ const handler = async (req: Request): Promise<Response> => {
       }
 
       case "syncAllSubscribers": {
-        // This would require the service role key to access all subscribers
-        // Only for admin use, would need proper authentication
-        return new Response(
-          JSON.stringify({ success: false, error: "Not implemented - requires admin auth" }),
-          {
-            status: 501,
-            headers: { "Content-Type": "application/json", ...corsHeaders },
-          }
-        );
+        // This now uses the implemented syncAllSubscribersToBeehiiv function
+        const result = await syncAllSubscribersToBeehiiv();
+        
+        return new Response(JSON.stringify(result), {
+          status: result.success ? 200 : 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        });
       }
 
       default:
