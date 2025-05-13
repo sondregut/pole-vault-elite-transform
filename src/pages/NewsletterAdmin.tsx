@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Send, Users } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Stats {
   total: number;
@@ -41,6 +42,7 @@ const NewsletterAdmin = () => {
   const [testEmail, setTestEmail] = useState('');
   const [emailSubject, setEmailSubject] = useState('');
   const [emailContent, setEmailContent] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -49,6 +51,7 @@ const NewsletterAdmin = () => {
 
   const fetchStats = async () => {
     setLoading(true);
+    setError(null);
     try {
       const { data, error } = await supabase.functions.invoke('newsletter-operations', {
         body: { operation: 'get_stats' }
@@ -61,6 +64,7 @@ const NewsletterAdmin = () => {
       setStats(data.stats[0]);
     } catch (error) {
       console.error('Error fetching newsletter stats:', error);
+      setError('Failed to load newsletter statistics. Please try again.');
       toast({
         title: "Error",
         description: "Failed to load newsletter statistics.",
@@ -82,6 +86,7 @@ const NewsletterAdmin = () => {
     }
 
     setLoadingAction(true);
+    setError(null);
     try {
       const { data, error } = await supabase.functions.invoke('newsletter-operations', {
         body: {
@@ -102,6 +107,7 @@ const NewsletterAdmin = () => {
       });
     } catch (error) {
       console.error('Error sending test email:', error);
+      setError('Failed to send test email. Please check your configuration.');
       toast({
         title: "Error",
         description: "Failed to send test email. Check console for details.",
@@ -133,6 +139,12 @@ const NewsletterAdmin = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-8">Newsletter Management</h1>
+        
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         
         <Tabs defaultValue="stats" className="w-full">
           <TabsList className="grid w-full md:w-[400px] grid-cols-3">
@@ -288,6 +300,7 @@ const NewsletterAdmin = () => {
 const SubscriberList = () => {
   const [subscribers, setSubscribers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -296,6 +309,7 @@ const SubscriberList = () => {
 
   const fetchSubscribers = async () => {
     setLoading(true);
+    setError(null);
     try {
       const { data, error } = await supabase
         .from('newsletter_subscribers')
@@ -306,6 +320,7 @@ const SubscriberList = () => {
       setSubscribers(data || []);
     } catch (error) {
       console.error('Error fetching subscribers:', error);
+      setError('Failed to load subscribers. Please try again.');
       toast({
         title: "Error",
         description: "Failed to load subscribers.",
@@ -318,6 +333,12 @@ const SubscriberList = () => {
 
   return (
     <div>
+      {error && (
+        <Alert variant="destructive" className="mb-6">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+      
       {loading ? (
         <div className="flex justify-center py-8">
           <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>

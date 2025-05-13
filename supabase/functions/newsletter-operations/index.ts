@@ -57,6 +57,7 @@ Deno.serve(async (req) => {
         const { data: stats, error: statsError } = await supabaseClient.rpc('get_newsletter_sync_stats');
         
         if (statsError) {
+          console.error('Error fetching newsletter stats:', statsError);
           return new Response(JSON.stringify({ error: statsError.message }), {
             status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -95,6 +96,7 @@ Deno.serve(async (req) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           });
         } catch (err) {
+          console.error('Error sending test email:', err);
           return new Response(JSON.stringify({ error: `Failed to send test email: ${err.message}` }), {
             status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -118,9 +120,11 @@ Deno.serve(async (req) => {
         const { data: subscribers, error: fetchError } = await supabaseClient
           .from('newsletter_subscribers')
           .select('email')
+          .eq('email_sent', false)  // Only target subscribers who haven't received an email
           .limit(50);
           
         if (fetchError) {
+          console.error('Error fetching subscribers:', fetchError);
           return new Response(JSON.stringify({ error: fetchError.message }), {
             status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -128,7 +132,7 @@ Deno.serve(async (req) => {
         }
         
         if (!subscribers || subscribers.length === 0) {
-          return new Response(JSON.stringify({ message: 'No subscribers found' }), {
+          return new Response(JSON.stringify({ message: 'No subscribers found who need emails' }), {
             status: 200,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           });
@@ -159,6 +163,7 @@ Deno.serve(async (req) => {
         });
     }
   } catch (error) {
+    console.error('Error in newsletter-operations:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
