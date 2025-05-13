@@ -31,16 +31,20 @@ export default function BeehiivImportDialog({ onImportComplete }: { onImportComp
   const [open, setOpen] = useState(false);
   const [importing, setImporting] = useState(false);
   const [importStats, setImportStats] = useState<ImportStats | null>(null);
+  const [importError, setImportError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleImport = async () => {
     setImporting(true);
     setImportStats(null);
+    setImportError(null);
 
     try {
+      console.log("Starting Beehiiv import...");
       const result = await importBeehiivSubscribers();
+      console.log("Import result:", result);
       
-      if (result.success) {
+      if (result.success && result.stats) {
         setImportStats(result.stats);
         toast({
           title: "Import completed",
@@ -48,13 +52,17 @@ export default function BeehiivImportDialog({ onImportComplete }: { onImportComp
         });
         onImportComplete();
       } else {
+        const errorMessage = result.error || "Failed to import subscribers from Beehiiv";
+        setImportError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
         toast({
           title: "Import failed",
-          description: result.error || "Failed to import subscribers from Beehiiv",
+          description: "See details in the dialog",
           variant: "destructive",
         });
       }
     } catch (error) {
+      console.error("Import exception:", error);
+      setImportError(error instanceof Error ? error.message : "An unexpected error occurred");
       toast({
         title: "Import failed",
         description: "An unexpected error occurred",
@@ -102,6 +110,18 @@ export default function BeehiivImportDialog({ onImportComplete }: { onImportComp
                 </p>
               )}
             </div>
+          ) : importError ? (
+            <div className="space-y-4">
+              <Alert variant="destructive">
+                <AlertTitle>Import Failed</AlertTitle>
+                <AlertDescription>
+                  <p className="mb-2">There was an error importing subscribers:</p>
+                  <div className="bg-destructive/10 p-2 rounded text-sm overflow-auto max-h-32">
+                    {importError}
+                  </div>
+                </AlertDescription>
+              </Alert>
+            </div>
           ) : (
             <p className="text-center">
               This will import all active subscribers from your Beehiiv account.<br />
@@ -111,7 +131,7 @@ export default function BeehiivImportDialog({ onImportComplete }: { onImportComp
         </div>
 
         <DialogFooter className="sm:justify-between">
-          {!importStats && (
+          {!importStats && !importError && (
             <div className="flex gap-4 items-center">
               <Button 
                 variant="default" 
@@ -140,12 +160,32 @@ export default function BeehiivImportDialog({ onImportComplete }: { onImportComp
             </div>
           )}
           
-          {importStats && (
+          {(importStats || importError) && (
             <Button 
               variant="default" 
               onClick={() => setOpen(false)}
             >
               Close
+            </Button>
+          )}
+          
+          {importError && (
+            <Button 
+              variant="outline"
+              onClick={handleImport}
+              disabled={importing}
+            >
+              {importing ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Retrying...
+                </>
+              ) : (
+                <>
+                  <Download className="h-4 w-4 mr-2" />
+                  Retry Import
+                </>
+              )}
             </Button>
           )}
         </DialogFooter>

@@ -31,6 +31,10 @@ async function fetchBeehiivSubscribers(page = 1, limit = 100) {
   console.log(`Fetching Beehiiv subscribers page ${page} with limit ${limit}`);
   
   try {
+    // Log the API URL and key existence (not the actual key)
+    console.log(`BEEHIIV_API_URL: ${BEEHIIV_API_URL}`);
+    console.log(`BEEHIIV_API_KEY exists: ${Boolean(BEEHIIV_API_KEY)}`);
+    
     const response = await fetch(`${BEEHIIV_API_URL}/subscribers?limit=${limit}&page=${page}`, {
       method: "GET",
       headers: {
@@ -39,23 +43,52 @@ async function fetchBeehiivSubscribers(page = 1, limit = 100) {
       }
     });
 
+    // Log the response status
+    console.log(`Beehiiv API response status: ${response.status}`);
+
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error fetching subscribers from Beehiiv:", errorData);
-      return { success: false, error: errorData, data: [], pagination: null };
+      const errorText = await response.text();
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch (e) {
+        errorData = { message: errorText };
+      }
+      
+      console.error("Error fetching subscribers from Beehiiv:", {
+        status: response.status,
+        statusText: response.statusText,
+        errorData
+      });
+      
+      return { 
+        success: false, 
+        error: { 
+          status: response.status, 
+          message: errorData.message || response.statusText 
+        }, 
+        data: [], 
+        pagination: null 
+      };
     }
 
     const data = await response.json();
-    console.log(`Successfully fetched ${data.data.length} subscribers from Beehiiv`);
+    console.log(`Successfully fetched ${data.data?.length || 0} subscribers from Beehiiv`);
+    console.log(`Pagination info:`, data.pagination);
     
     return { 
       success: true, 
-      data: data.data,
+      data: data.data || [],
       pagination: data.pagination 
     };
   } catch (error) {
     console.error("Exception fetching Beehiiv subscribers:", error);
-    return { success: false, error: error.message, data: [], pagination: null };
+    return { 
+      success: false, 
+      error: { message: error.message }, 
+      data: [], 
+      pagination: null 
+    };
   }
 }
 
@@ -64,10 +97,18 @@ async function fetchBeehiivSubscribers(page = 1, limit = 100) {
  */
 async function importBeehiivSubscribers() {
   try {
+    // Log Supabase credentials existence (not the actual credentials)
+    console.log(`SUPABASE_URL exists: ${Boolean(SUPABASE_URL)}`);
+    console.log(`SUPABASE_SERVICE_ROLE_KEY exists: ${Boolean(SUPABASE_SERVICE_ROLE_KEY)}`);
+    
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error("Supabase credentials are not configured");
+    }
+    
     // Create Supabase client with service role key for admin operations
     const supabase = createClient(
-      SUPABASE_URL!,
-      SUPABASE_SERVICE_ROLE_KEY!
+      SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY
     );
     
     let currentPage = 1;
@@ -94,13 +135,24 @@ async function importBeehiivSubscribers() {
       }
       
       const subscribers = result.data;
+      
+      if (!subscribers || subscribers.length === 0) {
+        console.log("No subscribers returned from the API. Ending pagination.");
+        break;
+      }
+      
       stats.total += subscribers.length;
+      
+      console.log(`Processing ${subscribers.length} subscribers from page ${currentPage}`);
       
       // Process each subscriber
       for (const subscriber of subscribers) {
         try {
+          console.log(`Processing subscriber: ${subscriber.email}, status: ${subscriber.status}`);
+          
           // Skip inactive subscribers
           if (subscriber.status !== 'active') {
+            console.log(`Skipping inactive subscriber: ${subscriber.email}`);
             stats.skipped++;
             continue;
           }
@@ -123,6 +175,7 @@ async function importBeehiivSubscribers() {
           }
           
           if (existingSubscriber) {
+            console.log(`Updating existing subscriber: ${subscriber.email}`);
             // Update existing subscriber
             const { error: updateError } = await supabase
               .from("newsletter_subscribers")
@@ -143,8 +196,10 @@ async function importBeehiivSubscribers() {
               });
             } else {
               stats.imported++;
+              console.log(`Updated subscriber: ${subscriber.email}`);
             }
           } else {
+            console.log(`Inserting new subscriber: ${subscriber.email}`);
             // Insert new subscriber
             const { error: insertError } = await supabase
               .from("newsletter_subscribers")
@@ -166,6 +221,7 @@ async function importBeehiivSubscribers() {
               });
             } else {
               stats.imported++;
+              console.log(`Inserted new subscriber: ${subscriber.email}`);
             }
           }
         } catch (error) {
@@ -180,12 +236,15 @@ async function importBeehiivSubscribers() {
       
       // Check if there are more pages
       if (result.pagination && result.pagination.has_more) {
+        console.log(`More pages available. Moving to page ${currentPage + 1}`);
         currentPage++;
       } else {
+        console.log("No more pages available. Ending pagination.");
         hasMorePages = false;
       }
     }
     
+    console.log("Import complete. Stats:", stats);
     return { success: true, stats };
   } catch (error) {
     console.error("Error importing subscribers:", error);
@@ -212,7 +271,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log("Starting Beehiiv import process");
     const result = await importBeehiivSubscribers();
+    
+    console.log("Import process finished with result:", {
+      success: result.success,
+      total: result.stats?.total,
+      imported: result.stats?.imported,
+      skipped: result.stats?.skipped,
+      failed: result.stats?.failed
+    });
     
     return new Response(
       JSON.stringify(result),
