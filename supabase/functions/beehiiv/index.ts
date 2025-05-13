@@ -62,7 +62,12 @@ async function createBeehiivSubscriber(email: string, name?: string) {
     }
 
     console.log("Successfully created Beehiiv subscriber:", data);
-    return { success: true, data };
+    return { 
+      success: true, 
+      data,
+      beehiiv_id: data?.data?.id || null,
+      timestamp: new Date().toISOString()
+    };
   } catch (error) {
     console.error("Exception creating Beehiiv subscriber:", error);
     return { success: false, error };
@@ -99,6 +104,18 @@ async function syncAllSubscribersToBeehiiv() {
       const subscriber = subscribers[i];
       const result = await createBeehiivSubscriber(subscriber.email);
       results.push({ email: subscriber.email, result });
+      
+      // Update the subscriber record to mark it as synced if successful
+      if (result.success) {
+        await supabase
+          .from("newsletter_subscribers")
+          .update({ 
+            synced_to_beehiiv: true,
+            last_synced_at: new Date().toISOString(),
+            beehiiv_id: result.beehiiv_id
+          })
+          .eq("id", subscriber.id);
+      }
       
       // Small delay to respect API limits
       if (i < subscribers.length - 1) {
@@ -145,7 +162,6 @@ const handler = async (req: Request): Promise<Response> => {
       }
 
       case "syncAllSubscribers": {
-        // This now uses the implemented syncAllSubscribersToBeehiiv function
         const result = await syncAllSubscribersToBeehiiv();
         
         return new Response(JSON.stringify(result), {
