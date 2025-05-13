@@ -102,9 +102,10 @@ export async function getNewsletterSyncStats() {
       return { success: false, error };
     }
     
+    // The function returns an array with a single object, so extract the first item
     return { 
       success: true, 
-      stats: data || { 
+      stats: Array.isArray(data) && data.length > 0 ? data[0] : { 
         total: 0, 
         synced: 0, 
         unsynced: 0,
