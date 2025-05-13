@@ -41,7 +41,8 @@ export async function syncSubscriberToBeehiiv(email: string) {
         .from("newsletter_subscribers")
         .update({ 
           synced_to_beehiiv: true,
-          last_synced_at: new Date().toISOString()
+          last_synced_at: new Date().toISOString(),
+          beehiiv_id: response.data?.beehiiv_id || null
         })
         .eq("email", email);
     }
