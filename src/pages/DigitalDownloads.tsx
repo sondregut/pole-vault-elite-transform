@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { FileText, Download } from "lucide-react";
+import { FileText, Download, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -14,6 +14,7 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface DigitalProduct {
   id: string;
@@ -31,6 +32,7 @@ const DigitalDownloads = () => {
   const [downloads, setDownloads] = useState<DigitalProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check for user authentication
@@ -135,9 +137,20 @@ const DigitalDownloads = () => {
       }
       
       toast.success("File downloaded successfully");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Download error:", error);
       toast.error(error.message || "Failed to download file");
+    }
+  };
+  
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast.success("Logged out successfully");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast.error("Failed to sign out");
     }
   };
 
@@ -150,7 +163,7 @@ const DigitalDownloads = () => {
             <h1 className="text-3xl font-bold mb-6">Your Digital Downloads</h1>
             <div className="bg-white rounded-lg shadow p-8 text-center">
               <p className="text-lg mb-6">Please sign in to access your digital products</p>
-              <Button onClick={() => window.location.href = "/login"}>Sign In</Button>
+              <Button onClick={() => navigate("/login")}>Sign In</Button>
             </div>
           </div>
         </div>
@@ -164,7 +177,17 @@ const DigitalDownloads = () => {
       <Navbar />
       <div className="min-h-screen bg-gray-50 pt-24 pb-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-6">Your Digital Downloads</h1>
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold">Your Digital Downloads</h1>
+            <Button variant="outline" onClick={handleSignOut} className="flex gap-2 items-center">
+              <LogOut size={16} />
+              Sign Out
+            </Button>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow p-4 mb-6">
+            <p className="font-medium">Signed in as: <span className="text-primary">{user.email}</span></p>
+          </div>
           
           {loading ? (
             <div className="flex justify-center items-center h-64">
