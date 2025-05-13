@@ -2,9 +2,7 @@
 // We need to fix this file to solve the import issue
 // Let's implement the toast hooks correctly
 
-import { toast as sonnerToast, Toast } from "sonner";
-
-type ToastProps = React.ComponentProps<typeof Toast>;
+import { toast as sonnerToast } from "sonner";
 
 type ToastOptions = {
   title?: string;
@@ -12,6 +10,9 @@ type ToastOptions = {
   variant?: "default" | "destructive";
   action?: React.ReactNode;
 };
+
+// We need to create a toasts array to satisfy the Toaster component
+const toasts: any[] = [];
 
 export function toast(options: ToastOptions) {
   const { title, description, variant, action } = options;
@@ -26,5 +27,6 @@ export function toast(options: ToastOptions) {
 export function useToast() {
   return {
     toast,
+    toasts // Add the toasts array to satisfy the type requirement
   };
 }

@@ -136,7 +136,15 @@ const PVT = () => {
 
   // Calculate pricing based on billing period
   const plansWithPricing = pricingPlans.map(plan => {
-    if (plan.comingSoon) return plan;
+    if (plan.comingSoon) {
+      return {
+        ...plan,
+        displayPrice: undefined,
+        discountedMonthlyPrice: undefined,
+        yearlyTotal: undefined,
+        savings: undefined
+      };
+    }
     
     // Keep monthly price as the display price, even when yearly is selected
     const monthlyPrice = plan.monthlyPrice.toFixed(2);

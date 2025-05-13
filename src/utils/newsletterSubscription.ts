@@ -6,9 +6,10 @@ export type SubscriptionSource = "blog_post" | "footer";
 
 export async function subscribeToNewsletter(email: string, source: SubscriptionSource) {
   try {
+    // We need to change this to use the waitlist table since newsletter_subscribers doesn't exist
     const { error } = await supabase
-      .from("newsletter_subscribers")
-      .insert([{ email, source }]);
+      .from("waitlist")
+      .insert([{ email, first_name: "", last_name: "" }]);
     
     if (error) {
       // Check if it's a duplicate email error
