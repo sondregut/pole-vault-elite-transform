@@ -32,7 +32,7 @@ export async function subscribeToNewsletter(email: string, source: SubscriptionS
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${supabase.auth.getSession()}`
+          "Authorization": `Bearer ${process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtYXNsdGVtZ2p0Yndyd3NjeHRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NjE4MTMsImV4cCI6MjA2MDMzNzgxM30.JYkoZPQE_7zPbpkqiyym2tIbsWfYjxXsnSayAIG82FQ"}`
         },
         body: JSON.stringify({ email })
       });
