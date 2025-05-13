@@ -21,9 +21,15 @@ const ComingSoon = () => {
     
     try {
       // Add email to Supabase waitlist table
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('waitlist')
-        .insert({ email, first_name: firstName, last_name: lastName });
+        .insert({ 
+          email, 
+          first_name: firstName, 
+          last_name: lastName,
+          synced_to_beehiiv: false // Track if this has been synced to Beehiiv
+        })
+        .select();
       
       if (error) {
         if (error.code === '23505') {
@@ -40,6 +46,17 @@ const ComingSoon = () => {
           title: "Success!",
           description: "You've been added to the waitlist. We'll notify you when we launch.",
         });
+        
+        // Trigger the sync to Beehiiv in the background
+        try {
+          await supabase.functions.invoke('sync-to-beehiiv', {
+            body: { record: data[0], type: 'SINGLE' }
+          });
+        } catch (syncError) {
+          console.error("Error syncing to Beehiiv:", syncError);
+          // We don't show this error to the user since they're already on our waitlist
+        }
+        
         setFirstName("");
         setLastName("");
         setEmail("");
