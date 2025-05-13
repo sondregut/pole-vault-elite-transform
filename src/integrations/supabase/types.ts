@@ -9,54 +9,24 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      contact_submissions: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          message: string
-          name: string
-          subject: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          message: string
-          name: string
-          subject: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          message?: string
-          name?: string
-          subject?: string
-        }
-        Relationships: []
-      }
       newsletter_subscribers: {
         Row: {
           created_at: string
           email: string
-          email_sent: boolean
           id: string
-          source: string
+          source: string | null
         }
         Insert: {
           created_at?: string
           email: string
-          email_sent?: boolean
           id?: string
-          source: string
+          source?: string | null
         }
         Update: {
           created_at?: string
           email?: string
-          email_sent?: boolean
           id?: string
-          source?: string
+          source?: string | null
         }
         Relationships: []
       }
@@ -235,15 +205,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_newsletter_sync_stats: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          total: number
-          synced: number
-          unsynced: number
-          sync_percentage: number
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never

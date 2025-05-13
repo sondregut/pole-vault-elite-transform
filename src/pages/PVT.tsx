@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,22 @@ import {
   CarouselPrevious,
   CarouselNext
 } from "@/components/ui/carousel";
-import { CheckCircle, Download, Play, Shield, Trophy, BarChart3 } from "lucide-react";
+import { CheckCircle, Download, Play, Shield, Trophy, BarChart3, Smartphone } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { 
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Toggle } from "@/components/ui/toggle";
 
 const PVT = () => {
   // App screenshots for carousel
@@ -60,15 +75,18 @@ const PVT = () => {
       icon: <CheckCircle className="h-6 w-6 text-primary" />
     }
   ];
-
-  const plans = [
+  
+  // Add pricing plans with monthly and yearly options
+  const [isYearlyBilling, setIsYearlyBilling] = useState(false);
+  
+  const pricingPlans = [
     {
       name: "Athlete",
       bgColor: "bg-gray-100",
       textColor: "text-gray-600",
       borderColor: "border-gray-300",
-      price: "€8.99/month",
-      yearPrice: "€75.99/year (save 30%)",
+      monthlyPrice: 8.99,
+      yearlyDiscount: 0.3, // 30% discount
       description: "Best for vaulters who want to log everything and stay consistent.",
       features: [
         "Unlimited jump & session logging",
@@ -85,8 +103,8 @@ const PVT = () => {
       textColor: "text-amber-600",
       borderColor: "border-amber-300",
       popular: true,
-      price: "€14.99/month",
-      yearPrice: "€125.99/year (save 30%)",
+      monthlyPrice: 14.99,
+      yearlyDiscount: 0.3, // 30% discount
       description: "Best for vaulters who want deep insights and full video tracking.",
       features: [
         "Everything in Athlete, plus:",
@@ -116,12 +134,58 @@ const PVT = () => {
     }
   ];
 
+  // Calculate pricing based on billing period
+  const plansWithPricing = pricingPlans.map(plan => {
+    if (plan.comingSoon) return plan;
+    
+    // Keep monthly price as the display price, even when yearly is selected
+    const monthlyPrice = plan.monthlyPrice.toFixed(2);
+    
+    // Calculate discounted monthly price (only for display when yearly is selected)
+    const discountedMonthlyPrice = isYearlyBilling 
+      ? (plan.monthlyPrice * (1 - plan.yearlyDiscount)).toFixed(2)
+      : null;
+    
+    // Calculate yearly total (only relevant when yearly is selected)
+    const yearlyTotalPrice = isYearlyBilling
+      ? (plan.monthlyPrice * (1 - plan.yearlyDiscount) * 12).toFixed(2)
+      : null;
+    
+    return {
+      ...plan,
+      // Always show monthly price, even when yearly is selected
+      displayPrice: `€${monthlyPrice}/mo`,
+      // Add discounted price for yearly
+      discountedMonthlyPrice: discountedMonthlyPrice ? `€${discountedMonthlyPrice}/mo` : null,
+      yearlyTotal: yearlyTotalPrice ? `€${yearlyTotalPrice}/year` : null,
+      savings: isYearlyBilling ? `Save ${plan.yearlyDiscount * 100}%` : null
+    };
+  });
+  
+  // Demo component state
+  const [steps, setSteps] = useState(16);
+  const [unitType, setUnitType] = useState("m");
+  const [jumpRating, setJumpRating] = useState("ok");
+  
+  // Sample poles data
+  const poles = [
+    "UCS Spirit 14'", 
+    "Spirit 13'6\"", 
+    "Pacer FX 14'",
+    "Carbon FX 15'", 
+    "Essx 13'6\""
+  ];
+
+  const handleStepChange = (change: number) => {
+    setSteps(prev => Math.max(1, prev + change));
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       
       <main className="flex-grow pt-16">
-        {/* Hero Section - Improved text visibility with lighter text color */}
+        {/* Hero Section */}
         <section className="bg-gradient-to-b from-gray-800 to-gray-900 text-gray-100 py-16 md:py-24">
           <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
             <div className="lg:w-1/2 space-y-6">
@@ -165,7 +229,7 @@ const PVT = () => {
           </div>
         </section>
 
-        {/* Built For Section - Already white */}
+        {/* Built For Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
@@ -194,7 +258,7 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Features Section - Already gray-50 */}
+        {/* Features Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -246,42 +310,199 @@ const PVT = () => {
             </div>
           </div>
         </section>
-        
-        {/* Built for Performance - Improved text visibility */}
-        <section className="py-16 bg-gray-800 text-white">
+
+        {/* Demo Section - Added from Demo.tsx */}
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
-                Built for Performance
-              </h2>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2 text-gray-100">Platform</h3>
-                  <p className="text-gray-200">Native iOS & Android app (built in React Native)</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">
+              Try the Pole Vault Tracker Demo
+            </h1>
+            <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+              Experience how the app helps vaulters log and analyze their jumps
+            </p>
+            
+            <div className="max-w-md mx-auto">
+              {/* iPhone frame */}
+              <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
+                {/* iPhone notch */}
+                <div className="absolute top-0 inset-x-0">
+                  <div className="mx-auto bg-black w-[40%] h-[25px] rounded-b-3xl"></div>
                 </div>
-                <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2 text-gray-100">Secure Backend</h3>
-                  <p className="text-gray-200">Supabase (PostgreSQL + Auth + Storage)</p>
+                
+                {/* iPhone screen */}
+                <div className="w-full h-full bg-white overflow-y-auto p-4">
+                  {/* App header */}
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="text-xs text-gray-500">9:41 AM</div>
+                    <div className="flex items-center">
+                      <div className="w-4 h-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-gray-500">
+                          <path fillRule="evenodd" d="M1.371 10.393c.58-1.735 1.502-3.346 2.707-4.734a1 1 0 0 1 1.497.117l2.913 3.597a1 1 0 0 1-.136 1.428 6 6 0 0 0-1.99 1.99 1 1 0 0 1-1.428.136L1.277 11.89a1 1 0 0 1 .094-1.498ZM20.922 10.393c-.58-1.735-1.502-3.346-2.707-4.734a1 1 0 0 0-1.497.117l-2.913 3.597a1 1 0 0 0 .136 1.428 6 6 0 0 1 1.99 1.99 1 1 0 0 0 1.428.136l3.657-2.937a1 1 0 0 0-.094-1.498Z" clipRule="evenodd" />
+                          <path fillRule="evenodd" d="M7.484 18.968a8.968 8.968 0 0 0 9.032 0 1 1 0 0 1 .496-.132H19a2 2 0 0 0 2-2v-3a1 1 0 0 0-.629-.928l-.385-.154a1 1 0 0 0-1.197.371 4 4 0 0 1-6.579 0 1 1 0 0 0-1.197-.37l-.385.154A1 1 0 0 0 10 13.965v4.87a1 1 0 0 0 1 1h.01a1 1 0 0 1 .474.132Z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="w-4 h-4 ml-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-gray-500">
+                          <path fillRule="evenodd" d="M3.75 6.75a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-.037c.856-.174 1.5-.93 1.5-1.838v-2.25c0-.907-.644-1.664-1.5-1.837V9.75a3 3 0 0 0-3-3h-15Zm15 1.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-6a1.5 1.5 0 0 1 1.5-1.5h15Z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-50 rounded-xl p-4 mb-2">
+                    {/* Jump form */}
+                    <h2 className="text-2xl font-bold mb-1">Jump Details</h2>
+                    <p className="text-sm text-gray-500 mb-4">Record the details of your jump</p>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Pole</label>
+                        <Select defaultValue={poles[0]}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a pole" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Your Poles</SelectLabel>
+                              {poles.map((pole) => (
+                                <SelectItem key={pole} value={pole}>{pole}</SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Number of Steps</label>
+                        <div className="flex items-center">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            className="h-10 w-10 p-0"
+                            onClick={() => handleStepChange(-1)}
+                          >
+                            -
+                          </Button>
+                          <div className="h-10 w-20 flex items-center justify-center border-y border-input">
+                            {steps}
+                          </div>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            className="h-10 w-10 p-0"
+                            onClick={() => handleStepChange(1)}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <label className="text-sm font-medium">Bar Height</label>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xs">Units:</span>
+                            <span className="text-xs">m</span>
+                            <Switch 
+                              checked={unitType === "ft"} 
+                              onCheckedChange={() => setUnitType(unitType === "m" ? "ft" : "m")}
+                            />
+                            <span className="text-xs">ft</span>
+                          </div>
+                        </div>
+                        <Input 
+                          type="text"
+                          placeholder={`Height in ${unitType === "m" ? "meters (e.g., 4.75)" : "feet (e.g., 15.5)"}`}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Grip Height</label>
+                        <Input type="text" placeholder={`Grip in ${unitType}`} />
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Run Up Length</label>
+                        <Input type="text" placeholder={`Length in ${unitType}`} />
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Take Off</label>
+                        <Input type="text" placeholder={`Distance in ${unitType}`} />
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Mid Mark</label>
+                        <Input type="text" placeholder={`Distance in ${unitType}`} />
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Jump Rating</label>
+                        <RadioGroup 
+                          value={jumpRating} 
+                          onValueChange={setJumpRating} 
+                          className="flex justify-between"
+                        >
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="run_thru" id="run_thru" />
+                            <Label htmlFor="run_thru" className="text-sm text-red-500">Run Thru</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="glider" id="glider" />
+                            <Label htmlFor="glider" className="text-sm text-orange-500">Glider</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="ok" id="ok" />
+                            <Label htmlFor="ok" className="text-sm text-amber-500">OK</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="good" id="good" />
+                            <Label htmlFor="good" className="text-sm text-green-500">Good</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="great" id="great" />
+                            <Label htmlFor="great" className="text-sm text-blue-500">Great</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium block mb-1">Jump Notes</label>
+                        <Textarea placeholder="Add any notes about this jump (e.g., 'late plant', 'good takeoff')" />
+                      </div>
+                      
+                      <div className="flex justify-between pt-2">
+                        <Button variant="outline">Cancel</Button>
+                        <Button className="px-6">Add Jump</Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2 text-gray-100">Design</h3>
-                  <p className="text-gray-200">Clean, dark-mode interface with gold/blue/purple accents</p>
+                
+                {/* iPhone home indicator */}
+                <div className="absolute bottom-0 inset-x-0 h-[5px]">
+                  <div className="mx-auto bg-black w-[30%] h-[5px] rounded-full"></div>
                 </div>
-                <div className="bg-gray-700/50 p-5 rounded-xl">
-                  <h3 className="font-semibold mb-2 text-gray-100">Storage</h3>
-                  <p className="text-gray-200">Supabase cloud storage (video-ready)</p>
-                </div>
-                <div className="bg-gray-700/50 p-5 rounded-xl sm:col-span-2">
-                  <h3 className="font-semibold mb-2 text-gray-100">Privacy</h3>
-                  <p className="text-gray-200">Full row-level security — only you (or your coach) can access your data</p>
-                </div>
+              </div>
+            </div>
+            
+            <div className="mt-16 text-center max-w-xl mx-auto">
+              <h2 className="text-2xl font-bold mb-4">Experience the Full App</h2>
+              <p className="text-gray-600 mb-6">
+                This is just one of many screens in the Pole Vault Tracker app. Download the full version to access all features 
+                including analytics, video uploads, achievements and more.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button size="lg" className="gap-2">
+                  <Smartphone className="w-5 h-5" /> Download Now
+                </Button>
+                <Button size="lg" variant="outline">Learn More</Button>
               </div>
             </div>
           </div>
         </section>
         
-        {/* Pricing Section - Already white */}
+        {/* Pricing Section */}
         <section className="py-16 bg-white" id="pricing">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
@@ -292,10 +513,24 @@ const PVT = () => {
                 All plans start with a 30-day free trial.
                 No commitment. Cancel any time before day 30.
               </p>
+              
+              {/* Billing toggle */}
+              <div className="flex items-center justify-center mt-8 space-x-3">
+                <span className={`text-sm font-medium ${!isYearlyBilling ? 'text-gray-900' : 'text-gray-500'}`}>Monthly</span>
+                <div 
+                  className="relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-gray-200 cursor-pointer"
+                  onClick={() => setIsYearlyBilling(!isYearlyBilling)}
+                >
+                  <div className={`absolute mx-1 h-4 w-4 rounded-full bg-white transition-transform ${isYearlyBilling ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+                <span className={`text-sm font-medium ${isYearlyBilling ? 'text-gray-900' : 'text-gray-500'}`}>
+                  Yearly <span className="text-green-600 ml-1">Save 30%</span>
+                </span>
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              {plans.map((plan, index) => (
+              {plansWithPricing.map((plan, index) => (
                 <div 
                   key={index}
                   className={`rounded-2xl border-2 ${plan.borderColor} overflow-hidden shadow-sm hover:shadow-md transition-shadow relative ${plan.popular ? 'transform md:-translate-y-4' : ''}`}
@@ -310,9 +545,19 @@ const PVT = () => {
                     {!plan.comingSoon ? (
                       <>
                         <div className="mt-3">
-                          <span className="text-3xl font-bold">{plan.price}</span>
+                          <span className="text-3xl font-bold">{plan.displayPrice}</span>
                         </div>
-                        <div className="text-sm mt-1">{plan.yearPrice}</div>
+                        {isYearlyBilling && (
+                          <>
+                            <div className="text-sm mt-1">
+                              <span className="line-through opacity-75">{plan.displayPrice}</span>
+                              {" "}
+                              <span className="font-medium">{plan.discountedMonthlyPrice}</span>
+                            </div>
+                            <div className="text-sm mt-1 text-green-600 font-medium">{plan.savings}</div>
+                            <div className="text-sm mt-1">{plan.yearlyTotal}</div>
+                          </>
+                        )}
                       </>
                     ) : (
                       <div className="mt-3 inline-block bg-red-200 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -349,7 +594,7 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Achievements Section - Already changing from gray-100 to white gradient */}
+        {/* Achievements Section */}
         <section className="py-16 bg-gradient-to-b from-gray-100 to-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
@@ -407,112 +652,8 @@ const PVT = () => {
             </div>
             
             <p className="text-center mt-8 text-gray-700">
-              All milestones include in-app icons and encouragement to gamify your grind.
+              More achievements are added with every app update!
             </p>
-          </div>
-        </section>
-        
-        {/* Security Section - Changed from blue-50 to gray-50 */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="md:w-1/3 flex justify-center">
-                  <div className="bg-white w-32 h-32 rounded-full flex items-center justify-center shadow-lg">
-                    <Shield className="w-16 h-16 text-primary" />
-                  </div>
-                </div>
-                
-                <div className="md:w-2/3">
-                  <h2 className="text-3xl font-bold mb-6">
-                    Safe, Secure & Athlete-First
-                  </h2>
-                  
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Your logs, poles, and sessions are private and encrypted</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Only you and your assigned coach can access your data</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>All video/media is backed up and secured in the cloud</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Built with privacy-first policies in mind</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        
-        {/* Summary Section - Improved text visibility */}
-        <section className="py-16 bg-gradient-to-b from-gray-800 to-gray-900 text-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
-                Ready to Transform Your Vault?
-              </h2>
-              
-              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-xl mb-10">
-                <h3 className="text-2xl font-semibold mb-6 text-white">Pole Vault Tracker helps you:</h3>
-                
-                <ul className="space-y-4 text-left mb-8">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Log every jump and vault session</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Track pole use and performance over time</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Upload video and analyze form</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">See progress with clear, clean stats</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Stay motivated with achievements</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Share highlights with friends and coaches</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-lg text-gray-100">Keep improving consistently, with purpose</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <p className="text-xl mb-8 text-gray-100">
-                Start your free trial today and take control of your training.
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg" className="gap-2">
-                  <Download size={20} />
-                  Download Now
-                </Button>
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10 gap-2">
-                  <Play size={20} />
-                  Watch Demo
-                </Button>
-                <Button size="lg" variant="secondary">
-                  Start Free Trial
-                </Button>
-              </div>
-            </div>
           </div>
         </section>
       </main>

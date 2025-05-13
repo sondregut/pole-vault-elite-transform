@@ -1,16 +1,13 @@
 
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, Send } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
-  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,50 +22,21 @@ const Contact = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    try {
-      // Submit form data to Supabase
-      const { error } = await supabase
-        .from("contact_submissions")
-        .insert([formData]);
-      
-      if (error) {
-        console.error("Error submitting form:", error);
-        toast({
-          title: "Error",
-          description: "There was a problem submitting your message. Please try again.",
-          variant: "destructive",
-        });
-        setIsSubmitting(false);
-        return;
-      }
-      
-      // Success
+    // Simulate form submission
+    setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
-      
-      toast({
-        title: "Success!",
-        description: "Your message has been sent. We'll get back to you soon.",
-      });
       
       // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitted(false);
       }, 5000);
-    } catch (err) {
-      console.error("Form submission error:", err);
-      setIsSubmitting(false);
-      toast({
-        title: "Error",
-        description: "There was a problem submitting your message. Please try again.",
-        variant: "destructive",
-      });
-    }
+    }, 1000);
   };
 
   return (
