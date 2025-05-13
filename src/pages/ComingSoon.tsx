@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,8 +6,11 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Instagram } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Label } from "@/components/ui/label";
 
 const ComingSoon = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -19,7 +23,7 @@ const ComingSoon = () => {
       // Add email to Supabase waitlist table
       const { error } = await supabase
         .from('waitlist')
-        .insert({ email });
+        .insert({ email, first_name: firstName, last_name: lastName });
       
       if (error) {
         if (error.code === '23505') {
@@ -36,6 +40,8 @@ const ComingSoon = () => {
           title: "Success!",
           description: "You've been added to the waitlist. We'll notify you when we launch.",
         });
+        setFirstName("");
+        setLastName("");
         setEmail("");
       }
     } catch (error) {
@@ -99,26 +105,56 @@ const ComingSoon = () => {
 
             <div className="relative max-w-md mx-auto">
               <form onSubmit={handleSubmit} className="mt-12 mb-8">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="bg-[#1A1D25] border-[#2A2D35] h-12 text-white"
-                    required
-                  />
+                <div className="flex flex-col gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName" className="text-white">First Name</Label>
+                      <Input
+                        id="firstName"
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="First Name"
+                        className="bg-[#1A1D25] border-[#2A2D35] h-12 text-white"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName" className="text-white">Last Name</Label>
+                      <Input
+                        id="lastName"
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Last Name"
+                        className="bg-[#1A1D25] border-[#2A2D35] h-12 text-white"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-white">Email Address</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Your email address"
+                      className="bg-[#1A1D25] border-[#2A2D35] h-12 text-white"
+                      required
+                    />
+                  </div>
                   <Button 
                     type="submit" 
                     disabled={isLoading}
-                    className="h-12 px-6 bg-primary hover:bg-primary/90 text-white"
+                    className="h-12 w-full px-6 bg-primary hover:bg-primary/90 text-white mt-2"
                   >
                     {isLoading ? "Adding..." : "Join the Waitlist"}
                   </Button>
+                  <p className="text-gray-500 text-sm">
+                    You'll be first in line when it drops.
+                  </p>
                 </div>
-                <p className="text-gray-500 text-sm mt-3">
-                  You'll be first in line when it drops.
-                </p>
               </form>
             </div>
           </motion.div>
