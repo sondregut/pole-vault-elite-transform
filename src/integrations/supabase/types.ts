@@ -11,31 +11,22 @@ export type Database = {
     Tables: {
       newsletter_subscribers: {
         Row: {
-          beehiiv_id: string | null
           created_at: string
           email: string
           id: string
-          last_synced_at: string | null
           source: string | null
-          synced_to_beehiiv: boolean | null
         }
         Insert: {
-          beehiiv_id?: string | null
           created_at?: string
           email: string
           id?: string
-          last_synced_at?: string | null
           source?: string | null
-          synced_to_beehiiv?: boolean | null
         }
         Update: {
-          beehiiv_id?: string | null
           created_at?: string
           email?: string
           id?: string
-          last_synced_at?: string | null
           source?: string | null
-          synced_to_beehiiv?: boolean | null
         }
         Relationships: []
       }
@@ -214,15 +205,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_newsletter_sync_stats: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          total: number
-          synced: number
-          unsynced: number
-          sync_percentage: number
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
