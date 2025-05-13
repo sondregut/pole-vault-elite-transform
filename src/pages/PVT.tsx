@@ -26,6 +26,28 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Toggle } from "@/components/ui/toggle";
 
+// Define interface for base pricing plan
+interface PricingPlan {
+  name: string;
+  bgColor: string;
+  textColor: string;
+  borderColor: string;
+  description: string;
+  features: string[];
+  popular?: boolean;
+  comingSoon?: boolean;
+  monthlyPrice?: number;
+  yearlyDiscount?: number;
+}
+
+// Define interface for pricing plan with calculated pricing
+interface PricingPlanWithPricing extends PricingPlan {
+  displayPrice?: string;
+  discountedMonthlyPrice?: string | null;
+  yearlyTotal?: string | null;
+  savings?: string | null;
+}
+
 const PVT = () => {
   // App screenshots for carousel
   const appScreenshots = [
@@ -79,7 +101,7 @@ const PVT = () => {
   // Add pricing plans with monthly and yearly options
   const [isYearlyBilling, setIsYearlyBilling] = useState(false);
   
-  const pricingPlans = [
+  const pricingPlans: PricingPlan[] = [
     {
       name: "Athlete",
       bgColor: "bg-gray-100",
@@ -135,30 +157,30 @@ const PVT = () => {
   ];
 
   // Calculate pricing based on billing period
-  const plansWithPricing = pricingPlans.map(plan => {
+  const plansWithPricing: PricingPlanWithPricing[] = pricingPlans.map(plan => {
     if (plan.comingSoon) return plan;
     
     // Keep monthly price as the display price, even when yearly is selected
-    const monthlyPrice = plan.monthlyPrice.toFixed(2);
+    const monthlyPrice = plan.monthlyPrice?.toFixed(2);
     
     // Calculate discounted monthly price (only for display when yearly is selected)
-    const discountedMonthlyPrice = isYearlyBilling 
+    const discountedMonthlyPrice = isYearlyBilling && plan.monthlyPrice && plan.yearlyDiscount
       ? (plan.monthlyPrice * (1 - plan.yearlyDiscount)).toFixed(2)
       : null;
     
     // Calculate yearly total (only relevant when yearly is selected)
-    const yearlyTotalPrice = isYearlyBilling
+    const yearlyTotalPrice = isYearlyBilling && plan.monthlyPrice && plan.yearlyDiscount
       ? (plan.monthlyPrice * (1 - plan.yearlyDiscount) * 12).toFixed(2)
       : null;
     
     return {
       ...plan,
       // Always show monthly price, even when yearly is selected
-      displayPrice: `€${monthlyPrice}/mo`,
+      displayPrice: monthlyPrice ? `€${monthlyPrice}/mo` : undefined,
       // Add discounted price for yearly
       discountedMonthlyPrice: discountedMonthlyPrice ? `€${discountedMonthlyPrice}/mo` : null,
       yearlyTotal: yearlyTotalPrice ? `€${yearlyTotalPrice}/year` : null,
-      savings: isYearlyBilling ? `Save ${plan.yearlyDiscount * 100}%` : null
+      savings: isYearlyBilling && plan.yearlyDiscount ? `Save ${plan.yearlyDiscount * 100}%` : null
     };
   });
   
