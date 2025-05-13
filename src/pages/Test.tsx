@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Test = () => {
   return (
@@ -13,20 +14,44 @@ const Test = () => {
           </p>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>Test Component</CardTitle>
-            <CardDescription>
-              This is a basic card component from the shadcn/ui library
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>
-              This page demonstrates a minimal React component setup. You can use this
-              as a template for building more complex pages.
-            </p>
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="tab1">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+            <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tab1">
+            <Card>
+              <CardHeader>
+                <CardTitle>Test Component - Tab 1</CardTitle>
+                <CardDescription>
+                  This is a basic card component from the shadcn/ui library
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  This page demonstrates a minimal React component setup. You can use this
+                  as a template for building more complex pages.
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="tab2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Test Component - Tab 2</CardTitle>
+                <CardDescription>
+                  This is the second tab content
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  This tab shows how to properly implement the Tabs component structure
+                  with TabsContent inside a Tabs container.
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
