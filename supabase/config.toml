@@ -37,3 +37,10 @@ verify_jwt = true
 
 [functions.printful]
 verify_jwt = false
+
+[functions.resend-welcome]
+verify_jwt = false
+
+[functions.newsletter-operations]
+verify_jwt = true
+

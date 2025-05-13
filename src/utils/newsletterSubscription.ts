@@ -8,7 +8,7 @@ export async function subscribeToNewsletter(email: string, source: SubscriptionS
   try {
     const { error } = await supabase
       .from("newsletter_subscribers")
-      .insert([{ email, source }]);
+      .insert([{ email, source, email_sent: false }]);
     
     if (error) {
       // Check if it's a duplicate email error
@@ -24,6 +24,25 @@ export async function subscribeToNewsletter(email: string, source: SubscriptionS
         success: false,
         message: "An error occurred. Please try again later."
       };
+    }
+
+    // Trigger the edge function to send welcome email
+    try {
+      const response = await fetch("https://qmasltemgjtbwrwscxtj.supabase.co/functions/v1/resend-welcome", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${supabase.auth.getSession()}`
+        },
+        body: JSON.stringify({ email })
+      });
+
+      if (!response.ok) {
+        console.error("Error sending welcome email:", await response.text());
+      }
+    } catch (err) {
+      console.error("Error calling welcome email function:", err);
+      // We don't return an error here as the subscription was successful
     }
     
     return {
