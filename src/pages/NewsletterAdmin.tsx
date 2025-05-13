@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { getNewsletterSubscribers, syncSubscriberToBeehiiv, syncAllSubscribersToBeehiiv, getNewsletterSyncStats } from "@/utils/beehiivAdmin";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BeehiivImportDialog from "@/components/newsletter/BeehiivImportDialog";
 import { Button } from "@/components/ui/button";
 import { Loader2, RefreshCw, Send, CheckCircle, XCircle, Filter } from "lucide-react";
 import {
@@ -267,7 +269,11 @@ const NewsletterAdmin = () => {
               className="max-w-sm"
             />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
+            <BeehiivImportDialog onImportComplete={() => {
+              fetchSubscribers();
+              fetchSyncStats();
+            }} />
             <Button 
               variant="outline" 
               onClick={() => {

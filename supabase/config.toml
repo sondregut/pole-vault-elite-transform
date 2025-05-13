@@ -2,12 +2,15 @@
 project_id = "qmasltemgjtbwrwscxtj"
 
 [api]
-enabled = true
 port = 54321
-schemas = ["public", "storage", "graphql_public"]
+schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
 
 [db]
 port = 54322
+shadow_port = 54320
+major_version = 15
 
 [studio]
 port = 54323
@@ -18,25 +21,22 @@ smtp_port = 54325
 pop3_port = 54326
 
 [storage]
-enabled = true
+file_size_limit = "50MiB"
 
 [auth]
-enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_expiration = 432000
+enable_signup = true
 
-[realtime]
-enabled = true
+[auth.external.google]
+enabled = false
+client_id = ""
+secret = ""
+url = ""
 
-[functions.create-checkout]
-verify_jwt = false
-
-[functions.stripe-webhook]
-verify_jwt = false
-
-[functions.get-digital-product]
-verify_jwt = true
-
-[functions.printful]
-verify_jwt = false
-
-[functions.beehiiv]
+[functions]
+[functions.beehiiv-import]
 verify_jwt = false
