@@ -6,10 +6,15 @@ export type SubscriptionSource = "blog_post" | "footer";
 
 export async function subscribeToNewsletter(email: string, source: SubscriptionSource) {
   try {
-    // We need to change this to use the waitlist table since newsletter_subscribers doesn't exist
+    // Add to waitlist table and track that it hasn't been synced to Beehiiv yet
     const { error } = await supabase
       .from("waitlist")
-      .insert([{ email, first_name: "", last_name: "" }]);
+      .insert([{ 
+        email, 
+        first_name: "", 
+        last_name: "",
+        synced_to_beehiiv: false
+      }]);
     
     if (error) {
       // Check if it's a duplicate email error
@@ -25,6 +30,25 @@ export async function subscribeToNewsletter(email: string, source: SubscriptionS
         success: false,
         message: "An error occurred. Please try again later."
       };
+    }
+    
+    // Sync to Beehiiv in the background
+    try {
+      // Get the newly inserted record
+      const { data } = await supabase
+        .from("waitlist")
+        .select("*")
+        .eq("email", email)
+        .single();
+        
+      if (data) {
+        await supabase.functions.invoke('sync-to-beehiiv', {
+          body: { record: data, type: 'SINGLE' }
+        });
+      }
+    } catch (syncError) {
+      console.error("Error syncing to Beehiiv:", syncError);
+      // We don't show this error to the user since they're already on our waitlist
     }
     
     return {
