@@ -22,6 +22,7 @@ import BlogPost from "./pages/BlogPost";
 import Programs from "./pages/Programs";
 import MediaKit from "./pages/MediaKit";
 import PVT from "./pages/PVT";
+import NewsletterAdmin from "./pages/NewsletterAdmin";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/mediakit" element={<MediaKit />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/pvt" element={<PVT />} />
+            <Route path="/admin/newsletter" element={<NewsletterAdmin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
