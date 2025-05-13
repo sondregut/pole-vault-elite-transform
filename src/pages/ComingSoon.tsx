@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import { Instagram } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -103,7 +103,7 @@ const ComingSoon = () => {
               </p>
             </div>
 
-            <div className="relative max-w-md mx-auto">
+            <div className="relative max-w-sm mx-auto">
               <form onSubmit={handleSubmit} className="mt-12 mb-8">
                 <div className="flex flex-col gap-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
