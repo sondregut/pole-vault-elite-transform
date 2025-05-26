@@ -1,3 +1,4 @@
+
 export const products = [
   {
     id: 1,
@@ -8,7 +9,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214",
     hasOptions: false,
     options: [],
-    description: "10-week strength-focused program (2–3 sessions/week) with Olympic lifts, compound and accessory work. Boost speed, explosiveness, and athleticism. Includes video demos for every exercise, delivered through TrainHeroic app with lifetime access."
+    description: "Build strength and explosive power with this 10-week weightlifting program. Features 2-3 sessions per week combining Olympic lifts, compound movements, and accessory exercises. Designed to enhance explosiveness, speed, and overall athleticism while seamlessly complementing your event-specific training. Includes video demos for every exercise and lifetime access through TrainHeroic."
   },
   {
     id: 2,
@@ -19,7 +20,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932",
     hasOptions: false,
     options: [],
-    description: "10-week, 6-day/week training plan with pole vault drills, sprint work, and lifting. Includes video library with demos for every movement and lifetime access through TrainHeroic."
+    description: "Elite pole vault training program with 6 days/week training plan. Includes professional weight room programming, pole vault-specific drills, sprint mechanics, gymnastics circuits, and mobility routines. Features progression phases for strength, power, and technical mastery with video tutorials and lifetime access through TrainHeroic."
   },
   {
     id: 3,
@@ -29,7 +30,7 @@ export const products = [
     category: "training",
     hasOptions: false,
     options: [],
-    description: "A comprehensive rehabilitation protocol for jumper's knee (patellar tendinopathy), designed by elite pole vaulter and coach Sondre Guttormsen. This evidence-based program takes you through three stages of recovery, from managing pain to returning to sport. Perfect for athletes struggling with persistent knee pain from jumping."
+    description: "Evidence-based rehabilitation protocol for patellar tendinopathy designed by elite pole vaulter Sondre Guttormsen. Features a 3-stage recovery approach from pain management to sport return. Includes daily exercise protocols, strength training programs, and sport-specific return-to-play guidelines. Perfect for jumpers, volleyball, and basketball players."
   },
   {
     id: 4,
@@ -40,7 +41,7 @@ export const products = [
     hasOptions: false,
     options: [],
     externalLink: "https://docs.google.com/forms/d/e/1FAIpQLSdcVhfxGSURY6myn9TsDFcfndfbg2hcivdYtsnKmjHsXzwmsw/viewform",
-    description: "Personalized online coaching tailored to your specific needs and goals. Work directly with Sondre to improve your technique, strength, and overall performance.",
+    description: "Personalized online coaching with custom weekly training plans, unlimited video technique analysis, bi-weekly Zoom coaching calls, and daily messaging support. Work directly with Olympic finalist Sondre Guttormsen to maximize your athletic performance with expert guidance tailored to your specific needs and goals.",
     productLink: "https://g-forcetraining.com/coaching"
   },
   {
@@ -51,7 +52,7 @@ export const products = [
     category: "coaching",
     hasOptions: false,
     options: [],
-    description: "By using the video coaching platform Onform, Sondre will give you a detailed video analysis of your pole vault technique as well as provide useful links to drills and exercises to work on your specific problem.",
+    description: "Get detailed video analysis of your pole vault technique through the Onform platform. Receive frame-by-frame breakdown with visual annotations, voice-over explanations, customized drill recommendations, and links to complementary training resources. Perfect for athletes seeking specific technique improvements.",
     youtubeVideo: "https://www.youtube.com/watch?v=vWH7UsJTQgE&t=27s"
   },
   {
@@ -62,7 +63,7 @@ export const products = [
     category: "coaching",
     hasOptions: true,
     options: ["30 Minutes - $50", "60 Minutes - $90", "3x 30 Minutes - $130"],
-    description: "Engage in a comprehensive online consultation with Sondre to elevate your pole vaulting technique. This session includes a detailed review of your jump videos, personalized feedback on your technique, training tips, and speed training strategies. Ideal for athletes seeking in-depth analysis and improvement advice."
+    description: "Comprehensive online consultation with detailed jump video review, personalized technique feedback, training tips, and speed training strategies. Choose from 30-minute focused sessions, 60-minute in-depth analysis, or a 3-session package for ongoing development and progress tracking."
   },
   {
     id: 7,
@@ -73,7 +74,7 @@ export const products = [
     hasOptions: false,
     options: [],
     comingSoon: true,
-    description: "Try a free 1-week sample of our comprehensive training programs to see if they're right for you."
+    description: "Try a free 1-week sample of our comprehensive training programs to see if they're right for you. Experience the quality and effectiveness of our proven training methods before committing to a full program."
   },
   {
     id: 13,
@@ -83,6 +84,6 @@ export const products = [
     category: "training",
     hasOptions: false,
     options: [],
-    description: "A free collection of the most effective pole vault drills to improve your technique and performance. Compiled by elite pole vaulter and coach Sondre Guttormsen, these drills focus on key aspects of the vault including run-up, plant, takeoff, and swing techniques."
+    description: "A comprehensive collection of the most effective pole vault drills compiled by elite pole vaulter and coach Sondre Guttormsen. Focus on key vault aspects including run-up, plant, takeoff, and swing techniques. Perfect for athletes and coaches looking to improve technical performance."
   }
 ];
