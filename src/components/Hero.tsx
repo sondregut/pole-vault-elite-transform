@@ -24,7 +24,7 @@ const Hero = () => {
             If you're serious about jumping higher, getting faster, and building real confidence in your vault — you're in the right place.
           </p>
           
-          <div className="flex flex-col gap-3 justify-center w-full">
+          <div className="flex flex-col gap-3 justify-center w-full max-w-md">
             <GoogleFormEmbed />
             <Link to="/shop" className="w-full">
               <Button 
