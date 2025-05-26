@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -11,14 +10,20 @@ import { Download, FileDown, CheckCircle } from "lucide-react";
 
 const CheckoutSuccess = () => {
   const { clearCart } = useCart();
+  const [searchParams] = useSearchParams();
   const [hasDigitalProducts, setHasDigitalProducts] = useState(false);
   const [hasJumpersKneeProtocol, setHasJumpersKneeProtocol] = useState(false);
   const [hasPoleVaultDrills, setHasPoleVaultDrills] = useState(false);
   const [isDownloading, setIsDownloading] = useState<Record<string, boolean>>({});
   
-  // Clear the cart when successfully checked out
+  // Only clear cart if there's a session_id parameter (indicating successful Stripe checkout)
   useEffect(() => {
-    clearCart();
+    const sessionId = searchParams.get('session_id');
+    
+    // Only clear cart if we have a session ID from Stripe, and don't show toast
+    if (sessionId) {
+      clearCart(false);
+    }
     
     // Check if the user has digital products
     const checkDigitalProducts = async () => {
@@ -52,7 +57,7 @@ const CheckoutSuccess = () => {
     };
     
     checkDigitalProducts();
-  }, [clearCart]);
+  }, [clearCart, searchParams]);
 
   const handleDownload = (type: string) => {
     setIsDownloading(prev => ({ ...prev, [type]: true }));
@@ -64,7 +69,7 @@ const CheckoutSuccess = () => {
       pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/Jumper%20Knee%20Protocol%20.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0p1bXBlciBLbmVlIFByb3RvY29sIC5wZGYiLCJpYXQiOjE3NDY1MDExMzksImV4cCI6MjA2MTg2MTEzOX0.VReJcr2d90Av7LHa31owYY-q8fk-6DDP5whzq3-7HmM";
       fileName = "Jumpers Knee Protocol.pdf";
     } else if (type === 'poleVaultDrills') {
-      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
+      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0NGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
       fileName = "Best Pole Vault Drills.pdf";
     }
     

@@ -16,7 +16,7 @@ type CartContextType = {
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number, option?: string) => void;
   updateQuantity: (id: number, quantity: number, option?: string) => void;
-  clearCart: () => void;
+  clearCart: (showToast?: boolean) => void;
   getCartTotal: () => number;
   getItemCount: () => number;
 };
@@ -90,9 +90,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const clearCart = () => {
+  const clearCart = (showToast: boolean = true) => {
     setCartItems([]);
-    toast.info("Cart cleared");
+    if (showToast) {
+      toast.info("Cart cleared");
+    }
   };
 
   const getCartTotal = () => {

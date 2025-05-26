@@ -135,7 +135,7 @@ const Cart = () => {
                   ))}
                 </ul>
                 <div className="p-4 border-t">
-                  <Button variant="outline" onClick={clearCart} className="text-gray-500">
+                  <Button variant="outline" onClick={() => clearCart(true)} className="text-gray-500">
                     Clear Cart
                   </Button>
                 </div>
