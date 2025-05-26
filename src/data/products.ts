@@ -1,5 +1,3 @@
-
-
 export const products = [
   {
     id: 1,
@@ -21,7 +19,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932",
     hasOptions: false,
     options: [],
-    description: "Elite pole vault training program using the exact system that led to 6-meter jumps and Olympic performance. Features 6 days/week programming with professional weight room sessions, pole vault-specific drills, sprint mechanics, gymnastics circuits, and mobility routines. Includes progression phases for strength, power, and technical mastery with video demos and expert guidance. Designed for pole vaulters of all levels ready to elevate their game."
+    description: "Unlock world-class performance with the exact system used to achieve 6 meters and Olympic competition. Features 6 days/week comprehensive training including professional weight room programming, pole vault-specific drills, sprint mechanics, gymnastics circuits, medicine ball workouts, and mobility routines. Includes cutting-edge drills developed from insights of the world's best coaches, video tutorials for every movement, and direct messaging support. Designed for pole vaulters of all levels ready to elevate their game with lifetime access through TrainHeroic."
   },
   {
     id: 3,
@@ -88,4 +86,3 @@ export const products = [
     description: "A comprehensive collection of the most effective pole vault drills compiled by elite pole vaulter and coach Sondre Guttormsen. Focus on key vault aspects including run-up, plant, takeoff, and swing techniques. Perfect for athletes and coaches looking to improve technical performance."
   }
 ];
-
