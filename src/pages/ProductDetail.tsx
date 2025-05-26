@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -6,6 +5,7 @@ import Footer from "@/components/Footer";
 import { products } from "@/data/products";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
+import { ExternalLink } from "lucide-react";
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -63,6 +63,34 @@ const ProductDetail = () => {
       option: selectedOption || undefined
     });
   };
+
+  // Related products data
+  const relatedProducts = [
+    {
+      id: 2,
+      name: "Flight Mode - 10 Week Pole Vault Program",
+      price: "$59",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg",
+      description: "Complete 10-week pole vault training program with drills, sprint work, and lifting.",
+      link: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932"
+    },
+    {
+      id: 1,
+      name: "Power Strength - 10 Week Weight Lifting Program",
+      price: "$39",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//weights.jpeg",
+      description: "Strength-focused program with Olympic lifts and compound movements.",
+      link: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214"
+    },
+    {
+      id: 3,
+      name: "Jumpers Knee Rehab Protocol",
+      price: "$19",
+      image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//jumpers%20knee.png",
+      description: "Complete rehabilitation protocol for jumper's knee recovery.",
+      link: "/shop/product/3"
+    }
+  ];
 
   // Special content for Jumpers Knee Protocol
   const jumpersKneeContent = product.id === 3 ? (
@@ -384,6 +412,45 @@ const ProductDetail = () => {
             {zoomConsultationContent}
             {onlineCoachingContent}
             {genericContent}
+
+            {/* You May Also Like Section */}
+            <div className="max-w-4xl mx-auto mt-12">
+              <h2 className="text-2xl font-bold text-gray-800 mb-8">You May Also Like</h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                {relatedProducts.map((relatedProduct) => (
+                  <div key={relatedProduct.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="h-48 overflow-hidden">
+                      <img 
+                        src={relatedProduct.image} 
+                        alt={relatedProduct.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-bold text-lg mb-2">{relatedProduct.name}</h3>
+                      <p className="text-gray-600 text-sm mb-3">{relatedProduct.description}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-primary font-bold text-lg">{relatedProduct.price}</span>
+                        {relatedProduct.link.startsWith('http') ? (
+                          <Button asChild size="sm">
+                            <a href={relatedProduct.link} target="_blank" rel="noopener noreferrer">
+                              View Program
+                              <ExternalLink className="ml-1 h-3 w-3" />
+                            </a>
+                          </Button>
+                        ) : (
+                          <Button asChild size="sm">
+                            <Link to={relatedProduct.link}>
+                              View Details
+                            </Link>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

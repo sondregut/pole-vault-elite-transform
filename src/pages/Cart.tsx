@@ -42,7 +42,7 @@ const Cart = () => {
 
       if (error) throw error;
       
-      // Redirect to Stripe Checkout
+      // Redirect to Stripe Checkout in the same window (not new tab)
       if (data?.url) {
         window.location.href = data.url;
       } else {

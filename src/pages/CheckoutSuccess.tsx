@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Download, FileDown, CheckCircle, ExternalLink } from "lucide-react";
+import { Download, FileDown, CheckCircle } from "lucide-react";
 
 const CheckoutSuccess = () => {
   const { clearCart } = useCart();
