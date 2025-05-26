@@ -9,7 +9,7 @@ const Hero = () => {
   
   return (
     <section 
-      className={`hero-section w-full ${isMobile ? 'h-[80vh]' : 'min-h-[85vh]'} relative bg-cover bg-center bg-no-repeat flex items-center justify-center`}
+      className={`hero-section w-full ${isMobile ? 'h-[80vh]' : 'h-screen'} relative bg-cover bg-center bg-no-repeat flex items-center justify-center`}
       style={{ 
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hero%20section%20image.jpg')` 
       }}
