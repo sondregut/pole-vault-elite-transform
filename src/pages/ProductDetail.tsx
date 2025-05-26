@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -169,6 +170,81 @@ const ProductDetail = () => {
     </>
   ) : null;
 
+  // Flight Mode specific content
+  const flightModeContent = product.id === 2 ? (
+    <div className="mt-12 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">FLIGHT MODE: Elite Pole Vault Training</h2>
+      <p className="mb-6">
+        Unlock the secrets of world-class performance with Flight Mode, crafted by elite athletes and coaches. This isn't just another training plan—it's the exact system used to achieve 6 meters and perform at the Olympics.
+      </p>
+      
+      <h3 className="text-xl font-bold mt-8 mb-3">Program Highlights</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>6 Days/Week Training:</strong> Build strength, power, and competition readiness</li>
+        <li><strong>Progression Phases:</strong> Tailored to maximize strength, power, and technical mastery</li>
+        <li><strong>Expert Guidance:</strong> Video tutorials and direct messaging support from Sondre Guttormsen</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">What's Included</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Professional weight room programming</li>
+        <li>Pole vault-specific drills</li>
+        <li>Sprint mechanics & gymnastics circuits</li>
+        <li>Medicine ball workouts & plyometrics</li>
+        <li>Mobility routines & vault-specific warm-ups</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Why Flight Mode?</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>Speed Development:</strong> Improve acceleration, max velocity, and runway control</li>
+        <li><strong>Strength Gains:</strong> Periodized training for peak performance</li>
+        <li><strong>Technical Mastery:</strong> Precision drills for every phase of the vault</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Key Features</h3>
+      <div className="grid md:grid-cols-2 gap-4 mb-6">
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">6 Days/Week Programming</h4>
+          <p>PV sessions, drills, specific strength, speed work, gymnastics and more!</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">Demo Videos</h4>
+          <p>Filmed demonstrations of each movement so you know what to do and how to do it.</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">Expert Instruction</h4>
+          <p>Beyond sets and reps, you'll get all the details needed to execute this program perfectly.</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">TrainHeroic Platform</h4>
+          <p>Delivered through the best tech in training for an optimal online experience.</p>
+        </div>
+      </div>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Equipment Required</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Weight Room Access</li>
+        <li>Pole Vault Equipment</li>
+        <li>High Bar</li>
+        <li>Mini Bands</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Who Is It For?</h3>
+      <p className="mb-6">
+        Designed for pole vaulters of all levels ready to elevate their game. Prior training experience recommended. 
+        Includes lifetime access, video demos, direct support, and a comprehensive 10-week plan.
+      </p>
+
+      <div className="bg-blue-50 p-6 rounded-lg mt-8">
+        <h3 className="text-xl font-bold mb-3">Ready to Take Flight?</h3>
+        <p>
+          Unlock your full potential with Flight Mode—the program built by an athlete who's competed and excelled at the sport's highest level. 
+          Don't just train—train with purpose. Take Flight Mode today and vault higher, get faster, and stronger than ever before.
+        </p>
+      </div>
+    </div>
+  ) : null;
+
   // Video Review specific content
   const videoReviewContent = product.id === 5 ? (
     <div className="mt-12 bg-white p-6 rounded-lg shadow">
@@ -289,7 +365,7 @@ const ProductDetail = () => {
   ) : null;
 
   // Generic content for other products
-  const genericContent = !jumpersKneeContent && !videoReviewContent && !zoomConsultationContent && !onlineCoachingContent ? (
+  const genericContent = !jumpersKneeContent && !videoReviewContent && !zoomConsultationContent && !onlineCoachingContent && !flightModeContent ? (
     <div className="mt-12 bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Product Description</h2>
       <p className="mb-6">
@@ -408,6 +484,7 @@ const ProductDetail = () => {
 
             {/* Product specific content */}
             {jumpersKneeContent}
+            {flightModeContent}
             {videoReviewContent}
             {zoomConsultationContent}
             {onlineCoachingContent}
