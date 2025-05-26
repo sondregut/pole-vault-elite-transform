@@ -1,4 +1,5 @@
 
+
 export const products = [
   {
     id: 1,
@@ -9,7 +10,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214",
     hasOptions: false,
     options: [],
-    description: "Build strength and explosive power with this 10-week weightlifting program. Features 2-3 sessions per week combining Olympic lifts, compound movements, and accessory exercises. Designed to enhance explosiveness, speed, and overall athleticism while seamlessly complementing your event-specific training. Includes video demos for every exercise and lifetime access through TrainHeroic."
+    description: "Transform your performance with this 10-week weightlifting program designed by elite athletes. Features 2-3 sessions per week combining Olympic lifts, compound movements, and accessory exercises. Build strength and explosive power while enhancing your speed and athleticism. Includes exercise video guidance, expert instruction, and seamlessly integrates with your event-specific training. Delivered through TrainHeroic with lifetime access."
   },
   {
     id: 2,
@@ -20,7 +21,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932",
     hasOptions: false,
     options: [],
-    description: "Elite pole vault training program with 6 days/week training plan. Includes professional weight room programming, pole vault-specific drills, sprint mechanics, gymnastics circuits, and mobility routines. Features progression phases for strength, power, and technical mastery with video tutorials and lifetime access through TrainHeroic."
+    description: "Elite pole vault training program using the exact system that led to 6-meter jumps and Olympic performance. Features 6 days/week programming with professional weight room sessions, pole vault-specific drills, sprint mechanics, gymnastics circuits, and mobility routines. Includes progression phases for strength, power, and technical mastery with video demos and expert guidance. Designed for pole vaulters of all levels ready to elevate their game."
   },
   {
     id: 3,
@@ -30,7 +31,7 @@ export const products = [
     category: "training",
     hasOptions: false,
     options: [],
-    description: "Evidence-based rehabilitation protocol for patellar tendinopathy designed by elite pole vaulter Sondre Guttormsen. Features a 3-stage recovery approach from pain management to sport return. Includes daily exercise protocols, strength training programs, and sport-specific return-to-play guidelines. Perfect for jumpers, volleyball, and basketball players."
+    description: "Evidence-based rehabilitation protocol for patellar tendinopathy designed by elite pole vaulter Sondre Guttormsen. Features a 3-stage recovery approach from pain management to sport return. Includes daily exercise protocols, strength training programs, and sport-specific return-to-play guidelines. Perfect for jumpers, volleyball, and basketball players dealing with persistent knee pain."
   },
   {
     id: 4,
@@ -87,3 +88,4 @@ export const products = [
     description: "A comprehensive collection of the most effective pole vault drills compiled by elite pole vaulter and coach Sondre Guttormsen. Focus on key vault aspects including run-up, plant, takeoff, and swing techniques. Perfect for athletes and coaches looking to improve technical performance."
   }
 ];
+
