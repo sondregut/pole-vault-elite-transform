@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -59,6 +58,7 @@ const PVT = () => {
       <section 
         className="py-20 lg:py-32 min-h-screen flex items-center"
         style={{
+          backgroundColor: '#FFFFFF',
           background: `linear-gradient(180deg, 
             #FFFFFF 0%,
             #FFFFFC 8.33%,
@@ -73,8 +73,7 @@ const PVT = () => {
             #F2F8FC 83.33%,
             #F1F8FD 91.66%,
             #F4F9FB 100%)`,
-          backgroundSize: '100% 100%',
-          fallback: '#FFFFFF'
+          backgroundSize: '100% 100%'
         }}
       >
         <div className="container mx-auto px-6">
