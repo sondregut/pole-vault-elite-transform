@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,18 +53,18 @@ const PVT = () => {
       >
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
+            <div className="text-black">
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
                 Pole Vault Tracker
               </h1>
-              <p className="text-xl lg:text-2xl mb-8 text-gray-300">
+              <p className="text-xl lg:text-2xl mb-8 text-gray-600">
                 The fastest way to log every jump, organize your poles, and unlock data-driven breakthroughs.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg"
                   onClick={() => scrollToSection('waitlist')}
-                  className="bg-white text-black hover:bg-gray-100"
+                  className="bg-black text-white hover:bg-gray-800"
                 >
                   Join the Waitlist
                 </Button>
@@ -71,13 +72,13 @@ const PVT = () => {
                   size="lg"
                   variant="outline"
                   onClick={() => scrollToSection('demo')}
-                  className="border-white text-white hover:bg-white/10"
+                  className="border-black text-black hover:bg-gray-50"
                 >
                   See PVT in Action
                 </Button>
               </div>
-              <div className="flex items-center text-gray-300">
-                <Badge variant="secondary" className="bg-gray-800 text-white">
+              <div className="flex items-center text-gray-600">
+                <Badge variant="secondary" className="bg-gray-100 text-black">
                   Built by Olympic finalist Sondre Guttormsen
                 </Badge>
               </div>
