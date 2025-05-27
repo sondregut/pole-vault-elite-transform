@@ -122,8 +122,16 @@ const PVT = () => {
         </div>
       </section>
 
-      {/* 3. Problem & Promise */}
-      <section className="py-20">
+      {/* 3. Problem & Promise - Extended Gradient */}
+      <section className="py-20" style={{
+        background: `linear-gradient(180deg, 
+          #F4F9FB 0%,
+          #F1F8FD 25%,
+          #F2F8FC 50%,
+          #F3F9FB 75%,
+          #F0F7FE 100%)`,
+        backgroundSize: '100% 100%'
+      }}>
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16">
             <div>
