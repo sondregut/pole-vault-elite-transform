@@ -138,283 +138,305 @@ const PVT = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       
       <main className="flex-grow pt-16">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-b from-gray-800 to-gray-900 text-gray-100 py-16 md:py-24">
-          <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
-            <div className="lg:w-1/2 space-y-6">
-              <div className="inline-block bg-gray-700 px-3 py-1 rounded-full text-sm font-medium mb-2">
-                New App Release
+        {/* Hero Section - Clean layout like Cal AI */}
+        <section className="bg-white py-12 md:py-20">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col lg:flex-row items-center gap-12">
+              <div className="lg:w-1/2 space-y-8">
+                <div className="space-y-6">
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black leading-tight">
+                    Pole Vault Tracker
+                  </h1>
+                  <h2 className="text-2xl md:text-3xl text-black font-normal">
+                    Track. Analyze. Improve.
+                  </h2>
+                  <p className="text-xl text-gray-600 leading-relaxed">
+                    The #1 app for pole vaulters to log every jump, review videos, and unlock performance insights.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button size="lg" className="bg-black text-white hover:bg-gray-800 px-8 py-4 text-lg">
+                    <Download size={24} className="mr-2" />
+                    Download Now
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-2 border-black text-black hover:bg-gray-50 px-8 py-4 text-lg">
+                    Join Waitlist
+                  </Button>
+                </div>
+                
+                {/* App Store badges */}
+                <div className="flex gap-4 pt-4">
+                  <div className="bg-black rounded-lg px-6 py-3">
+                    <div className="text-white text-sm">Download on the</div>
+                    <div className="text-white text-lg font-semibold">App Store</div>
+                  </div>
+                  <div className="bg-black rounded-lg px-6 py-3">
+                    <div className="text-white text-sm">GET IT ON</div>
+                    <div className="text-white text-lg font-semibold">Google Play</div>
+                  </div>
+                </div>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
-                Pole Vault Tracker
-              </h1>
-              <h2 className="text-xl md:text-2xl text-gray-100">
-                Track. Analyze. Improve.
-              </h2>
-              <p className="text-lg text-gray-100">
-                The #1 app for pole vaulters to log every jump, review videos, and unlock performance insights.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="gap-2">
-                  <Download size={20} />
-                  Download Now
-                </Button>
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10 gap-2">
-                  Join Waitlist
-                </Button>
-              </div>
-            </div>
-            
-            <div className="lg:w-1/2 mt-8 lg:mt-0">
-              <div className="relative mx-auto max-w-md">
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 blur-xl opacity-50 rounded-3xl transform rotate-3"></div>
-                <div className="relative p-2 bg-gray-900 rounded-3xl shadow-2xl border border-gray-700">
-                  <img 
-                    src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hero-section-image.jpg" 
-                    alt="Pole Vault Tracker App" 
-                    className="rounded-2xl w-full"
-                  />
+              
+              <div className="lg:w-1/2 flex justify-center">
+                <div className="relative">
+                  {/* Phone mockup */}
+                  <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-2xl">
+                    {/* iPhone notch */}
+                    <div className="absolute top-0 inset-x-0">
+                      <div className="mx-auto bg-black w-[40%] h-[25px] rounded-b-3xl"></div>
+                    </div>
+                    
+                    {/* iPhone screen */}
+                    <div className="w-full h-full bg-white overflow-hidden rounded-[1.5rem]">
+                      <img 
+                        src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hero-section-image.jpg" 
+                        alt="Pole Vault Tracker App" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    {/* iPhone home indicator */}
+                    <div className="absolute bottom-0 inset-x-0 h-[5px]">
+                      <div className="mx-auto bg-black w-[30%] h-[5px] rounded-full"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
         
-        {/* Features Section */}
-        <section className="py-16 bg-white">
+        {/* What PVT includes - Similar to Cal AI's features section */}
+        <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              What You Can Do With PVT
-            </h2>
-            <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-              Powerful features designed specifically for pole vault training and performance tracking
-            </p>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
+                What does PVT include?
+              </h2>
+            </div>
             
+            <div className="flex flex-col lg:flex-row items-center gap-16">
+              {/* Phone mockup */}
+              <div className="lg:w-1/2 flex justify-center">
+                <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-2xl">
+                  {/* iPhone notch */}
+                  <div className="absolute top-0 inset-x-0">
+                    <div className="mx-auto bg-black w-[40%] h-[25px] rounded-b-3xl"></div>
+                  </div>
+                  
+                  {/* iPhone screen */}
+                  <div className="w-full h-full bg-white overflow-y-auto p-4 rounded-[1.5rem]">
+                    {/* App header */}
+                    <div className="flex justify-between items-center mb-6">
+                      <div className="text-xs text-gray-500">9:41</div>
+                      <div className="text-lg font-semibold">Jump Database</div>
+                      <div className="w-6"></div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="bg-gray-50 rounded-xl p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">Height Cleared</span>
+                          <span className="text-sm text-gray-500">4.75m</span>
+                        </div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">Pole Used</span>
+                          <span className="text-sm text-gray-500">UCS Spirit 14'</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Steps</span>
+                          <span className="text-sm text-gray-500">16</span>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gray-50 rounded-xl p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">Height Cleared</span>
+                          <span className="text-sm text-gray-500">4.50m</span>
+                        </div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">Pole Used</span>
+                          <span className="text-sm text-gray-500">Spirit 13'6"</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Steps</span>
+                          <span className="text-sm text-gray-500">14</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* iPhone home indicator */}
+                  <div className="absolute bottom-0 inset-x-0 h-[5px]">
+                    <div className="mx-auto bg-black w-[30%] h-[5px] rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Features */}
+              <div className="lg:w-1/2 space-y-12">
+                <div className="space-y-6">
+                  <h3 className="text-2xl font-semibold text-black">Log Every Jump With Just a Few Taps</h3>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    Grip height, pole used, run-up, height cleared, jump rating, notes — all in seconds. 
+                    Our intuitive interface makes tracking effortless.
+                  </p>
+                </div>
+                
+                <div className="bg-gray-100 rounded-2xl p-8">
+                  <h4 className="text-xl font-semibold text-black mb-4">Track Your Sessions Like Never Before</h4>
+                  <p className="text-gray-600 leading-relaxed">
+                    Vault calendar keeps your training organized — no more guessing when you last jumped. 
+                    See patterns, plan better, jump higher.
+                  </p>
+                </div>
+                
+                <div className="space-y-6">
+                  <h3 className="text-2xl font-semibold text-black">Complete Progress Tracking and Analytics</h3>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    Smart analytics show trends, consistency, and PRs over time. Get personalized insights 
+                    to optimize your training and performance.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Meet PVT Section - Similar to Cal AI's main hero */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col lg:flex-row items-center gap-16">
+              <div className="lg:w-1/2 space-y-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex -space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-blue-500"></div>
+                    <div className="w-8 h-8 rounded-full bg-green-500"></div>
+                    <div className="w-8 h-8 rounded-full bg-purple-500"></div>
+                  </div>
+                  <span className="text-gray-600">Loved by 5M users with ⭐ 4.9 rating</span>
+                </div>
+                
+                <h2 className="text-4xl md:text-5xl font-bold text-black leading-tight">
+                  Meet PVT
+                  <br />
+                  Track your jumps
+                  <br />
+                  with just a few taps
+                </h2>
+                
+                <p className="text-xl text-gray-600 leading-relaxed">
+                  Meet PVT, the AI-powered app for easy pole vault tracking. Log a jump, 
+                  upload a video, or review your session and get instant performance insights.
+                </p>
+                
+                <div className="flex gap-4">
+                  <div className="bg-black rounded-lg px-6 py-3">
+                    <div className="text-white text-sm">Download on the</div>
+                    <div className="text-white text-lg font-semibold">App Store</div>
+                  </div>
+                  <div className="bg-black rounded-lg px-6 py-3">
+                    <div className="text-white text-sm">GET IT ON</div>
+                    <div className="text-white text-lg font-semibold">Google Play</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="lg:w-1/2 flex justify-center gap-8">
+                {/* Two phone mockups side by side */}
+                <div className="relative">
+                  <div className="relative mx-auto border-gray-800 bg-gray-800 border-[12px] rounded-[2rem] h-[500px] w-[250px] shadow-2xl">
+                    <div className="w-full h-full bg-white overflow-hidden rounded-[1rem] p-4">
+                      <div className="text-center mb-4">
+                        <div className="text-sm text-gray-500 mb-2">9:41</div>
+                        <div className="text-lg font-semibold">Video Analysis</div>
+                      </div>
+                      <div className="bg-black rounded-lg h-40 mb-4 flex items-center justify-center">
+                        <Play className="text-white w-12 h-12" />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium">Jump Analysis</div>
+                        <div className="text-xs text-gray-500">Height: 4.75m</div>
+                        <div className="text-xs text-gray-500">Form: Excellent takeoff</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="relative mt-8">
+                  <div className="relative mx-auto border-gray-800 bg-gray-800 border-[12px] rounded-[2rem] h-[500px] w-[250px] shadow-2xl">
+                    <div className="w-full h-full bg-white overflow-hidden rounded-[1rem] p-4">
+                      <div className="text-center mb-4">
+                        <div className="text-sm text-gray-500 mb-2">9:41</div>
+                        <div className="text-lg font-semibold">Progress Stats</div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="bg-blue-50 rounded-lg p-3">
+                          <div className="text-xs text-blue-600 mb-1">Personal Best</div>
+                          <div className="text-2xl font-bold text-blue-600">5.15m</div>
+                        </div>
+                        <div className="bg-green-50 rounded-lg p-3">
+                          <div className="text-xs text-green-600 mb-1">This Season</div>
+                          <div className="text-lg font-semibold text-green-600">127 jumps</div>
+                        </div>
+                        <div className="bg-purple-50 rounded-lg p-3">
+                          <div className="text-xs text-purple-600 mb-1">Consistency</div>
+                          <div className="text-lg font-semibold text-purple-600">89%</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Grid - Simplified */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((feature, index) => (
-                <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                  <div className="mb-4 inline-block bg-white p-3 rounded-lg">
+                <div key={index} className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <div className="mb-6 inline-block bg-gray-100 p-4 rounded-xl">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <h3 className="text-xl font-semibold mb-4 text-black">{feature.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* See It In Action Section */}
-        <section className="py-16 bg-gray-50">
+        {/* Testimonials Section - Clean design */}
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              See It In Action
-            </h2>
-            <div className="text-center mb-12">
-              <Button size="lg" variant="outline" className="gap-2">
-                <Play size={20} />
-                Watch Demo Video
-              </Button>
-              <p className="text-gray-600 mt-4">Log a jump. Upload a clip. Analyze the result. It's that easy.</p>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-black mb-8">
+                What Athletes Say
+              </h2>
             </div>
-          </div>
-        </section>
-
-        {/* App Screenshots Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              App Screenshots
-            </h2>
             
-            <div className="max-w-4xl mx-auto">
-              <Carousel className="w-full">
-                <CarouselContent>
-                  {appScreenshots.map((screenshot, index) => (
-                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                      <div className="p-4">
-                        <img 
-                          src={screenshot.src} 
-                          alt={screenshot.alt}
-                          className="rounded-xl shadow-lg w-full h-auto"
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
-            </div>
-          </div>
-        </section>
-
-        {/* Demo Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              Try the Demo
-            </h1>
-            <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-              Experience how the app helps vaulters log and analyze their jumps
-            </p>
-            
-            <div className="max-w-md mx-auto">
-              {/* iPhone frame */}
-              <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
-                {/* iPhone notch */}
-                <div className="absolute top-0 inset-x-0">
-                  <div className="mx-auto bg-black w-[40%] h-[25px] rounded-b-3xl"></div>
-                </div>
-                
-                {/* iPhone screen */}
-                <div className="w-full h-full bg-white overflow-y-auto p-4">
-                  {/* App header */}
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="text-xs text-gray-500">9:41 AM</div>
-                  </div>
-                  
-                  <div className="bg-gray-50 rounded-xl p-4 mb-2">
-                    {/* Jump form */}
-                    <h2 className="text-2xl font-bold mb-1">Jump Details</h2>
-                    <p className="text-sm text-gray-500 mb-4">Record the details of your jump</p>
-                    
-                    <div className="space-y-4">
-                      <div>
-                        <label className="text-sm font-medium block mb-1">Pole</label>
-                        <Select defaultValue={poles[0]}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a pole" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Your Poles</SelectLabel>
-                              {poles.map((pole) => (
-                                <SelectItem key={pole} value={pole}>{pole}</SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div>
-                        <label className="text-sm font-medium block mb-1">Number of Steps</label>
-                        <div className="flex items-center">
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            className="h-10 w-10 p-0"
-                            onClick={() => handleStepChange(-1)}
-                          >
-                            -
-                          </Button>
-                          <div className="h-10 w-20 flex items-center justify-center border-y border-input">
-                            {steps}
-                          </div>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            className="h-10 w-10 p-0"
-                            onClick={() => handleStepChange(1)}
-                          >
-                            +
-                          </Button>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <div className="flex justify-between items-center mb-1">
-                          <label className="text-sm font-medium">Bar Height</label>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xs">Units:</span>
-                            <span className="text-xs">m</span>
-                            <Switch 
-                              checked={unitType === "ft"} 
-                              onCheckedChange={() => setUnitType(unitType === "m" ? "ft" : "m")}
-                            />
-                            <span className="text-xs">ft</span>
-                          </div>
-                        </div>
-                        <Input 
-                          type="text"
-                          placeholder={`Height in ${unitType === "m" ? "meters (e.g., 4.75)" : "feet (e.g., 15.5)"}`}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="text-sm font-medium block mb-1">Jump Rating</label>
-                        <RadioGroup 
-                          value={jumpRating} 
-                          onValueChange={setJumpRating} 
-                          className="flex justify-between"
-                        >
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="run_thru" id="run_thru" />
-                            <Label htmlFor="run_thru" className="text-sm text-red-500">Miss</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="ok" id="ok" />
-                            <Label htmlFor="ok" className="text-sm text-amber-500">OK</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="good" id="good" />
-                            <Label htmlFor="good" className="text-sm text-green-500">Good</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="great" id="great" />
-                            <Label htmlFor="great" className="text-sm text-blue-500">Great</Label>
-                          </div>
-                        </RadioGroup>
-                      </div>
-                      
-                      <div>
-                        <label className="text-sm font-medium block mb-1">Jump Notes</label>
-                        <Textarea placeholder="Add any notes about this jump" />
-                      </div>
-                      
-                      <div className="flex justify-between pt-2">
-                        <Button variant="outline">Cancel</Button>
-                        <Button className="px-6">Add Jump</Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* iPhone home indicator */}
-                <div className="absolute bottom-0 inset-x-0 h-[5px]">
-                  <div className="mx-auto bg-black w-[30%] h-[5px] rounded-full"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              What Athletes Say
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
-                <p className="text-lg italic mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+              <div className="bg-gray-50 p-8 rounded-2xl">
+                <p className="text-xl italic mb-6 text-gray-800 leading-relaxed">
                   "I finally understand why I jump better from 14 than 16. This app is a game changer."
                 </p>
-                <div className="text-sm text-gray-600">
+                <div className="text-gray-600 font-medium">
                   — Emma Rose, U20 National Medalist
                 </div>
               </div>
               
-              <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
-                <p className="text-lg italic mb-4">
+              <div className="bg-gray-50 p-8 rounded-2xl">
+                <p className="text-xl italic mb-6 text-gray-800 leading-relaxed">
                   "I've used it for every jump this season. Simple, smart, essential."
                 </p>
-                <div className="text-sm text-gray-600">
+                <div className="text-gray-600 font-medium">
                   — James M., College Vaulter
                 </div>
               </div>
@@ -422,11 +444,11 @@ const PVT = () => {
           </div>
         </section>
         
-        {/* Pricing Section */}
-        <section className="py-16 bg-gray-50" id="pricing">
+        {/* Pricing Section - Clean design */}
+        <section className="py-20 bg-gray-50" id="pricing">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
                 Pricing
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -438,37 +460,34 @@ const PVT = () => {
               {pricingPlans.map((plan, index) => (
                 <div 
                   key={index}
-                  className={`rounded-2xl border-2 ${plan.borderColor} overflow-hidden shadow-sm hover:shadow-md transition-shadow relative ${plan.popular ? 'transform md:-translate-y-4' : ''}`}
+                  className={`rounded-2xl border-2 ${plan.borderColor} bg-white overflow-hidden shadow-sm hover:shadow-lg transition-shadow relative ${plan.popular ? 'transform md:-translate-y-4 border-black' : ''}`}
                 >
                   {plan.popular && (
-                    <div className="absolute top-0 left-0 right-0 bg-blue-500 text-white text-center py-1 text-sm font-medium">
+                    <div className="absolute top-0 left-0 right-0 bg-black text-white text-center py-2 text-sm font-medium">
                       Most Popular
                     </div>
                   )}
-                  <div className={`${plan.bgColor} ${plan.textColor} p-6 text-center`}>
-                    <h3 className="text-2xl font-bold">{plan.name}</h3>
-                    <div className="mt-3">
+                  <div className={`p-8 text-center ${plan.popular ? 'pt-12' : ''}`}>
+                    <h3 className="text-2xl font-bold text-black mb-4">{plan.name}</h3>
+                    <div className="mb-4">
                       {plan.monthlyPrice === 0 ? (
-                        <span className="text-3xl font-bold">Free</span>
+                        <span className="text-4xl font-bold text-black">Free</span>
                       ) : (
-                        <span className="text-3xl font-bold">${plan.monthlyPrice}/month</span>
+                        <span className="text-4xl font-bold text-black">${plan.monthlyPrice}/month</span>
                       )}
                     </div>
-                  </div>
-                  
-                  <div className="p-6 bg-white">
-                    <p className="text-gray-600 mb-4">{plan.description}</p>
+                    <p className="text-gray-600 mb-8">{plan.description}</p>
                     
-                    <ul className="space-y-3 mb-8">
+                    <ul className="space-y-4 mb-8 text-left">
                       {plan.features.map((feature, fIndex) => (
-                        <li key={fIndex} className="flex items-start gap-2">
-                          <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>{feature}</span>
+                        <li key={fIndex} className="flex items-start gap-3">
+                          <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                          <span className="text-gray-700">{feature}</span>
                         </li>
                       ))}
                     </ul>
                     
-                    <Button className="w-full" size="lg">
+                    <Button className="w-full bg-black text-white hover:bg-gray-800" size="lg">
                       {plan.monthlyPrice === 0 ? "Start Free" : "Upgrade to Pro"}
                     </Button>
                   </div>
@@ -478,34 +497,34 @@ const PVT = () => {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="py-16 bg-white">
+        {/* FAQ Section - Simple */}
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-black">
               FAQ
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+              <div className="space-y-8">
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Is this only for elites?</h3>
+                  <h3 className="text-xl font-semibold mb-3 text-black">Is this only for elites?</h3>
                   <p className="text-gray-600">No — if you vault, you'll benefit.</p>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Can coaches use this?</h3>
+                  <h3 className="text-xl font-semibold mb-3 text-black">Can coaches use this?</h3>
                   <p className="text-gray-600">Yes. Coach mode is coming soon.</p>
                 </div>
               </div>
               
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">How much video can I upload?</h3>
+                  <h3 className="text-xl font-semibold mb-3 text-black">How much video can I upload?</h3>
                   <p className="text-gray-600">Pro gives you generous cloud storage — and we compress efficiently.</p>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Does it work offline?</h3>
+                  <h3 className="text-xl font-semibold mb-3 text-black">Does it work offline?</h3>
                   <p className="text-gray-600">Yes, and syncs when you're back online.</p>
                 </div>
               </div>
@@ -513,59 +532,59 @@ const PVT = () => {
           </div>
         </section>
 
-        {/* Early Access Section */}
-        <section className="py-16 bg-gray-50">
+        {/* Early Access Section - Clean design */}
+        <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
                 Get Early Access
               </h2>
-              <p className="text-xl text-gray-600 mb-8">
+              <p className="text-xl text-gray-600 mb-12">
                 Drop your email to get exclusive launch updates and one free month of PVT Pro
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <Input placeholder="Your name" className="flex-1" />
-                <Input placeholder="Your email" className="flex-1" />
-                <Button>Join Waitlist</Button>
+                <Input placeholder="Your name" className="flex-1 h-12 text-lg border-2" />
+                <Input placeholder="Your email" className="flex-1 h-12 text-lg border-2" />
+                <Button className="bg-black text-white hover:bg-gray-800 h-12 px-8 text-lg">Join Waitlist</Button>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Download Section */}
-        <section className="py-16 bg-white">
+        {/* Download Section - Clean */}
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold text-black mb-12">
               Download PVT
             </h2>
             
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <Button size="lg" className="gap-2">
-                <Smartphone className="w-5 h-5" />
-                App Store
-              </Button>
-              <Button size="lg" variant="outline" className="gap-2">
-                <Smartphone className="w-5 h-5" />
-                Google Play
-              </Button>
+            <div className="flex flex-wrap justify-center gap-6 mb-12">
+              <div className="bg-black rounded-lg px-8 py-4 text-white cursor-pointer hover:bg-gray-800 transition-colors">
+                <div className="text-sm">Download on the</div>
+                <div className="text-xl font-semibold">App Store</div>
+              </div>
+              <div className="bg-black rounded-lg px-8 py-4 text-white cursor-pointer hover:bg-gray-800 transition-colors">
+                <div className="text-sm">GET IT ON</div>
+                <div className="text-xl font-semibold">Google Play</div>
+              </div>
             </div>
             
             <div className="text-center">
-              <div className="inline-block p-4 bg-gray-100 rounded-lg">
-                <div className="w-32 h-32 bg-gray-300 rounded flex items-center justify-center">
-                  <span className="text-gray-600">QR Code</span>
+              <div className="inline-block p-6 bg-gray-100 rounded-2xl">
+                <div className="w-32 h-32 bg-gray-300 rounded-xl flex items-center justify-center">
+                  <span className="text-gray-600 font-medium">QR Code</span>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Footer CTA */}
-        <section className="py-8 bg-gray-800 text-white">
+        {/* Footer CTA - Clean */}
+        <section className="py-12 bg-black text-white">
           <div className="container mx-auto px-4 text-center">
-            <p className="text-sm mb-2">Stay Connected: Instagram | TikTok | YouTube</p>
-            <p className="text-sm mb-2">Questions? Email us at support@polevaulttracker.com</p>
+            <p className="text-sm mb-3">Stay Connected: Instagram | TikTok | YouTube</p>
+            <p className="text-sm mb-3">Questions? Email us at support@polevaulttracker.com</p>
             <p className="text-xs text-gray-400">© 2025 Pole Vault Tracker · Made by Vaulters, for Vaulters.</p>
           </div>
         </section>
