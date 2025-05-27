@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUp, ArrowDown, Login } from "lucide-react";
+import { ArrowUp, ArrowDown, LogIn } from "lucide-react";
 
 const PVT = () => {
   const scrollToSection = (id: string) => {
@@ -36,7 +35,7 @@ const PVT = () => {
                 Waitlist <ArrowUp className="ml-1 w-4 h-4" />
               </Button>
               <Button variant="outline" className="text-brand-violet-700 border-brand-violet-700">
-                <Login className="w-4 h-4 mr-2" />
+                <LogIn className="w-4 h-4 mr-2" />
                 Login
               </Button>
             </div>
