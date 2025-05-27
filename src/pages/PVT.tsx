@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,9 +57,24 @@ const PVT = () => {
 
       {/* 2. Hero Section */}
       <section 
-        className="py-20 lg:py-32"
+        className="py-20 lg:py-32 min-h-screen flex items-center"
         style={{
-          background: `linear-gradient(135deg, #FFFFFE 0%, #FFFFFC 50%, #FFFFFE 100%)`
+          background: `linear-gradient(180deg, 
+            #FFFFFF 0%,
+            #FFFFFC 8.33%,
+            #FFFFFB 16.66%,
+            #FFFFF8 25%,
+            #FFFFF6 33.33%,
+            #FFFFF5 41.66%,
+            #FCFDF3 50%,
+            #FAFCF3 58.33%,
+            #FAFCF4 66.66%,
+            #F3F9FB 75%,
+            #F2F8FC 83.33%,
+            #F1F8FD 91.66%,
+            #F4F9FB 100%)`,
+          backgroundSize: '100% 100%',
+          fallback: '#FFFFFF'
         }}
       >
         <div className="container mx-auto px-6">
