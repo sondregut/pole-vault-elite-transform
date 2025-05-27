@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +14,18 @@ const PVT = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{
+      background: `linear-gradient(to bottom, 
+        #FFFFFE 0%, 
+        #FFFFFC 15%, 
+        #FFFFFE 30%, 
+        #eff8ff 45%, 
+        #eff7ff 55%, 
+        #f0f7fe 65%, 
+        #f2f8fc 75%, 
+        #f5fafd 85%, 
+        #f1f8fe 100%)`
+    }}>
       {/* 1. Sticky Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
         <div className="container mx-auto px-6 py-4">
@@ -44,7 +54,7 @@ const PVT = () => {
         </div>
       </header>
 
-      {/* 2. Hero Section with Color Gradient */}
+      {/* 2. Hero Section */}
       <section 
         className="py-20 lg:py-32"
         style={{
@@ -98,7 +108,7 @@ const PVT = () => {
       </section>
 
       {/* 3. Problem & Promise */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16">
             <div>
@@ -195,7 +205,7 @@ const PVT = () => {
       </section>
 
       {/* 5. Social Proof */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16 text-black">What Athletes Say</h2>
           <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -284,7 +294,7 @@ const PVT = () => {
       </section>
 
       {/* 7. Demo Video & Screenshots */}
-      <section id="screenshots" className="py-20 bg-gray-50">
+      <section id="screenshots" className="py-20">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16 text-black">See It In Action</h2>
           <div className="flex justify-center space-x-8 mb-12">
@@ -364,7 +374,7 @@ const PVT = () => {
       </section>
 
       {/* 9. The Story */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16 text-black">The Story</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -436,7 +446,7 @@ const PVT = () => {
       </section>
 
       {/* 11. Footer */}
-      <footer className="py-12 bg-black text-white">
+      <footer className="py-12 bg-black/90 text-white">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
