@@ -177,8 +177,16 @@ const PVT = () => {
         </div>
       </section>
 
-      {/* 4. Feature Highlights */}
-      <section id="features" className="py-20">
+      {/* 4. Feature Highlights - Continuous Gradient */}
+      <section id="features" className="py-20" style={{
+        background: `linear-gradient(180deg, 
+          #F0F7FE 0%,
+          #EFF6FD 25%,
+          #EEF5FC 50%,
+          #EDF4FB 75%,
+          #ECF3FA 100%)`,
+        backgroundSize: '100% 100%'
+      }}>
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16 text-black">Features That Matter</h2>
           <div className="grid md:grid-cols-3 gap-8">
