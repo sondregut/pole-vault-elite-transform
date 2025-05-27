@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,7 +10,7 @@ import {
   CarouselPrevious,
   CarouselNext
 } from "@/components/ui/carousel";
-import { CheckCircle, Download, Play, Shield, Trophy, BarChart3, Smartphone } from "lucide-react";
+import { CheckCircle, Download, Play, Shield, Trophy, BarChart3, Smartphone, Calendar, Video, FileText, Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -24,14 +25,13 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Toggle } from "@/components/ui/toggle";
 
 const PVT = () => {
   // App screenshots for carousel
   const appScreenshots = [
     {
       src: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1200",
-      alt: "Pole Vault Tracker - Jump tracking interface"
+      alt: "Pole Vault Tracker - Jump logging interface"
     },
     {
       src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=1200",
@@ -39,40 +39,48 @@ const PVT = () => {
     },
     {
       src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200",
-      alt: "Pole Vault Tracker - Session logging"
+      alt: "Pole Vault Tracker - Session calendar"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1200",
+      alt: "Pole Vault Tracker - Pole library"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1200",
+      alt: "Pole Vault Tracker - Video upload"
     }
   ];
 
   const features = [
     {
       title: "Log Every Jump",
-      description: "Track all key details of your training and competition jumps including pole used, approach steps, grip height, bar height, and more.",
-      icon: <CheckCircle className="h-6 w-6 text-primary" />
+      description: "Grip height, pole used, run-up, height cleared, jump rating, notes — all in seconds.",
+      icon: <FileText className="h-6 w-6 text-primary" />
+    },
+    {
+      title: "See Your Progress",
+      description: "Smart analytics show trends, consistency, and PRs over time.",
+      icon: <BarChart3 className="h-6 w-6 text-primary" />
+    },
+    {
+      title: "Upload & Review Video",
+      description: "Attach slow-mo clips to each jump and review sessions anytime.",
+      icon: <Video className="h-6 w-6 text-primary" />
+    },
+    {
+      title: "Track Sessions",
+      description: "Vault calendar keeps your training organized — no more guessing when you last jumped.",
+      icon: <Calendar className="h-6 w-6 text-primary" />
     },
     {
       title: "Manage Your Poles",
-      description: "Store your full inventory with brand, length, flex number, weight rating, custom labels & notes.",
-      icon: <CheckCircle className="h-6 w-6 text-primary" />
+      description: "Keep track of your pole collection: flex numbers, stiffness, lengths, and usage history.",
+      icon: <Trophy className="h-6 w-6 text-primary" />
     },
     {
-      title: "Log Training Sessions",
-      description: "Track full vault practices with session type, weather & location, session goal, energy/mood sliders, and more.",
-      icon: <CheckCircle className="h-6 w-6 text-primary" />
-    },
-    {
-      title: "Media Uploads",
-      description: "Upload video per jump for detailed analysis, attach photos or clips to full sessions, and review form visually over time.",
-      icon: <CheckCircle className="h-6 w-6 text-primary" />
-    },
-    {
-      title: "Analytics",
-      description: "Track PR progress, visualize grip height trends, see jump-quality distribution, monitor bar heights and jump volume.",
-      icon: <CheckCircle className="h-6 w-6 text-primary" />
-    },
-    {
-      title: "Training Library",
-      description: "Browse your full archive of training and meet sessions, filter by location, type, or date.",
-      icon: <CheckCircle className="h-6 w-6 text-primary" />
+      title: "Your Data = Your Vault",
+      description: "Private, secure, and made only for vaulters.",
+      icon: <Shield className="h-6 w-6 text-primary" />
     }
   ];
   
@@ -81,95 +89,36 @@ const PVT = () => {
   
   const pricingPlans = [
     {
-      name: "Athlete",
+      name: "Free Forever",
       bgColor: "bg-gray-100",
       textColor: "text-gray-600",
       borderColor: "border-gray-300",
-      monthlyPrice: 8.99,
-      yearlyDiscount: 0.3, // 30% discount
-      description: "Best for vaulters who want to log everything and stay consistent.",
+      monthlyPrice: 0,
+      description: "Perfect for getting started with pole vault tracking.",
       features: [
-        "Unlimited jump & session logging",
-        "Pole inventory management",
-        "Session summaries & goal tracking",
-        "1 highlight video upload per session",
-        "Basic PR tracker and session count",
-        "Single-device sync"
+        "Log unlimited sessions",
+        "Use the pole vault calendar",
+        "Add notes, ratings, and tags"
       ]
     },
     {
-      name: "Athlete+",
-      bgColor: "bg-amber-100",
-      textColor: "text-amber-600",
-      borderColor: "border-amber-300",
+      name: "PVT Pro",
+      bgColor: "bg-blue-100",
+      textColor: "text-blue-600",
+      borderColor: "border-blue-300",
       popular: true,
-      monthlyPrice: 14.99,
-      yearlyDiscount: 0.3, // 30% discount
-      description: "Best for vaulters who want deep insights and full video tracking.",
+      monthlyPrice: 4.99,
+      description: "Everything you need to take your vaulting to the next level.",
       features: [
-        "Everything in Athlete, plus:",
-        "Upload video to each jump (30 GB/month storage)",
-        "Grip height and jump-quality trend analytics",
-        "Pole usage heatmaps",
-        "Session comparison tools",
-        "CSV export for custom tracking",
-        "Multi-device sync and cloud backup",
-        "Priority in-app support",
-        "Feed sharing with friends (coming soon)"
-      ]
-    },
-    {
-      name: "Coach Plan",
-      bgColor: "bg-red-100",
-      textColor: "text-red-600",
-      borderColor: "border-red-300",
-      comingSoon: true,
-      description: "For vault coaches managing athletes or teams.",
-      features: [
-        "Multi-athlete dashboards",
-        "Team analytics",
-        "Drill assignment",
-        "Competition planning tools"
+        "Everything in Free, plus:",
+        "Upload videos",
+        "Unlock analytics & trends",
+        "Track pole usage",
+        "Export your vault history"
       ]
     }
   ];
 
-  // Calculate pricing based on billing period
-  const plansWithPricing = pricingPlans.map(plan => {
-    if (plan.comingSoon) {
-      return {
-        ...plan,
-        displayPrice: undefined,
-        discountedMonthlyPrice: undefined,
-        yearlyTotal: undefined,
-        savings: undefined
-      };
-    }
-    
-    // Keep monthly price as the display price, even when yearly is selected
-    const monthlyPrice = plan.monthlyPrice.toFixed(2);
-    
-    // Calculate discounted monthly price (only for display when yearly is selected)
-    const discountedMonthlyPrice = isYearlyBilling 
-      ? (plan.monthlyPrice * (1 - plan.yearlyDiscount)).toFixed(2)
-      : null;
-    
-    // Calculate yearly total (only relevant when yearly is selected)
-    const yearlyTotalPrice = isYearlyBilling
-      ? (plan.monthlyPrice * (1 - plan.yearlyDiscount) * 12).toFixed(2)
-      : null;
-    
-    return {
-      ...plan,
-      // Always show monthly price, even when yearly is selected
-      displayPrice: `€${monthlyPrice}/mo`,
-      // Add discounted price for yearly
-      discountedMonthlyPrice: discountedMonthlyPrice ? `€${discountedMonthlyPrice}/mo` : null,
-      yearlyTotal: yearlyTotalPrice ? `€${yearlyTotalPrice}/year` : null,
-      savings: isYearlyBilling ? `Save ${plan.yearlyDiscount * 100}%` : null
-    };
-  });
-  
   // Demo component state
   const [steps, setSteps] = useState(16);
   const [unitType, setUnitType] = useState("m");
@@ -204,11 +153,10 @@ const PVT = () => {
                 Pole Vault Tracker
               </h1>
               <h2 className="text-xl md:text-2xl text-gray-100">
-                Track Every Jump. Level Up Your Vault.
+                Track. Analyze. Improve.
               </h2>
               <p className="text-lg text-gray-100">
-                A powerful app for pole vaulters to log sessions, track poles, analyze performance, 
-                and keep improving—built by vaulters, for vaulters.
+                The #1 app for pole vaulters to log every jump, review videos, and unlock performance insights.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" className="gap-2">
@@ -216,8 +164,7 @@ const PVT = () => {
                   Download Now
                 </Button>
                 <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10 gap-2">
-                  <Play size={20} />
-                  Watch Demo
+                  Join Waitlist
                 </Button>
               </div>
             </div>
@@ -236,41 +183,12 @@ const PVT = () => {
             </div>
           </div>
         </section>
-
-        {/* Built For Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Built for Every Vaulter
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                "Competitive pole vaulters (high school, college, pro)",
-                "Pole vault coaches (individuals, schools, clubs)",
-                "Parents of developing athletes",
-                "Vault clubs and training centers",
-                "Track & field teams with vault groups",
-                "Anyone serious about improving their vault"
-              ].map((item, index) => (
-                <div key={index} className="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                  <p className="text-lg">{item}</p>
-                </div>
-              ))}
-            </div>
-            
-            <p className="text-xl text-center mt-10 max-w-3xl mx-auto text-gray-700">
-              Whether you're chasing a new PR, coaching a squad, or logging reps through the season, 
-              this app helps you stay on track.
-            </p>
-          </div>
-        </section>
         
         {/* Features Section */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              What You Can Do
+              What You Can Do With PVT
             </h2>
             <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
               Powerful features designed specifically for pole vault training and performance tracking
@@ -278,52 +196,68 @@ const PVT = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((feature, index) => (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                  <div className="mb-4 inline-block bg-gray-100 p-3 rounded-lg">
+                <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+                  <div className="mb-4 inline-block bg-white p-3 rounded-lg">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">{index + 1}. {feature.title}</h3>
+                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
                   <p className="text-gray-600">{feature.description}</p>
                 </div>
               ))}
             </div>
-            
-            <div className="mt-12 bg-gradient-to-r from-gray-100 to-gray-200 p-6 md:p-8 rounded-2xl">
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="md:w-1/2">
-                  <h3 className="text-2xl font-bold mb-4">Coming Soon: Vault Feed & Coach Dashboard</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Share highlight videos from your session</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Post PRs, big breakthroughs, and cool moments</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                      <span>Coach Dashboard with team management for up to 15 athletes</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="md:w-1/2">
-                  <img 
-                    src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=800" 
-                    alt="Coach dashboard preview" 
-                    className="rounded-lg shadow-lg" 
-                  />
-                </div>
-              </div>
+          </div>
+        </section>
+
+        {/* See It In Action Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+              See It In Action
+            </h2>
+            <div className="text-center mb-12">
+              <Button size="lg" variant="outline" className="gap-2">
+                <Play size={20} />
+                Watch Demo Video
+              </Button>
+              <p className="text-gray-600 mt-4">Log a jump. Upload a clip. Analyze the result. It's that easy.</p>
             </div>
           </div>
         </section>
 
-        {/* Demo Section - Added from Demo.tsx */}
+        {/* App Screenshots Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+              App Screenshots
+            </h2>
+            
+            <div className="max-w-4xl mx-auto">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {appScreenshots.map((screenshot, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                      <div className="p-4">
+                        <img 
+                          src={screenshot.src} 
+                          alt={screenshot.alt}
+                          className="rounded-xl shadow-lg w-full h-auto"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </div>
+          </div>
+        </section>
+
+        {/* Demo Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
             <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              Try the Pole Vault Tracker Demo
+              Try the Demo
             </h1>
             <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
               Experience how the app helps vaulters log and analyze their jumps
@@ -342,19 +276,6 @@ const PVT = () => {
                   {/* App header */}
                   <div className="flex justify-between items-center mb-2">
                     <div className="text-xs text-gray-500">9:41 AM</div>
-                    <div className="flex items-center">
-                      <div className="w-4 h-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-gray-500">
-                          <path fillRule="evenodd" d="M1.371 10.393c.58-1.735 1.502-3.346 2.707-4.734a1 1 0 0 1 1.497.117l2.913 3.597a1 1 0 0 1-.136 1.428 6 6 0 0 0-1.99 1.99 1 1 0 0 1-1.428.136L1.277 11.89a1 1 0 0 1 .094-1.498ZM20.922 10.393c-.58-1.735-1.502-3.346-2.707-4.734a1 1 0 0 0-1.497.117l-2.913 3.597a1 1 0 0 0 .136 1.428 6 6 0 0 1 1.99 1.99 1 1 0 0 0 1.428.136l3.657-2.937a1 1 0 0 0-.094-1.498Z" clipRule="evenodd" />
-                          <path fillRule="evenodd" d="M7.484 18.968a8.968 8.968 0 0 0 9.032 0 1 1 0 0 1 .496-.132H19a2 2 0 0 0 2-2v-3a1 1 0 0 0-.629-.928l-.385-.154a1 1 0 0 0-1.197.371 4 4 0 0 1-6.579 0 1 1 0 0 0-1.197-.37l-.385.154A1 1 0 0 0 10 13.965v4.87a1 1 0 0 0 1 1h.01a1 1 0 0 1 .474.132Z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="w-4 h-4 ml-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-gray-500">
-                          <path fillRule="evenodd" d="M3.75 6.75a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-.037c.856-.174 1.5-.93 1.5-1.838v-2.25c0-.907-.644-1.664-1.5-1.837V9.75a3 3 0 0 0-3-3h-15Zm15 1.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-6a1.5 1.5 0 0 1 1.5-1.5h15Z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
                   </div>
                   
                   <div className="bg-gray-50 rounded-xl p-4 mb-2">
@@ -425,26 +346,6 @@ const PVT = () => {
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium block mb-1">Grip Height</label>
-                        <Input type="text" placeholder={`Grip in ${unitType}`} />
-                      </div>
-                      
-                      <div>
-                        <label className="text-sm font-medium block mb-1">Run Up Length</label>
-                        <Input type="text" placeholder={`Length in ${unitType}`} />
-                      </div>
-                      
-                      <div>
-                        <label className="text-sm font-medium block mb-1">Take Off</label>
-                        <Input type="text" placeholder={`Distance in ${unitType}`} />
-                      </div>
-                      
-                      <div>
-                        <label className="text-sm font-medium block mb-1">Mid Mark</label>
-                        <Input type="text" placeholder={`Distance in ${unitType}`} />
-                      </div>
-                      
-                      <div>
                         <label className="text-sm font-medium block mb-1">Jump Rating</label>
                         <RadioGroup 
                           value={jumpRating} 
@@ -453,11 +354,7 @@ const PVT = () => {
                         >
                           <div className="flex items-center space-x-1">
                             <RadioGroupItem value="run_thru" id="run_thru" />
-                            <Label htmlFor="run_thru" className="text-sm text-red-500">Run Thru</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="glider" id="glider" />
-                            <Label htmlFor="glider" className="text-sm text-orange-500">Glider</Label>
+                            <Label htmlFor="run_thru" className="text-sm text-red-500">Miss</Label>
                           </div>
                           <div className="flex items-center space-x-1">
                             <RadioGroupItem value="ok" id="ok" />
@@ -476,7 +373,7 @@ const PVT = () => {
                       
                       <div>
                         <label className="text-sm font-medium block mb-1">Jump Notes</label>
-                        <Textarea placeholder="Add any notes about this jump (e.g., 'late plant', 'good takeoff')" />
+                        <Textarea placeholder="Add any notes about this jump" />
                       </div>
                       
                       <div className="flex justify-between pt-2">
@@ -493,85 +390,70 @@ const PVT = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+              What Athletes Say
+            </h2>
             
-            <div className="mt-16 text-center max-w-xl mx-auto">
-              <h2 className="text-2xl font-bold mb-4">Experience the Full App</h2>
-              <p className="text-gray-600 mb-6">
-                This is just one of many screens in the Pole Vault Tracker app. Download the full version to access all features 
-                including analytics, video uploads, achievements and more.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg" className="gap-2">
-                  <Smartphone className="w-5 h-5" /> Download Now
-                </Button>
-                <Button size="lg" variant="outline">Learn More</Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
+                <p className="text-lg italic mb-4">
+                  "I finally understand why I jump better from 14 than 16. This app is a game changer."
+                </p>
+                <div className="text-sm text-gray-600">
+                  — Emma Rose, U20 National Medalist
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
+                <p className="text-lg italic mb-4">
+                  "I've used it for every jump this season. Simple, smart, essential."
+                </p>
+                <div className="text-sm text-gray-600">
+                  — James M., College Vaulter
+                </div>
               </div>
             </div>
           </div>
         </section>
         
         {/* Pricing Section */}
-        <section className="py-16 bg-white" id="pricing">
+        <section className="py-16 bg-gray-50" id="pricing">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Pricing — Start Free for 30 Days
+                Pricing
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                All plans start with a 30-day free trial.
-                No commitment. Cancel any time before day 30.
+                Choose the plan that works for you. Start free and upgrade when you're ready.
               </p>
-              
-              {/* Billing toggle */}
-              <div className="flex items-center justify-center mt-8 space-x-3">
-                <span className={`text-sm font-medium ${!isYearlyBilling ? 'text-gray-900' : 'text-gray-500'}`}>Monthly</span>
-                <div 
-                  className="relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-gray-200 cursor-pointer"
-                  onClick={() => setIsYearlyBilling(!isYearlyBilling)}
-                >
-                  <div className={`absolute mx-1 h-4 w-4 rounded-full bg-white transition-transform ${isYearlyBilling ? 'translate-x-6' : 'translate-x-0'}`} />
-                </div>
-                <span className={`text-sm font-medium ${isYearlyBilling ? 'text-gray-900' : 'text-gray-500'}`}>
-                  Yearly <span className="text-green-600 ml-1">Save 30%</span>
-                </span>
-              </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              {plansWithPricing.map((plan, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {pricingPlans.map((plan, index) => (
                 <div 
                   key={index}
                   className={`rounded-2xl border-2 ${plan.borderColor} overflow-hidden shadow-sm hover:shadow-md transition-shadow relative ${plan.popular ? 'transform md:-translate-y-4' : ''}`}
                 >
                   {plan.popular && (
-                    <div className="absolute top-0 left-0 right-0 bg-amber-500 text-white text-center py-1 text-sm font-medium">
+                    <div className="absolute top-0 left-0 right-0 bg-blue-500 text-white text-center py-1 text-sm font-medium">
                       Most Popular
                     </div>
                   )}
                   <div className={`${plan.bgColor} ${plan.textColor} p-6 text-center`}>
                     <h3 className="text-2xl font-bold">{plan.name}</h3>
-                    {!plan.comingSoon ? (
-                      <>
-                        <div className="mt-3">
-                          <span className="text-3xl font-bold">{plan.displayPrice}</span>
-                        </div>
-                        {isYearlyBilling && (
-                          <>
-                            <div className="text-sm mt-1">
-                              <span className="line-through opacity-75">{plan.displayPrice}</span>
-                              {" "}
-                              <span className="font-medium">{plan.discountedMonthlyPrice}</span>
-                            </div>
-                            <div className="text-sm mt-1 text-green-600 font-medium">{plan.savings}</div>
-                            <div className="text-sm mt-1">{plan.yearlyTotal}</div>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <div className="mt-3 inline-block bg-red-200 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
-                        Coming Soon
-                      </div>
-                    )}
+                    <div className="mt-3">
+                      {plan.monthlyPrice === 0 ? (
+                        <span className="text-3xl font-bold">Free</span>
+                      ) : (
+                        <span className="text-3xl font-bold">${plan.monthlyPrice}/month</span>
+                      )}
+                    </div>
                   </div>
                   
                   <div className="p-6 bg-white">
@@ -586,82 +468,105 @@ const PVT = () => {
                       ))}
                     </ul>
                     
-                    {!plan.comingSoon ? (
-                      <Button className="w-full" size="lg">
-                        Start Free Trial
-                      </Button>
-                    ) : (
-                      <Button variant="outline" className="w-full" size="lg">
-                        Join Waitlist
-                      </Button>
-                    )}
+                    <Button className="w-full" size="lg">
+                      {plan.monthlyPrice === 0 ? "Start Free" : "Upgrade to Pro"}
+                    </Button>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
-        
-        {/* Achievements Section */}
-        <section className="py-16 bg-gradient-to-b from-gray-100 to-white">
+
+        {/* FAQ Section */}
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Motivation That Builds Over Time
-              </h2>
-              <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-                Pole Vault Tracker includes Achievement Milestones to keep you engaged:
-              </p>
-            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+              FAQ
+            </h2>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {[
-                {
-                  title: "Session Streaks",
-                  desc: "Bronze, Silver, Gold achievements for consistent training",
-                  icon: <Trophy className="h-10 w-10 text-amber-500" />
-                },
-                {
-                  title: "Jump Volume",
-                  desc: "Goals for 100 / 1000 logged jumps",
-                  icon: <BarChart3 className="h-10 w-10 text-blue-500" />
-                },
-                {
-                  title: "Quality Jumps",
-                  desc: '"Trifecta" = 3 Great jumps in a day',
-                  icon: <Trophy className="h-10 w-10 text-purple-500" />
-                },
-                {
-                  title: "Pole Achievements",
-                  desc: '"Pole Conquered" for mastering specific poles',
-                  icon: <Trophy className="h-10 w-10 text-green-500" />
-                },
-                {
-                  title: "Form & Consistency",
-                  desc: '"Full Send," "Over the Top" badges for technique',
-                  icon: <Trophy className="h-10 w-10 text-red-500" />
-                },
-                {
-                  title: "Technical Milestones",
-                  desc: "Grip height milestones, logging detail achievements",
-                  icon: <Trophy className="h-10 w-10 text-indigo-500" />
-                }
-              ].map((item, index) => (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 flex gap-4 items-start">
-                  <div className="rounded-full bg-gray-100 p-3">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
-                    <p className="text-gray-600">{item.desc}</p>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Is this only for elites?</h3>
+                  <p className="text-gray-600">No — if you vault, you'll benefit.</p>
                 </div>
-              ))}
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Can coaches use this?</h3>
+                  <p className="text-gray-600">Yes. Coach mode is coming soon.</p>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">How much video can I upload?</h3>
+                  <p className="text-gray-600">Pro gives you generous cloud storage — and we compress efficiently.</p>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Does it work offline?</h3>
+                  <p className="text-gray-600">Yes, and syncs when you're back online.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Early Access Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Get Early Access
+              </h2>
+              <p className="text-xl text-gray-600 mb-8">
+                Drop your email to get exclusive launch updates and one free month of PVT Pro
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <Input placeholder="Your name" className="flex-1" />
+                <Input placeholder="Your email" className="flex-1" />
+                <Button>Join Waitlist</Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Download Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">
+              Download PVT
+            </h2>
+            
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <Button size="lg" className="gap-2">
+                <Smartphone className="w-5 h-5" />
+                App Store
+              </Button>
+              <Button size="lg" variant="outline" className="gap-2">
+                <Smartphone className="w-5 h-5" />
+                Google Play
+              </Button>
             </div>
             
-            <p className="text-center mt-8 text-gray-700">
-              More achievements are added with every app update!
-            </p>
+            <div className="text-center">
+              <div className="inline-block p-4 bg-gray-100 rounded-lg">
+                <div className="w-32 h-32 bg-gray-300 rounded flex items-center justify-center">
+                  <span className="text-gray-600">QR Code</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer CTA */}
+        <section className="py-8 bg-gray-800 text-white">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-sm mb-2">Stay Connected: Instagram | TikTok | YouTube</p>
+            <p className="text-sm mb-2">Questions? Email us at support@polevaulttracker.com</p>
+            <p className="text-xs text-gray-400">© 2025 Pole Vault Tracker · Made by Vaulters, for Vaulters.</p>
           </div>
         </section>
       </main>
