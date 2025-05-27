@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,12 +80,27 @@ const PVT = () => {
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-black">
+              <div className="flex items-center mb-6">
+                <div className="flex -space-x-2 mr-4">
+                  <div className="w-10 h-10 bg-gray-300 rounded-full border-2 border-white"></div>
+                  <div className="w-10 h-10 bg-gray-400 rounded-full border-2 border-white"></div>
+                  <div className="w-10 h-10 bg-gray-500 rounded-full border-2 border-white"></div>
+                </div>
+                <span className="text-gray-600">Used by 1000+ vaulters with ⭐ 4.9 rating</span>
+              </div>
+              
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                Pole Vault Tracker
+                Meet PVT
               </h1>
+              
+              <h2 className="text-4xl lg:text-6xl font-bold mb-8 leading-tight">
+                Track your jumps with just a tap
+              </h2>
+              
               <p className="text-xl lg:text-2xl mb-8 text-gray-600">
-                The fastest way to log every jump, organize your poles, and unlock data-driven breakthroughs.
+                Meet PVT, the AI-powered app for easy pole vault tracking. Log attempts, organize poles, and get instant analytics to jump higher.
               </p>
+              
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg"
@@ -102,6 +118,7 @@ const PVT = () => {
                   See PVT in Action
                 </Button>
               </div>
+              
               <div className="flex items-center text-gray-600">
                 <Badge variant="secondary" className="bg-gray-100 text-black">
                   Built by Olympic finalist Sondre Guttormsen
