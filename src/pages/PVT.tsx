@@ -235,8 +235,16 @@ const PVT = () => {
         </div>
       </section>
 
-      {/* 5. Social Proof */}
-      <section className="py-20">
+      {/* 5. Social Proof - Continuous Gradient */}
+      <section className="py-20" style={{
+        background: `linear-gradient(180deg, 
+          #ECF3FA 0%,
+          #EBF2F9 25%,
+          #EAF1F8 50%,
+          #E9F0F7 75%,
+          #E8EFF6 100%)`,
+        backgroundSize: '100% 100%'
+      }}>
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16 text-black">What Athletes Say</h2>
           <div className="grid md:grid-cols-2 gap-8 mb-12">
