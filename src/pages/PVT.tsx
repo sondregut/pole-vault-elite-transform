@@ -1,7 +1,6 @@
 
 import React from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const PVT = () => {
   return (
@@ -11,8 +10,6 @@ const PVT = () => {
       <main className="flex-grow pt-16">
         {/* Blank page - ready for new content */}
       </main>
-      
-      <Footer />
     </div>
   );
 };
