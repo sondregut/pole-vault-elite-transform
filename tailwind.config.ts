@@ -41,6 +41,20 @@ export default {
 					light: '#D1FAE5',
 					dark: '#047857',
 				},
+				// PVT Brand Colors
+				'brand-violet': {
+					700: '#7B3AF5',
+					400: '#A47BFF',
+					100: '#F3EFFF',
+				},
+				'canvas-light': '#FFFFFF',
+				'canvas-dark': '#17141E',
+				'content-primary': '#0E0D0F',
+				'content-secondary': '#55546B',
+				'success-ring-green': '#32D05F',
+				'warning-ring-orange': '#FF9F1C',
+				'info-ring-blue': '#3AA3FF',
+				'surface-card': '#F8F7FC',
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
 					foreground: 'hsl(var(--muted-foreground))'
