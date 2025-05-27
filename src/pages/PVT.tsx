@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUp, ArrowDown, LogIn } from "lucide-react";
+import { ArrowUp, LogIn } from "lucide-react";
 
 const PVT = () => {
   const scrollToSection = (id: string) => {
@@ -44,8 +43,13 @@ const PVT = () => {
         </div>
       </header>
 
-      {/* 2. Hero Section */}
-      <section className="py-20 lg:py-32 bg-black">
+      {/* 2. Hero Section with Color Gradient */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{
+          background: `linear-gradient(135deg, #FFFFFE 0%, #FFFFFC 50%, #FFFFFE 100%)`
+        }}
+      >
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
