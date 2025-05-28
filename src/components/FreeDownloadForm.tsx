@@ -40,36 +40,32 @@ const FreeDownloadForm = ({
     setIsSubmitting(true);
     
     try {
-      // Store the form submission
-      const { error } = await supabase
-        .from('free_download_submissions')
-        .insert({
-          email: formData.email,
-          name: formData.name,
-          product_id: productId,
-          product_name: productName
-        });
+      // Try to store the form submission, but don't fail if it doesn't work
+      try {
+        const { error } = await supabase
+          .from('free_download_submissions')
+          .insert({
+            email: formData.email,
+            name: formData.name,
+            product_id: productId,
+            product_name: productName
+          });
 
-      if (error) {
-        console.error('Error storing form submission:', error);
-        toast.error('Something went wrong. Please try again.');
-        return;
+        if (error) {
+          console.error('Error storing form submission:', error);
+          // Continue with download even if storage fails
+        }
+      } catch (storageError) {
+        console.error('Storage error:', storageError);
+        // Continue with download even if storage fails
       }
 
-      // Start the download
+      // Start the download regardless of storage success/failure
       const a = document.createElement('a');
       a.href = downloadUrl;
       a.download = fileName;
       a.style.display = 'none';
       document.body.appendChild(a);
-      
-      // Update the submission with download timestamp
-      await supabase
-        .from('free_download_submissions')
-        .update({ downloaded_at: new Date().toISOString() })
-        .eq('email', formData.email)
-        .eq('product_id', productId);
-      
       a.click();
       document.body.removeChild(a);
       
