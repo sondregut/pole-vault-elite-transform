@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Download } from 'lucide-react';
 
@@ -40,27 +39,7 @@ const FreeDownloadForm = ({
     setIsSubmitting(true);
     
     try {
-      // Try to store the form submission, but don't fail if it doesn't work
-      try {
-        const { error } = await supabase
-          .from('free_download_submissions')
-          .insert({
-            email: formData.email,
-            name: formData.name,
-            product_id: productId,
-            product_name: productName
-          });
-
-        if (error) {
-          console.error('Error storing form submission:', error);
-          // Continue with download even if storage fails
-        }
-      } catch (storageError) {
-        console.error('Storage error:', storageError);
-        // Continue with download even if storage fails
-      }
-
-      // Start the download regardless of storage success/failure
+      // Start the download immediately - no database storage required for free downloads
       const a = document.createElement('a');
       a.href = downloadUrl;
       a.download = fileName;
