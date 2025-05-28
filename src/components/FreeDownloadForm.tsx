@@ -46,12 +46,15 @@ const FreeDownloadForm = ({
     setIsSubmitting(true);
     
     try {
+      // Use a public URL that doesn't require authentication
+      const publicDownloadUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
+      
       // Simulate a brief delay for better UX
       await new Promise(resolve => setTimeout(resolve, 500));
       
       // Start the download
       const a = document.createElement('a');
-      a.href = downloadUrl;
+      a.href = publicDownloadUrl;
       a.download = fileName;
       a.style.display = 'none';
       document.body.appendChild(a);

@@ -484,7 +484,7 @@ const ProductDetail = () => {
                       productId={product.id}
                       productName={product.name}
                       onSuccess={handleFreeDownloadSuccess}
-                      downloadUrl="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0NGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw"
+                      downloadUrl="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf"
                       fileName="Best Pole Vault Drills.pdf"
                     />
                     <Button 
