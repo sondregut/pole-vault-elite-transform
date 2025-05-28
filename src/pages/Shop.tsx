@@ -10,6 +10,7 @@ import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
+import FreeDownloadForm from "@/components/FreeDownloadForm";
 
 const Shop = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const Shop = () => {
   const [selectedOptions, setSelectedOptions] = useState<Record<number, string>>({});
   // State for download tracking
   const [isDownloading, setIsDownloading] = useState<Record<number, boolean>>({});
+  // State for showing free download form
+  const [showFreeDownloadForm, setShowFreeDownloadForm] = useState<Record<number, boolean>>({});
 
   // Categories - removed "apparel" and "printful"
   const categories = [
@@ -65,26 +68,36 @@ const Shop = () => {
   // Handle direct download for free products
   const handleFreeDownload = (e: React.MouseEvent, product: any) => {
     e.stopPropagation();
+    
+    // For product with ID 13 (Best Pole Vault Drills), show the form first
+    if (product.id === 13) {
+      setShowFreeDownloadForm(prev => ({ ...prev, [product.id]: true }));
+      return;
+    }
+    
+    // For other free products, download directly
     setIsDownloading(prev => ({ ...prev, [product.id]: true }));
     
-    // For product with ID 13 (Best Pole Vault Drills)
-    if (product.id === 13) {
-      // Directly download the PDF without showing a form
-      const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
-      
-      const a = document.createElement('a');
-      a.href = pdfUrl;
-      a.download = "Best Pole Vault Drills.pdf";
-      document.body.appendChild(a);
-      
-      // Use timeout as a fallback since download success isn't reliably detectable
-      setTimeout(() => {
-        a.click();
-        document.body.removeChild(a);
-        setIsDownloading(prev => ({ ...prev, [product.id]: false }));
-        toast.success("Your free PDF is being downloaded!");
-      }, 100);
-    }
+    const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0NGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
+    
+    const a = document.createElement('a');
+    a.href = pdfUrl;
+    a.download = "Best Pole Vault Drills.pdf";
+    document.body.appendChild(a);
+    
+    // Use timeout as a fallback since download success isn't reliably detectable
+    setTimeout(() => {
+      a.click();
+      document.body.removeChild(a);
+      setIsDownloading(prev => ({ ...prev, [product.id]: false }));
+      toast.success("Your free PDF is being downloaded!");
+    }, 100);
+  };
+
+  // Handle successful form submission for free downloads
+  const handleFreeDownloadSuccess = (productId: number) => {
+    setShowFreeDownloadForm(prev => ({ ...prev, [productId]: false }));
+    toast.success("Download started! Check your downloads folder.");
   };
   
   // Handle option change
@@ -124,79 +137,104 @@ const Shop = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map(product => (
                 <Card key={product.id} className="overflow-hidden h-full flex flex-col">
-                  <div 
-                    onClick={() => handleProductClick(product)}
-                    className="cursor-pointer group flex flex-col flex-grow"
-                  >
-                    <div className="aspect-square w-full overflow-hidden relative">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  {/* Show form if requested for this product */}
+                  {showFreeDownloadForm[product.id] ? (
+                    <div className="p-4">
+                      <FreeDownloadForm
+                        productId={product.id}
+                        productName={product.name}
+                        onSuccess={() => handleFreeDownloadSuccess(product.id)}
+                        downloadUrl="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0NGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw"
+                        fileName="Best Pole Vault Drills.pdf"
                       />
-                      {product.price === "$0.00" && (
-                        <div className="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 font-bold">
-                          FREE
-                        </div>
-                      )}
-                    </div>
-                    <CardHeader className="pb-2">
-                      <div className="font-medium group-hover:text-primary transition-colors">{product.name}</div>
-                      <div className="text-lg font-semibold">{product.price}</div>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                      {product.hasOptions && (
-                        <div className="mb-4" onClick={(e) => e.stopPropagation()}>
-                          <label className="text-sm text-gray-500 mb-1 block">
-                            Select Option
-                          </label>
-                          <Select
-                            value={selectedOptions[product.id] || ""}
-                            onValueChange={(value) => handleOptionChange(product.id, value)}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose option" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {product.options.map(option => (
-                                <SelectItem key={option} value={option}>{option}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      )}
-                    </CardContent>
-                  </div>
-                  <CardFooter>
-                    {product.externalLink ? (
-                      <Button asChild className="w-full" onClick={(e) => e.stopPropagation()}>
-                        <a href={product.externalLink} target="_blank" rel="noopener noreferrer">
-                          {product.category === "training" ? "Buy Now" : "Apply Now"}
-                        </a>
-                      </Button>
-                    ) : product.comingSoon ? (
-                      <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700" onClick={(e) => e.stopPropagation()}>
-                        Coming Soon
-                      </Button>
-                    ) : product.price === "$0.00" ? (
                       <Button 
-                        className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center gap-2" 
-                        onClick={(e) => handleFreeDownload(e, product)}
-                        disabled={isDownloading[product.id]}
+                        variant="outline" 
+                        className="w-full mt-4"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowFreeDownloadForm(prev => ({ ...prev, [product.id]: false }));
+                        }}
                       >
-                        {isDownloading[product.id] ? (
-                          "Downloading..."
-                        ) : (
-                          <>
-                            <Download className="h-4 w-4" />
-                            Download Free
-                          </>
-                        )}
+                        Cancel
                       </Button>
-                    ) : (
-                      <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</Button>
-                    )}
-                  </CardFooter>
+                    </div>
+                  ) : (
+                    <>
+                      <div 
+                        onClick={() => handleProductClick(product)}
+                        className="cursor-pointer group flex flex-col flex-grow"
+                      >
+                        <div className="aspect-square w-full overflow-hidden relative">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                          {product.price === "$0.00" && (
+                            <div className="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 font-bold">
+                              FREE
+                            </div>
+                          )}
+                        </div>
+                        <CardHeader className="pb-2">
+                          <div className="font-medium group-hover:text-primary transition-colors">{product.name}</div>
+                          <div className="text-lg font-semibold">{product.price}</div>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                          {product.hasOptions && (
+                            <div className="mb-4" onClick={(e) => e.stopPropagation()}>
+                              <label className="text-sm text-gray-500 mb-1 block">
+                                Select Option
+                              </label>
+                              <Select
+                                value={selectedOptions[product.id] || ""}
+                                onValueChange={(value) => handleOptionChange(product.id, value)}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Choose option" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {product.options.map(option => (
+                                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
+                        </CardContent>
+                      </div>
+                      <CardFooter>
+                        {product.externalLink ? (
+                          <Button asChild className="w-full" onClick={(e) => e.stopPropagation()}>
+                            <a href={product.externalLink} target="_blank" rel="noopener noreferrer">
+                              {product.category === "training" ? "Buy Now" : "Apply Now"}
+                            </a>
+                          </Button>
+                        ) : product.comingSoon ? (
+                          <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700" onClick={(e) => e.stopPropagation()}>
+                            Coming Soon
+                          </Button>
+                        ) : product.price === "$0.00" ? (
+                          <Button 
+                            className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center gap-2" 
+                            onClick={(e) => handleFreeDownload(e, product)}
+                            disabled={isDownloading[product.id]}
+                          >
+                            {isDownloading[product.id] ? (
+                              "Downloading..."
+                            ) : (
+                              <>
+                                <Download className="h-4 w-4" />
+                                Download Free
+                              </>
+                            )}
+                          </Button>
+                        ) : (
+                          <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</Button>
+                        )}
+                      </CardFooter>
+                    </>
+                  )}
                 </Card>
               ))}
             </div>
