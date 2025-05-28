@@ -7,6 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Download, FileDown, CheckCircle, ExternalLink } from "lucide-react";
+import FreeDownloadForm from "@/components/FreeDownloadForm";
 
 const CheckoutSuccess = () => {
   const { clearCart } = useCart();
@@ -15,6 +16,7 @@ const CheckoutSuccess = () => {
   const [hasJumpersKneeProtocol, setHasJumpersKneeProtocol] = useState(false);
   const [hasPoleVaultDrills, setHasPoleVaultDrills] = useState(false);
   const [isDownloading, setIsDownloading] = useState<Record<string, boolean>>({});
+  const [showFreeDownloadForm, setShowFreeDownloadForm] = useState(false);
   
   // Only clear cart if there's a session_id parameter (indicating successful Stripe checkout)
   useEffect(() => {
@@ -97,6 +99,10 @@ const CheckoutSuccess = () => {
     }, 3000);
     
     a.click();
+  };
+
+  const handleFreeDownloadSuccess = () => {
+    setShowFreeDownloadForm(false);
   };
 
   const relatedProducts = [
@@ -195,21 +201,26 @@ const CheckoutSuccess = () => {
                 </Link>
               )}
               
-              {/* Free product download - simplified without form */}
-              <Button 
-                onClick={() => handleDownload("poleVaultDrills")} 
-                className="w-full mb-3 bg-primary text-white flex items-center justify-center gap-2"
-                disabled={isDownloading['poleVaultDrills']}
-              >
-                {isDownloading['poleVaultDrills'] ? (
-                  "Downloading..."
-                ) : (
-                  <>
-                    <Download className="mr-2 h-4 w-4" />
-                    Download Free Pole Vault Drills
-                  </>
-                )}
-              </Button>
+              {/* Free product download - now with form */}
+              {!showFreeDownloadForm ? (
+                <Button 
+                  onClick={() => setShowFreeDownloadForm(true)} 
+                  className="w-full mb-3 bg-primary text-white flex items-center justify-center gap-2"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Get Free Pole Vault Drills
+                </Button>
+              ) : (
+                <div className="mb-6">
+                  <FreeDownloadForm
+                    productId={13}
+                    productName="Best Pole Vault Drills"
+                    onSuccess={handleFreeDownloadSuccess}
+                    downloadUrl="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0NGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw"
+                    fileName="Best Pole Vault Drills.pdf"
+                  />
+                </div>
+              )}
               
               <Link to="/shop">
                 <Button className="w-full" variant={hasDigitalProducts ? "outline" : "default"}>
