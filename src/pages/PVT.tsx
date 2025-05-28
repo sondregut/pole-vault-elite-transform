@@ -502,40 +502,51 @@ const PVT = () => {
       </section>
 
       {/* 11. Footer */}
-      <footer className="py-12 bg-black/90 text-white">
+      <footer className="py-12 bg-neutral-50 border-t border-neutral-200">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-12">
+            {/* Download Section */}
             <div>
-              <h3 className="text-xl font-bold mb-4">Download</h3>
-              <div className="space-y-2">
-                <Button disabled className="w-full bg-gray-600 cursor-not-allowed">
+              <h3 className="text-lg font-semibold mb-6 text-neutral-800">Download PVT</h3>
+              <div className="space-y-3">
+                <Button disabled className="w-full bg-gray-300 text-gray-600 cursor-not-allowed">
                   App Store (Coming Soon)
                 </Button>
-                <Button disabled className="w-full bg-gray-600 cursor-not-allowed">
+                <Button disabled className="w-full bg-gray-300 text-gray-600 cursor-not-allowed">
                   Google Play (Coming Soon)
                 </Button>
               </div>
             </div>
             
+            {/* Company Section */}
             <div>
-              <h3 className="text-xl font-bold mb-4">Connect</h3>
-              <div className="space-y-2">
-                <p>Instagram: @polevaulttracker</p>
-                <p>Email: support@polevaulttracker.com</p>
+              <h3 className="text-lg font-semibold mb-6 text-neutral-800">Company</h3>
+              <div className="space-y-3">
+                <a href="#" className="block text-neutral-600 hover:text-neutral-800 transition-colors">Contact</a>
               </div>
             </div>
             
+            {/* Connect Section */}
             <div>
-              <h3 className="text-xl font-bold mb-4">Legal</h3>
-              <div className="space-y-2">
-                <p><a href="#" className="hover:text-gray-300">Privacy Policy</a></p>
-                <p><a href="#" className="hover:text-gray-300">Terms of Service</a></p>
+              <h3 className="text-lg font-semibold mb-6 text-neutral-800">Connect</h3>
+              <div className="space-y-3">
+                <p className="text-neutral-600">Instagram: @polevaulttracker</p>
+                <p className="text-neutral-600">Email: support@polevaulttracker.com</p>
+              </div>
+            </div>
+            
+            {/* Legal Section */}
+            <div>
+              <h3 className="text-lg font-semibold mb-6 text-neutral-800">Legal</h3>
+              <div className="space-y-3">
+                <a href="#" className="block text-neutral-600 hover:text-neutral-800 transition-colors">Privacy Policy</a>
+                <a href="#" className="block text-neutral-600 hover:text-neutral-800 transition-colors">Terms of Service</a>
               </div>
             </div>
           </div>
           
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p className="text-gray-400">© 2025 PVT. All rights reserved.</p>
+          <div className="border-t border-neutral-200 pt-8 text-center">
+            <p className="text-neutral-600">© Copyright 2025. All rights reserved</p>
           </div>
         </div>
       </footer>
