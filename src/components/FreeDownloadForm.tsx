@@ -36,10 +36,20 @@ const FreeDownloadForm = ({
       return;
     }
 
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      // Start the download immediately - no database storage required for free downloads
+      // Simulate a brief delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Start the download
       const a = document.createElement('a');
       a.href = downloadUrl;
       a.download = fileName;
