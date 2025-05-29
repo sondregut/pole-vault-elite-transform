@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -211,16 +210,8 @@ const CheckoutSuccess = () => {
             )}
             
             <div className="space-y-3">
-              {hasDigitalProducts && (
-                <Link to="/downloads">
-                  <Button className="w-full mb-3">
-                    Access Your Downloads
-                  </Button>
-                </Link>
-              )}
-              
               <Link to="/shop">
-                <Button className="w-full" variant={hasDigitalProducts ? "outline" : "default"}>
+                <Button className="w-full">
                   Continue Shopping
                 </Button>
               </Link>
