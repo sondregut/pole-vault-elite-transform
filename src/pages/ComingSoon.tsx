@@ -20,7 +20,8 @@ const ComingSoon = () => {
   const handleDownload = () => {
     setIsDownloading(true);
     
-    const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iYzM0YmFkZS00NGI0LTRlNmYtOWQ3ZS0wMDI0ZThlNDBiNWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0ODUyODg4MCwiZXhwIjoxOTA2MjA4ODgwfQ.UKbGcR89BZpQDVcRFRLRWXHeg5D3I3ik7l55Sn1mKBw";
+    // Use direct public URL instead of signed URL
+    const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
     const fileName = "Best Pole Vault Drills.pdf";
     
     // Create a hidden anchor element and click it
