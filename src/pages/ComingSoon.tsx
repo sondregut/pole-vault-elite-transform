@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
-import { Instagram } from "lucide-react";
+import { Instagram, FileDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Label } from "@/components/ui/label";
 
@@ -13,7 +12,48 @@ const ComingSoon = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const { toast } = useToast();
+
+  const handleDownload = () => {
+    setIsDownloading(true);
+    
+    const pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iYzM0YmFkZS00NGI0LTRlNmYtOWQ3ZS0wMDI0ZThlNDBiNWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0ODUyODg4MCwiZXhwIjoxOTA2MjA4ODgwfQ.UKbGcR89BZpQDVcRFRLRWXHeg5D3I3ik7l55Sn1mKBw";
+    const fileName = "Best Pole Vault Drills.pdf";
+    
+    // Create a hidden anchor element and click it
+    const a = document.createElement('a');
+    a.href = pdfUrl;
+    a.download = fileName;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    
+    // Add event listeners to track download completion
+    a.addEventListener('error', () => {
+      toast({
+        title: "Download failed",
+        description: "Failed to download the PDF. Please try again.",
+        variant: "destructive",
+      });
+      setIsDownloading(false);
+      document.body.removeChild(a);
+    });
+    
+    // Use timeout as a fallback since download success isn't reliably detectable
+    setTimeout(() => {
+      setIsDownloading(false);
+      toast({
+        title: "Download started",
+        description: "Your PDF download has been initiated.",
+      });
+      if (document.body.contains(a)) {
+        document.body.removeChild(a);
+      }
+    }, 3000);
+    
+    a.click();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,10 +82,7 @@ const ComingSoon = () => {
           throw error;
         }
       } else {
-        toast({
-          title: "Success!",
-          description: "You've been added to the waitlist. We'll notify you when we launch.",
-        });
+        setShowThankYou(true);
         
         // Trigger the sync to Beehiiv in the background
         try {
@@ -72,6 +109,70 @@ const ComingSoon = () => {
       setIsLoading(false);
     }
   };
+
+  if (showThankYou) {
+    return (
+      <div className="min-h-screen bg-[#0F1116] text-white flex flex-col justify-center">
+        <div className="container mx-auto px-4 py-24 max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <div className="mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Thanks for signing up for the PVT Waitlist!
+              </h1>
+              <p className="text-xl text-gray-300 mb-8">
+                We'll let you know as soon as the app is live. In the meantime here is a free PDF of some of my favorite pole vault drills if interested.
+              </p>
+              
+              <Button 
+                onClick={handleDownload}
+                disabled={isDownloading}
+                className="bg-primary hover:bg-primary/90 text-white mb-8"
+                size="lg"
+              >
+                {isDownloading ? (
+                  <>Downloading...</>
+                ) : (
+                  <>
+                    <FileDown className="mr-2 h-4 w-4" />
+                    Download Free Pole Vault Drills PDF
+                  </>
+                )}
+              </Button>
+              
+              <div className="mt-8">
+                <Button 
+                  onClick={() => setShowThankYou(false)}
+                  variant="outline"
+                  className="border-white text-white hover:bg-white hover:text-black"
+                >
+                  Back to Waitlist
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+        
+        <footer className="py-6 mt-auto">
+          <div className="container mx-auto text-center">
+            <a 
+              href="https://www.instagram.com/g_forcetraining/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              aria-label="Follow us on Instagram"
+            >
+              <Instagram className="w-6 h-6 text-white" />
+            </a>
+          </div>
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0F1116] text-white flex flex-col justify-center">
