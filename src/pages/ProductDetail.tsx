@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -6,15 +5,15 @@ import Footer from "@/components/Footer";
 import { products } from "@/data/products";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
-import { ExternalLink } from "lucide-react";
-import FreeDownloadForm from "@/components/FreeDownloadForm";
+import { ExternalLink, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const product = products.find(p => p.id === Number(productId));
   const { addToCart } = useCart();
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const [showFreeDownloadForm, setShowFreeDownloadForm] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   if (!product) {
     return (
@@ -68,11 +67,22 @@ const ProductDetail = () => {
   };
 
   const handleFreeDownload = () => {
-    setShowFreeDownloadForm(true);
-  };
-
-  const handleFreeDownloadSuccess = () => {
-    setShowFreeDownloadForm(false);
+    setIsDownloading(true);
+    
+    // Use public URL instead of signed URL
+    const publicDownloadUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
+    
+    const a = document.createElement('a');
+    a.href = publicDownloadUrl;
+    a.download = "Best Pole Vault Drills.pdf";
+    document.body.appendChild(a);
+    
+    setTimeout(() => {
+      a.click();
+      document.body.removeChild(a);
+      setIsDownloading(false);
+      toast.success("Your free PDF is being downloaded!");
+    }, 100);
   };
 
   // Related products data
@@ -477,47 +487,33 @@ const ProductDetail = () => {
                 {product.id === 3 && <p className="mb-4">Instant PDF Download</p>}
                 {product.id === 13 && <p className="mb-4">Free PDF Download</p>}
 
-                {/* Show form for Best Pole Vault Drills (id 13) if form is active */}
-                {product.id === 13 && showFreeDownloadForm ? (
-                  <div className="mb-6">
-                    <FreeDownloadForm
-                      productId={product.id}
-                      productName={product.name}
-                      onSuccess={handleFreeDownloadSuccess}
-                      downloadUrl="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf"
-                      fileName="Best Pole Vault Drills.pdf"
-                    />
-                    <Button 
-                      variant="outline" 
-                      className="w-full mt-4"
-                      onClick={() => setShowFreeDownloadForm(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                ) : (
-                  <>
-                    {product.externalLink ? (
-                      <Button asChild className="w-full">
-                        <a href={product.externalLink} target="_blank" rel="noopener noreferrer">
-                          {product.category === "training" ? "Buy Now" : "Apply Now"}
-                        </a>
-                      </Button>
-                    ) : product.comingSoon ? (
-                      <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700">
-                        Coming Soon
-                      </Button>
-                    ) : product.id === 13 ? (
-                      <Button 
-                        className="w-full bg-green-600 hover:bg-green-700"
-                        onClick={handleFreeDownload}
-                      >
-                        Get Free Download
-                      </Button>
+                {product.externalLink ? (
+                  <Button asChild className="w-full">
+                    <a href={product.externalLink} target="_blank" rel="noopener noreferrer">
+                      {product.category === "training" ? "Buy Now" : "Apply Now"}
+                    </a>
+                  </Button>
+                ) : product.comingSoon ? (
+                  <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700">
+                    Coming Soon
+                  </Button>
+                ) : product.id === 13 ? (
+                  <Button 
+                    className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center gap-2"
+                    onClick={handleFreeDownload}
+                    disabled={isDownloading}
+                  >
+                    {isDownloading ? (
+                      "Downloading..."
                     ) : (
-                      <Button className="w-full" onClick={handleAddToCart}>Add To Cart</Button>
+                      <>
+                        <Download className="h-4 w-4" />
+                        Download Free
+                      </>
                     )}
-                  </>
+                  </Button>
+                ) : (
+                  <Button className="w-full" onClick={handleAddToCart}>Add To Cart</Button>
                 )}
               </div>
             </div>
