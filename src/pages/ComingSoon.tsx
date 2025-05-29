@@ -129,21 +129,24 @@ const ComingSoon = () => {
                 We'll let you know as soon as the app is live. In the meantime here is a free PDF of some of my favorite pole vault drills if interested.
               </p>
               
-              <Button 
-                onClick={handleDownload}
-                disabled={isDownloading}
-                className="bg-primary hover:bg-primary/90 text-white mb-8"
-                size="lg"
-              >
-                {isDownloading ? (
-                  <>Downloading...</>
-                ) : (
-                  <>
-                    <FileDown className="mr-2 h-4 w-4" />
-                    Download Free Pole Vault Drills PDF
-                  </>
-                )}
-              </Button>
+              <div className="mb-8">
+                <p className="text-2xl text-white mb-4">Here is your free PDF</p>
+                <Button 
+                  onClick={handleDownload}
+                  disabled={isDownloading}
+                  className="bg-primary hover:bg-primary/90 text-white"
+                  size="lg"
+                >
+                  {isDownloading ? (
+                    <>Downloading...</>
+                  ) : (
+                    <>
+                      <FileDown className="mr-2 h-4 w-4" />
+                      Download Now
+                    </>
+                  )}
+                </Button>
+              </div>
               
               <div className="mt-8">
                 <Button 
