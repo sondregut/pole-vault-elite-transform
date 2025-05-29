@@ -19,12 +19,15 @@ type CartContextType = {
   clearCart: (showToast?: boolean) => void;
   getCartTotal: () => number;
   getItemCount: () => number;
+  showCartSheet: boolean;
+  setShowCartSheet: (show: boolean) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [showCartSheet, setShowCartSheet] = useState(false);
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -55,10 +58,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex].quantity += item.quantity;
         toast.success(`${item.name} quantity updated in cart`);
+        setShowCartSheet(true);
         return updatedItems;
       } else {
         // If item doesn't exist, add to cart
         toast.success(`${item.name} added to cart`);
+        setShowCartSheet(true);
         return [...prevItems, item];
       }
     });
@@ -118,7 +123,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateQuantity,
         clearCart,
         getCartTotal,
-        getItemCount
+        getItemCount,
+        showCartSheet,
+        setShowCartSheet
       }}
     >
       {children}
