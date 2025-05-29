@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,6 @@ import { useCart } from "@/context/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Download, FileDown, CheckCircle, ExternalLink } from "lucide-react";
-import FreeDownloadForm from "@/components/FreeDownloadForm";
 
 const CheckoutSuccess = () => {
   const { clearCart } = useCart();
@@ -16,7 +16,6 @@ const CheckoutSuccess = () => {
   const [hasJumpersKneeProtocol, setHasJumpersKneeProtocol] = useState(false);
   const [hasPoleVaultDrills, setHasPoleVaultDrills] = useState(false);
   const [isDownloading, setIsDownloading] = useState<Record<string, boolean>>({});
-  const [showFreeDownloadForm, setShowFreeDownloadForm] = useState(false);
   
   // Only clear cart if there's a session_id parameter (indicating successful Stripe checkout)
   useEffect(() => {
@@ -71,7 +70,7 @@ const CheckoutSuccess = () => {
       pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/Jumper%20Knee%20Protocol%20.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0p1bXBlciBLbmVlIFByb3RvY29sIC5wZGYiLCJpYXQiOjE3NDY1MDExMzksImV4cCI6MjA2MTg2MTEzOX0.VReJcr2d90Av7LHa31owYY-q8fk-6DDP5whzq3-7HmM";
       fileName = "Jumpers Knee Protocol.pdf";
     } else if (type === 'poleVaultDrills') {
-      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0NGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw";
+      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
       fileName = "Best Pole Vault Drills.pdf";
     }
     
@@ -99,10 +98,6 @@ const CheckoutSuccess = () => {
     }, 3000);
     
     a.click();
-  };
-
-  const handleFreeDownloadSuccess = () => {
-    setShowFreeDownloadForm(false);
   };
 
   const relatedProducts = [
@@ -199,27 +194,6 @@ const CheckoutSuccess = () => {
                     Access Your Downloads
                   </Button>
                 </Link>
-              )}
-              
-              {/* Free product download - now with form */}
-              {!showFreeDownloadForm ? (
-                <Button 
-                  onClick={() => setShowFreeDownloadForm(true)} 
-                  className="w-full mb-3 bg-primary text-white flex items-center justify-center gap-2"
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  Get Free Pole Vault Drills
-                </Button>
-              ) : (
-                <div className="mb-6">
-                  <FreeDownloadForm
-                    productId={13}
-                    productName="Best Pole Vault Drills"
-                    onSuccess={handleFreeDownloadSuccess}
-                    downloadUrl="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0NGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0NjUwMTQ5NiwiZXhwIjoyMDYxODYxNDk2fQ.Hg8Uob-9MeKRkjlsLqp937w2yYb3PCiNwB8lHn41Cnw"
-                    fileName="Best Pole Vault Drills.pdf"
-                  />
-                </div>
               )}
               
               <Link to="/shop">

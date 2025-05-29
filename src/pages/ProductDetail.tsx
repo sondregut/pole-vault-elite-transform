@@ -5,15 +5,13 @@ import Footer from "@/components/Footer";
 import { products } from "@/data/products";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
-import { ExternalLink, Download } from "lucide-react";
-import { toast } from "sonner";
+import { ExternalLink } from "lucide-react";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const product = products.find(p => p.id === Number(productId));
   const { addToCart } = useCart();
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const [isDownloading, setIsDownloading] = useState(false);
 
   if (!product) {
     return (
@@ -64,25 +62,6 @@ const ProductDetail = () => {
       quantity: 1,
       option: selectedOption || undefined
     });
-  };
-
-  const handleFreeDownload = () => {
-    setIsDownloading(true);
-    
-    // Use public URL instead of signed URL
-    const publicDownloadUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
-    
-    const a = document.createElement('a');
-    a.href = publicDownloadUrl;
-    a.download = "Best Pole Vault Drills.pdf";
-    document.body.appendChild(a);
-    
-    setTimeout(() => {
-      a.click();
-      document.body.removeChild(a);
-      setIsDownloading(false);
-      toast.success("Your free PDF is being downloaded!");
-    }, 100);
   };
 
   // Related products data
@@ -384,8 +363,43 @@ const ProductDetail = () => {
     </div>
   ) : null;
 
+  // Best Pole Vault Drills specific content
+  const poleVaultDrillsContent = product.id === 13 ? (
+    <div className="mt-12 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">Best Pole Vault Drills</h2>
+      <p className="mb-6">
+        A comprehensive collection of the most effective pole vault drills compiled by elite pole vaulter and coach Sondre Guttormsen. This free resource focuses on key vault aspects including run-up, plant, takeoff, and swing techniques.
+      </p>
+      
+      <h3 className="text-xl font-bold mt-8 mb-3">What You'll Get</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Essential pole vault drills for all skill levels</li>
+        <li>Step-by-step technique breakdown</li>
+        <li>Run-up and approach optimization</li>
+        <li>Plant and takeoff mechanics</li>
+        <li>Swing and bar clearance techniques</li>
+        <li>Expert tips from Olympic-level experience</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Perfect For</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Pole vault athletes at any level</li>
+        <li>Coaches looking for proven drill progressions</li>
+        <li>Athletes wanting to improve their technique</li>
+        <li>Teams seeking structured practice methods</li>
+      </ul>
+
+      <div className="bg-green-50 p-6 rounded-lg mt-8">
+        <h3 className="text-xl font-bold mb-3 text-green-800">Free Download</h3>
+        <p className="text-green-700">
+          Complete the checkout process to receive your free PDF download. No payment required - just add to cart and proceed through checkout to get instant access.
+        </p>
+      </div>
+    </div>
+  ) : null;
+
   // Generic content for other products
-  const genericContent = !jumpersKneeContent && !videoReviewContent && !zoomConsultationContent && !onlineCoachingContent && !flightModeContent ? (
+  const genericContent = !jumpersKneeContent && !videoReviewContent && !zoomConsultationContent && !onlineCoachingContent && !flightModeContent && !poleVaultDrillsContent ? (
     <div className="mt-12 bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Product Description</h2>
       <p className="mb-6">
@@ -485,7 +499,7 @@ const ProductDetail = () => {
                 )}
 
                 {product.id === 3 && <p className="mb-4">Instant PDF Download</p>}
-                {product.id === 13 && <p className="mb-4">Free PDF Download</p>}
+                {product.id === 13 && <p className="mb-4">Free PDF Download - Complete checkout to receive</p>}
 
                 {product.externalLink ? (
                   <Button asChild className="w-full">
@@ -497,23 +511,10 @@ const ProductDetail = () => {
                   <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700">
                     Coming Soon
                   </Button>
-                ) : product.id === 13 ? (
-                  <Button 
-                    className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center gap-2"
-                    onClick={handleFreeDownload}
-                    disabled={isDownloading}
-                  >
-                    {isDownloading ? (
-                      "Downloading..."
-                    ) : (
-                      <>
-                        <Download className="h-4 w-4" />
-                        Download Free
-                      </>
-                    )}
-                  </Button>
                 ) : (
-                  <Button className="w-full" onClick={handleAddToCart}>Add To Cart</Button>
+                  <Button className="w-full" onClick={handleAddToCart}>
+                    {product.price === "$0.00" ? "Get Free" : "Add To Cart"}
+                  </Button>
                 )}
               </div>
             </div>
@@ -524,6 +525,7 @@ const ProductDetail = () => {
             {videoReviewContent}
             {zoomConsultationContent}
             {onlineCoachingContent}
+            {poleVaultDrillsContent}
             {genericContent}
 
             {/* You May Also Like Section */}

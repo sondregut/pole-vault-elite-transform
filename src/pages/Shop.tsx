@@ -8,7 +8,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
-import { Download } from "lucide-react";
 import { toast } from "sonner";
 
 const Shop = () => {
@@ -18,8 +17,6 @@ const Shop = () => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   // State for selected options
   const [selectedOptions, setSelectedOptions] = useState<Record<number, string>>({});
-  // State for download tracking
-  const [isDownloading, setIsDownloading] = useState<Record<number, boolean>>({});
 
   // Categories - removed "apparel" and "printful"
   const categories = [
@@ -60,29 +57,6 @@ const Shop = () => {
       quantity: 1,
       option: product.hasOptions ? selectedOptions[product.id] : undefined
     });
-  };
-
-  // Handle direct download for free products
-  const handleFreeDownload = (e: React.MouseEvent, product: any) => {
-    e.stopPropagation();
-    
-    setIsDownloading(prev => ({ ...prev, [product.id]: true }));
-    
-    // Use public URL instead of signed URL
-    const publicDownloadUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
-    
-    const a = document.createElement('a');
-    a.href = publicDownloadUrl;
-    a.download = "Best Pole Vault Drills.pdf";
-    document.body.appendChild(a);
-    
-    // Use timeout as a fallback since download success isn't reliably detectable
-    setTimeout(() => {
-      a.click();
-      document.body.removeChild(a);
-      setIsDownloading(prev => ({ ...prev, [product.id]: false }));
-      toast.success("Your free PDF is being downloaded!");
-    }, 100);
   };
   
   // Handle option change
@@ -176,23 +150,10 @@ const Shop = () => {
                       <Button disabled className="w-full bg-gray-300 hover:bg-gray-300 text-gray-700" onClick={(e) => e.stopPropagation()}>
                         Coming Soon
                       </Button>
-                    ) : product.price === "$0.00" ? (
-                      <Button 
-                        className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center gap-2" 
-                        onClick={(e) => handleFreeDownload(e, product)}
-                        disabled={isDownloading[product.id]}
-                      >
-                        {isDownloading[product.id] ? (
-                          "Downloading..."
-                        ) : (
-                          <>
-                            <Download className="h-4 w-4" />
-                            Download Free
-                          </>
-                        )}
-                      </Button>
                     ) : (
-                      <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</Button>
+                      <Button className="w-full" onClick={(e) => handleAddToCart(e, product)}>
+                        {product.price === "$0.00" ? "Get Free" : "Add to Cart"}
+                      </Button>
                     )}
                   </CardFooter>
                 </Card>
