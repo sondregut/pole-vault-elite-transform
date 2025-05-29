@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ const CheckoutSuccess = () => {
   const [hasJumpersKneeProtocol, setHasJumpersKneeProtocol] = useState(false);
   const [hasPoleVaultDrills, setHasPoleVaultDrills] = useState(false);
   const [isDownloading, setIsDownloading] = useState<Record<string, boolean>>({});
+  const [autoDownloadTriggered, setAutoDownloadTriggered] = useState(false);
   
   // Only clear cart if there's a session_id parameter (indicating successful Stripe checkout)
   useEffect(() => {
@@ -54,11 +54,20 @@ const CheckoutSuccess = () => {
         );
         
         setHasPoleVaultDrills(hasPoleVaultDrills);
+
+        // Auto-download pole vault drills if present and not already triggered
+        if (hasPoleVaultDrills && !autoDownloadTriggered) {
+          setAutoDownloadTriggered(true);
+          // Small delay to ensure UI is ready
+          setTimeout(() => {
+            handleDownload('poleVaultDrills');
+          }, 1000);
+        }
       }
     };
     
     checkDigitalProducts();
-  }, [clearCart, searchParams]);
+  }, [clearCart, searchParams, autoDownloadTriggered]);
 
   const handleDownload = (type: string) => {
     setIsDownloading(prev => ({ ...prev, [type]: true }));
@@ -168,7 +177,7 @@ const CheckoutSuccess = () => {
               <div className="mb-6 p-4 bg-green-50 rounded-md">
                 <h2 className="text-lg font-medium text-green-800 mb-2">Best Pole Vault Drills</h2>
                 <p className="text-green-700 mb-3">
-                  Your Best Pole Vault Drills PDF is now ready for download.
+                  Your Best Pole Vault Drills PDF is downloading automatically. If it doesn't start, click the button below.
                 </p>
                 <Button 
                   onClick={() => handleDownload('poleVaultDrills')}
