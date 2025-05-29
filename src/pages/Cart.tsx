@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart, storePurchaseInfo } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
   const cartTotal = getCartTotal();
@@ -21,6 +20,9 @@ const Cart = () => {
       toast.error("Your cart is empty");
       return;
     }
+
+    // Store purchase info before processing
+    storePurchaseInfo();
 
     setIsProcessing(true);
 

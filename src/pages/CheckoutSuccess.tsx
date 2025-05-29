@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Download, FileDown, CheckCircle, ExternalLink } from "lucide-react";
 
 const CheckoutSuccess = () => {
-  const { clearCart } = useCart();
+  const { clearCart, getLastPurchaseInfo, clearPurchaseInfo } = useCart();
   const [searchParams] = useSearchParams();
   const [hasDigitalProducts, setHasDigitalProducts] = useState(false);
   const [hasJumpersKneeProtocol, setHasJumpersKneeProtocol] = useState(false);
@@ -17,7 +17,6 @@ const CheckoutSuccess = () => {
   const [isDownloading, setIsDownloading] = useState<Record<string, boolean>>({});
   const [autoDownloadTriggered, setAutoDownloadTriggered] = useState(false);
   
-  // Only clear cart if there's a session_id parameter (indicating successful Stripe checkout)
   useEffect(() => {
     const sessionId = searchParams.get('session_id');
     
@@ -26,48 +25,70 @@ const CheckoutSuccess = () => {
       clearCart(false);
     }
     
-    // Check if the user has digital products
-    const checkDigitalProducts = async () => {
-      const { data: session } = await supabase.auth.getSession();
+    // Check what was purchased from stored purchase info
+    const checkPurchasedItems = async () => {
+      const purchaseInfo = getLastPurchaseInfo();
+      console.log("Purchase info:", purchaseInfo);
       
-      if (session?.session?.user) {
-        const userId = session.session.user.id;
-        
-        // Check for any digital products
-        const { data: downloads } = await supabase
-          .from('user_downloads')
-          .select('id, product_files(product_id)')
-          .eq('user_id', userId);
-          
-        setHasDigitalProducts(downloads && downloads.length > 0);
-        
-        // Check specifically for Jumpers Knee Protocol (product ID 3)
-        const hasJumpersKnee = downloads?.some(
-          download => download.product_files?.product_id === 3
-        );
-        
+      if (purchaseInfo && purchaseInfo.length > 0) {
+        // Check for Jumpers Knee Protocol (product ID 3)
+        const hasJumpersKnee = purchaseInfo.some(item => item.id === 3);
         setHasJumpersKneeProtocol(hasJumpersKnee);
-
-        // Check specifically for Pole Vault Drills (product ID 13)
-        const hasPoleVaultDrills = downloads?.some(
-          download => download.product_files?.product_id === 13
-        );
         
-        setHasPoleVaultDrills(hasPoleVaultDrills);
-
+        // Check for Pole Vault Drills (product ID 13)
+        const hasPoleVault = purchaseInfo.some(item => item.id === 13);
+        setHasPoleVaultDrills(hasPoleVault);
+        
+        // Set hasDigitalProducts if either is present
+        const hasDigital = hasJumpersKnee || hasPoleVault;
+        setHasDigitalProducts(hasDigital);
+        
+        console.log("Has Jumpers Knee:", hasJumpersKnee);
+        console.log("Has Pole Vault:", hasPoleVault);
+        
         // Auto-download pole vault drills if present and not already triggered
-        if (hasPoleVaultDrills && !autoDownloadTriggered) {
+        if (hasPoleVault && !autoDownloadTriggered) {
           setAutoDownloadTriggered(true);
+          console.log("Auto-downloading pole vault drills");
           // Small delay to ensure UI is ready
           setTimeout(() => {
             handleDownload('poleVaultDrills');
           }, 1000);
         }
+        
+        // Clear purchase info after processing
+        clearPurchaseInfo();
+      } else {
+        // Fallback: check database for authenticated users
+        const { data: session } = await supabase.auth.getSession();
+        
+        if (session?.session?.user) {
+          const userId = session.session.user.id;
+          
+          const { data: downloads } = await supabase
+            .from('user_downloads')
+            .select('id, product_files(product_id)')
+            .eq('user_id', userId);
+            
+          setHasDigitalProducts(downloads && downloads.length > 0);
+          
+          const hasJumpersKnee = downloads?.some(
+            download => download.product_files?.product_id === 3
+          );
+          
+          setHasJumpersKneeProtocol(hasJumpersKnee);
+
+          const hasPoleVaultDrills = downloads?.some(
+            download => download.product_files?.product_id === 13
+          );
+          
+          setHasPoleVaultDrills(hasPoleVaultDrills);
+        }
       }
     };
     
-    checkDigitalProducts();
-  }, [clearCart, searchParams, autoDownloadTriggered]);
+    checkPurchasedItems();
+  }, [clearCart, searchParams, autoDownloadTriggered, getLastPurchaseInfo, clearPurchaseInfo]);
 
   const handleDownload = (type: string) => {
     setIsDownloading(prev => ({ ...prev, [type]: true }));
@@ -82,6 +103,8 @@ const CheckoutSuccess = () => {
       pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iYzM0YmFkZS00NGI0LTRlNmYtOWQ3ZS0wMDI0ZThlNDBiNWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0ODUyODg4MCwiZXhwIjoxOTA2MjA4ODgwfQ.UKbGcR89BZpQDVcRFRLRWXHeg5D3I3ik7l55Sn1mKBw";
       fileName = "Best Pole Vault Drills.pdf";
     }
+    
+    console.log(`Downloading ${fileName} from ${pdfUrl}`);
     
     // Create a hidden anchor element and click it
     const a = document.createElement('a');

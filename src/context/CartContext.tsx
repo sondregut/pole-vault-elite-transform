@@ -21,6 +21,9 @@ type CartContextType = {
   getItemCount: () => number;
   showCartSheet: boolean;
   setShowCartSheet: (show: boolean) => void;
+  storePurchaseInfo: () => void;
+  getLastPurchaseInfo: () => CartItem[] | null;
+  clearPurchaseInfo: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -95,6 +98,27 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
+  const storePurchaseInfo = () => {
+    localStorage.setItem("lastPurchase", JSON.stringify(cartItems));
+  };
+
+  const getLastPurchaseInfo = (): CartItem[] | null => {
+    const stored = localStorage.getItem("lastPurchase");
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (error) {
+        console.error("Failed to parse purchase info", error);
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const clearPurchaseInfo = () => {
+    localStorage.removeItem("lastPurchase");
+  };
+
   const clearCart = (showToast: boolean = true) => {
     setCartItems([]);
     if (showToast) {
@@ -125,7 +149,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         getCartTotal,
         getItemCount,
         showCartSheet,
-        setShowCartSheet
+        setShowCartSheet,
+        storePurchaseInfo,
+        getLastPurchaseInfo,
+        clearPurchaseInfo
       }}
     >
       {children}
