@@ -84,6 +84,6 @@ export const products = [
     category: "training",
     hasOptions: false,
     options: [],
-    description: "A comprehensive collection of the most effective pole vault drills compiled by elite pole vaulter and coach Sondre Guttormsen. Focus on key vault aspects including run-up, plant, takeoff, and swing techniques. Perfect for athletes and coaches looking to improve technical performance."
+    description: "Some of Sondre's favorite and most used Pole vault drills. Feel free to dm @sondre_pv on instagram with any questions."
   }
 ];

@@ -94,79 +94,77 @@ const ProductDetail = () => {
 
   // Special content for Jumpers Knee Protocol
   const jumpersKneeContent = product.id === 3 ? (
-    <>
-      <div className="mt-12 bg-white p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-bold mb-4">Jumper's Knee Protocol</h2>
-        <p className="mb-6">
-          Are you struggling with persistent knee pain that won't go away? Traditional treatments often fail because they treat jumper's knee as an inflammation issue - but modern research shows this isn't true. This comprehensive rehabilitation protocol, designed by elite pole vaulter and coach Sondre Guttormsen, provides a proven, science-based approach to finally overcome patellar tendinopathy and return to peak performance.
-        </p>
+    <div className="mt-12 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">Jumper's Knee Protocol</h2>
+      <p className="mb-6">
+        Are you struggling with persistent knee pain that won't go away? Traditional treatments often fail because they treat jumper's knee as an inflammation issue - but modern research shows this isn't true. This comprehensive rehabilitation protocol, designed by elite pole vaulter and coach Sondre Guttormsen, provides a proven, science-based approach to finally overcome patellar tendinopathy and return to peak performance.
+      </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-3">Why Traditional Treatments Fail</h3>
-        <p className="mb-6">
-          Most conventional approaches treat jumper's knee as "patellar tendinitis," focusing on reducing inflammation through rest and ice. Modern research shows this understanding is outdated, which is why these methods rarely provide lasting relief. This protocol is built on the latest scientific understanding of tendon rehabilitation.
-        </p>
+      <h3 className="text-xl font-bold mt-8 mb-3">Why Traditional Treatments Fail</h3>
+      <p className="mb-6">
+        Most conventional approaches treat jumper's knee as "patellar tendinitis," focusing on reducing inflammation through rest and ice. Modern research shows this understanding is outdated, which is why these methods rarely provide lasting relief. This protocol is built on the latest scientific understanding of tendon rehabilitation.
+      </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-3">What You'll Get</h3>
-        <ul className="list-disc pl-6 mb-6 space-y-2">
-          <li>Complete 3-stage rehabilitation program</li>
-          <li>Daily exercise protocols with clear progressions</li>
-          <li>Pain monitoring guidelines</li>
-          <li>Sport-specific return-to-play protocols</li>
-          <li>Strength training programs</li>
-          <li>Supplementation recommendations</li>
-        </ul>
+      <h3 className="text-xl font-bold mt-8 mb-3">What You'll Get</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Complete 3-stage rehabilitation program</li>
+        <li>Daily exercise protocols with clear progressions</li>
+        <li>Pain monitoring guidelines</li>
+        <li>Sport-specific return-to-play protocols</li>
+        <li>Strength training programs</li>
+        <li>Supplementation recommendations</li>
+      </ul>
 
-        <h3 className="text-xl font-bold mt-8 mb-3">The Three-Stage Approach</h3>
-        <ol className="list-decimal pl-6 mb-6 space-y-4">
-          <li>
-            <span className="font-bold">Foundation Building</span>
-            <p>Master isometric loading techniques</p>
-          </li>
-          <li>
-            <span className="font-bold">Strength Development</span>
-            <p>Progress through heavy slow resistance training</p>
-          </li>
-          <li>
-            <span className="font-bold">Performance Return</span>
-            <p>Gradually reintegrate jumping and sport-specific movements</p>
-          </li>
-        </ol>
+      <h3 className="text-xl font-bold mt-8 mb-3">The Three-Stage Approach</h3>
+      <ol className="list-decimal pl-6 mb-6 space-y-4">
+        <li>
+          <span className="font-bold">Foundation Building</span>
+          <p>Master isometric loading techniques</p>
+        </li>
+        <li>
+          <span className="font-bold">Strength Development</span>
+          <p>Progress through heavy slow resistance training</p>
+        </li>
+        <li>
+          <span className="font-bold">Performance Return</span>
+          <p>Gradually reintegrate jumping and sport-specific movements</p>
+        </li>
+      </ol>
 
-        <h3 className="text-xl font-bold mt-8 mb-3">Perfect For</h3>
-        <ul className="list-disc pl-6 mb-6 space-y-2">
-          <li>Track and field athletes</li>
-          <li>Jumpers and volleyball players</li>
-          <li>Basketball players</li>
-          <li>Any athlete experiencing knee pain from jumping activities</li>
-          <li>Coaches working with athletes recovering from patellar tendinopathy</li>
-        </ul>
+      <h3 className="text-xl font-bold mt-8 mb-3">Perfect For</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Track and field athletes</li>
+        <li>Jumpers and volleyball players</li>
+        <li>Basketball players</li>
+        <li>Any athlete experiencing knee pain from jumping activities</li>
+        <li>Coaches working with athletes recovering from patellar tendinopathy</li>
+      </ul>
 
-        <h3 className="text-xl font-bold mt-8 mb-3">Expert-Crafted Content</h3>
-        <p className="mb-6">
-          Created by Sondre Guttormsen, this protocol combines practical experience from elite athletics with evidence-based rehabilitation principles. Each exercise, progression, and guideline has been carefully selected to optimize recovery while minimizing setbacks.
-        </p>
+      <h3 className="text-xl font-bold mt-8 mb-3">Expert-Crafted Content</h3>
+      <p className="mb-6">
+        Created by Sondre Guttormsen, this protocol combines practical experience from elite athletics with evidence-based rehabilitation principles. Each exercise, progression, and guideline has been carefully selected to optimize recovery while minimizing setbacks.
+      </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-3">What to Expect</h3>
-        <ul className="list-disc pl-6 mb-6 space-y-2">
-          <li>3-12 month structured recovery timeline</li>
-          <li>Clear progression markers</li>
-          <li>Daily exercise protocols</li>
-          <li>Strength training programs</li>
-          <li>Return-to-sport guidelines</li>
-          <li>Recovery optimization tips</li>
-          <li>Nutrition and supplement guidance</li>
-          <li>Red flag indicators to prevent setbacks</li>
-          <li>Exercise modification options</li>
-        </ul>
+      <h3 className="text-xl font-bold mt-8 mb-3">What to Expect</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>3-12 month structured recovery timeline</li>
+        <li>Clear progression markers</li>
+        <li>Daily exercise protocols</li>
+        <li>Strength training programs</li>
+        <li>Return-to-sport guidelines</li>
+        <li>Recovery optimization tips</li>
+        <li>Nutrition and supplement guidance</li>
+        <li>Red flag indicators to prevent setbacks</li>
+        <li>Exercise modification options</li>
+      </ul>
 
-        <p className="mb-6">
-          Take control of your recovery today with this comprehensive rehabilitation protocol.
-        </p>
-        <p className="mb-6">
-          Whether you're dealing with acute symptoms or chronic tendon issues, this program provides the structure and guidance needed for a successful return to sport.
-        </p>
-      </div>
-    </>
+      <p className="mb-6">
+        Take control of your recovery today with this comprehensive rehabilitation protocol.
+      </p>
+      <p className="mb-6">
+        Whether you're dealing with acute symptoms or chronic tendon issues, this program provides the structure and guidance needed for a successful return to sport.
+      </p>
+    </div>
   ) : null;
 
   // Flight Mode specific content
@@ -368,27 +366,9 @@ const ProductDetail = () => {
     <div className="mt-12 bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Best Pole Vault Drills</h2>
       <p className="mb-6">
-        A comprehensive collection of the most effective pole vault drills compiled by elite pole vaulter and coach Sondre Guttormsen. This free resource focuses on key vault aspects including run-up, plant, takeoff, and swing techniques.
+        Some of Sondre's favorite and most used Pole vault drills. Feel free to dm @sondre_pv on instagram with any questions.
       </p>
       
-      <h3 className="text-xl font-bold mt-8 mb-3">What You'll Get</h3>
-      <ul className="list-disc pl-6 mb-6 space-y-2">
-        <li>Essential pole vault drills for all skill levels</li>
-        <li>Step-by-step technique breakdown</li>
-        <li>Run-up and approach optimization</li>
-        <li>Plant and takeoff mechanics</li>
-        <li>Swing and bar clearance techniques</li>
-        <li>Expert tips from Olympic-level experience</li>
-      </ul>
-
-      <h3 className="text-xl font-bold mt-8 mb-3">Perfect For</h3>
-      <ul className="list-disc pl-6 mb-6 space-y-2">
-        <li>Pole vault athletes at any level</li>
-        <li>Coaches looking for proven drill progressions</li>
-        <li>Athletes wanting to improve their technique</li>
-        <li>Teams seeking structured practice methods</li>
-      </ul>
-
       <div className="bg-green-50 p-6 rounded-lg mt-8">
         <h3 className="text-xl font-bold mb-3 text-green-800">Free Download</h3>
         <p className="text-green-700">
