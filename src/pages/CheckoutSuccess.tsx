@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -45,16 +46,6 @@ const CheckoutSuccess = () => {
         
         console.log("Has Jumpers Knee:", hasJumpersKnee);
         console.log("Has Pole Vault:", hasPoleVault);
-        
-        // Auto-download pole vault drills if present and not already triggered
-        if (hasPoleVault && !autoDownloadTriggered) {
-          setAutoDownloadTriggered(true);
-          console.log("Auto-downloading pole vault drills");
-          // Small delay to ensure UI is ready
-          setTimeout(() => {
-            handleDownload('poleVaultDrills');
-          }, 1000);
-        }
         
         // Clear purchase info after processing
         clearPurchaseInfo();
@@ -173,15 +164,37 @@ const CheckoutSuccess = () => {
               Thank you for your purchase. Your order has been received and is now being processed.
             </p>
             
+            {/* Free PDF Download Section - Always visible for any purchase */}
+            <div className="mb-6 p-4 bg-blue-50 rounded-md border-2 border-blue-200">
+              <h2 className="text-lg font-medium text-blue-800 mb-2">🎁 Free Bonus: Best Pole Vault Drills</h2>
+              <p className="text-blue-700 mb-3">
+                As a thank you for your purchase, here's your free PDF with the best pole vault drills!
+              </p>
+              <Button 
+                onClick={() => handleDownload('poleVaultDrills')}
+                className="w-full mb-3 bg-blue-600 hover:bg-blue-700"
+                disabled={isDownloading['poleVaultDrills']}
+              >
+                {isDownloading['poleVaultDrills'] ? (
+                  <>Downloading...</>
+                ) : (
+                  <>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Free PDF - Best Pole Vault Drills
+                  </>
+                )}
+              </Button>
+            </div>
+
             {hasJumpersKneeProtocol && (
-              <div className="mb-6 p-4 bg-blue-50 rounded-md">
-                <h2 className="text-lg font-medium text-blue-800 mb-2">Jumpers Knee Protocol</h2>
-                <p className="text-blue-700 mb-3">
+              <div className="mb-6 p-4 bg-green-50 rounded-md">
+                <h2 className="text-lg font-medium text-green-800 mb-2">Jumpers Knee Protocol</h2>
+                <p className="text-green-700 mb-3">
                   Your Jumpers Knee Protocol PDF is now ready for download.
                 </p>
                 <Button 
                   onClick={() => handleDownload('jumpersKnee')}
-                  className="w-full mb-3 bg-blue-600 hover:bg-blue-700"
+                  className="w-full mb-3 bg-green-600 hover:bg-green-700"
                   disabled={isDownloading['jumpersKnee']}
                 >
                   {isDownloading['jumpersKnee'] ? (
@@ -190,29 +203,6 @@ const CheckoutSuccess = () => {
                     <>
                       <FileDown className="mr-2 h-4 w-4" />
                       Download Jumpers Knee Protocol PDF
-                    </>
-                  )}
-                </Button>
-              </div>
-            )}
-
-            {hasPoleVaultDrills && (
-              <div className="mb-6 p-4 bg-green-50 rounded-md">
-                <h2 className="text-lg font-medium text-green-800 mb-2">Best Pole Vault Drills</h2>
-                <p className="text-green-700 mb-3">
-                  Your Best Pole Vault Drills PDF is downloading automatically. If it doesn't start, click the button below.
-                </p>
-                <Button 
-                  onClick={() => handleDownload('poleVaultDrills')}
-                  className="w-full mb-3 bg-green-600 hover:bg-green-700"
-                  disabled={isDownloading['poleVaultDrills']}
-                >
-                  {isDownloading['poleVaultDrills'] ? (
-                    <>Downloading...</>
-                  ) : (
-                    <>
-                      <FileDown className="mr-2 h-4 w-4" />
-                      Download Best Pole Vault Drills PDF
                     </>
                   )}
                 </Button>
@@ -237,45 +227,43 @@ const CheckoutSuccess = () => {
           </div>
 
           {/* You May Also Like Section */}
-          {(hasPoleVaultDrills || !hasDigitalProducts) && (
-            <div className="max-w-4xl mx-auto mt-12">
-              <h2 className="text-2xl font-bold text-gray-800 mb-8">You May Also Like</h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                {relatedProducts.map((product) => (
-                  <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="h-48 overflow-hidden">
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg mb-2">{product.name}</h3>
-                      <p className="text-gray-600 text-sm mb-3">{product.description}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-primary font-bold text-lg">{product.price}</span>
-                        {product.link.startsWith('http') ? (
-                          <Button asChild size="sm">
-                            <a href={product.link} target="_blank" rel="noopener noreferrer">
-                              View Program
-                              <ExternalLink className="ml-1 h-3 w-3" />
-                            </a>
-                          </Button>
-                        ) : (
-                          <Button asChild size="sm">
-                            <Link to={product.link}>
-                              View Details
-                            </Link>
-                          </Button>
-                        )}
-                      </div>
+          <div className="max-w-4xl mx-auto mt-12">
+            <h2 className="text-2xl font-bold text-gray-800 mb-8">You May Also Like</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {relatedProducts.map((product) => (
+                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <div className="h-48 overflow-hidden">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg mb-2">{product.name}</h3>
+                    <p className="text-gray-600 text-sm mb-3">{product.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-primary font-bold text-lg">{product.price}</span>
+                      {product.link.startsWith('http') ? (
+                        <Button asChild size="sm">
+                          <a href={product.link} target="_blank" rel="noopener noreferrer">
+                            View Program
+                            <ExternalLink className="ml-1 h-3 w-3" />
+                          </a>
+                        </Button>
+                      ) : (
+                        <Button asChild size="sm">
+                          <Link to={product.link}>
+                            View Details
+                          </Link>
+                        </Button>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       </div>
       <Footer />
