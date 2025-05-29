@@ -79,7 +79,7 @@ const CheckoutSuccess = () => {
       pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/Jumper%20Knee%20Protocol%20.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2JjMzRiYWRlLTQ0YjQtNGU2Zi05ZDdlLTAwMjRlOGU0MGI1YyJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0p1bXBlciBLbmVlIFByb3RvY29sIC5wZGYiLCJpYXQiOjE3NDY1MDExMzksImV4cCI6MjA2MTg2MTEzOX0.VReJcr2d90Av7LHa31owYY-q8fk-6DDP5whzq3-7HmM";
       fileName = "Jumpers Knee Protocol.pdf";
     } else if (type === 'poleVaultDrills') {
-      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
+      pdfUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/sign/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iYzM0YmFkZS00NGI0LTRlNmYtOWQ3ZS0wMDI0ZThlNDBiNWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLXByb2R1Y3RzL0JFU1QgUE9MRSBWQVVMVCBEUklMTFMgU29uZHJlLnBkZiIsImlhdCI6MTc0ODUyODg4MCwiZXhwIjoxOTA2MjA4ODgwfQ.UKbGcR89BZpQDVcRFRLRWXHeg5D3I3ik7l55Sn1mKBw";
       fileName = "Best Pole Vault Drills.pdf";
     }
     
