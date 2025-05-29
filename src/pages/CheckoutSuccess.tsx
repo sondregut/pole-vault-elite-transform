@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Download, FileDown, CheckCircle, ExternalLink } from "lucide-react";
+import { FileDown, CheckCircle, ExternalLink } from "lucide-react";
 
 const CheckoutSuccess = () => {
   const { clearCart, getLastPurchaseInfo, clearPurchaseInfo } = useCart();
@@ -163,28 +162,6 @@ const CheckoutSuccess = () => {
             <p className="text-gray-600 mb-6">
               Thank you for your purchase. Your order has been received and is now being processed.
             </p>
-            
-            {/* Free PDF Download Section - Always visible for any purchase */}
-            <div className="mb-6 p-4 bg-blue-50 rounded-md border-2 border-blue-200">
-              <h2 className="text-lg font-medium text-blue-800 mb-2">🎁 Free Bonus: Best Pole Vault Drills</h2>
-              <p className="text-blue-700 mb-3">
-                As a thank you for your purchase, here's your free PDF with the best pole vault drills!
-              </p>
-              <Button 
-                onClick={() => handleDownload('poleVaultDrills')}
-                className="w-full mb-3 bg-blue-600 hover:bg-blue-700"
-                disabled={isDownloading['poleVaultDrills']}
-              >
-                {isDownloading['poleVaultDrills'] ? (
-                  <>Downloading...</>
-                ) : (
-                  <>
-                    <Download className="mr-2 h-4 w-4" />
-                    Download Free PDF - Best Pole Vault Drills
-                  </>
-                )}
-              </Button>
-            </div>
 
             {hasJumpersKneeProtocol && (
               <div className="mb-6 p-4 bg-green-50 rounded-md">
