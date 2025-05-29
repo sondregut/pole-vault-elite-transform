@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -148,7 +149,7 @@ const ComingSoon = () => {
                 <Button 
                   onClick={() => setShowThankYou(false)}
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-black"
+                  className="border-white text-black hover:bg-white hover:text-black bg-white"
                 >
                   Back to Waitlist
                 </Button>
