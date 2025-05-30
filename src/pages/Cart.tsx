@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,12 +9,19 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import FreeDownloadForm from "@/components/FreeDownloadForm";
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart, storePurchaseInfo } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showFreeDownloadForm, setShowFreeDownloadForm] = useState(false);
+  const [freeProduct, setFreeProduct] = useState<any>(null);
   const navigate = useNavigate();
   const cartTotal = getCartTotal();
+
+  // Check if cart contains only free products
+  const hasFreeProductsOnly = cartItems.length > 0 && cartTotal === 0;
+  const hasPaidProducts = cartTotal > 0;
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
@@ -21,7 +29,17 @@ const Cart = () => {
       return;
     }
 
-    // Store purchase info before processing
+    // If cart has only free products, show download form for the first free product
+    if (hasFreeProductsOnly) {
+      const firstFreeProduct = cartItems.find(item => parseFloat(item.price.replace('$', '')) === 0);
+      if (firstFreeProduct) {
+        setFreeProduct(firstFreeProduct);
+        setShowFreeDownloadForm(true);
+        return;
+      }
+    }
+
+    // Store purchase info before processing paid products
     storePurchaseInfo();
 
     setIsProcessing(true);
@@ -57,6 +75,27 @@ const Cart = () => {
     }
   };
 
+  const handleFreeDownloadSuccess = () => {
+    setShowFreeDownloadForm(false);
+    setFreeProduct(null);
+    clearCart(false);
+    toast.success("Download completed! Check your downloads folder.");
+  };
+
+  const getFreeDownloadUrl = (productId: number) => {
+    if (productId === 13) { // Best Pole Vault Drills
+      return "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
+    }
+    return "";
+  };
+
+  const getFreeDownloadFileName = (productId: number) => {
+    if (productId === 13) { // Best Pole Vault Drills
+      return "Best Pole Vault Drills.pdf";
+    }
+    return "download.pdf";
+  };
+
   if (cartItems.length === 0) {
     return (
       <>
@@ -69,6 +108,47 @@ const Cart = () => {
               <Link to="/shop">
                 <Button>Continue Shopping</Button>
               </Link>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (showFreeDownloadForm && freeProduct) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen pt-24 pb-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-md mx-auto">
+              <div className="mb-6 text-center">
+                <h1 className="text-3xl font-bold mb-2">Free Download</h1>
+                <p className="text-gray-600">
+                  Get your free {freeProduct.name} by entering your details below
+                </p>
+              </div>
+              
+              <FreeDownloadForm
+                productId={freeProduct.id}
+                productName={freeProduct.name}
+                onSuccess={handleFreeDownloadSuccess}
+                downloadUrl={getFreeDownloadUrl(freeProduct.id)}
+                fileName={getFreeDownloadFileName(freeProduct.id)}
+              />
+              
+              <div className="mt-4 text-center">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setShowFreeDownloadForm(false);
+                    setFreeProduct(null);
+                  }}
+                >
+                  Back to Cart
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -158,12 +238,21 @@ const Cart = () => {
                     <span>${cartTotal.toFixed(2)}</span>
                   </div>
                 </div>
+                
+                {hasFreeProductsOnly && (
+                  <div className="mb-4 p-3 bg-green-50 rounded-md">
+                    <p className="text-sm text-green-700">
+                      🎉 This is a free download! Click below to get it.
+                    </p>
+                  </div>
+                )}
+                
                 <Button 
                   className="w-full mb-4" 
                   onClick={handleCheckout}
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Processing..." : "Proceed to Checkout"}
+                  {isProcessing ? "Processing..." : hasFreeProductsOnly ? "Get Free Download" : "Proceed to Checkout"}
                 </Button>
                 <Link to="/shop">
                   <Button variant="outline" className="w-full">
