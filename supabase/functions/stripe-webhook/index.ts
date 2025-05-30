@@ -62,7 +62,7 @@ serve(async (req) => {
 
       if (orderId) {
         // Update the order with payment status, fulfillment, and customer email
-        const { data, error } = await supabaseAdmin
+        const { data: orderData, error } = await supabaseAdmin
           .from('orders')
           .update({ 
             status: 'paid',
@@ -70,7 +70,8 @@ serve(async (req) => {
             customer_email: customerEmail
           })
           .eq('id', orderId)
-          .select();
+          .select()
+          .single();
 
         if (error) {
           console.error('Error updating order:', error);
@@ -78,7 +79,47 @@ serve(async (req) => {
         }
 
         console.log(`Order ${orderId} marked as paid and fulfilled with email: ${customerEmail}`);
-        console.log('Updated order data:', data);
+
+        // For digital products, create download records
+        const { data: orderItems, error: itemsError } = await supabaseAdmin
+          .from('order_items')
+          .select('product_id')
+          .eq('order_id', orderId);
+
+        if (itemsError) {
+          console.error('Error fetching order items:', itemsError);
+        } else if (orderItems && orderItems.length > 0) {
+          // Check if any of these products have digital files
+          const productIds = orderItems.map(item => item.product_id);
+          
+          const { data: productFiles, error: filesError } = await supabaseAdmin
+            .from('product_files')
+            .select('*')
+            .in('product_id', productIds);
+
+          if (filesError) {
+            console.error('Error fetching product files:', filesError);
+          } else if (productFiles && productFiles.length > 0) {
+            // Create user download records for each digital file
+            const downloadRecords = productFiles.map(file => ({
+              product_file_id: file.id,
+              order_id: orderId,
+              user_id: null, // Guest checkout, no user ID
+              download_count: 0,
+              downloaded_at: null
+            }));
+
+            const { error: downloadError } = await supabaseAdmin
+              .from('user_downloads')
+              .insert(downloadRecords);
+
+            if (downloadError) {
+              console.error('Error creating download records:', downloadError);
+            } else {
+              console.log(`Created ${downloadRecords.length} download records for order ${orderId}`);
+            }
+          }
+        }
       } else {
         console.log('No order_id found in session metadata, but still capturing email if available');
         
