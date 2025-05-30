@@ -55,18 +55,38 @@ serve(async (req) => {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const orderId = session.metadata?.order_id;
+      const customerEmail = session.customer_details?.email || session.customer_email;
+
+      console.log(`Processing checkout.session.completed for session: ${session.id}`);
+      console.log(`Order ID: ${orderId}, Customer Email: ${customerEmail}`);
 
       if (orderId) {
-        // Mark the order as paid and fulfilled
-        await supabaseAdmin
+        // Update the order with payment status, fulfillment, and customer email
+        const { data, error } = await supabaseAdmin
           .from('orders')
           .update({ 
             status: 'paid',
-            fulfilled: true 
+            fulfilled: true,
+            customer_email: customerEmail
           })
-          .eq('id', orderId);
+          .eq('id', orderId)
+          .select();
 
-        console.log(`Order ${orderId} marked as paid and fulfilled`);
+        if (error) {
+          console.error('Error updating order:', error);
+          throw error;
+        }
+
+        console.log(`Order ${orderId} marked as paid and fulfilled with email: ${customerEmail}`);
+        console.log('Updated order data:', data);
+      } else {
+        console.log('No order_id found in session metadata, but still capturing email if available');
+        
+        // If no order_id but we have customer email, we could still log this for tracking
+        if (customerEmail) {
+          console.log(`Checkout completed without order_id but captured email: ${customerEmail}`);
+          console.log(`Session ID: ${session.id}, Amount: ${session.amount_total}`);
+        }
       }
     }
 

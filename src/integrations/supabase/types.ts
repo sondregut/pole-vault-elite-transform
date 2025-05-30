@@ -85,6 +85,7 @@ export type Database = {
           amount: number
           created_at: string
           currency: string
+          customer_email: string | null
           fulfilled: boolean | null
           id: string
           status: string
@@ -97,6 +98,7 @@ export type Database = {
           amount: number
           created_at?: string
           currency?: string
+          customer_email?: string | null
           fulfilled?: boolean | null
           id?: string
           status?: string
@@ -109,6 +111,7 @@ export type Database = {
           amount?: number
           created_at?: string
           currency?: string
+          customer_email?: string | null
           fulfilled?: boolean | null
           id?: string
           status?: string
