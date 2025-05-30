@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Download } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface FreeDownloadFormProps {
   productId: number;
@@ -46,15 +47,25 @@ const FreeDownloadForm = ({
     setIsSubmitting(true);
     
     try {
-      // Use a public URL that doesn't require authentication
-      const publicDownloadUrl = "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/digital-products/BEST%20POLE%20VAULT%20DRILLS%20Sondre.pdf";
-      
-      // Simulate a brief delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Start the download
+      // Store the free download submission in the database
+      const { error: dbError } = await supabase
+        .from('free_download_submissions')
+        .insert({
+          product_id: productId,
+          product_name: productName,
+          name: formData.name,
+          email: formData.email,
+          downloaded_at: new Date().toISOString()
+        });
+
+      if (dbError) {
+        console.error('Database error:', dbError);
+        // Don't block the download for database errors, just log it
+      }
+
+      // Start the download immediately
       const a = document.createElement('a');
-      a.href = publicDownloadUrl;
+      a.href = downloadUrl;
       a.download = fileName;
       a.style.display = 'none';
       document.body.appendChild(a);
