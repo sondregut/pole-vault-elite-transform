@@ -17,6 +17,61 @@ const ComingSoon = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const { toast } = useToast();
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      // Add email to Supabase waitlist table
+      const { data, error } = await supabase
+        .from('waitlist')
+        .insert({ 
+          email, 
+          first_name: firstName, 
+          last_name: lastName,
+          synced_to_beehiiv: false // Track if this has been synced to Beehiiv
+        })
+        .select();
+      
+      if (error) {
+        if (error.code === '23505') {
+          // Unique constraint violation (email already exists)
+          toast({
+            title: "Already registered",
+            description: "This email is already on our waitlist.",
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        setShowThankYou(true);
+        
+        // Trigger the sync to Beehiiv in the background
+        try {
+          await supabase.functions.invoke('sync-to-beehiiv', {
+            body: { record: data[0], type: 'SINGLE' }
+          });
+        } catch (syncError) {
+          console.error("Error syncing to Beehiiv:", syncError);
+          // We don't show this error to the user since they're already on our waitlist
+        }
+        
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+      }
+    } catch (error) {
+      console.error("Error adding to waitlist:", error);
+      toast({
+        title: "Something went wrong",
+        description: "There was an error adding you to the waitlist. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleDownload = async () => {
     setIsDownloading(true);
     
@@ -259,128 +314,6 @@ const ComingSoon = () => {
       </footer>
     </div>
   );
-
-  if (showThankYou) {
-    return (
-      <div className="min-h-screen bg-[#0F1116] text-white flex flex-col justify-center">
-        <div className="container mx-auto px-4 py-24 max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <div className="mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Thanks for signing up for the PVT Waitlist!
-              </h1>
-              <p className="text-xl text-gray-300 mb-8">
-                We'll let you know as soon as the app is live. In the meantime here is a free PDF of some of my favorite pole vault drills if interested.
-              </p>
-              
-              <div className="mb-8">
-                <p className="text-2xl text-white mb-4">Here is your free PDF</p>
-                <Button 
-                  onClick={handleDownload}
-                  disabled={isDownloading}
-                  className="bg-primary hover:bg-primary/90 text-white"
-                  size="lg"
-                >
-                  {isDownloading ? (
-                    <>Downloading...</>
-                  ) : (
-                    <>
-                      <FileDown className="mr-2 h-4 w-4" />
-                      Download Now
-                    </>
-                  )}
-                </Button>
-              </div>
-              
-              <div className="mt-8">
-                <Button 
-                  onClick={() => setShowThankYou(false)}
-                  variant="outline"
-                  className="border-white text-black hover:bg-white hover:text-black bg-white"
-                >
-                  Back to Waitlist
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-        
-        <footer className="py-6 mt-auto">
-          <div className="container mx-auto text-center">
-            <a 
-              href="https://www.instagram.com/g_forcetraining/" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-              aria-label="Follow us on Instagram"
-            >
-              <Instagram className="w-6 h-6 text-white" />
-            </a>
-          </div>
-        </footer>
-      </div>
-    );
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      // Add email to Supabase waitlist table
-      const { data, error } = await supabase
-        .from('waitlist')
-        .insert({ 
-          email, 
-          first_name: firstName, 
-          last_name: lastName,
-          synced_to_beehiiv: false // Track if this has been synced to Beehiiv
-        })
-        .select();
-      
-      if (error) {
-        if (error.code === '23505') {
-          // Unique constraint violation (email already exists)
-          toast({
-            title: "Already registered",
-            description: "This email is already on our waitlist.",
-          });
-        } else {
-          throw error;
-        }
-      } else {
-        setShowThankYou(true);
-        
-        // Trigger the sync to Beehiiv in the background
-        try {
-          await supabase.functions.invoke('sync-to-beehiiv', {
-            body: { record: data[0], type: 'SINGLE' }
-          });
-        } catch (syncError) {
-          console.error("Error syncing to Beehiiv:", syncError);
-          // We don't show this error to the user since they're already on our waitlist
-        }
-        
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-      }
-    } catch (error) {
-      console.error("Error adding to waitlist:", error);
-      toast({
-        title: "Something went wrong",
-        description: "There was an error adding you to the waitlist. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 };
 
 export default ComingSoon;
