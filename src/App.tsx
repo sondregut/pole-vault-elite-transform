@@ -24,6 +24,7 @@ import MediaKit from "./pages/MediaKit";
 import PVT from "./pages/PVT";
 import AdminSyncWaitlist from "./pages/AdminSyncWaitlist";
 import Auth from "./pages/Auth";
+import VideoLibrary from "./pages/VideoLibrary";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/admin/sync-waitlist" element={<AdminSyncWaitlist />} />
             <Route path="/login" element={<Auth />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/video-library" element={<VideoLibrary />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

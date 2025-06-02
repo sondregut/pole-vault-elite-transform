@@ -194,6 +194,109 @@ export type Database = {
           },
         ]
       }
+      video_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          parent_category_id: string | null
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          parent_category_id?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          parent_category_id?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_categories_parent_category_id_fkey"
+            columns: ["parent_category_id"]
+            isOneToOne: false
+            referencedRelation: "video_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      videos: {
+        Row: {
+          category_id: string
+          created_at: string
+          description: string | null
+          duration: number | null
+          equipment_needed: string[] | null
+          file_path: string
+          id: string
+          is_featured: boolean | null
+          subcategory: string | null
+          tags: string[] | null
+          target_muscle_groups: string[] | null
+          thumbnail_path: string | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          description?: string | null
+          duration?: number | null
+          equipment_needed?: string[] | null
+          file_path: string
+          id?: string
+          is_featured?: boolean | null
+          subcategory?: string | null
+          tags?: string[] | null
+          target_muscle_groups?: string[] | null
+          thumbnail_path?: string | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          description?: string | null
+          duration?: number | null
+          equipment_needed?: string[] | null
+          file_path?: string
+          id?: string
+          is_featured?: boolean | null
+          subcategory?: string | null
+          tags?: string[] | null
+          target_muscle_groups?: string[] | null
+          thumbnail_path?: string | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "video_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       waitlist: {
         Row: {
           created_at: string
