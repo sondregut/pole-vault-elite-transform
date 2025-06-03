@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import { ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/hooks/useUser";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const navigate = useNavigate();

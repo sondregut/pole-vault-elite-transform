@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -31,35 +32,38 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <CartProvider>
-      <QueryClient client={queryClient}>
-        <Toaster />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/coaching" element={<OneOnOneCoaching />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/programs" element={<Programs />} />
-            <Route path="/shop/product/:productId" element={<ProductDetail />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout/success" element={<CheckoutSuccess />} />
-            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
-            <Route path="/downloads" element={<DigitalDownloads />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/mediakit" element={<MediaKit />} />
-            <Route path="/coming-soon" element={<ComingSoon />} />
-            <Route path="/pvt" element={<PVT />} />
-            <Route path="/admin/sync-waitlist" element={<AdminSyncWaitlist />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/subscribe" element={<Subscribe />} />
-            <Route path="/video-library" element={<VideoLibrary />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </QueryClient>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/coaching" element={<OneOnOneCoaching />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/programs" element={<Programs />} />
+              <Route path="/shop/product/:productId" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout/success" element={<CheckoutSuccess />} />
+              <Route path="/checkout/cancel" element={<CheckoutCancel />} />
+              <Route path="/downloads" element={<DigitalDownloads />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/mediakit" element={<MediaKit />} />
+              <Route path="/coming-soon" element={<ComingSoon />} />
+              <Route path="/pvt" element={<PVT />} />
+              <Route path="/admin/sync-waitlist" element={<AdminSyncWaitlist />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/subscribe" element={<Subscribe />} />
+              <Route path="/video-library" element={<VideoLibrary />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
     </CartProvider>
   );
 }
