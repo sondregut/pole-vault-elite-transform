@@ -18,9 +18,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
   const [isFullscreen, setIsFullscreen] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [duration, setDuration] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   useEffect(() => {
-    if (isOpen && videoRef.current) {
+    if (isOpen && videoRef.current && video) {
+      setIsLoading(true);
+      setError(null);
       videoRef.current.load();
     }
   }, [isOpen, video]);
@@ -30,7 +34,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play();
+        videoRef.current.play().catch((err) => {
+          console.error("Error playing video:", err);
+          setError("Unable to play video. Please check the video format.");
+        });
       }
       setIsPlaying(!isPlaying);
     }
@@ -46,9 +53,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
   const toggleFullscreen = () => {
     if (videoRef.current) {
       if (!isFullscreen) {
-        videoRef.current.requestFullscreen();
+        videoRef.current.requestFullscreen().catch(() => {
+          console.log("Fullscreen not supported");
+        });
       } else {
-        document.exitFullscreen();
+        document.exitFullscreen().catch(() => {
+          console.log("Exit fullscreen failed");
+        });
       }
       setIsFullscreen(!isFullscreen);
     }
@@ -63,7 +74,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
+      setIsLoading(false);
     }
+  };
+
+  const handleLoadStart = () => {
+    setIsLoading(true);
+  };
+
+  const handleCanPlay = () => {
+    setIsLoading(false);
+    setError(null);
+  };
+
+  const handleError = () => {
+    setIsLoading(false);
+    setError("Error loading video. Please check if the video file exists and is accessible.");
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +108,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
 
   const getVideoUrl = () => {
     if (!video) return "";
+    // Handle both full URLs and relative paths
+    if (video.file_path.startsWith('http')) {
+      return video.file_path;
+    }
     return `https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/video-library/${video.file_path}`;
   };
 
@@ -89,53 +119,79 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl w-full h-[90vh] p-0">
-        <div className="relative w-full h-full bg-black">
+      <DialogContent className="max-w-6xl w-full h-[90vh] p-0 bg-black">
+        <div className="relative w-full h-full">
           <Button
             onClick={onClose}
             variant="ghost"
             size="icon"
-            className="absolute top-4 right-4 z-10 text-white hover:bg-white/20"
+            className="absolute top-4 right-4 z-20 text-white hover:bg-white/20"
           >
             <X className="h-4 w-4" />
           </Button>
+
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
+              <div className="text-center">
+                <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p>Loading video...</p>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
+              <div className="text-center">
+                <p className="text-red-400 mb-4">{error}</p>
+                <p className="text-sm text-gray-400">Video URL: {getVideoUrl()}</p>
+              </div>
+            </div>
+          )}
 
           <video
             ref={videoRef}
             className="w-full h-full object-contain"
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
+            onLoadStart={handleLoadStart}
+            onCanPlay={handleCanPlay}
+            onError={handleError}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
+            controls={false}
+            preload="metadata"
           >
             <source src={getVideoUrl()} type="video/mp4" />
+            <source src={getVideoUrl()} type="video/quicktime" />
             <source src={getVideoUrl()} type="video/mov" />
             Your browser does not support the video tag.
           </video>
 
           {/* Video Controls */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-            <div className="flex items-center gap-4 text-white">
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6">
+            <div className="flex items-center gap-4 text-white mb-4">
               <Button
                 onClick={togglePlay}
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/20"
+                disabled={isLoading || !!error}
               >
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
               </Button>
 
-              <div className="flex items-center gap-2 flex-1">
-                <span className="text-sm">{formatTime(currentTime)}</span>
+              <div className="flex items-center gap-3 flex-1">
+                <span className="text-sm min-w-[40px]">{formatTime(currentTime)}</span>
                 <input
                   type="range"
                   min="0"
                   max="100"
                   value={duration ? (currentTime / duration) * 100 : 0}
                   onChange={handleSeek}
-                  className="flex-1 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                  className="flex-1 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+                  disabled={isLoading || !!error}
                 />
-                <span className="text-sm">{formatTime(duration)}</span>
+                <span className="text-sm min-w-[40px]">{formatTime(duration)}</span>
               </div>
 
               <Button
@@ -143,8 +199,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/20"
+                disabled={isLoading || !!error}
               >
-                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
               </Button>
 
               <Button
@@ -152,12 +209,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isOpen, onClose }) => 
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/20"
+                disabled={isLoading || !!error}
               >
-                {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+                {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
               </Button>
             </div>
 
-            <div className="mt-2">
+            <div>
               <h3 className="text-lg font-semibold text-white">{video.title}</h3>
               {video.description && (
                 <p className="text-gray-300 text-sm mt-1">{video.description}</p>

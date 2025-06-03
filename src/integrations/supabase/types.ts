@@ -304,7 +304,6 @@ export type Database = {
           first_name: string | null
           id: string
           last_name: string | null
-          synced_to_beehiiv: boolean | null
         }
         Insert: {
           created_at?: string
@@ -312,7 +311,6 @@ export type Database = {
           first_name?: string | null
           id?: string
           last_name?: string | null
-          synced_to_beehiiv?: boolean | null
         }
         Update: {
           created_at?: string
@@ -320,7 +318,6 @@ export type Database = {
           first_name?: string | null
           id?: string
           last_name?: string | null
-          synced_to_beehiiv?: boolean | null
         }
         Relationships: []
       }

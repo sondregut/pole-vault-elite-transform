@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -215,6 +216,31 @@
   /* Helper for Remix Icons */
   :where([class^="ri-"])::before { 
     content: "\f3c2"; 
+  }
+
+  /* Video player slider styling */
+  .slider {
+    background: linear-gradient(to right, #3176FF 0%, #3176FF var(--progress, 0%), #4b5563 var(--progress, 0%), #4b5563 100%);
+  }
+
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    height: 16px;
+    width: 16px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .slider::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 }
 
