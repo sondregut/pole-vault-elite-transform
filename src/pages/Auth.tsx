@@ -29,7 +29,7 @@ const Auth = () => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate("/downloads");
+        navigate("/video-library");
       }
     };
     
@@ -38,7 +38,7 @@ const Auth = () => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
-        navigate("/downloads");
+        navigate("/video-library");
       }
     });
 
@@ -63,8 +63,22 @@ const Auth = () => {
       });
       
       if (error) throw error;
-      toast.success("Logged in successfully");
-      // Navigation handled by auth state change listener
+      
+      // Check if user has an active subscription
+      const { data: subscriber } = await supabase
+        .from('subscribers')
+        .select('subscribed, subscription_end')
+        .eq('email', email)
+        .single();
+
+      if (!subscriber?.subscribed || (subscriber.subscription_end && new Date(subscriber.subscription_end) < new Date())) {
+        // Redirect to subscription page
+        navigate("/subscribe");
+        toast.info("Please subscribe to access the video library");
+      } else {
+        toast.success("Logged in successfully");
+        navigate("/video-library");
+      }
     } catch (error: any) {
       toast.error(error.message || "Failed to log in");
     } finally {
@@ -90,12 +104,16 @@ const Auth = () => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/video-library`
+        }
       });
       
       if (error) throw error;
       
-      toast.success("Signup successful! Please check your email for verification.");
-      setActiveTab("login");
+      toast.success("Account created! Please check your email for verification, then subscribe to access the video library.");
+      // Redirect to subscription page after signup
+      navigate("/subscribe");
     } catch (error: any) {
       toast.error(error.message || "Failed to sign up");
     } finally {
@@ -106,12 +124,12 @@ const Auth = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+      <div className="min-h-screen bg-gradient-to-br from-primary to-primary-dark pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-md mx-auto">
-            <h1 className="text-3xl font-bold mb-6 text-center">Account Access</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center text-white">Account Access</h1>
             
-            <Card>
+            <Card className="shadow-2xl border-0">
               <CardHeader>
                 <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
                   <TabsList className="grid w-full grid-cols-2">
@@ -120,16 +138,16 @@ const Auth = () => {
                   </TabsList>
 
                   <TabsContent value="login">
-                    <CardTitle className="text-2xl">Welcome back</CardTitle>
+                    <CardTitle className="text-2xl text-primary">Welcome back</CardTitle>
                     <CardDescription>
-                      Sign in to access your digital downloads
+                      Sign in to access your video library
                     </CardDescription>
                   </TabsContent>
                   
                   <TabsContent value="signup">
-                    <CardTitle className="text-2xl">Create an account</CardTitle>
+                    <CardTitle className="text-2xl text-primary">Create an account</CardTitle>
                     <CardDescription>
-                      Sign up to purchase and access digital products
+                      Sign up to access premium pole vault training videos
                     </CardDescription>
                   </TabsContent>
                 </Tabs>
@@ -188,7 +206,7 @@ const Auth = () => {
                       </p>
                     </div>
                     <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? "Signing up..." : "Sign Up"}
+                      {loading ? "Creating account..." : "Create Account"}
                     </Button>
                   </form>
                 </TabsContent>

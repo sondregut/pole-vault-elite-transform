@@ -1,119 +1,100 @@
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
-import Stripe from 'https://esm.sh/stripe@14.21.0';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+}
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    const { lineItems, successUrl, cancelUrl } = await req.json();
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+    )
+
+    const { data: { user } } = await supabaseClient.auth.getUser()
+    if (!user) {
+      throw new Error('Unauthorized')
+    }
+
+    const { priceId, email, userId } = await req.json()
 
     // Initialize Stripe
-    const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
-      apiVersion: '2023-10-16',
-    });
+    const stripe = new (await import('https://esm.sh/stripe@12.0.0')).default(
+      Deno.env.get('STRIPE_SECRET_KEY') ?? '',
+      { apiVersion: '2022-11-15' }
+    )
 
-    // Initialize Supabase admin client to create order records
-    const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Calculate total amount
-    const totalAmount = lineItems.reduce((sum, item) => {
-      const price = parseFloat(item.price.replace('$', ''));
-      return sum + (price * item.quantity * 100); // Convert to cents
-    }, 0);
-
-    // Create order record in Supabase first
-    const { data: orderData, error: orderError } = await supabaseAdmin
-      .from('orders')
-      .insert({
-        amount: totalAmount,
-        currency: 'usd',
-        status: 'pending'
-      })
-      .select()
-      .single();
-
-    if (orderError) {
-      console.error('Error creating order:', orderError);
-      throw orderError;
+    // Create or get Stripe customer
+    let customer
+    const existingCustomers = await stripe.customers.list({ email })
+    
+    if (existingCustomers.data.length > 0) {
+      customer = existingCustomers.data[0]
+    } else {
+      customer = await stripe.customers.create({ email })
     }
 
-    console.log('Created order:', orderData);
-
-    // Create order items
-    const orderItems = lineItems.map(item => ({
-      order_id: orderData.id,
-      product_id: item.productId,
-      product_name: item.productName,
-      product_option: item.option || null,
-      quantity: item.quantity,
-      price: item.price
-    }));
-
-    const { error: itemsError } = await supabaseAdmin
-      .from('order_items')
-      .insert(orderItems);
-
-    if (itemsError) {
-      console.error('Error creating order items:', itemsError);
-      throw itemsError;
-    }
-
-    // Prepare line items for Stripe
-    const stripeLineItems = lineItems.map(item => {
-      const price = parseFloat(item.price.replace('$', ''));
-      const unitAmount = Math.max(Math.round(price * 100), 1); // Minimum 1 cent for Stripe
-      
-      return {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: item.productName,
-            description: item.option ? `Option: ${item.option}` : undefined,
-            images: item.image ? [item.image] : undefined,
-          },
-          unit_amount: unitAmount,
-        },
-        quantity: item.quantity,
-      };
-    });
-
-    // Create Stripe checkout session with order ID in metadata
+    // Create checkout session
     const session = await stripe.checkout.sessions.create({
+      customer: customer.id,
       payment_method_types: ['card'],
-      line_items: stripeLineItems,
-      mode: 'payment',
-      success_url: successUrl,
-      cancel_url: cancelUrl,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Pole Vault Training Library',
+              description: 'Monthly access to premium pole vault training videos',
+            },
+            unit_amount: 999, // $9.99 in cents
+            recurring: {
+              interval: 'month',
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'subscription',
+      success_url: `${req.headers.get('origin')}/video-library?success=true`,
+      cancel_url: `${req.headers.get('origin')}/subscribe?canceled=true`,
       metadata: {
-        order_id: orderData.id,
+        userId: userId,
       },
-      customer_creation: 'always',
-      billing_address_collection: 'required',
-    });
+      subscription_data: {
+        trial_period_days: 7, // 7-day free trial
+      },
+    })
 
-    console.log(`Created Stripe session ${session.id} for order ${orderData.id}`);
+    // Store customer info in our database
+    await supabaseClient.from('subscribers').upsert({
+      user_id: userId,
+      email: email,
+      stripe_customer_id: customer.id,
+    })
 
     return new Response(
       JSON.stringify({ url: session.url }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+      { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      },
+    )
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+      { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      },
+    )
   }
-});
+})

@@ -1,142 +1,111 @@
-
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import Logo from "./Logo";
-import { Menu } from "lucide-react";
-import CartIcon from "./CartIcon";
-
-// Update the interface to include the external property
-interface NavLink {
-  name: string;
-  href: string;
-  external?: boolean;
-}
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useCart } from "@/hooks/useCart";
+import { ShoppingCart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useUser } from "@/hooks/useUser";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
+  const navigate = useNavigate();
+  const { cartItems } = useCart();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  const { user, isLoading } = useUser();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Scroll to top when route changes
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
-
-  const navLinks: NavLink[] = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "1:1 Coaching", href: "/coaching" },
-    { name: "Blog", href: "/blog" },
-    { name: "App", href: "/coming-soon" },
-    { name: "Programs", href: "/shop" },
-    { name: "Contact", href: "/contact" },
-  ];
-
-  const handleLinkClick = () => {
-    window.scrollTo(0, 0);
-    if (isOpen) {
-      setIsOpen(false);
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast.success("Logged out successfully");
+    } catch (error) {
+      toast.error("Error logging out");
     }
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 bg-white z-50 transition-shadow ${isScrolled ? "shadow-md" : ""}`}>
-      <div className="container mx-auto py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <Logo />
-          <h1 className="font-medium text-gray-800 text-lg">G-Force Training</h1>
-        </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link to="/" className="flex items-center font-bold text-lg">
+            Pole Vault Digital
+          </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
-            link.external ? (
-              <a
-                key={link.name}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-800 font-medium hover:text-primary transition"
-              >
-                {link.name}
-              </a>
-            ) : (
-              <Link
-                key={link.name}
-                to={link.href}
-                className={`text-gray-800 font-medium hover:text-primary transition ${
-                  location.pathname === link.href ? "text-primary" : ""
-                }`}
-                onClick={handleLinkClick}
-              >
-                {link.name}
-              </Link>
-            )
-          ))}
-          <CartIcon />
-        </div>
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="/video-library" className="text-gray-600 hover:text-primary transition-colors">
+              Video Library
+            </Link>
+            <Link to="/products" className="text-gray-600 hover:text-primary transition-colors">
+              Products
+            </Link>
+            <Link to="/drills" className="text-gray-600 hover:text-primary transition-colors">
+              Drills
+            </Link>
+            <Link to="/contact" className="text-gray-600 hover:text-primary transition-colors">
+              Contact
+            </Link>
+          </div>
 
-        {/* Mobile Navigation Toggle - Updated with Lucide Menu icon */}
-        <div className="md:hidden flex items-center">
-          <CartIcon />
-          <button
-            onClick={toggleMenu}
-            className="p-2 ml-2 rounded-md hover:bg-gray-100 transition-colors"
-            aria-label="Toggle menu"
-          >
-            <Menu className="h-6 w-6 text-gray-800" />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-md">
-          <div className="container mx-auto py-4 flex flex-col">
-            {navLinks.map((link) => (
-              link.external ? (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-3 text-gray-900 hover:text-primary border-b border-gray-100"
-                  onClick={toggleMenu}
-                >
-                  {link.name}
-                </a>
+          <div className="flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <ShoppingCart className="h-4 w-4" />
+                  {cartItems.length > 0 && (
+                    <Badge className="absolute -top-2 -right-2 rounded-full px-2 py-0.5 text-xs">
+                      {cartItems.length}
+                    </Badge>
+                  )}
+                  <span className="sr-only">Toggle Cart</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-80">
+                <DropdownMenuLabel>My Cart</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {cartItems.length === 0 ? (
+                  <DropdownMenuItem className="text-center">Cart is empty</DropdownMenuItem>
+                ) : (
+                  cartItems.map((item) => (
+                    <DropdownMenuItem key={item.id} className="flex justify-between">
+                      {item.name} x {item.quantity}
+                      <span className="font-bold">${item.price}</span>
+                    </DropdownMenuItem>
+                  ))
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/cart")}>View Cart</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {!isLoading && (
+              user ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">Welcome, {user.email}</span>
+                  <Button variant="outline" size="sm" onClick={handleSignOut}>
+                    Sign Out
+                  </Button>
+                </div>
               ) : (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className={`py-3 text-gray-900 hover:text-primary border-b border-gray-100 ${
-                    location.pathname === link.href ? "text-primary" : ""
-                  }`}
-                  onClick={handleLinkClick}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => navigate("/auth")}
                 >
-                  {link.name}
-                </Link>
+                  Sign In
+                </Button>
               )
-            ))}
+            )}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
