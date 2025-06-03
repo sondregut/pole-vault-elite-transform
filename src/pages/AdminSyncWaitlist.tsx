@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,26 +41,26 @@ const AdminSyncWaitlist = () => {
 
   const fetchStats = async () => {
     try {
-      const { data: total } = await supabase
+      const { data: total, count: totalCount } = await supabase
         .from("waitlist")
         .select("id", { count: "exact" });
 
-      const { data: synced } = await supabase
+      const { data: synced, count: syncedCount } = await supabase
         .from("waitlist")
         .select("id", { count: "exact" })
         .eq("synced_to_beehiiv", true);
 
-      const { data: unsynced } = await supabase
+      const { data: unsynced, count: unsyncedCount } = await supabase
         .from("waitlist")
         .select("id", { count: "exact" })
         .eq("synced_to_beehiiv", false);
 
       setStats({
-        total: total?.length || 0,
-        synced: synced?.length || 0,
-        unsynced: unsynced?.length || 0,
+        total: totalCount || 0,
+        synced: syncedCount || 0,
+        unsynced: unsyncedCount || 0,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching waitlist stats:", error);
     }
   };
