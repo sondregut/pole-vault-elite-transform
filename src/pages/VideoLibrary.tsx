@@ -1,7 +1,6 @@
 
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import VideoGrid from "@/components/video-library/VideoGrid";
 import VideoFilters from "@/components/video-library/VideoFilters";
 import VideoSearch from "@/components/video-library/VideoSearch";
@@ -117,8 +116,6 @@ const VideoLibrary = () => {
         isOpen={isPlayerOpen}
         onClose={handleClosePlayer}
       />
-
-      <Footer />
     </>
   );
 };
