@@ -6,7 +6,8 @@ import VideoGrid from "@/components/video-library/VideoGrid";
 import VideoFilters from "@/components/video-library/VideoFilters";
 import VideoSearch from "@/components/video-library/VideoSearch";
 import CategoryNavigation from "@/components/video-library/CategoryNavigation";
-import { useVideoLibrary } from "@/hooks/useVideoLibrary";
+import VideoPlayer from "@/components/video-library/VideoPlayer";
+import { useVideoLibrary, Video } from "@/hooks/useVideoLibrary";
 
 const VideoLibrary = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -15,6 +16,8 @@ const VideoLibrary = () => {
   const [sortBy, setSortBy] = useState("created_at");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
   const {
     videos,
@@ -29,6 +32,16 @@ const VideoLibrary = () => {
     tags: selectedTags,
     equipment: selectedEquipment
   });
+
+  const handleVideoSelect = (video: Video) => {
+    setSelectedVideo(video);
+    setIsPlayerOpen(true);
+  };
+
+  const handleClosePlayer = () => {
+    setIsPlayerOpen(false);
+    setSelectedVideo(null);
+  };
 
   return (
     <>
@@ -80,10 +93,19 @@ const VideoLibrary = () => {
               videos={videos}
               isLoading={isLoading}
               selectedCategory={selectedCategory}
+              onVideoSelect={handleVideoSelect}
             />
           )}
         </div>
       </div>
+
+      {/* Video Player Modal */}
+      <VideoPlayer
+        video={selectedVideo}
+        isOpen={isPlayerOpen}
+        onClose={handleClosePlayer}
+      />
+
       <Footer />
     </>
   );

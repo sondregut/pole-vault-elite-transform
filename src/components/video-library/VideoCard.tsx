@@ -7,18 +7,15 @@ import { Video } from "@/hooks/useVideoLibrary";
 
 interface VideoCardProps {
   video: Video;
+  onClick: () => void;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ video, onClick }) => {
   const formatDuration = (seconds: number | null) => {
     if (!seconds) return "Unknown";
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
-  const getVideoUrl = () => {
-    return `https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/video-library/${video.file_path}`;
   };
 
   const getThumbnailUrl = () => {
@@ -30,7 +27,10 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+    <Card 
+      className="hover:shadow-lg transition-shadow cursor-pointer group" 
+      onClick={onClick}
+    >
       <CardContent className="p-0">
         {/* Video Thumbnail */}
         <div className="relative aspect-video bg-gray-200 rounded-t-lg overflow-hidden">
