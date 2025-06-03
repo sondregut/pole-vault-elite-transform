@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import VideoGrid from "@/components/video-library/VideoGrid";
@@ -21,6 +20,7 @@ const VideoLibrary = () => {
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const [showUploadHelper, setShowUploadHelper] = useState(false);
+  const [filterCategory, setFilterCategory] = useState("all");
 
   const {
     videos,
@@ -48,28 +48,46 @@ const VideoLibrary = () => {
     setSelectedVideo(null);
   };
 
+  const filterCategories = [
+    { id: "all", name: "All Exercises" },
+    { id: "warmup", name: "Warm-up" },
+    { id: "technique", name: "Technique" },
+    { id: "strength", name: "Strength" },
+    { id: "drills", name: "Drills" },
+    { id: "flexibility", name: "Flexibility" }
+  ];
+
+  const filteredVideos = filterCategory === "all" 
+    ? videos 
+    : videos.filter(video => video.category?.name.toLowerCase() === filterCategory);
+
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+      <div className="min-h-screen bg-gradient-to-br from-primary to-primary-dark pt-24 pb-16">
         <div className="container mx-auto px-6 max-w-7xl">
-          {/* Header */}
-          <div className="mb-10 text-center">
-            <div className="flex justify-center items-center gap-4 mb-4">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Video Library</h1>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowUploadHelper(!showUploadHelper)}
-                className="gap-2"
-              >
-                <HelpCircle className="h-4 w-4" />
-                Upload Guide
-              </Button>
+          {/* Header with animated background */}
+          <div className="text-center text-white py-16 mb-12 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-full scale-150 animate-pulse opacity-30"></div>
+            <div className="relative z-10">
+              <div className="flex justify-center items-center gap-4 mb-4">
+                <h1 className="text-4xl md:text-5xl font-bold text-white">
+                  Pole Vault Exercise Library
+                </h1>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowUploadHelper(!showUploadHelper)}
+                  className="gap-2 bg-white/20 border-white/30 text-white hover:bg-white/30"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                  Upload Guide
+                </Button>
+              </div>
+              <p className="text-xl text-white/90 max-w-3xl mx-auto">
+                Comprehensive training videos for athletes at all levels
+              </p>
             </div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive collection of pole vault training videos, drills, and exercises
-            </p>
           </div>
 
           {/* Upload Helper */}
@@ -79,38 +97,46 @@ const VideoLibrary = () => {
             </div>
           )}
 
-          {/* Category Navigation */}
-          <div className="mb-8">
-            <CategoryNavigation
-              categories={categories}
-              selectedCategory={selectedCategory}
-              selectedSubcategory={selectedSubcategory}
-              onCategorySelect={setSelectedCategory}
-              onSubcategorySelect={setSelectedSubcategory}
-            />
+          {/* Filter Buttons */}
+          <div className="flex justify-center gap-3 mb-12 flex-wrap">
+            {filterCategories.map((category) => (
+              <Button
+                key={category.id}
+                onClick={() => setFilterCategory(category.id)}
+                variant={filterCategory === category.id ? "default" : "outline"}
+                className={`
+                  px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg
+                  ${filterCategory === category.id 
+                    ? 'bg-secondary text-white hover:bg-secondary/90 shadow-xl' 
+                    : 'bg-white text-primary border-white hover:bg-gray-50'
+                  }
+                `}
+              >
+                {category.name}
+              </Button>
+            ))}
           </div>
 
-          {/* Search and Filters Row */}
-          <div className="bg-white rounded-xl shadow-sm border p-6 mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Search - Takes up 2 columns on large screens */}
-              <div className="lg:col-span-2">
-                <VideoSearch
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                />
-              </div>
-              
-              {/* Filters - Takes up 1 column on large screens */}
-              <div>
-                <VideoFilters
-                  sortBy={sortBy}
-                  onSortChange={setSortBy}
-                  selectedTags={selectedTags}
-                  onTagsChange={setSelectedTags}
-                  selectedEquipment={selectedEquipment}
-                  onEquipmentChange={setSelectedEquipment}
-                />
+          {/* Search and Advanced Filters - Hidden in new design but keeping functionality */}
+          <div className="hidden">
+            <div className="bg-white rounded-xl shadow-sm border p-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <VideoSearch
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                  />
+                </div>
+                <div>
+                  <VideoFilters
+                    sortBy={sortBy}
+                    onSortChange={setSortBy}
+                    selectedTags={selectedTags}
+                    onTagsChange={setSelectedTags}
+                    selectedEquipment={selectedEquipment}
+                    onEquipmentChange={setSelectedEquipment}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -123,9 +149,9 @@ const VideoLibrary = () => {
             </div>
           ) : (
             <VideoGrid
-              videos={videos}
+              videos={filteredVideos}
               isLoading={isLoading}
-              selectedCategory={selectedCategory}
+              selectedCategory={filterCategory}
               onVideoSelect={handleVideoSelect}
             />
           )}
