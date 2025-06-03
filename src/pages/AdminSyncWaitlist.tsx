@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,9 +13,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+interface SyncResult {
+  email: string;
+  success: boolean;
+  error?: string;
+}
+
+interface SyncResponse {
+  results: SyncResult[];
+}
+
 const AdminSyncWaitlist = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<SyncResponse | null>(null);
   const [stats, setStats] = useState<{ total: number; synced: number; unsynced: number }>({
     total: 0,
     synced: 0,
@@ -66,21 +75,21 @@ const AdminSyncWaitlist = () => {
       
       if (error) throw error;
       
-      setResults(data);
+      setResults(data as SyncResponse);
       fetchStats(); // Refresh stats after sync
       
       // Count successful and failed syncs
-      const successful = data.results?.filter((r: any) => r.success).length || 0;
-      const failed = data.results?.length - successful || 0;
+      const successful = data?.results?.filter((r: SyncResult) => r.success).length || 0;
+      const failed = (data?.results?.length || 0) - successful;
       
       toast({
         title: "Sync Complete",
-        description: `Processed ${data.results?.length || 0} entries (${successful} successful, ${failed} failed)`,
+        description: `Processed ${data?.results?.length || 0} entries (${successful} successful, ${failed} failed)`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error syncing waitlist to Beehiiv:", error);
       
-      let errorMessage = error.message || "Unknown error occurred";
+      let errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
       
       // Check if it's a rate limit error
       if (errorMessage.includes("429") || errorMessage.toLowerCase().includes("rate limit")) {
@@ -183,7 +192,7 @@ const AdminSyncWaitlist = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {results.results?.map((result: any, index: number) => (
+                      {results.results?.map((result: SyncResult, index: number) => (
                         <TableRow key={index} className={isRateLimitError(result.error || '') ? "bg-yellow-50" : ""}>
                           <TableCell className="font-medium">{result.email}</TableCell>
                           <TableCell>
@@ -194,7 +203,7 @@ const AdminSyncWaitlist = () => {
                             ) : (
                               <span className="flex items-center text-red-600">
                                 <AlertCircle className="h-4 w-4 mr-1" /> 
-                                {isRateLimitError(result.error) ? (
+                                {isRateLimitError(result.error || '') ? (
                                   <span>Rate Limited - Try Again Later</span>
                                 ) : (
                                   <span>Failed: {result.error}</span>
@@ -207,7 +216,7 @@ const AdminSyncWaitlist = () => {
                     </TableBody>
                   </Table>
                   
-                  {results.results?.some((r: any) => isRateLimitError(r.error || '')) && (
+                  {results.results?.some((r: SyncResult) => isRateLimitError(r.error || '')) && (
                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
                       <div className="flex">
                         <div className="flex-shrink-0">
