@@ -21,7 +21,6 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 async function syncToBeehiiv(waitlistEntry: any) {
   try {
     // Get your publication ID from the Beehiiv API
-    // This is a necessary first step as we need the publication ID for the subscribers endpoint
     const publicationsResponse = await fetch("https://api.beehiiv.com/v2/publications", {
       method: "GET",
       headers: {
@@ -79,13 +78,6 @@ async function syncToBeehiiv(waitlistEntry: any) {
       // If the error is that the subscriber already exists, we'll treat that as success
       if (responseData.error?.includes("already exists")) {
         console.log(`Subscriber ${waitlistEntry.email} already exists in Beehiiv`);
-        
-        // Mark as synced in Supabase even though it already exists
-        await supabase
-          .from("waitlist")
-          .update({ synced_to_beehiiv: true })
-          .eq("id", waitlistEntry.id);
-          
         return { success: true, message: "Subscriber already exists in Beehiiv", data: responseData };
       } else {
         console.error(`Failed to add subscriber to Beehiiv: ${JSON.stringify(responseData)}`);
@@ -94,17 +86,6 @@ async function syncToBeehiiv(waitlistEntry: any) {
     }
 
     console.log(`Successfully added ${waitlistEntry.email} to Beehiiv`);
-    
-    // Mark as synced in Supabase
-    const { error: updateError } = await supabase
-      .from("waitlist")
-      .update({ synced_to_beehiiv: true })
-      .eq("id", waitlistEntry.id);
-    
-    if (updateError) {
-      console.error(`Failed to mark subscriber as synced in Supabase: ${updateError.message}`);
-    }
-    
     return { success: true, data: responseData };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -123,26 +104,25 @@ serve(async (req) => {
     
     // Handle different request types
     if (type === "SYNC_ALL") {
-      // Fetch all unsynced waitlist entries
-      const { data: unsyncedEntries, error } = await supabase
+      // Fetch all waitlist entries
+      const { data: allEntries, error } = await supabase
         .from("waitlist")
-        .select("*")
-        .eq("synced_to_beehiiv", false);
+        .select("*");
       
       if (error) {
         throw error;
       }
       
-      console.log(`Found ${unsyncedEntries?.length || 0} unsynced waitlist entries`);
+      console.log(`Found ${allEntries?.length || 0} waitlist entries`);
       
-      // Sync each unsynced entry with delays between requests
+      // Sync each entry with delays between requests
       const results = [];
       
       // Process in smaller batches with delays to avoid rate limiting
       const batchSize = 5; // Process 5 at a time
       
-      for (let i = 0; i < (unsyncedEntries?.length || 0); i += batchSize) {
-        const batch = unsyncedEntries!.slice(i, i + batchSize);
+      for (let i = 0; i < (allEntries?.length || 0); i += batchSize) {
+        const batch = allEntries!.slice(i, i + batchSize);
         
         for (const entry of batch) {
           try {
@@ -157,13 +137,13 @@ serve(async (req) => {
           }
           
           // Add a delay between each request to avoid rate limits
-          if (i < unsyncedEntries!.length - 1) {
+          if (i < allEntries!.length - 1) {
             await delay(1000); // 1 second delay between requests
           }
         }
         
         // Larger delay between batches
-        if (i + batchSize < unsyncedEntries!.length) {
+        if (i + batchSize < allEntries!.length) {
           await delay(3000); // 3 seconds delay between batches
         }
       }

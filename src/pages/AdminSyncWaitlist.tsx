@@ -27,10 +27,8 @@ interface SyncResponse {
 const AdminSyncWaitlist = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<SyncResponse | null>(null);
-  const [stats, setStats] = useState<{ total: number; synced: number; unsynced: number }>({
+  const [stats, setStats] = useState<{ total: number }>({
     total: 0,
-    synced: 0,
-    unsynced: 0,
   });
   const { toast } = useToast();
 
@@ -41,24 +39,12 @@ const AdminSyncWaitlist = () => {
 
   const fetchStats = async () => {
     try {
-      const { data: total, count: totalCount } = await supabase
+      const { count: totalCount } = await supabase
         .from("waitlist")
         .select("id", { count: "exact" });
 
-      const { data: synced, count: syncedCount } = await supabase
-        .from("waitlist")
-        .select("id", { count: "exact" })
-        .eq("synced_to_beehiiv", true);
-
-      const { data: unsynced, count: unsyncedCount } = await supabase
-        .from("waitlist")
-        .select("id", { count: "exact" })
-        .eq("synced_to_beehiiv", false);
-
       setStats({
         total: totalCount || 0,
-        synced: syncedCount || 0,
-        unsynced: unsyncedCount || 0,
       });
     } catch (error: unknown) {
       console.error("Error fetching waitlist stats:", error);
@@ -121,27 +107,17 @@ const AdminSyncWaitlist = () => {
             <h1 className="text-2xl font-bold mb-6">Admin: Sync Waitlist to Beehiiv</h1>
             
             <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 gap-4 mb-6">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-500">Total Subscribers</p>
                   <p className="text-2xl font-bold">{stats.total}</p>
-                </div>
-                
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-500">Synced to Beehiiv</p>
-                  <p className="text-2xl font-bold text-green-700">{stats.synced}</p>
-                </div>
-                
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-500">Not Yet Synced</p>
-                  <p className="text-2xl font-bold text-blue-700">{stats.unsynced}</p>
                 </div>
               </div>
               
               <div>
                 <p className="mb-4 text-gray-700">
-                  This will sync all waitlist entries that have not yet been synced to your Beehiiv email list.
-                  New subscribers are automatically synced when they sign up.
+                  This will sync all waitlist entries to your Beehiiv email list.
+                  The sync will process all entries and attempt to add them to Beehiiv.
                 </p>
 
                 <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
@@ -161,7 +137,7 @@ const AdminSyncWaitlist = () => {
                 
                 <Button 
                   onClick={syncAllToBeehiiv} 
-                  disabled={isLoading || stats.unsynced === 0}
+                  disabled={isLoading || stats.total === 0}
                   className="flex items-center gap-2"
                 >
                   {isLoading ? (
@@ -172,7 +148,7 @@ const AdminSyncWaitlist = () => {
                   ) : (
                     <>
                       <RefreshCw className="h-4 w-4" />
-                      Sync {stats.unsynced} Unsynced {stats.unsynced === 1 ? 'Entry' : 'Entries'} to Beehiiv
+                      Sync {stats.total} {stats.total === 1 ? 'Entry' : 'Entries'} to Beehiiv
                     </>
                   )}
                 </Button>
@@ -226,7 +202,7 @@ const AdminSyncWaitlist = () => {
                         <div className="ml-3">
                           <p className="text-sm text-yellow-700">
                             <strong>Rate limit detected.</strong> Some entries couldn't be synced due to Beehiiv's API 
-                            rate limits. Wait 5-10 minutes and try again with the remaining unsynced entries.
+                            rate limits. Wait 5-10 minutes and try again.
                           </p>
                         </div>
                       </div>
