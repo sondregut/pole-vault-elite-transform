@@ -130,97 +130,97 @@ const Auth = () => {
             <h1 className="text-3xl font-bold mb-6 text-center text-white">Account Access</h1>
             
             <Card className="shadow-2xl border-0">
-              <CardHeader>
-                <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
+              <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
+                <CardHeader>
                   <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="login">Log In</TabsTrigger>
                     <TabsTrigger value="signup">Sign Up</TabsTrigger>
                   </TabsList>
+                </CardHeader>
 
-                  <TabsContent value="login">
+                <TabsContent value="login">
+                  <CardHeader>
                     <CardTitle className="text-2xl text-primary">Welcome back</CardTitle>
                     <CardDescription>
                       Sign in to access your video library
                     </CardDescription>
-                  </TabsContent>
-                  
-                  <TabsContent value="signup">
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleLogin} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="your@email.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                          id="password"
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                      </div>
+                      <Button type="submit" className="w-full" disabled={loading}>
+                        {loading ? "Logging in..." : "Log In"}
+                      </Button>
+                    </form>
+                  </CardContent>
+                </TabsContent>
+                
+                <TabsContent value="signup">
+                  <CardHeader>
                     <CardTitle className="text-2xl text-primary">Create an account</CardTitle>
                     <CardDescription>
                       Sign up to access premium pole vault training videos
                     </CardDescription>
-                  </TabsContent>
-                </Tabs>
-              </CardHeader>
-              
-              <CardContent>
-                <TabsContent value="login" className="mt-0">
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="your@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? "Logging in..." : "Log In"}
-                    </Button>
-                  </form>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSignup} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="signupEmail">Email</Label>
+                        <Input
+                          id="signupEmail"
+                          type="email"
+                          placeholder="your@email.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="signupPassword">Password</Label>
+                        <Input
+                          id="signupPassword"
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <p className="text-xs text-gray-500">
+                          Password must be at least 6 characters
+                        </p>
+                      </div>
+                      <Button type="submit" className="w-full" disabled={loading}>
+                        {loading ? "Creating account..." : "Create Account"}
+                      </Button>
+                    </form>
+                  </CardContent>
                 </TabsContent>
-                
-                <TabsContent value="signup" className="mt-0">
-                  <form onSubmit={handleSignup} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="signupEmail">Email</Label>
-                      <Input
-                        id="signupEmail"
-                        type="email"
-                        placeholder="your@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signupPassword">Password</Label>
-                      <Input
-                        id="signupPassword"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                      <p className="text-xs text-gray-500">
-                        Password must be at least 6 characters
-                      </p>
-                    </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? "Creating account..." : "Create Account"}
-                    </Button>
-                  </form>
-                </TabsContent>
-              </CardContent>
 
-              <CardFooter>
-                <p className="text-sm text-center w-full text-gray-500">
-                  {activeTab === "login" ? (
-                    "Don't have an account? Click 'Sign Up' above"
-                  ) : (
-                    "Already have an account? Click 'Log In' above"
-                  )}
-                </p>
-              </CardFooter>
+                <CardFooter>
+                  <p className="text-sm text-center w-full text-gray-500">
+                    {activeTab === "login" ? (
+                      "Don't have an account? Click 'Sign Up' above"
+                    ) : (
+                      "Already have an account? Click 'Log In' above"
+                    )}
+                  </p>
+                </CardFooter>
+              </Tabs>
             </Card>
           </div>
         </div>
