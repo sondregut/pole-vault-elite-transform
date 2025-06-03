@@ -3,6 +3,8 @@ import React from "react";
 import VideoCard from "./VideoCard";
 import { Video } from "@/hooks/useVideoLibrary";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AlertCircle, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface VideoGridProps {
   videos: Video[];
@@ -33,9 +35,25 @@ const VideoGrid: React.FC<VideoGridProps> = ({
 
   if (videos.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 text-lg">No videos found matching your criteria.</p>
-        <p className="text-gray-400 mt-2">Try adjusting your filters or search terms.</p>
+      <div className="text-center py-12 bg-white rounded-xl shadow-sm">
+        <div className="max-w-md mx-auto">
+          <AlertCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Videos Found</h3>
+          <p className="text-gray-500 mb-6">
+            {selectedCategory 
+              ? "No videos found in this category. Try adjusting your filters or search terms."
+              : "No videos have been uploaded yet."
+            }
+          </p>
+          <div className="text-sm text-gray-400 space-y-2">
+            <p>To add videos to the library:</p>
+            <div className="flex items-center justify-center gap-2 text-xs">
+              <Upload className="h-4 w-4" />
+              <span>Upload videos to the 'video-library' storage bucket in Supabase</span>
+            </div>
+            <p className="text-xs">Supported formats: MP4, WebM, MOV, QuickTime</p>
+          </div>
+        </div>
       </div>
     );
   }

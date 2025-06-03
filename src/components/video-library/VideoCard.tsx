@@ -2,8 +2,9 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Clock, Eye } from "lucide-react";
+import { Play, Clock, Eye, AlertCircle } from "lucide-react";
 import { Video } from "@/hooks/useVideoLibrary";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VideoCardProps {
   video: Video;
@@ -11,6 +12,45 @@ interface VideoCardProps {
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({ video, onClick }) => {
+  const [thumbnailUrl, setThumbnailUrl] = React.useState<string | null>(null);
+  const [thumbnailError, setThumbnailError] = React.useState(false);
+
+  React.useEffect(() => {
+    const generateThumbnailUrl = async () => {
+      if (video.thumbnail_path) {
+        try {
+          // Try to get a signed URL first
+          const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+            .from('video-thumbnails')
+            .createSignedUrl(video.thumbnail_path, 3600);
+
+          if (signedUrlData?.signedUrl && !signedUrlError) {
+            setThumbnailUrl(signedUrlData.signedUrl);
+            return;
+          }
+
+          // Fallback to public URL
+          const { data: publicUrlData } = supabase.storage
+            .from('video-thumbnails')
+            .getPublicUrl(video.thumbnail_path);
+
+          if (publicUrlData?.publicUrl) {
+            setThumbnailUrl(publicUrlData.publicUrl);
+            return;
+          }
+
+          // Final fallback
+          setThumbnailUrl(`https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/video-thumbnails/${video.thumbnail_path}`);
+        } catch (err) {
+          console.error('Error generating thumbnail URL:', err);
+          setThumbnailError(true);
+        }
+      }
+    };
+
+    generateThumbnailUrl();
+  }, [video.thumbnail_path]);
+
   const formatDuration = (seconds: number | null) => {
     if (!seconds) return "Unknown";
     const minutes = Math.floor(seconds / 60);
@@ -18,12 +58,12 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onClick }) => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const getThumbnailUrl = () => {
-    if (video.thumbnail_path) {
-      return `https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/video-thumbnails/${video.thumbnail_path}`;
-    }
-    // Fallback to a default thumbnail or video first frame
+  const getFallbackThumbnail = () => {
     return "https://via.placeholder.com/400x225/e5e7eb/6b7280?text=Video";
+  };
+
+  const handleThumbnailError = () => {
+    setThumbnailError(true);
   };
 
   return (
@@ -34,11 +74,22 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onClick }) => {
       <CardContent className="p-0">
         {/* Video Thumbnail */}
         <div className="relative aspect-video bg-gray-200 rounded-t-lg overflow-hidden">
-          <img
-            src={getThumbnailUrl()}
-            alt={video.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          {thumbnailError ? (
+            <div className="w-full h-full flex items-center justify-center bg-gray-300">
+              <div className="text-center text-gray-500">
+                <AlertCircle className="h-8 w-8 mx-auto mb-2" />
+                <p className="text-sm">No thumbnail</p>
+              </div>
+            </div>
+          ) : (
+            <img
+              src={thumbnailUrl || getFallbackThumbnail()}
+              alt={video.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={handleThumbnailError}
+            />
+          )}
+          
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
             <Play className="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>

@@ -6,7 +6,10 @@ import VideoFilters from "@/components/video-library/VideoFilters";
 import VideoSearch from "@/components/video-library/VideoSearch";
 import CategoryNavigation from "@/components/video-library/CategoryNavigation";
 import VideoPlayer from "@/components/video-library/VideoPlayer";
+import VideoUploadHelper from "@/components/video-library/VideoUploadHelper";
 import { useVideoLibrary, Video } from "@/hooks/useVideoLibrary";
+import { Button } from "@/components/ui/button";
+import { HelpCircle } from "lucide-react";
 
 const VideoLibrary = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -17,6 +20,7 @@ const VideoLibrary = () => {
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+  const [showUploadHelper, setShowUploadHelper] = useState(false);
 
   const {
     videos,
@@ -51,11 +55,29 @@ const VideoLibrary = () => {
         <div className="container mx-auto px-6 max-w-7xl">
           {/* Header */}
           <div className="mb-10 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Video Library</h1>
+            <div className="flex justify-center items-center gap-4 mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Video Library</h1>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowUploadHelper(!showUploadHelper)}
+                className="gap-2"
+              >
+                <HelpCircle className="h-4 w-4" />
+                Upload Guide
+              </Button>
+            </div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Comprehensive collection of pole vault training videos, drills, and exercises
             </p>
           </div>
+
+          {/* Upload Helper */}
+          {showUploadHelper && (
+            <div className="mb-8">
+              <VideoUploadHelper />
+            </div>
+          )}
 
           {/* Category Navigation */}
           <div className="mb-8">
