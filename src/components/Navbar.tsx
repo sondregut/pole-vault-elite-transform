@@ -1,9 +1,17 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
-import { Menu } from "lucide-react";
+import { Menu, LogIn, LogOut, User } from "lucide-react";
 import CartIcon from "./CartIcon";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Update the interface to include the external property
 interface NavLink {
@@ -16,6 +24,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { user, isAdmin, loading, signOut } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -55,6 +64,11 @@ const Navbar = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    window.location.href = '/';
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-white z-50 transition-shadow ${isScrolled ? "shadow-md" : ""}`}>
       <div className="container mx-auto py-3 flex items-center justify-between">
@@ -90,11 +104,50 @@ const Navbar = () => {
             )
           ))}
           <CartIcon />
+          
+          {/* Auth Button */}
+          {!loading && (
+            user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <User className="h-4 w-4 mr-2" />
+                    {user.email?.split('@')[0]}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin/videos">Admin Panel</Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button asChild variant="outline" size="sm">
+                <Link to="/auth">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Link>
+              </Button>
+            )
+          )}
         </div>
 
-        {/* Mobile Navigation Toggle - Updated with Lucide Menu icon */}
+        {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center">
           <CartIcon />
+          {!loading && !user && (
+            <Button asChild variant="outline" size="sm" className="mr-2">
+              <Link to="/auth">
+                <LogIn className="h-4 w-4" />
+              </Link>
+            </Button>
+          )}
           <button
             onClick={toggleMenu}
             className="p-2 ml-2 rounded-md hover:bg-gray-100 transition-colors"
@@ -134,6 +187,40 @@ const Navbar = () => {
                 </Link>
               )
             ))}
+            
+            {/* Mobile Auth Section */}
+            {!loading && (
+              user ? (
+                <div className="py-3 border-b border-gray-100">
+                  <div className="text-sm text-gray-600 mb-2">Signed in as {user.email}</div>
+                  {isAdmin && (
+                    <Link 
+                      to="/admin/videos" 
+                      className="block py-2 text-gray-900 hover:text-primary"
+                      onClick={handleLinkClick}
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center py-2 text-gray-900 hover:text-primary"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/auth"
+                  className="py-3 text-gray-900 hover:text-primary border-b border-gray-100 flex items-center"
+                  onClick={handleLinkClick}
+                >
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Link>
+              )
+            )}
           </div>
         </div>
       )}

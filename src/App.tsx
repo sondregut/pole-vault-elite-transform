@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +23,7 @@ import MediaKit from "./pages/MediaKit";
 import PVT from "./pages/PVT";
 import VideoLibrary from "./pages/VideoLibrary";
 import AdminVideos from "./pages/AdminVideos";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +36,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/coaching" element={<OneOnOneCoaching />} />
             <Route path="/about" element={<About />} />
             <Route path="/shop" element={<Shop />} />
