@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Dialog,
@@ -17,26 +18,12 @@ interface VideoModalProps {
 const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
   if (!exercise) return null;
 
-  const getCategoryStyle = (category: string) => {
-    const styles = {
-      'Warm-up': 'bg-green-50 text-green-700 border-green-200',
-      'Strength': 'bg-blue-50 text-blue-700 border-blue-200',
-      'Rehab': 'bg-purple-50 text-purple-700 border-purple-200',
-      'PVD': 'bg-red-50 text-red-700 border-red-200',
-      'Med Ball': 'bg-orange-50 text-orange-700 border-orange-200',
-      'Gym': 'bg-gray-50 text-gray-700 border-gray-200'
-    };
-    return styles[category as keyof typeof styles] || 'bg-gray-50 text-gray-700 border-gray-200';
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
-            <div 
-              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium shadow-sm ${getCategoryStyle(exercise.category)}`}
-            >
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium shadow-sm bg-gray-50 text-gray-700 border-gray-200">
               {exercise.category}
             </div>
             <div className="flex items-center gap-1 text-gray-500 text-sm">

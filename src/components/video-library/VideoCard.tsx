@@ -9,18 +9,6 @@ interface VideoCardProps {
 }
 
 const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
-  const getCategoryStyle = (category: string) => {
-    const styles = {
-      'Warm-up': 'bg-green-50 text-green-700 border-green-200',
-      'Strength': 'bg-blue-50 text-blue-700 border-blue-200',
-      'Rehab': 'bg-purple-50 text-purple-700 border-purple-200',
-      'PVD': 'bg-red-50 text-red-700 border-red-200',
-      'Med Ball': 'bg-orange-50 text-orange-700 border-orange-200',
-      'Gym': 'bg-gray-50 text-gray-700 border-gray-200'
-    };
-    return styles[category as keyof typeof styles] || 'bg-gray-50 text-gray-700 border-gray-200';
-  };
-
   return (
     <div
       onClick={onClick}
@@ -34,9 +22,7 @@ const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
       </div>
 
       {/* Category pill button */}
-      <div 
-        className={`inline-flex items-center px-1 py-0 rounded-full text-sm font-medium mb-3 shadow-sm ${getCategoryStyle(exercise.category)}`}
-      >
+      <div className="inline-flex items-center px-1 py-0 rounded-full text-sm font-medium mb-3 shadow-sm bg-gray-50 text-gray-700 border-gray-200">
         {exercise.category}
       </div>
 
