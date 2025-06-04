@@ -42,7 +42,18 @@ export const useVideos = () => {
         throw fetchError;
       }
 
-      setVideos(data || []);
+      // Type cast the data to ensure it matches our Video interface
+      const typedVideos: Video[] = (data || []).map(video => ({
+        ...video,
+        category: video.category as Video['category'],
+        difficulty: video.difficulty as Video['difficulty'],
+        instructions: video.instructions || [],
+        key_points: video.key_points || [],
+        equipment: video.equipment || [],
+        target_muscles: video.target_muscles || []
+      }));
+
+      setVideos(typedVideos);
     } catch (err: any) {
       console.error('Error fetching videos:', err);
       setError(err.message || 'Failed to fetch videos');
