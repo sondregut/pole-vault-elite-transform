@@ -1,21 +1,31 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
-import { Menu } from "lucide-react";
+import { Menu, User, LogOut } from "lucide-react";
 import CartIcon from "./CartIcon";
+import { useAuth } from "@/context/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Update the interface to include the external property
 interface NavLink {
   name: string;
   href: string;
   external?: boolean;
+  requireAuth?: boolean;
 }
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -42,7 +52,7 @@ const Navbar = () => {
     { name: "About", href: "/about" },
     { name: "1:1 Coaching", href: "/coaching" },
     { name: "Blog", href: "/blog" },
-    { name: "Video Library", href: "/video-library" },
+    { name: "Video Library", href: "/video-library", requireAuth: true },
     { name: "App", href: "/coming-soon" },
     { name: "Programs", href: "/shop" },
     { name: "Contact", href: "/contact" },
@@ -55,6 +65,13 @@ const Navbar = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    setIsOpen(false);
+  };
+
+  const visibleNavLinks = navLinks.filter(link => !link.requireAuth || user);
+
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-white z-50 transition-shadow ${isScrolled ? "shadow-md" : ""}`}>
       <div className="container mx-auto py-3 flex items-center justify-between">
@@ -65,7 +82,7 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
+          {visibleNavLinks.map((link) => (
             link.external ? (
               <a
                 key={link.name}
@@ -89,10 +106,33 @@ const Navbar = () => {
               </Link>
             )
           ))}
+          
           <CartIcon />
+          
+          {/* Auth Section */}
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  Account
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link to="/auth">
+              <Button size="sm">Sign In</Button>
+            </Link>
+          )}
         </div>
 
-        {/* Mobile Navigation Toggle - Updated with Lucide Menu icon */}
+        {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center">
           <CartIcon />
           <button
@@ -109,7 +149,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-md">
           <div className="container mx-auto py-4 flex flex-col">
-            {navLinks.map((link) => (
+            {visibleNavLinks.map((link) => (
               link.external ? (
                 <a
                   key={link.name}
@@ -134,6 +174,24 @@ const Navbar = () => {
                 </Link>
               )
             ))}
+            
+            {/* Mobile Auth Section */}
+            {user ? (
+              <button
+                onClick={handleSignOut}
+                className="py-3 text-left text-gray-900 hover:text-primary border-b border-gray-100"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                className="py-3 text-gray-900 hover:text-primary border-b border-gray-100"
+                onClick={handleLinkClick}
+              >
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}
