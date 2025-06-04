@@ -15,8 +15,9 @@ const FilterButtons = ({ categories, activeCategory, onCategoryChange }: FilterB
         <Button
           key={category}
           variant={activeCategory === category ? "default" : "outline"}
+          size="sm"
           onClick={() => onCategoryChange(category)}
-          className="transition-all duration-200"
+          className="transition-all duration-200 px-3 py-1 h-auto text-sm"
         >
           {category}
         </Button>
