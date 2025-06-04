@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -23,7 +22,7 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium shadow-sm bg-gray-50 text-gray-700 border-gray-200">
+            <div className="text-sm font-medium text-gray-600">
               {exercise.category}
             </div>
             <div className="flex items-center gap-1 text-gray-500 text-sm">

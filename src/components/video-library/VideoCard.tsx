@@ -21,8 +21,8 @@ const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
         </div>
       </div>
 
-      {/* Category pill button */}
-      <div className="inline-flex items-center px-1 py-0 rounded-full text-sm font-medium mb-3 shadow-sm bg-gray-50 text-gray-700 border-gray-200">
+      {/* Category text only */}
+      <div className="text-sm font-medium mb-3 text-gray-600">
         {exercise.category}
       </div>
 
