@@ -45,8 +45,8 @@ const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
         </div>
       </div>
 
-      {/* Category badge with compact padding */}
-      <Badge className={`mb-3 px-1.5 py-0.5 ${getCategoryColor(exercise.category)}`}>
+      {/* Category badge with minimal padding */}
+      <Badge className={`mb-3 px-1 py-0 ${getCategoryColor(exercise.category)}`}>
         {exercise.category}
       </Badge>
 
