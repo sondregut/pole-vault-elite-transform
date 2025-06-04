@@ -38,26 +38,26 @@ const VideoForm = ({ video, onSuccess, onCancel }: VideoFormProps) => {
   const videoInputRef = useRef<HTMLInputElement>(null);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
 
-  const handleArrayChange = (field: string, index: number, value: string) => {
+  const handleArrayChange = (field: keyof typeof formData, index: number, value: string) => {
     setFormData(prev => ({
       ...prev,
-      [field]: prev[field as keyof typeof prev].map((item: string, i: number) => 
+      [field]: (prev[field] as string[]).map((item, i) => 
         i === index ? value : item
       )
     }));
   };
 
-  const addArrayItem = (field: string) => {
+  const addArrayItem = (field: keyof typeof formData) => {
     setFormData(prev => ({
       ...prev,
-      [field]: [...prev[field as keyof typeof prev], '']
+      [field]: [...(prev[field] as string[]), '']
     }));
   };
 
-  const removeArrayItem = (field: string, index: number) => {
+  const removeArrayItem = (field: keyof typeof formData, index: number) => {
     setFormData(prev => ({
       ...prev,
-      [field]: prev[field as keyof typeof prev].filter((_: string, i: number) => i !== index)
+      [field]: (prev[field] as string[]).filter((_, i) => i !== index)
     }));
   };
 
@@ -136,8 +136,8 @@ const VideoForm = ({ video, onSuccess, onCancel }: VideoFormProps) => {
     }
   };
 
-  const renderArrayField = (field: string, label: string, placeholder: string) => {
-    const items = formData[field as keyof typeof formData] as string[];
+  const renderArrayField = (field: keyof typeof formData, label: string, placeholder: string) => {
+    const items = formData[field] as string[];
     
     return (
       <div className="space-y-2">
