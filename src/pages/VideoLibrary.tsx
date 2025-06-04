@@ -1,7 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import VideoCard from '@/components/video-library/VideoCard';
 import FilterButtons from '@/components/video-library/FilterButtons';
 import VideoModal from '@/components/video-library/VideoModal';
@@ -55,7 +54,7 @@ const VideoLibrary = () => {
         {/* Header Section */}
         <div className="text-center mb-12">
           <h1 className="section-heading">
-            Exercise Video Library
+            Video Library
           </h1>
           <p className="section-subheading">
             Comprehensive pole vault training exercises to improve your technique, strength, and performance. 
@@ -128,8 +127,6 @@ const VideoLibrary = () => {
         isOpen={isModalOpen}
         onClose={handleModalClose}
       />
-
-      <Footer />
     </div>
   );
 };
