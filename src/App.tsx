@@ -26,6 +26,7 @@ import MediaKit from "./pages/MediaKit";
 import PVT from "./pages/PVT";
 import VideoLibrary from "./pages/VideoLibrary";
 import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,11 @@ const App = () => (
               <Route path="/video-library" element={
                 <ProtectedRoute>
                   <VideoLibrary />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <Admin />
                 </ProtectedRoute>
               } />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

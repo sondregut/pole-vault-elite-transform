@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
-import { Menu, User, LogOut } from "lucide-react";
+import { Menu, User, LogOut, Settings } from "lucide-react";
 import CartIcon from "./CartIcon";
 import { useAuth } from "@/context/AuthContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useUserRole();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -119,6 +121,14 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                {isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin" className="flex items-center">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Admin Panel
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign Out
@@ -177,12 +187,23 @@ const Navbar = () => {
             
             {/* Mobile Auth Section */}
             {user ? (
-              <button
-                onClick={handleSignOut}
-                className="py-3 text-left text-gray-900 hover:text-primary border-b border-gray-100"
-              >
-                Sign Out
-              </button>
+              <>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="py-3 text-gray-900 hover:text-primary border-b border-gray-100"
+                    onClick={handleLinkClick}
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                <button
+                  onClick={handleSignOut}
+                  className="py-3 text-left text-gray-900 hover:text-primary border-b border-gray-100"
+                >
+                  Sign Out
+                </button>
+              </>
             ) : (
               <Link
                 to="/auth"
