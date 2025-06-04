@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -6,7 +5,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import { Clock, CheckCircle, Package, Target } from 'lucide-react';
 import { VideoExercise } from '@/data/videoLibraryData';
 
@@ -19,16 +17,16 @@ interface VideoModalProps {
 const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
   if (!exercise) return null;
 
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      'Warm-up': 'bg-green-100 text-green-800',
-      'Strength': 'bg-blue-100 text-blue-800',
-      'Rehab': 'bg-purple-100 text-purple-800',
-      'PVD': 'bg-red-100 text-red-800',
-      'Med Ball': 'bg-orange-100 text-orange-800',
-      'Gym': 'bg-gray-100 text-gray-800'
+  const getCategoryStyle = (category: string) => {
+    const styles = {
+      'Warm-up': 'bg-green-50 text-green-700 border-green-200',
+      'Strength': 'bg-blue-50 text-blue-700 border-blue-200',
+      'Rehab': 'bg-purple-50 text-purple-700 border-purple-200',
+      'PVD': 'bg-red-50 text-red-700 border-red-200',
+      'Med Ball': 'bg-orange-50 text-orange-700 border-orange-200',
+      'Gym': 'bg-gray-50 text-gray-700 border-gray-200'
     };
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+    return styles[category as keyof typeof styles] || 'bg-gray-50 text-gray-700 border-gray-200';
   };
 
   const getDifficultyDots = (difficulty: number) => {
@@ -47,9 +45,11 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
-            <Badge className={getCategoryColor(exercise.category)}>
+            <div 
+              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium shadow-sm ${getCategoryStyle(exercise.category)}`}
+            >
               {exercise.category}
-            </Badge>
+            </div>
             <div className="flex items-center gap-1">
               {getDifficultyDots(exercise.difficulty)}
             </div>
