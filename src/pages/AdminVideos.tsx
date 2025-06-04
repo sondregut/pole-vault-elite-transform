@@ -13,6 +13,14 @@ const AdminVideos = () => {
   const { user, isAdmin, loading: authLoading } = useAuth();
   const { videos, loading: videosLoading, refetch } = useVideos();
 
+  // Debug logging
+  console.log('AdminVideos - Auth state:', { 
+    user: user?.id, 
+    isAdmin, 
+    authLoading,
+    userEmail: user?.email 
+  });
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-white">
@@ -20,7 +28,7 @@ const AdminVideos = () => {
         <main className="section-padding py-20">
           <div className="text-center">
             <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary" />
-            <p className="mt-4 text-gray-600">Loading...</p>
+            <p className="mt-4 text-gray-600">Loading authentication...</p>
           </div>
         </main>
       </div>
@@ -36,6 +44,9 @@ const AdminVideos = () => {
             <Lock className="mx-auto h-12 w-12 text-gray-400" />
             <h1 className="mt-4 text-2xl font-bold text-gray-900">Authentication Required</h1>
             <p className="mt-2 text-gray-600">Please sign in to access the admin panel.</p>
+            <Button asChild className="mt-4">
+              <a href="/auth">Sign In</a>
+            </Button>
           </div>
         </main>
       </div>
@@ -51,6 +62,12 @@ const AdminVideos = () => {
             <Lock className="mx-auto h-12 w-12 text-gray-400" />
             <h1 className="mt-4 text-2xl font-bold text-gray-900">Access Denied</h1>
             <p className="mt-2 text-gray-600">You don't have permission to access this page.</p>
+            <p className="mt-2 text-sm text-gray-500">
+              User: {user.email} | Admin Status: {isAdmin ? 'Yes' : 'No'}
+            </p>
+            <p className="mt-1 text-xs text-gray-400">
+              If you should have admin access, please check that your user role is properly configured.
+            </p>
           </div>
         </main>
       </div>
@@ -66,6 +83,7 @@ const AdminVideos = () => {
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Video Management</h1>
             <p className="mt-2 text-gray-600">Upload and manage videos for the video library</p>
+            <p className="mt-1 text-sm text-green-600">✓ Admin access confirmed for {user.email}</p>
           </div>
 
           <Tabs defaultValue="upload" className="space-y-6">

@@ -11,6 +11,7 @@ export const useAuth = () => {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session:', session?.user?.id);
       setUser(session?.user ?? null);
       if (session?.user) {
         checkAdminStatus(session.user.id);
@@ -21,6 +22,7 @@ export const useAuth = () => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('Auth state change:', _event, session?.user?.id);
       setUser(session?.user ?? null);
       if (session?.user) {
         checkAdminStatus(session.user.id);
@@ -34,15 +36,19 @@ export const useAuth = () => {
   }, []);
 
   const checkAdminStatus = async (userId: string) => {
+    console.log('Checking admin status for user:', userId);
     try {
       const { data, error } = await supabase
         .rpc('has_role', { _user_id: userId, _role: 'admin' });
+      
+      console.log('Admin check result:', { data, error });
       
       if (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
       } else {
         setIsAdmin(data || false);
+        console.log('User is admin:', data || false);
       }
     } catch (error) {
       console.error('Error checking admin status:', error);
