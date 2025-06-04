@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Clock } from 'lucide-react';
-import { VideoExercise } from '@/data/videoLibraryData';
+import { Video } from '@/hooks/useVideos';
 
 interface VideoCardProps {
-  exercise: VideoExercise;
+  exercise: Video;
   onClick: () => void;
 }
 
@@ -14,11 +14,19 @@ const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
       onClick={onClick}
       className="feature-card cursor-pointer group"
     >
-      {/* Thumbnail placeholder */}
-      <div className="w-full h-40 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-        <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-          <div className="w-0 h-0 border-l-4 border-l-white border-t-2 border-t-transparent border-b-2 border-b-transparent ml-1"></div>
-        </div>
+      {/* Thumbnail - show actual thumbnail if available, otherwise placeholder */}
+      <div className="w-full h-40 bg-gray-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+        {exercise.thumbnail_url ? (
+          <img 
+            src={exercise.thumbnail_url} 
+            alt={exercise.title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+            <div className="w-0 h-0 border-l-4 border-l-white border-t-2 border-t-transparent border-b-2 border-b-transparent ml-1"></div>
+          </div>
+        )}
       </div>
 
       {/* Category text only */}

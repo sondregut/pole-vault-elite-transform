@@ -5,39 +5,43 @@ import VideoCard from '@/components/video-library/VideoCard';
 import FilterButtons from '@/components/video-library/FilterButtons';
 import VideoModal from '@/components/video-library/VideoModal';
 import VideoSearch from '@/components/video-library/VideoSearch';
-import { videoExercises, categories, VideoExercise } from '@/data/videoLibraryData';
+import { useVideos, Video } from '@/hooks/useVideos';
+
+const categories = ['All', 'Warm-up', 'Strength', 'Rehab', 'PVD', 'Med Ball', 'Gym'] as const;
 
 const VideoLibrary = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedExercise, setSelectedExercise] = useState<VideoExercise | null>(null);
+  const [selectedExercise, setSelectedExercise] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const { videos, loading, error } = useVideos();
 
   const filteredExercises = useMemo(() => {
-    let filtered = videoExercises;
+    let filtered = videos;
 
     // Filter by category
     if (activeCategory !== 'All') {
-      filtered = filtered.filter(exercise => exercise.category === activeCategory);
+      filtered = filtered.filter(video => video.category === activeCategory);
     }
 
     // Filter by search term
     if (searchTerm.trim()) {
       const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(exercise =>
-        exercise.title.toLowerCase().includes(searchLower) ||
-        exercise.description.toLowerCase().includes(searchLower) ||
-        exercise.category.toLowerCase().includes(searchLower) ||
-        exercise.targetMuscles.some(muscle => muscle.toLowerCase().includes(searchLower)) ||
-        exercise.equipment.some(equip => equip.toLowerCase().includes(searchLower))
+      filtered = filtered.filter(video =>
+        video.title.toLowerCase().includes(searchLower) ||
+        video.description.toLowerCase().includes(searchLower) ||
+        video.category.toLowerCase().includes(searchLower) ||
+        video.target_muscles.some(muscle => muscle.toLowerCase().includes(searchLower)) ||
+        video.equipment.some(equip => equip.toLowerCase().includes(searchLower))
       );
     }
 
     return filtered;
-  }, [activeCategory, searchTerm]);
+  }, [videos, activeCategory, searchTerm]);
 
-  const handleVideoClick = (exercise: VideoExercise) => {
-    setSelectedExercise(exercise);
+  const handleVideoClick = (video: Video) => {
+    setSelectedExercise(video);
     setIsModalOpen(true);
   };
 
@@ -45,6 +49,39 @@ const VideoLibrary = () => {
     setIsModalOpen(false);
     setSelectedExercise(null);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <main className="section-padding py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading videos...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <main className="section-padding py-20">
+          <div className="text-center">
+            <p className="text-red-600 mb-4">Error loading videos: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="text-primary hover:underline"
+            >
+              Try again
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -88,11 +125,11 @@ const VideoLibrary = () => {
 
         {/* Video Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in">
-          {filteredExercises.map((exercise) => (
+          {filteredExercises.map((video) => (
             <VideoCard
-              key={exercise.id}
-              exercise={exercise}
-              onClick={() => handleVideoClick(exercise)}
+              key={video.id}
+              exercise={video}
+              onClick={() => handleVideoClick(video)}
             />
           ))}
         </div>

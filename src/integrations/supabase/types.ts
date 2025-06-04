@@ -230,6 +230,87 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string
+          difficulty: number
+          duration: string
+          equipment: string[]
+          file_size: number | null
+          file_type: string | null
+          id: string
+          instructions: string[]
+          key_points: string[]
+          target_muscles: string[]
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          difficulty: number
+          duration: string
+          equipment?: string[]
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          instructions?: string[]
+          key_points?: string[]
+          target_muscles?: string[]
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          difficulty?: number
+          duration?: string
+          equipment?: string[]
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          instructions?: string[]
+          key_points?: string[]
+          target_muscles?: string[]
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
           created_at: string
@@ -269,12 +350,14 @@ export type Database = {
         }[]
       }
       has_role: {
-        Args: { _user_id: string; _role: string }
+        Args:
+          | { _user_id: string; _role: Database["public"]["Enums"]["app_role"] }
+          | { _user_id: string; _role: string }
         Returns: boolean
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -389,6 +472,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

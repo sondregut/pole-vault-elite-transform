@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Dialog,
@@ -6,10 +7,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Clock, CheckCircle, Package, Target } from 'lucide-react';
-import { VideoExercise } from '@/data/videoLibraryData';
+import { Video } from '@/hooks/useVideos';
 
 interface VideoModalProps {
-  exercise: VideoExercise | null;
+  exercise: Video | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -37,20 +38,24 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
         <div className="space-y-6">
           {/* Video Section */}
           <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-0 h-0 border-l-6 border-l-white border-t-4 border-t-transparent border-b-4 border-b-transparent ml-1"></div>
-              </div>
-              <p className="text-gray-600 mb-2">Video Player</p>
-              <a
-                href={`https://youtube.com/watch?v=${exercise.youtubeId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
+            {exercise.video_url ? (
+              <video
+                controls
+                className="w-full h-full rounded-lg"
+                poster={exercise.thumbnail_url}
               >
-                Watch on YouTube
-              </a>
-            </div>
+                <source src={exercise.video_url} type={exercise.file_type || 'video/mp4'} />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-0 h-0 border-l-6 border-l-white border-t-4 border-t-transparent border-b-4 border-b-transparent ml-1"></div>
+                </div>
+                <p className="text-gray-600 mb-2">Video coming soon</p>
+                <p className="text-sm text-gray-500">This exercise video will be available shortly</p>
+              </div>
+            )}
           </div>
 
           {/* Information Grid */}
@@ -80,7 +85,7 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
                 Key Points
               </h3>
               <ul className="space-y-2">
-                {exercise.keyPoints.map((point, index) => (
+                {exercise.key_points.map((point, index) => (
                   <li key={index} className="flex gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700">{point}</span>
@@ -112,7 +117,7 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
                 Target Muscles
               </h3>
               <ul className="space-y-1">
-                {exercise.targetMuscles.map((muscle, index) => (
+                {exercise.target_muscles.map((muscle, index) => (
                   <li key={index} className="flex gap-2 items-center">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
                     <span className="text-gray-700">{muscle}</span>
