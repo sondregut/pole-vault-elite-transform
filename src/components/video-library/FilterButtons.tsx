@@ -12,19 +12,15 @@ const FilterButtons = ({ categories, activeCategory, onCategoryChange }: FilterB
   return (
     <div className="flex flex-wrap gap-2 justify-center mb-8">
       {categories.map((category) => (
-        <button
+        <Button
           key={category}
+          variant={activeCategory === category ? "default" : "outline"}
+          size="sm"
           onClick={() => onCategoryChange(category)}
-          className={`
-            px-1.5 py-2 rounded-full text-sm font-medium transition-all duration-200 
-            ${activeCategory === category 
-              ? 'bg-blue-100 text-blue-700 border border-blue-200' 
-              : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200'
-            }
-          `}
+          className="transition-all duration-200 px-3 py-1 h-auto text-sm"
         >
           {category}
-        </button>
+        </Button>
       ))}
     </div>
   );
