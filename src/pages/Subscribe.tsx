@@ -14,6 +14,9 @@ const Subscribe = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Development mode check
+  const isDevelopment = import.meta.env.DEV;
+
   useEffect(() => {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -70,6 +73,11 @@ const Subscribe = () => {
     }
   };
 
+  const handleDevBypass = () => {
+    toast.success("Development bypass activated!");
+    navigate("/video-library");
+  };
+
   const features = [
     "Access to complete exercise library",
     "HD video quality with detailed instructions",
@@ -94,6 +102,18 @@ const Subscribe = () => {
               Get unlimited access to our comprehensive pole vault training library
             </p>
           </div>
+
+          {isDevelopment && (
+            <div className="text-center mb-8">
+              <Button 
+                onClick={handleDevBypass}
+                variant="outline"
+                className="bg-yellow-400 text-black border-yellow-400 hover:bg-yellow-300"
+              >
+                I'm the dev
+              </Button>
+            </div>
+          )}
 
           <div className="max-w-lg mx-auto">
             <Card className="shadow-2xl border-0 relative overflow-hidden">
