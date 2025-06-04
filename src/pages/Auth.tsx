@@ -25,6 +25,9 @@ const Auth = () => {
   const [activeTab, setActiveTab] = useState("login");
   const navigate = useNavigate();
 
+  // Development mode check
+  const isDevelopment = import.meta.env.DEV;
+
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -64,7 +67,14 @@ const Auth = () => {
       
       if (error) throw error;
       
-      // Check if user has an active subscription
+      // Skip subscription check in development
+      if (isDevelopment) {
+        toast.success("Logged in successfully (Development Mode)");
+        navigate("/video-library");
+        return;
+      }
+      
+      // Check if user has an active subscription (production only)
       const { data: subscriber } = await supabase
         .from('subscribers')
         .select('subscribed, subscription_end')
@@ -111,9 +121,14 @@ const Auth = () => {
       
       if (error) throw error;
       
-      toast.success("Account created! Please check your email for verification, then subscribe to access the video library.");
-      // Redirect to subscription page after signup
-      navigate("/subscribe");
+      if (isDevelopment) {
+        toast.success("Account created! (Development Mode - No email verification required)");
+        navigate("/video-library");
+      } else {
+        toast.success("Account created! Please check your email for verification, then subscribe to access the video library.");
+        // Redirect to subscription page after signup
+        navigate("/subscribe");
+      }
     } catch (error: any) {
       toast.error(error.message || "Failed to sign up");
     } finally {
@@ -128,6 +143,12 @@ const Auth = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-md mx-auto">
             <h1 className="text-3xl font-bold mb-6 text-center text-white">Account Access</h1>
+            
+            {isDevelopment && (
+              <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-6">
+                <strong>Development Mode:</strong> Subscription checks are bypassed
+              </div>
+            )}
             
             <Card className="shadow-2xl border-0">
               <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>

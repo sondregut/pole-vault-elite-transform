@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import VideoGrid from "@/components/video-library/VideoGrid";
@@ -26,7 +27,12 @@ const VideoLibrary = () => {
 
   const { user, isAdmin, isLoading: isAuthLoading } = useUser();
 
+  // Development mode check
+  const isDevelopment = import.meta.env.DEV;
+
   useEffect(() => {
+    // In development, only check if user is logged in
+    // In production, also check subscription status
     if (!user && !isAuthLoading) {
       toast.info("Please log in to access the video library.");
       navigate("/auth");
@@ -95,6 +101,11 @@ const VideoLibrary = () => {
               <p className="text-xl text-white/90 max-w-3xl mx-auto">
                 Comprehensive training videos for athletes at all levels
               </p>
+              {isDevelopment && (
+                <div className="mt-4 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg inline-block">
+                  <strong>Development Mode:</strong> Full access enabled
+                </div>
+              )}
             </div>
           </div>
 
