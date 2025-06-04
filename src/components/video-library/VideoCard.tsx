@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Clock } from 'lucide-react';
 import { VideoExercise } from '@/data/videoLibraryData';
@@ -8,17 +9,6 @@ interface VideoCardProps {
 }
 
 const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
-  const getDifficultyDots = (difficulty: number) => {
-    return Array.from({ length: 3 }, (_, i) => (
-      <div
-        key={i}
-        className={`w-2 h-2 rounded-full ${
-          i < difficulty ? 'bg-primary' : 'bg-gray-300'
-        }`}
-      />
-    ));
-  };
-
   const getCategoryStyle = (category: string) => {
     const styles = {
       'Warm-up': 'bg-green-50 text-green-700 border-green-200',
@@ -45,7 +35,7 @@ const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
 
       {/* Category pill button */}
       <div 
-        className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium mb-3 shadow-sm ${getCategoryStyle(exercise.category)}`}
+        className={`inline-flex items-center px-1 py-0 rounded-full text-sm font-medium mb-3 shadow-sm ${getCategoryStyle(exercise.category)}`}
       >
         {exercise.category}
       </div>
@@ -60,13 +50,8 @@ const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
         {exercise.description}
       </p>
 
-      {/* Footer with difficulty and duration */}
-      <div className="flex items-center justify-between mt-auto">
-        {/* Difficulty dots */}
-        <div className="flex items-center gap-1">
-          {getDifficultyDots(exercise.difficulty)}
-        </div>
-
+      {/* Footer with duration only */}
+      <div className="flex items-center justify-end mt-auto">
         {/* Duration */}
         <div className="flex items-center gap-1 text-gray-500 text-sm">
           <Clock className="w-4 h-4" />

@@ -29,17 +29,6 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
     return styles[category as keyof typeof styles] || 'bg-gray-50 text-gray-700 border-gray-200';
   };
 
-  const getDifficultyDots = (difficulty: number) => {
-    return Array.from({ length: 3 }, (_, i) => (
-      <div
-        key={i}
-        className={`w-2 h-2 rounded-full ${
-          i < difficulty ? 'bg-primary' : 'bg-gray-300'
-        }`}
-      />
-    ));
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -49,9 +38,6 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
               className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium shadow-sm ${getCategoryStyle(exercise.category)}`}
             >
               {exercise.category}
-            </div>
-            <div className="flex items-center gap-1">
-              {getDifficultyDots(exercise.difficulty)}
             </div>
             <div className="flex items-center gap-1 text-gray-500 text-sm">
               <Clock className="w-4 h-4" />
