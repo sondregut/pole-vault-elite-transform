@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -22,6 +23,7 @@ import Programs from "./pages/Programs";
 import MediaKit from "./pages/MediaKit";
 import PVT from "./pages/PVT";
 import VideoLibrary from "./pages/VideoLibrary";
+import AdminVideos from "./pages/AdminVideos";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +52,7 @@ const App = () => (
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/pvt" element={<PVT />} />
             <Route path="/video-library" element={<VideoLibrary />} />
+            <Route path="/admin/videos" element={<AdminVideos />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
