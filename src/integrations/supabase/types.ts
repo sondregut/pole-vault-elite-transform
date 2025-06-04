@@ -152,42 +152,6 @@ export type Database = {
         }
         Relationships: []
       }
-      subscribers: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          stripe_customer_id: string | null
-          subscribed: boolean
-          subscription_end: string | null
-          subscription_tier: string | null
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          stripe_customer_id?: string | null
-          subscribed?: boolean
-          subscription_end?: string | null
-          subscription_tier?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          stripe_customer_id?: string | null
-          subscribed?: boolean
-          subscription_end?: string | null
-          subscription_tier?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       user_downloads: {
         Row: {
           download_count: number | null
@@ -230,130 +194,6 @@ export type Database = {
           },
         ]
       }
-      user_roles: {
-        Row: {
-          created_at: string
-          id: string
-          role: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          role: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          role?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      video_categories: {
-        Row: {
-          created_at: string
-          description: string | null
-          icon: string | null
-          id: string
-          name: string
-          parent_category_id: string | null
-          sort_order: number | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          icon?: string | null
-          id?: string
-          name: string
-          parent_category_id?: string | null
-          sort_order?: number | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          icon?: string | null
-          id?: string
-          name?: string
-          parent_category_id?: string | null
-          sort_order?: number | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "video_categories_parent_category_id_fkey"
-            columns: ["parent_category_id"]
-            isOneToOne: false
-            referencedRelation: "video_categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      videos: {
-        Row: {
-          category_id: string
-          created_at: string
-          description: string | null
-          duration: number | null
-          equipment_needed: string[] | null
-          file_path: string
-          id: string
-          is_featured: boolean | null
-          subcategory: string | null
-          tags: string[] | null
-          target_muscle_groups: string[] | null
-          thumbnail_path: string | null
-          title: string
-          updated_at: string
-          view_count: number | null
-        }
-        Insert: {
-          category_id: string
-          created_at?: string
-          description?: string | null
-          duration?: number | null
-          equipment_needed?: string[] | null
-          file_path: string
-          id?: string
-          is_featured?: boolean | null
-          subcategory?: string | null
-          tags?: string[] | null
-          target_muscle_groups?: string[] | null
-          thumbnail_path?: string | null
-          title: string
-          updated_at?: string
-          view_count?: number | null
-        }
-        Update: {
-          category_id?: string
-          created_at?: string
-          description?: string | null
-          duration?: number | null
-          equipment_needed?: string[] | null
-          file_path?: string
-          id?: string
-          is_featured?: boolean | null
-          subcategory?: string | null
-          tags?: string[] | null
-          target_muscle_groups?: string[] | null
-          thumbnail_path?: string | null
-          title?: string
-          updated_at?: string
-          view_count?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "videos_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "video_categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       waitlist: {
         Row: {
           created_at: string
@@ -361,6 +201,7 @@ export type Database = {
           first_name: string | null
           id: string
           last_name: string | null
+          synced_to_beehiiv: boolean | null
         }
         Insert: {
           created_at?: string
@@ -368,6 +209,7 @@ export type Database = {
           first_name?: string | null
           id?: string
           last_name?: string | null
+          synced_to_beehiiv?: boolean | null
         }
         Update: {
           created_at?: string
@@ -375,6 +217,7 @@ export type Database = {
           first_name?: string | null
           id?: string
           last_name?: string | null
+          synced_to_beehiiv?: boolean | null
         }
         Relationships: []
       }
@@ -391,10 +234,6 @@ export type Database = {
           unsynced: number
           sync_percentage: number
         }[]
-      }
-      has_role: {
-        Args: { _user_id: string; _role: string }
-        Returns: boolean
       }
     }
     Enums: {
