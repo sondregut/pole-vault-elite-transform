@@ -10,16 +10,8 @@ import { useVideos } from '@/hooks/useVideos';
 import { Loader2, Lock, Video, Upload } from 'lucide-react';
 
 const AdminVideos = () => {
-  const { user, isAdmin, loading: authLoading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { videos, loading: videosLoading, refetch } = useVideos();
-
-  // Debug logging
-  console.log('AdminVideos - Auth state:', { 
-    user: user?.id, 
-    isAdmin, 
-    authLoading,
-    userEmail: user?.email 
-  });
 
   if (authLoading) {
     return (
@@ -43,31 +35,10 @@ const AdminVideos = () => {
           <div className="text-center">
             <Lock className="mx-auto h-12 w-12 text-gray-400" />
             <h1 className="mt-4 text-2xl font-bold text-gray-900">Authentication Required</h1>
-            <p className="mt-2 text-gray-600">Please sign in to access the admin panel.</p>
+            <p className="mt-2 text-gray-600">Please sign in to access the video management panel.</p>
             <Button asChild className="mt-4">
               <a href="/auth">Sign In</a>
             </Button>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen bg-white">
-        <Navbar />
-        <main className="section-padding py-20">
-          <div className="text-center">
-            <Lock className="mx-auto h-12 w-12 text-gray-400" />
-            <h1 className="mt-4 text-2xl font-bold text-gray-900">Access Denied</h1>
-            <p className="mt-2 text-gray-600">You don't have permission to access this page.</p>
-            <p className="mt-2 text-sm text-gray-500">
-              User: {user.email} | Admin Status: {isAdmin ? 'Yes' : 'No'}
-            </p>
-            <p className="mt-1 text-xs text-gray-400">
-              If you should have admin access, please check that your user role is properly configured.
-            </p>
           </div>
         </main>
       </div>
@@ -83,7 +54,7 @@ const AdminVideos = () => {
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Video Management</h1>
             <p className="mt-2 text-gray-600">Upload and manage videos for the video library</p>
-            <p className="mt-1 text-sm text-green-600">✓ Admin access confirmed for {user.email}</p>
+            <p className="mt-1 text-sm text-blue-600">✓ Access granted for {user.email}</p>
           </div>
 
           <Tabs defaultValue="upload" className="space-y-6">
