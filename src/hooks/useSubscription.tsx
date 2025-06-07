@@ -70,7 +70,7 @@ export const useSubscription = () => {
       if (error) throw error;
       
       if (data.url) {
-        window.open(data.url, '_blank');
+        window.location.href = data.url;
       }
     } catch (error: any) {
       console.error('Error creating checkout:', error);
@@ -90,7 +90,7 @@ export const useSubscription = () => {
       if (error) throw error;
       
       if (data.url) {
-        window.open(data.url, '_blank');
+        window.location.href = data.url;
       }
     } catch (error: any) {
       console.error('Error opening customer portal:', error);
