@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Clock, CheckCircle, Package, Target } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { Video } from '@/hooks/useVideos';
 
 interface VideoModalProps {
@@ -59,71 +59,60 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
           </div>
 
           {/* Information Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-6">
             {/* Instructions */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-secondary flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-primary" />
-                Step-by-Step Instructions
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium text-secondary">
+                Instructions
               </h3>
-              <ol className="space-y-2">
+              <ol className="space-y-1 text-gray-700">
                 {exercise.instructions.map((instruction, index) => (
-                  <li key={index} className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm">
-                      {index + 1}
+                  <li key={index} className="flex gap-2">
+                    <span className="text-gray-400 font-medium min-w-[1.5rem]">
+                      {index + 1}.
                     </span>
-                    <span className="text-gray-700">{instruction}</span>
+                    <span>{instruction}</span>
                   </li>
                 ))}
               </ol>
             </div>
 
             {/* Key Points */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-secondary flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-primary" />
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium text-secondary">
                 Key Points
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-1 text-gray-700">
                 {exercise.key_points.map((point, index) => (
-                  <li key={index} className="flex gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{point}</span>
+                  <li key={index} className="flex gap-2">
+                    <span className="text-gray-400">–</span>
+                    <span>{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Equipment */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-secondary flex items-center gap-2">
-                <Package className="w-5 h-5 text-primary" />
-                Equipment Needed
-              </h3>
-              <ul className="space-y-1">
-                {exercise.equipment.map((item, index) => (
-                  <li key={index} className="flex gap-2 items-center">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span className="text-gray-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Equipment and Target Muscles in a row */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Equipment */}
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium text-secondary">
+                  Equipment
+                </h3>
+                <div className="text-gray-700">
+                  {exercise.equipment.join(', ')}
+                </div>
+              </div>
 
-            {/* Target Muscles */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-secondary flex items-center gap-2">
-                <Target className="w-5 h-5 text-primary" />
-                Target Muscles
-              </h3>
-              <ul className="space-y-1">
-                {exercise.target_muscles.map((muscle, index) => (
-                  <li key={index} className="flex gap-2 items-center">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span className="text-gray-700">{muscle}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Target Muscles */}
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium text-secondary">
+                  Target Muscles
+                </h3>
+                <div className="text-gray-700">
+                  {exercise.target_muscles.join(', ')}
+                </div>
+              </div>
             </div>
           </div>
         </div>
