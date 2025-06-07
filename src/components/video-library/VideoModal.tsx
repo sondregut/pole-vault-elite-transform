@@ -42,7 +42,7 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
               <video
                 controls
                 className="w-full h-full rounded-lg"
-                poster={exercise.thumbnail_url}
+                poster={exercise.thumbnail_url || exercise.video_url}
               >
                 <source src={exercise.video_url} type={exercise.file_type || 'video/mp4'} />
                 Your browser does not support the video tag.
@@ -59,16 +59,14 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
           </div>
 
           {/* Information Grid */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Instructions */}
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium text-secondary">
-                Instructions
-              </h3>
-              <ol className="space-y-1 text-gray-700">
+            <div>
+              <h3 className="text-base font-medium text-gray-900 mb-2">Instructions</h3>
+              <ol className="space-y-1 text-sm text-gray-700">
                 {exercise.instructions.map((instruction, index) => (
                   <li key={index} className="flex gap-2">
-                    <span className="text-gray-400 font-medium min-w-[1.5rem]">
+                    <span className="text-gray-400 font-medium min-w-[1.2rem] text-xs">
                       {index + 1}.
                     </span>
                     <span>{instruction}</span>
@@ -78,38 +76,30 @@ const VideoModal = ({ exercise, isOpen, onClose }: VideoModalProps) => {
             </div>
 
             {/* Key Points */}
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium text-secondary">
-                Key Points
-              </h3>
-              <ul className="space-y-1 text-gray-700">
+            <div>
+              <h3 className="text-base font-medium text-gray-900 mb-2">Key Points</h3>
+              <ul className="space-y-1 text-sm text-gray-700">
                 {exercise.key_points.map((point, index) => (
                   <li key={index} className="flex gap-2">
-                    <span className="text-gray-400">–</span>
+                    <span className="text-gray-400 text-xs">•</span>
                     <span>{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Equipment and Target Muscles in a row */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Equipment */}
-              <div className="space-y-2">
-                <h3 className="text-lg font-medium text-secondary">
-                  Equipment
-                </h3>
-                <div className="text-gray-700">
+            {/* Equipment and Target Muscles */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-base font-medium text-gray-900 mb-2">Equipment</h3>
+                <div className="text-sm text-gray-700">
                   {exercise.equipment.join(', ')}
                 </div>
               </div>
 
-              {/* Target Muscles */}
-              <div className="space-y-2">
-                <h3 className="text-lg font-medium text-secondary">
-                  Target Muscles
-                </h3>
-                <div className="text-gray-700">
+              <div>
+                <h3 className="text-base font-medium text-gray-900 mb-2">Target Muscles</h3>
+                <div className="text-sm text-gray-700">
                   {exercise.target_muscles.join(', ')}
                 </div>
               </div>

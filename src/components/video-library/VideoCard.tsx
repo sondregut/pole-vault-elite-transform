@@ -14,13 +14,20 @@ const VideoCard = ({ exercise, onClick }: VideoCardProps) => {
       onClick={onClick}
       className="feature-card cursor-pointer group"
     >
-      {/* Thumbnail - show actual thumbnail if available, otherwise placeholder */}
+      {/* Thumbnail - show thumbnail, video preview, or placeholder */}
       <div className="w-full h-40 bg-gray-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
         {exercise.thumbnail_url ? (
           <img 
             src={exercise.thumbnail_url} 
             alt={exercise.title}
             className="w-full h-full object-cover"
+          />
+        ) : exercise.video_url ? (
+          <video 
+            src={exercise.video_url}
+            className="w-full h-full object-cover"
+            muted
+            preload="metadata"
           />
         ) : (
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">

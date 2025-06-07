@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, Plus, X } from 'lucide-react';
+import { generateVideoThumbnail } from '@/utils/videoThumbnailGenerator';
 
 const categories = ['Warm-up', 'Strength', 'Rehab', 'PVD', 'Med Ball', 'Gym'] as const;
 
@@ -37,7 +37,6 @@ const VideoUploadForm = ({ onVideoUploaded }: { onVideoUploaded: () => void }) =
     target_muscles: ['']
   });
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
   const handleArrayFieldChange = (field: keyof Pick<VideoFormData, 'instructions' | 'key_points' | 'equipment' | 'target_muscles'>, index: number, value: string) => {
@@ -81,6 +80,24 @@ const VideoUploadForm = ({ onVideoUploaded }: { onVideoUploaded: () => void }) =
     return data.publicUrl;
   };
 
+  const uploadBlob = async (blob: Blob, bucket: string, fileName: string): Promise<string | null> => {
+    const filePath = fileName;
+
+    const { error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, blob);
+
+    if (error) {
+      throw error;
+    }
+
+    const { data } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -96,10 +113,15 @@ const VideoUploadForm = ({ onVideoUploaded }: { onVideoUploaded: () => void }) =
       const videoUrl = await uploadFile(videoFile, 'videos');
       if (!videoUrl) throw new Error('Failed to upload video');
 
-      // Upload thumbnail if provided
+      // Generate and upload thumbnail automatically
       let thumbnailUrl = null;
-      if (thumbnailFile) {
-        thumbnailUrl = await uploadFile(thumbnailFile, 'thumbnails');
+      try {
+        const thumbnailBlob = await generateVideoThumbnail(videoFile);
+        const thumbnailFileName = `${Date.now()}.jpg`;
+        thumbnailUrl = await uploadBlob(thumbnailBlob, 'thumbnails', thumbnailFileName);
+      } catch (thumbnailError) {
+        console.warn('Failed to generate thumbnail:', thumbnailError);
+        // Continue without thumbnail - video will use first frame as fallback
       }
 
       // Filter out empty strings from arrays
@@ -124,7 +146,7 @@ const VideoUploadForm = ({ onVideoUploaded }: { onVideoUploaded: () => void }) =
 
       if (error) throw error;
 
-      toast.success('Video uploaded successfully!');
+      toast.success('Video uploaded successfully with auto-generated thumbnail!');
       onVideoUploaded();
       
       // Reset form
@@ -140,7 +162,6 @@ const VideoUploadForm = ({ onVideoUploaded }: { onVideoUploaded: () => void }) =
         target_muscles: ['']
       });
       setVideoFile(null);
-      setThumbnailFile(null);
 
     } catch (error: any) {
       console.error('Error uploading video:', error);
@@ -154,6 +175,7 @@ const VideoUploadForm = ({ onVideoUploaded }: { onVideoUploaded: () => void }) =
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle>Upload New Video</CardTitle>
+        <p className="text-sm text-gray-600">Thumbnails will be automatically generated from your video</p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -221,27 +243,22 @@ const VideoUploadForm = ({ onVideoUploaded }: { onVideoUploaded: () => void }) =
             </div>
           </div>
 
-          {/* File Uploads */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="video">Video File</Label>
-              <Input
-                id="video"
-                type="file"
-                accept="video/*"
-                onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="thumbnail">Thumbnail (Optional)</Label>
-              <Input
-                id="thumbnail"
-                type="file"
-                accept="image/*"
-                onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
-              />
-            </div>
+          {/* Video File Upload */}
+          <div>
+            <Label htmlFor="video">Video File</Label>
+            <Input
+              id="video"
+              type="file"
+              accept="video/*"
+              onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+              required
+              className="mt-2"
+            />
+            {videoFile && (
+              <p className="mt-2 text-sm text-gray-600">
+                Selected: {videoFile.name} ({(videoFile.size / (1024 * 1024)).toFixed(1)} MB)
+              </p>
+            )}
           </div>
 
           {/* Array Fields */}
