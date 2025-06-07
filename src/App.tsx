@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +25,7 @@ import VideoLibrary from "./pages/VideoLibrary";
 import AdminVideos from "./pages/AdminVideos";
 import Auth from "./pages/Auth";
 import Upload from "./pages/Upload";
+import SubmissionThankYou from "./pages/SubmissionThankYou";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +40,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/upload" element={<Upload />} />
+            <Route path="/submission-thank-you" element={<SubmissionThankYou />} />
             <Route path="/coaching" element={<OneOnOneCoaching />} />
             <Route path="/about" element={<About />} />
             <Route path="/shop" element={<Shop />} />

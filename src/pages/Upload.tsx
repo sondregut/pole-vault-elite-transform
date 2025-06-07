@@ -165,6 +165,10 @@ const Upload = () => {
     }
   };
 
+  const handleSubmitForReview = () => {
+    navigate('/submission-thank-you');
+  };
+
   const handleDeleteSubmission = async (submission: VideoSubmission) => {
     if (!confirm(`Are you sure you want to delete "${submission.video_file_name}"? This action cannot be undone.`)) {
       return;
@@ -387,6 +391,22 @@ const Upload = () => {
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+                
+                {/* Submit for Review Button */}
+                {submissions.length > 0 && (
+                  <div className="mt-6 pt-4 border-t">
+                    <Button 
+                      onClick={handleSubmitForReview}
+                      className="w-full"
+                      variant="cta"
+                    >
+                      Submit for Review
+                    </Button>
+                    <p className="mt-2 text-xs text-gray-500 text-center">
+                      Click to submit all your videos for review
+                    </p>
                   </div>
                 )}
               </CardContent>
