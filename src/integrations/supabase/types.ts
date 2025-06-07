@@ -278,6 +278,39 @@ export type Database = {
         }
         Relationships: []
       }
+      video_submissions: {
+        Row: {
+          created_at: string
+          id: string
+          submission_status: string
+          submitted_at: string | null
+          user_id: string
+          video_file_name: string
+          video_file_size: number | null
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          submission_status?: string
+          submitted_at?: string | null
+          user_id: string
+          video_file_name: string
+          video_file_size?: number | null
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          submission_status?: string
+          submitted_at?: string | null
+          user_id?: string
+          video_file_name?: string
+          video_file_size?: number | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       videos: {
         Row: {
           category: string

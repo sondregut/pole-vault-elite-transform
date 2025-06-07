@@ -1,0 +1,287 @@
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+import { Loader2, Upload as UploadIcon, Video, CheckCircle, Clock, X } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+
+interface VideoSubmission {
+  id: string;
+  video_file_name: string;
+  video_file_size: number | null;
+  submission_status: string;
+  created_at: string;
+  submitted_at: string | null;
+}
+
+const Upload = () => {
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [submissions, setSubmissions] = useState<VideoSubmission[]>([]);
+  const [loadingSubmissions, setLoadingSubmissions] = useState(true);
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [user, authLoading, navigate]);
+
+  // Load user's previous submissions
+  useEffect(() => {
+    if (user) {
+      fetchSubmissions();
+    }
+  }, [user]);
+
+  const fetchSubmissions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('video_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      setSubmissions(data || []);
+    } catch (error: any) {
+      console.error('Error fetching submissions:', error);
+      toast.error('Failed to load your submissions');
+    } finally {
+      setLoadingSubmissions(false);
+    }
+  };
+
+  const uploadFile = async (file: File): Promise<string | null> => {
+    if (!user) throw new Error('User not authenticated');
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+
+    const { error } = await supabase.storage
+      .from('video-submissions')
+      .upload(fileName, file);
+
+    if (error) {
+      throw error;
+    }
+
+    const { data } = supabase.storage
+      .from('video-submissions')
+      .getPublicUrl(fileName);
+
+    return data.publicUrl;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!videoFile) {
+      toast.error('Please select a video file');
+      return;
+    }
+
+    if (!user) {
+      toast.error('You must be signed in to upload videos');
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      // Upload video file
+      const videoUrl = await uploadFile(videoFile);
+      if (!videoUrl) throw new Error('Failed to upload video');
+
+      // Insert submission record
+      const { error } = await supabase
+        .from('video_submissions')
+        .insert({
+          user_id: user.id,
+          video_url: videoUrl,
+          video_file_name: videoFile.name,
+          video_file_size: videoFile.size,
+          submission_status: 'pending'
+        });
+
+      if (error) throw error;
+
+      toast.success('Video uploaded successfully! We\'ll review it soon.');
+      
+      // Reset form and refresh submissions
+      setVideoFile(null);
+      const fileInput = document.getElementById('video') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+      
+      fetchSubmissions();
+
+    } catch (error: any) {
+      console.error('Error uploading video:', error);
+      toast.error(error.message || 'Failed to upload video');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const formatFileSize = (bytes: number | null) => {
+    if (!bytes) return 'Unknown size';
+    const mb = bytes / (1024 * 1024);
+    return `${mb.toFixed(1)} MB`;
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case 'approved':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'rejected':
+        return <X className="h-4 w-4 text-red-500" />;
+      default:
+        return <Clock className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <main className="section-padding py-20">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary" />
+            <p className="mt-4 text-gray-600">Loading...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Will redirect via useEffect
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      
+      <main className="section-padding py-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Upload Video</h1>
+            <p className="mt-2 text-gray-600">Submit your video for review</p>
+            <p className="mt-1 text-sm text-blue-600">Submitting as: {user.email}</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Upload Form */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UploadIcon className="h-5 w-5" />
+                  Upload New Video
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <Label htmlFor="video">Video File</Label>
+                    <Input
+                      id="video"
+                      type="file"
+                      accept="video/*"
+                      onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+                      required
+                      className="mt-2"
+                    />
+                    {videoFile && (
+                      <p className="mt-2 text-sm text-gray-600">
+                        Selected: {videoFile.name} ({formatFileSize(videoFile.size)})
+                      </p>
+                    )}
+                  </div>
+
+                  <Button type="submit" disabled={uploading || !videoFile} className="w-full">
+                    {uploading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <UploadIcon className="mr-2 h-4 w-4" />
+                        Upload Video
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Previous Submissions */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Video className="h-5 w-5" />
+                  Your Submissions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {loadingSubmissions ? (
+                  <div className="text-center py-8">
+                    <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+                    <p className="mt-2 text-gray-600">Loading submissions...</p>
+                  </div>
+                ) : submissions.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Video className="mx-auto h-12 w-12 text-gray-400" />
+                    <p className="mt-4 text-gray-600">No submissions yet</p>
+                    <p className="text-sm text-gray-500">Upload your first video to get started</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {submissions.map(submission => (
+                      <div key={submission.id} className="flex items-start justify-between p-4 border rounded-lg bg-white">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-medium truncate">{submission.video_file_name}</h3>
+                          <p className="text-sm text-gray-600">
+                            {formatFileSize(submission.video_file_size)} • {formatDate(submission.created_at)}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 ml-4">
+                          {getStatusIcon(submission.submission_status)}
+                          <span className="text-sm capitalize font-medium">
+                            {submission.submission_status}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Upload;
