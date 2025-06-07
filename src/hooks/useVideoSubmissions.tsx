@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -29,28 +28,33 @@ export const useVideoSubmissions = () => {
       setLoading(true);
       setError(null);
       
-      // Get submissions with profile data
+      // Get submissions first
       const { data: submissionsData, error: submissionsError } = await supabase
         .from('video_submissions')
-        .select(`
-          *,
-          profiles:user_id (
-            first_name,
-            last_name
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (submissionsError) throw submissionsError;
 
-      // For now, we'll use a placeholder email since we can't access auth.users directly
-      // In a production setup, you'd need a server-side function to get user emails
-      const submissionsWithEmails = (submissionsData || []).map(submission => ({
+      // Get profiles separately to avoid join issues
+      const userIds = submissionsData?.map(s => s.user_id) || [];
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, first_name, last_name')
+        .in('id', userIds);
+
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+      }
+
+      // Combine the data manually
+      const submissionsWithProfiles = (submissionsData || []).map(submission => ({
         ...submission,
+        profiles: profilesData?.find(profile => profile.id === submission.user_id) || null,
         user_email: `user-${submission.user_id.slice(0, 8)}@placeholder.com` // Placeholder email
       }));
 
-      setSubmissions(submissionsWithEmails);
+      setSubmissions(submissionsWithProfiles);
     } catch (err: any) {
       console.error('Error fetching video submissions:', err);
       setError(err.message || 'Failed to fetch video submissions');
