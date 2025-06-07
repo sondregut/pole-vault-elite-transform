@@ -5,13 +5,56 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import VideoUploadForm from '@/components/admin/VideoUploadForm';
+import SubmissionCard from '@/components/admin/SubmissionCard';
+import VideoPreviewModal from '@/components/admin/VideoPreviewModal';
+import SubmissionStats from '@/components/admin/SubmissionStats';
 import { useVideos } from '@/hooks/useVideos';
-import { Loader2, Lock, Video, Upload } from 'lucide-react';
+import { useVideoSubmissions, VideoSubmissionWithProfile } from '@/hooks/useVideoSubmissions';
+import { Loader2, Lock, Video, Upload, Users, Search } from 'lucide-react';
 
 const AdminVideos = () => {
   const { user, loading: authLoading } = useAuth();
   const { videos, loading: videosLoading, refetch } = useVideos();
+  const { submissions, loading: submissionsLoading, updateSubmissionStatus, downloadVideo } = useVideoSubmissions();
+  
+  const [selectedSubmission, setSelectedSubmission] = useState<VideoSubmissionWithProfile | null>(null);
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+
+  // Filter submissions based on search and status
+  const filteredSubmissions = submissions.filter(submission => {
+    const matchesSearch = submission.video_file_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         submission.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (submission.profiles?.first_name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (submission.profiles?.last_name?.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    const matchesStatus = statusFilter === 'all' || submission.submission_status === statusFilter;
+    
+    return matchesSearch && matchesStatus;
+  });
+
+  const handlePreview = (submission: VideoSubmissionWithProfile) => {
+    setSelectedSubmission(submission);
+    setPreviewModalOpen(true);
+  };
+
+  const handleApprove = async (submissionId: string) => {
+    await updateSubmissionStatus(submissionId, 'approved');
+    setPreviewModalOpen(false);
+  };
+
+  const handleReject = async (submissionId: string) => {
+    await updateSubmissionStatus(submissionId, 'rejected');
+    setPreviewModalOpen(false);
+  };
+
+  const handleDownload = async (submission: VideoSubmissionWithProfile) => {
+    await downloadVideo(submission);
+  };
 
   if (authLoading) {
     return (
@@ -67,6 +110,10 @@ const AdminVideos = () => {
                 <Video className="mr-2 h-4 w-4" />
                 Manage Videos ({videos.length})
               </TabsTrigger>
+              <TabsTrigger value="submissions">
+                <Users className="mr-2 h-4 w-4" />
+                User Submissions ({submissions.length})
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="upload">
@@ -113,7 +160,89 @@ const AdminVideos = () => {
                 </CardContent>
               </Card>
             </TabsContent>
+
+            <TabsContent value="submissions" className="space-y-6">
+              <SubmissionStats submissions={submissions} />
+              
+              {/* Filters */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Filter Submissions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-4">
+                    <div className="flex-1">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          placeholder="Search by filename, user name, or email..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-48">
+                        <SelectValue placeholder="Filter by status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Status</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="approved">Approved</SelectItem>
+                        <SelectItem value="rejected">Rejected</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Submissions List */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Video Submissions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {submissionsLoading ? (
+                    <div className="text-center py-8">
+                      <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+                      <p className="mt-2 text-gray-600">Loading submissions...</p>
+                    </div>
+                  ) : filteredSubmissions.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Users className="mx-auto h-12 w-12 text-gray-400" />
+                      <p className="mt-4 text-gray-600">
+                        {submissions.length === 0 ? 'No submissions yet' : 'No submissions match your filters'}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredSubmissions.map(submission => (
+                        <SubmissionCard
+                          key={submission.id}
+                          submission={submission}
+                          onApprove={() => handleApprove(submission.id)}
+                          onReject={() => handleReject(submission.id)}
+                          onDownload={() => handleDownload(submission)}
+                          onPreview={() => handlePreview(submission)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
           </Tabs>
+
+          {/* Video Preview Modal */}
+          <VideoPreviewModal
+            submission={selectedSubmission}
+            open={previewModalOpen}
+            onClose={() => setPreviewModalOpen(false)}
+            onApprove={() => selectedSubmission && handleApprove(selectedSubmission.id)}
+            onReject={() => selectedSubmission && handleReject(selectedSubmission.id)}
+            onDownload={() => selectedSubmission && handleDownload(selectedSubmission)}
+          />
         </div>
       </main>
     </div>
