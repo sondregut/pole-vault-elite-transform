@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { Loader2, Upload as UploadIcon, Video, CheckCircle, Clock, X } from 'lucide-react';
+import { Loader2, Upload as UploadIcon, Video, CheckCircle, Clock, X, Trash2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 
 interface VideoSubmission {
@@ -18,6 +17,7 @@ interface VideoSubmission {
   submission_status: string;
   created_at: string;
   submitted_at: string | null;
+  video_url: string | null;
 }
 
 const Upload = () => {
@@ -26,6 +26,7 @@ const Upload = () => {
   const [uploading, setUploading] = useState(false);
   const [submissions, setSubmissions] = useState<VideoSubmission[]>([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(true);
+  const [deletingSubmission, setDeletingSubmission] = useState<string | null>(null);
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
@@ -161,6 +162,51 @@ const Upload = () => {
       toast.error(error.message || 'Failed to upload video');
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDeleteSubmission = async (submission: VideoSubmission) => {
+    if (!confirm(`Are you sure you want to delete "${submission.video_file_name}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    setDeletingSubmission(submission.id);
+
+    try {
+      // Delete video file from storage if it exists
+      if (submission.video_url) {
+        // Extract file path from URL
+        const url = new URL(submission.video_url);
+        const pathParts = url.pathname.split('/');
+        const fileName = pathParts[pathParts.length - 1];
+        const filePath = `${user?.id}/${fileName}`;
+
+        const { error: storageError } = await supabase.storage
+          .from('video-submissions')
+          .remove([filePath]);
+
+        if (storageError) {
+          console.error('Error deleting file from storage:', storageError);
+          // Continue with database deletion even if storage deletion fails
+        }
+      }
+
+      // Delete submission record from database
+      const { error } = await supabase
+        .from('video_submissions')
+        .delete()
+        .eq('id', submission.id);
+
+      if (error) throw error;
+
+      toast.success('Video submission deleted successfully');
+      fetchSubmissions(); // Refresh the list
+
+    } catch (error: any) {
+      console.error('Error deleting submission:', error);
+      toast.error(error.message || 'Failed to delete submission');
+    } finally {
+      setDeletingSubmission(null);
     }
   };
 
@@ -315,11 +361,29 @@ const Upload = () => {
                             {formatFileSize(submission.video_file_size)} • {formatDate(submission.created_at)}
                           </p>
                         </div>
-                        <div className="flex items-center gap-2 ml-4">
-                          {getStatusIcon(submission.submission_status)}
-                          <span className="text-sm capitalize font-medium">
-                            {submission.submission_status}
-                          </span>
+                        <div className="flex items-center gap-3 ml-4">
+                          <div className="flex items-center gap-2">
+                            {getStatusIcon(submission.submission_status)}
+                            <span className="text-sm capitalize font-medium">
+                              {submission.submission_status}
+                            </span>
+                          </div>
+                          {/* Delete button - only show for pending/rejected submissions */}
+                          {(submission.submission_status === 'pending' || submission.submission_status === 'rejected') && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteSubmission(submission)}
+                              disabled={deletingSubmission === submission.id}
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2"
+                            >
+                              {deletingSubmission === submission.id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Trash2 className="h-4 w-4" />
+                              )}
+                            </Button>
+                          )}
                         </div>
                       </div>
                     ))}
