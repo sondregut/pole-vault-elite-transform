@@ -1,11 +1,16 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import VideoCard from '@/components/video-library/VideoCard';
 import FilterButtons from '@/components/video-library/FilterButtons';
 import VideoModal from '@/components/video-library/VideoModal';
 import VideoSearch from '@/components/video-library/VideoSearch';
+import SubscriptionPaywall from '@/components/subscription/SubscriptionPaywall';
+import SubscriptionStatus from '@/components/subscription/SubscriptionStatus';
 import { useVideos, Video } from '@/hooks/useVideos';
+import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
+import { toast } from 'sonner';
 
 const categories = ['All', 'Warm-up', 'Strength', 'Rehab', 'PVD', 'Med Ball', 'Gym'] as const;
 
@@ -16,6 +21,24 @@ const VideoLibrary = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const { videos, loading, error } = useVideos();
+  const { user, isAdmin, loading: authLoading } = useAuth();
+  const { subscribed, loading: subscriptionLoading } = useSubscription();
+
+  // Check for subscription success/cancel in URL params
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const subscriptionParam = urlParams.get('subscription');
+    
+    if (subscriptionParam === 'success') {
+      toast.success('Subscription activated! Welcome to the video library!');
+      // Remove the URL parameter
+      window.history.replaceState({}, '', '/video-library');
+    } else if (subscriptionParam === 'cancelled') {
+      toast.info('Subscription cancelled. You can try again anytime.');
+      // Remove the URL parameter
+      window.history.replaceState({}, '', '/video-library');
+    }
+  }, []);
 
   const filteredExercises = useMemo(() => {
     let filtered = videos;
@@ -49,6 +72,49 @@ const VideoLibrary = () => {
     setIsModalOpen(false);
     setSelectedExercise(null);
   };
+
+  // Show loading while checking auth and subscription
+  if (authLoading || subscriptionLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <main className="section-padding py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <main className="section-padding py-20">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Sign In Required</h1>
+            <p className="text-gray-600 mb-6">Please sign in to access the video library.</p>
+            <a href="/auth" className="text-primary hover:underline">
+              Go to Sign In
+            </a>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Show paywall for non-subscribers (unless admin)
+  if (!isAdmin && !subscribed) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <SubscriptionPaywall />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -97,6 +163,13 @@ const VideoLibrary = () => {
             Comprehensive pole vault training exercises to improve your technique, strength, and performance. 
             Each video includes detailed instructions and professional guidance.
           </p>
+          
+          {/* Subscription Status for subscribed users */}
+          {(subscribed || isAdmin) && (
+            <div className="mt-6 flex justify-center">
+              <SubscriptionStatus />
+            </div>
+          )}
         </div>
 
         {/* Search */}
