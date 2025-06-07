@@ -22,6 +22,7 @@ interface VideoSubmission {
 
 const Upload = () => {
   const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [submissions, setSubmissions] = useState<VideoSubmission[]>([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(true);
@@ -42,6 +43,15 @@ const Upload = () => {
     }
   }, [user]);
 
+  // Clean up video preview URL when component unmounts or file changes
+  useEffect(() => {
+    return () => {
+      if (videoPreviewUrl) {
+        URL.revokeObjectURL(videoPreviewUrl);
+      }
+    };
+  }, [videoPreviewUrl]);
+
   const fetchSubmissions = async () => {
     try {
       const { data, error } = await supabase
@@ -57,6 +67,25 @@ const Upload = () => {
       toast.error('Failed to load your submissions');
     } finally {
       setLoadingSubmissions(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    
+    // Clean up previous preview URL
+    if (videoPreviewUrl) {
+      URL.revokeObjectURL(videoPreviewUrl);
+    }
+    
+    setVideoFile(file);
+    
+    // Create preview URL for the new file
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setVideoPreviewUrl(previewUrl);
+    } else {
+      setVideoPreviewUrl(null);
     }
   };
 
@@ -118,6 +147,10 @@ const Upload = () => {
       
       // Reset form and refresh submissions
       setVideoFile(null);
+      if (videoPreviewUrl) {
+        URL.revokeObjectURL(videoPreviewUrl);
+        setVideoPreviewUrl(null);
+      }
       const fileInput = document.getElementById('video') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
       
@@ -207,7 +240,7 @@ const Upload = () => {
                       id="video"
                       type="file"
                       accept="video/*"
-                      onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+                      onChange={handleFileChange}
                       required
                       className="mt-2"
                     />
@@ -217,6 +250,23 @@ const Upload = () => {
                       </p>
                     )}
                   </div>
+
+                  {/* Video Preview */}
+                  {videoPreviewUrl && (
+                    <div>
+                      <Label>Preview</Label>
+                      <div className="mt-2 border rounded-lg overflow-hidden bg-black">
+                        <video
+                          src={videoPreviewUrl}
+                          controls
+                          className="w-full max-h-64 object-contain"
+                          preload="metadata"
+                        >
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </div>
+                  )}
 
                   <Button type="submit" disabled={uploading || !videoFile} className="w-full">
                     {uploading ? (
