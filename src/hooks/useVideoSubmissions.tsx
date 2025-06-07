@@ -29,7 +29,7 @@ export const useVideoSubmissions = () => {
       setLoading(true);
       setError(null);
       
-      // First get submissions with profile data
+      // Get submissions with profile data
       const { data: submissionsData, error: submissionsError } = await supabase
         .from('video_submissions')
         .select(`
@@ -43,19 +43,12 @@ export const useVideoSubmissions = () => {
 
       if (submissionsError) throw submissionsError;
 
-      // Get user emails from auth.users (we need to fetch this separately)
-      const userIds = submissionsData?.map(s => s.user_id) || [];
-      const { data: usersData, error: usersError } = await supabase.auth.admin.listUsers();
-      
-      if (usersError) {
-        console.error('Error fetching user emails:', usersError);
-      }
-
-      // Combine data
-      const submissionsWithEmails = submissionsData?.map(submission => ({
+      // For now, we'll use a placeholder email since we can't access auth.users directly
+      // In a production setup, you'd need a server-side function to get user emails
+      const submissionsWithEmails = (submissionsData || []).map(submission => ({
         ...submission,
-        user_email: usersData?.users?.find(u => u.id === submission.user_id)?.email || 'Unknown'
-      })) || [];
+        user_email: `user-${submission.user_id.slice(0, 8)}@placeholder.com` // Placeholder email
+      }));
 
       setSubmissions(submissionsWithEmails);
     } catch (err: any) {
