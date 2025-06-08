@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -91,6 +92,97 @@ const ProductDetail = () => {
       link: "/shop/product/3"
     }
   ];
+
+  // Power Strength specific content
+  const powerStrengthContent = product.id === 1 ? (
+    <div className="mt-12 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">POWER STRENGTH: Build Strength and Explosive Power</h2>
+      <p className="mb-6">
+        Developed with the same proven principles that drive elite athletes to success, Power Strength is a 10-week weightlifting program designed to transform your performance. This program focuses on building strength and power that will make you faster on the track and elevate your overall athleticism, all while perfectly complementing your event-specific training.
+      </p>
+      
+      <p className="mb-6">
+        Power Strength includes 2-3 expertly crafted training sessions per week, combining Olympic lifts, compound movements, and accessory exercises to build a foundation of strength and power. This program is designed to enhance your explosiveness, speed, and overall athleticism while fitting seamlessly into your routine.
+      </p>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Program Benefits</h3>
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-3">Build Strength & Power</h4>
+          <p>This program is designed to improve your overall strength, explosiveness, and power through full-body weightlifting sessions. By incorporating Olympic lifts, compound movements, accessory exercises, and core work, Power Strength helps you become both faster and stronger on the track while enhancing your overall athleticism.</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-3">Supplement Your Training Plan</h4>
+          <p>Power Strength is the perfect addition to your sport-specific training, designed to seamlessly integrate into your routine. With focused sessions that enhance strength and power without compromising your primary training, this program targets the key muscle groups essential for athletic performance.</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-3">Train like a PRO</h4>
+          <p>Your time is too valuable to waste on ineffective training plans or guesswork. Power Strength takes the stress out of your routine, delivering a proven blueprint designed to produce results. Over the next 10 weeks, expect consistent progress as every session, exercise, and rep is purposefully crafted to optimize your training.</p>
+        </div>
+      </div>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Program Features</h3>
+      <div className="grid md:grid-cols-2 gap-4 mb-6">
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">Programming 2-3 Days Per Week</h4>
+          <p>Power Strength is a weightlifting program that complements your track and field training and includes 2-3 sessions per week.</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">Exercise Video Guidance</h4>
+          <p>Instructional videos to guide your practice and make execution easy</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">Detailed Expert Instruction</h4>
+          <p>Expert guidance that will hold you accountable and provide the feedback you need to grow</p>
+        </div>
+        <div className="p-4 border rounded-lg">
+          <h4 className="font-bold mb-2">Delivered through TrainHeroic</h4>
+          <p>Partnered with the best tech in training so you get an online training experience that works as hard as you do.</p>
+        </div>
+      </div>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Sample Week Overview</h3>
+      <div className="bg-gray-50 p-6 rounded-lg mb-6">
+        <h4 className="font-bold mb-4">Week 1 of 10-week program</h4>
+        <div className="space-y-4">
+          <div>
+            <h5 className="font-semibold">Sunday - Weights W1 D1</h5>
+            <p className="text-sm text-gray-600">Hang Power Clean, Incline Chop, Trap Bar Deadlift, Box Jumps, Weighted Chin Ups, Handstand Pushups, Explosive Step Ups</p>
+          </div>
+          <div>
+            <h5 className="font-semibold">Tuesday - Weights W1 D2</h5>
+            <p className="text-sm text-gray-600">Kettlebell Swing, Ab Wheel Rollouts, DB Bench, Bulgarian Split Squats, Single-Leg Romanian Deadlift, Inverted Row, Farmer's Walks</p>
+          </div>
+          <div>
+            <h5 className="font-semibold">Thursday - Weights W1 D3</h5>
+            <p className="text-sm text-gray-600">Clean from Floor, High Bar Half Bubkas, Incline DB Bench Press, Half Back Squat, SL Back Extensions, Weighted Dips</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Equipment Required</h3>
+      <ul className="list-disc pl-6 mb-6 space-y-2">
+        <li>Weight Room Access</li>
+        <li>Olympic Barbell and Plates</li>
+        <li>Dumbbells</li>
+        <li>Pull-up Bar</li>
+        <li>Basic gym equipment (benches, squat rack)</li>
+      </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-3">Who Is It For?</h3>
+      <p className="mb-6">
+        Whether you're a track and field athlete, pole vaulter, or anyone striving for better performance, this program is your key to unlocking incredible results. Perfect for athletes looking to build a foundation of strength that supplements their event-specific needs, ensuring you're always progressing toward your goals.
+      </p>
+
+      <div className="bg-blue-50 p-6 rounded-lg mt-8">
+        <h3 className="text-xl font-bold mb-3">Ready to Transform Your Performance?</h3>
+        <p>
+          By focusing on movements that drive performance, Power Strength helps you develop the strength and power you need to dominate your sport without compromising your event-specific training. 
+          Expect focused programming that builds a foundation of strength and supplements your event-specific needs.
+        </p>
+      </div>
+    </div>
+  ) : null;
 
   // Special content for Jumpers Knee Protocol
   const jumpersKneeContent = product.id === 3 ? (
@@ -379,7 +471,7 @@ const ProductDetail = () => {
   ) : null;
 
   // Generic content for other products
-  const genericContent = !jumpersKneeContent && !videoReviewContent && !zoomConsultationContent && !onlineCoachingContent && !flightModeContent && !poleVaultDrillsContent ? (
+  const genericContent = !jumpersKneeContent && !powerStrengthContent && !videoReviewContent && !zoomConsultationContent && !onlineCoachingContent && !flightModeContent && !poleVaultDrillsContent ? (
     <div className="mt-12 bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Product Description</h2>
       <p className="mb-6">
@@ -500,6 +592,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Product specific content */}
+            {powerStrengthContent}
             {jumpersKneeContent}
             {flightModeContent}
             {videoReviewContent}
