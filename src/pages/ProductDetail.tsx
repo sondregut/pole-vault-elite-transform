@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -65,7 +64,7 @@ const ProductDetail = () => {
     });
   };
 
-  // Related products data
+  // Related products data - updated to link to g-force product pages
   const relatedProducts = [
     {
       id: 2,
@@ -73,7 +72,7 @@ const ProductDetail = () => {
       price: "$59",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg",
       description: "Complete 10-week pole vault training program with drills, sprint work, and lifting.",
-      link: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1733159932"
+      link: "/shop/product/2"
     },
     {
       id: 1,
@@ -81,7 +80,7 @@ const ProductDetail = () => {
       price: "$39",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//weights.jpeg",
       description: "Strength-focused program with Olympic lifts and compound movements.",
-      link: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214"
+      link: "/shop/product/1"
     },
     {
       id: 3,
@@ -93,7 +92,7 @@ const ProductDetail = () => {
     }
   ];
 
-  // Power Strength specific content
+  // Power Strength specific content - removed Sample Week Overview section
   const powerStrengthContent = product.id === 1 ? (
     <div className="mt-12 bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">POWER STRENGTH: Build Strength and Explosive Power</h2>
@@ -138,25 +137,6 @@ const ProductDetail = () => {
         <div className="p-4 border rounded-lg">
           <h4 className="font-bold mb-2">Delivered through TrainHeroic</h4>
           <p>Partnered with the best tech in training so you get an online training experience that works as hard as you do.</p>
-        </div>
-      </div>
-
-      <h3 className="text-xl font-bold mt-8 mb-3">Sample Week Overview</h3>
-      <div className="bg-gray-50 p-6 rounded-lg mb-6">
-        <h4 className="font-bold mb-4">Week 1 of 10-week program</h4>
-        <div className="space-y-4">
-          <div>
-            <h5 className="font-semibold">Sunday - Weights W1 D1</h5>
-            <p className="text-sm text-gray-600">Hang Power Clean, Incline Chop, Trap Bar Deadlift, Box Jumps, Weighted Chin Ups, Handstand Pushups, Explosive Step Ups</p>
-          </div>
-          <div>
-            <h5 className="font-semibold">Tuesday - Weights W1 D2</h5>
-            <p className="text-sm text-gray-600">Kettlebell Swing, Ab Wheel Rollouts, DB Bench, Bulgarian Split Squats, Single-Leg Romanian Deadlift, Inverted Row, Farmer's Walks</p>
-          </div>
-          <div>
-            <h5 className="font-semibold">Thursday - Weights W1 D3</h5>
-            <p className="text-sm text-gray-600">Clean from Floor, High Bar Half Bubkas, Incline DB Bench Press, Half Back Squat, SL Back Extensions, Weighted Dips</p>
-          </div>
         </div>
       </div>
 
@@ -601,12 +581,16 @@ const ProductDetail = () => {
             {poleVaultDrillsContent}
             {genericContent}
 
-            {/* You May Also Like Section */}
+            {/* You May Also Like Section - Updated with clickable cards */}
             <div className="max-w-4xl mx-auto mt-12">
               <h2 className="text-2xl font-bold text-gray-800 mb-8">You May Also Like</h2>
               <div className="grid md:grid-cols-3 gap-6">
                 {relatedProducts.map((relatedProduct) => (
-                  <div key={relatedProduct.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <Link 
+                    key={relatedProduct.id} 
+                    to={relatedProduct.link}
+                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                  >
                     <div className="h-48 overflow-hidden">
                       <img 
                         src={relatedProduct.image} 
@@ -619,23 +603,9 @@ const ProductDetail = () => {
                       <p className="text-gray-600 text-sm mb-3">{relatedProduct.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-primary font-bold text-lg">{relatedProduct.price}</span>
-                        {relatedProduct.link.startsWith('http') ? (
-                          <Button asChild size="sm">
-                            <a href={relatedProduct.link} target="_blank" rel="noopener noreferrer">
-                              View Program
-                              <ExternalLink className="ml-1 h-3 w-3" />
-                            </a>
-                          </Button>
-                        ) : (
-                          <Button asChild size="sm">
-                            <Link to={relatedProduct.link}>
-                              View Details
-                            </Link>
-                          </Button>
-                        )}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
