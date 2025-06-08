@@ -51,7 +51,7 @@ const Navbar = () => {
     { name: "About", href: "/about" },
     { name: "1:1 Coaching", href: "/coaching" },
     { name: "Blog", href: "/blog" },
-    { name: "Video Library", href: "/video-library" },
+    // { name: "Video Library", href: "/video-library" }, // Temporarily hidden
     { name: "App", href: "/coming-soon" },
     { name: "Programs", href: "/shop" },
     { name: "Contact", href: "/contact" },
@@ -105,8 +105,8 @@ const Navbar = () => {
           ))}
           <CartIcon />
           
-          {/* Auth Button */}
-          {!loading && (
+          {/* Auth Button - Temporarily Hidden */}
+          {/* {!loading && (
             user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -135,19 +135,20 @@ const Navbar = () => {
                 </Link>
               </Button>
             )
-          )}
+          )} */}
         </div>
 
         {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center">
           <CartIcon />
-          {!loading && !user && (
+          {/* Mobile Auth Button - Temporarily Hidden */}
+          {/* {!loading && !user && (
             <Button asChild variant="outline" size="sm" className="mr-2">
               <Link to="/auth">
                 <LogIn className="h-4 w-4" />
               </Link>
             </Button>
-          )}
+          )} */}
           <button
             onClick={toggleMenu}
             className="p-2 ml-2 rounded-md hover:bg-gray-100 transition-colors"
@@ -188,8 +189,8 @@ const Navbar = () => {
               )
             ))}
             
-            {/* Mobile Auth Section */}
-            {!loading && (
+            {/* Mobile Auth Section - Temporarily Hidden */}
+            {/* {!loading && (
               user ? (
                 <div className="py-3 border-b border-gray-100">
                   <div className="text-sm text-gray-600 mb-2">Signed in as {user.email}</div>
@@ -220,7 +221,7 @@ const Navbar = () => {
                   Sign In
                 </Link>
               )
-            )}
+            )} */}
           </div>
         </div>
       )}
