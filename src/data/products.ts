@@ -1,4 +1,3 @@
-
 export const products = [
   {
     id: 1,
@@ -9,7 +8,7 @@ export const products = [
     externalLink: "https://marketplace.trainheroic.com/account/login?team=guttormsen-program-1735674214",
     hasOptions: false,
     options: [],
-    description: "Transform your performance with this 10-week weightlifting program designed by elite athletes. Features 2-3 sessions per week combining Olympic lifts, compound movements, and accessory exercises. Build strength and explosive power while enhancing your speed and athleticism. Includes exercise video guidance, expert instruction, and seamlessly integrates with your event-specific training. Delivered through TrainHeroic with lifetime access."
+    description: "Developed with the same proven principles that drive elite athletes to success, Power Strength is a 10-week weightlifting program designed to transform your performance. This program focuses on building strength and power that will make you faster on the track and elevate your overall athleticism, all while perfectly complementing your event-specific training. Power Strength includes 2-3 expertly crafted training sessions per week, combining Olympic lifts, compound movements, and accessory exercises to build a foundation of strength and power. This program is designed to enhance your explosiveness, speed, and overall athleticism while fitting seamlessly into your routine. By focusing on movements that drive performance, Power Strength helps you develop the strength and power you need to dominate your sport without compromising your event-specific training. Expect focused programming that builds a foundation of strength and supplements your event-specific needs, ensuring you're always progressing toward your goals. Whether you're a track and field athlete, pole vaulter, or anyone striving for better performance, this program is your key to unlocking incredible results. Delivered through TrainHeroic with lifetime access."
   },
   {
     id: 2,

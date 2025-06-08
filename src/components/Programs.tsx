@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Check, Plane, Dumbbell, UserRound, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -26,14 +25,14 @@ const Programs = () => {
     },
     {
       title: "Power Strength Program",
-      subtitle: "10-week strength program to develop explosive power and athleticism.",
+      subtitle: "Developed with proven principles that drive elite athletes to success, build explosive power and athleticism.",
       image: "https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//weights.jpeg",
       icon: <Dumbbell className="text-primary text-xl" />,
       features: [
-        "10-week strength program (2-3 sessions/week)",
-        "Olympic lifts, compound and accessory work",
-        "Video demos for every exercise",
-        "Boost speed, explosiveness, and athleticism",
+        "2-3 expertly crafted training sessions per week",
+        "Olympic lifts, compound movements & accessory work",
+        "Builds foundation of strength and explosive power",
+        "Seamlessly integrates with event-specific training",
         "Lifetime access through TrainHeroic"
       ],
       price: "$39",
