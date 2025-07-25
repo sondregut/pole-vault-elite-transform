@@ -106,15 +106,15 @@ const VideoLibrary = () => {
     );
   }
 
-  // Show paywall for non-subscribers (unless admin)
-  if (!isAdmin && !subscribed) {
+  // Show paywall for non-subscribers (unless admin) - Temporarily disabled
+  /* if (!isAdmin && !subscribed) {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
         <SubscriptionPaywall />
       </div>
     );
-  }
+  } */
 
   if (loading) {
     return (
