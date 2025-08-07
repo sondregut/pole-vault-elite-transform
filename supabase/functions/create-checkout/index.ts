@@ -19,44 +19,96 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
-    const user = data.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
+    // Check if user is authenticated
+    let user = null;
+    const authHeader = req.headers.get("Authorization");
+    
+    if (authHeader) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data } = await supabaseClient.auth.getUser(token);
+      user = data.user;
+    }
 
+    const { lineItems, successUrl, cancelUrl } = await req.json();
+    
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
     });
 
-    // Check if customer exists
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    let customerId;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
+    // Determine if this is a subscription or one-time payment
+    const isSubscription = lineItems && lineItems.some((item: any) => 
+      item.productName === "Video Library Access"
+    );
+
+    // For subscriptions, require authentication
+    if (isSubscription && !user?.email) {
+      throw new Error("Authentication required for subscription products");
     }
 
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : user.email,
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: { 
-              name: "Video Library Access",
-              description: "Monthly access to G-Force Training video library"
+    // Check if customer exists (for authenticated users)
+    let customerId;
+    let customerEmail;
+    
+    if (user?.email) {
+      const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+      if (customers.data.length > 0) {
+        customerId = customers.data[0].id;
+      }
+      customerEmail = user.email;
+    } else {
+      // For guest checkout, use a default email or require email input
+      customerEmail = "guest@example.com";
+    }
+
+    let sessionConfig;
+
+    if (isSubscription) {
+      // Subscription checkout
+      sessionConfig = {
+        customer: customerId,
+        customer_email: customerId ? undefined : customerEmail,
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: { 
+                name: "Video Library Access",
+                description: "Monthly access to G-Force Training video library"
+              },
+              unit_amount: 999, // $9.99
+              recurring: { interval: "month" },
             },
-            unit_amount: 999, // $9.99
-            recurring: { interval: "month" },
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        mode: "subscription" as const,
+        success_url: `${req.headers.get("origin")}/video-library?subscription=success`,
+        cancel_url: `${req.headers.get("origin")}/video-library?subscription=cancelled`,
+      };
+    } else {
+      // One-time payment checkout
+      const stripeLineItems = lineItems.map((item: any) => ({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: item.productName,
+          },
+          unit_amount: Math.round(parseFloat(item.price.replace('$', '')) * 100),
         },
-      ],
-      mode: "subscription",
-      success_url: `${req.headers.get("origin")}/video-library?subscription=success`,
-      cancel_url: `${req.headers.get("origin")}/video-library?subscription=cancelled`,
-    });
+        quantity: item.quantity,
+      }));
+
+      sessionConfig = {
+        customer: customerId,
+        customer_email: customerId ? undefined : customerEmail,
+        line_items: stripeLineItems,
+        mode: "payment" as const,
+        success_url: successUrl || `${req.headers.get("origin")}/checkout/success`,
+        cancel_url: cancelUrl || `${req.headers.get("origin")}/checkout/cancel`,
+      };
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
