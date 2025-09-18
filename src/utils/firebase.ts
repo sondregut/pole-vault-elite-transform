@@ -2,15 +2,15 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, browserLocalPersistence, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Firebase config - same as mobile app for data synchronization
+// Firebase config - loaded from environment variables for security
 const firebaseConfig = {
-  apiKey: "AIzaSyCCvltpzk9atQw04kfNn1i_DSttaRt0iz4",
-  authDomain: "pvt-app-440c9.firebaseapp.com",
-  projectId: "pvt-app-440c9",
-  storageBucket: "pvt-app-440c9.firebasestorage.app",
-  messagingSenderId: "629740230590",
-  appId: "1:629740230590:web:6369829122066d4a1c8bef",
-  measurementId: "G-49YJZ0W5R4"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase app
