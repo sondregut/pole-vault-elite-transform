@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
-import { Menu, LogIn, LogOut, User } from "lucide-react";
+import { Menu, LogIn, LogOut, User, BarChart3 } from "lucide-react";
 import CartIcon from "./CartIcon";
 import { useAuth } from "@/hooks/useAuth";
+import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +26,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { user, isAdmin, loading, signOut } = useAuth();
+  const { user: vaultUser } = useFirebaseAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -52,7 +54,7 @@ const Navbar = () => {
     { name: "1:1 Coaching", href: "/coaching" },
     { name: "Blog", href: "/blog" },
     // { name: "Video Library", href: "/video-library" }, // Temporarily hidden
-    { name: "App", href: "/coming-soon" },
+    { name: "Vault App", href: "/vault" },
     { name: "Programs", href: "/shop" },
     { name: "Contact", href: "/contact" },
   ];
@@ -103,6 +105,21 @@ const Navbar = () => {
               </Link>
             )
           ))}
+
+          {/* Vault Dashboard Link for authenticated users */}
+          {vaultUser && (
+            <Link
+              to="/vault/dashboard"
+              className={`text-blue-600 font-medium hover:text-blue-700 transition flex items-center gap-1 ${
+                location.pathname === "/vault/dashboard" ? "text-blue-800" : ""
+              }`}
+              onClick={handleLinkClick}
+            >
+              <BarChart3 className="h-4 w-4" />
+              Dashboard
+            </Link>
+          )}
+
           <CartIcon />
           
           {/* Auth Button - Temporarily Hidden */}
@@ -188,6 +205,20 @@ const Navbar = () => {
                 </Link>
               )
             ))}
+
+            {/* Vault Dashboard Link for mobile */}
+            {vaultUser && (
+              <Link
+                to="/vault/dashboard"
+                className={`py-3 text-blue-600 hover:text-blue-700 border-b border-gray-100 flex items-center gap-2 ${
+                  location.pathname === "/vault/dashboard" ? "text-blue-800" : ""
+                }`}
+                onClick={handleLinkClick}
+              >
+                <BarChart3 className="h-4 w-4" />
+                Dashboard
+              </Link>
+            )}
             
             {/* Mobile Auth Section - Temporarily Hidden */}
             {/* {!loading && (

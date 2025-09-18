@@ -26,6 +26,12 @@ import AdminVideos from "./pages/AdminVideos";
 import Auth from "./pages/Auth";
 import Upload from "./pages/Upload";
 import SubmissionThankYou from "./pages/SubmissionThankYou";
+import VaultLanding from "./pages/VaultLanding";
+import VaultLogin from "./pages/VaultLogin";
+import VaultDashboard from "./pages/VaultDashboard";
+import VaultEquipment from "./pages/VaultEquipment";
+import VaultSessions from "./pages/VaultSessions";
+import VaultSessionDetail from "./pages/VaultSessionDetail";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +64,13 @@ const App = () => (
             <Route path="/pvt" element={<PVT />} />
             <Route path="/video-library" element={<VideoLibrary />} />
             <Route path="/admin/videos" element={<AdminVideos />} />
+            <Route path="/vault" element={<VaultLanding />} />
+            <Route path="/vault/login" element={<VaultLogin />} />
+            <Route path="/vault/dashboard" element={<VaultDashboard />} />
+            <Route path="/vault/equipment" element={<VaultEquipment />} />
+            <Route path="/vault/sessions" element={<VaultSessions />} />
+            <Route path="/vault/sessions/:sessionId" element={<VaultSessionDetail />} />
+            <Route path="/vault-app-secure" element={<VaultLanding />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
