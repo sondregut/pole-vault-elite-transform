@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { useVaultPoles } from '@/hooks/useVaultData';
 import { toast } from 'sonner';
@@ -31,7 +32,7 @@ const VaultEquipment = () => {
   const { poles, loading: polesLoading, error, addPole, updatePole, deletePole, bulkImportPoles } = useVaultPoles(user);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('my-poles');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -269,55 +270,56 @@ const VaultEquipment = () => {
                   ))}
                 </div>
               ) : (
-                // List View
-                <div className="space-y-2">
-                  {filteredPoles.map((pole) => (
-                    <Card key={pole.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4 flex-1">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                              <Wrench className="h-6 w-6 text-blue-600" />
+                // Table View
+                <Card>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Brand</TableHead>
+                        <TableHead>Length</TableHead>
+                        <TableHead>Weight</TableHead>
+                        <TableHead>Flex</TableHead>
+                        <TableHead>Serial</TableHead>
+                        <TableHead>Notes</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredPoles.map((pole) => (
+                        <TableRow key={pole.id} className="hover:bg-gray-50">
+                          <TableCell className="font-medium">{pole.name}</TableCell>
+                          <TableCell>
+                            <Badge variant="secondary">{pole.brand}</Badge>
+                          </TableCell>
+                          <TableCell>{pole.length}</TableCell>
+                          <TableCell>{pole.pounds} lbs</TableCell>
+                          <TableCell>{pole.flex || '-'}</TableCell>
+                          <TableCell className="font-mono text-sm">{pole.serial || '-'}</TableCell>
+                          <TableCell className="max-w-xs">
+                            {pole.notes ? (
+                              <span className="text-sm text-gray-600 truncate block" title={pole.notes}>
+                                {pole.notes}
+                              </span>
+                            ) : (
+                              '-'
+                            )}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex gap-1 justify-end">
+                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
                             </div>
-
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className="text-lg font-semibold text-gray-900 truncate">
-                                  {pole.name}
-                                </h3>
-                                <Badge variant="secondary" className="flex-shrink-0">
-                                  {pole.brand}
-                                </Badge>
-                              </div>
-
-                              <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                                <span><strong>Length:</strong> {pole.length}</span>
-                                <span><strong>Weight:</strong> {pole.pounds} lbs</span>
-                                {pole.flex && <span><strong>Flex:</strong> {pole.flex}</span>}
-                                {pole.serial && <span><strong>Serial:</strong> {pole.serial}</span>}
-                              </div>
-
-                              {pole.notes && (
-                                <p className="text-sm text-gray-500 mt-2 truncate">
-                                  {pole.notes}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="flex gap-1 flex-shrink-0">
-                            <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Card>
               )}
             </TabsContent>
 
