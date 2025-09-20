@@ -37,6 +37,23 @@ const VaultEquipment = () => {
 
   const loading = authLoading || polesLoading;
 
+  // Check for tab parameter in URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab && ['my-poles', 'add-pole', 'bulk-import'].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
+
+  // Update URL when tab changes
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    const params = new URLSearchParams(location.search);
+    params.set('tab', newTab);
+    navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+  };
+
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
@@ -142,7 +159,7 @@ const VaultEquipment = () => {
           </div>
 
           {/* Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs value={activeTab} onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-3 max-w-md">
               <TabsTrigger value="my-poles">My Poles</TabsTrigger>
               <TabsTrigger value="add-pole">Add Pole</TabsTrigger>
@@ -170,11 +187,11 @@ const VaultEquipment = () => {
                           Add your first pole to start tracking your equipment
                         </p>
                         <div className="flex gap-3 justify-center">
-                          <Button onClick={() => setActiveTab('add-pole')}>
+                          <Button onClick={() => handleTabChange('add-pole')}>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Your First Pole
                           </Button>
-                          <Button variant="outline" onClick={() => setActiveTab('bulk-import')}>
+                          <Button variant="outline" onClick={() => handleTabChange('bulk-import')}>
                             <Upload className="mr-2 h-4 w-4" />
                             Bulk Import
                           </Button>
