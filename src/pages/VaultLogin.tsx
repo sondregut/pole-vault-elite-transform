@@ -18,7 +18,10 @@ const VaultLogin = () => {
   const { user, signIn } = useFirebaseAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/vault/dashboard';
+  const fromLocation = location.state?.from;
+  const from = fromLocation
+    ? `${fromLocation.pathname}${fromLocation.search || ''}`
+    : '/vault/dashboard';
 
   // Redirect if already authenticated
   useEffect(() => {
