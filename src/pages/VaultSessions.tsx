@@ -45,9 +45,9 @@ const VaultSessions = () => {
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/vault/login');
+      navigate('/vault/login', { state: { from: location } });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location]);
 
   // Filter sessions
   const filteredSessions = sessions.filter(session => {

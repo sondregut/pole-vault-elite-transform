@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -33,15 +33,16 @@ const VaultEquipment = () => {
   const [activeTab, setActiveTab] = useState('my-poles');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const navigate = useNavigate();
+  const location = useLocation();
 
   const loading = authLoading || polesLoading;
 
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/vault/login');
+      navigate('/vault/login', { state: { from: location } });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location]);
 
   // Filter poles based on search term
   const filteredPoles = poles.filter(pole =>

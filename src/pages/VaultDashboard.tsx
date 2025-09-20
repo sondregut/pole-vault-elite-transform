@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -27,15 +27,16 @@ const VaultDashboard = () => {
   const { sessions, loading: sessionsLoading } = useVaultSessions(user);
   const { stats, loading: statsLoading } = useVaultStats(user, sessions);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const loading = authLoading || sessionsLoading || statsLoading;
 
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/vault/login');
+      navigate('/vault/login', { state: { from: location } });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location]);
 
   const handleSignOut = async () => {
     const { error } = await signOut();

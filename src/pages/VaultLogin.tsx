@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,13 +17,15 @@ const VaultLogin = () => {
   const [loading, setLoading] = useState(false);
   const { user, signIn } = useFirebaseAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/vault/dashboard';
 
   // Redirect if already authenticated
   useEffect(() => {
     if (user) {
-      navigate('/vault/dashboard');
+      navigate(from, { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, navigate, from]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,8 +40,8 @@ const VaultLogin = () => {
       }
 
       if (signedInUser) {
-        toast.success('Welcome back! Redirecting to your dashboard...');
-        navigate('/vault/dashboard');
+        toast.success('Welcome back! Redirecting...');
+        navigate(from, { replace: true });
       }
     } catch (error: any) {
       toast.error('Failed to sign in. Please try again.');
