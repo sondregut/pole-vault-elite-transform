@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { useVaultPoles } from '@/hooks/useVaultData';
 import { toast } from 'sonner';
@@ -21,7 +22,11 @@ import {
   Trash2,
   Grid3X3,
   List,
-  LayoutGrid
+  LayoutGrid,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Filter
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import PoleForm from '@/components/vault/equipment/PoleForm';
@@ -33,10 +38,34 @@ const VaultEquipment = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('my-poles');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [sortField, setSortField] = useState<string>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [brandFilter, setBrandFilter] = useState<string>('all');
+  const [flexFilter, setFlexFilter] = useState<string>('all');
   const navigate = useNavigate();
   const location = useLocation();
 
   const loading = authLoading || polesLoading;
+
+  // Sortable header component
+  const SortableHeader = ({ field, children }: { field: string; children: React.ReactNode }) => {
+    const isActive = sortField === field;
+    const Icon = isActive
+      ? (sortDirection === 'asc' ? ArrowUp : ArrowDown)
+      : ArrowUpDown;
+
+    return (
+      <TableHead
+        className="cursor-pointer hover:bg-gray-50 select-none"
+        onClick={() => handleSort(field)}
+      >
+        <div className="flex items-center gap-2">
+          {children}
+          <Icon className={`h-4 w-4 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+        </div>
+      </TableHead>
+    );
+  };
 
   // Check for tab parameter in URL
   useEffect(() => {
@@ -62,12 +91,58 @@ const VaultEquipment = () => {
     }
   }, [user, authLoading, navigate, location]);
 
-  // Filter poles based on search term
-  const filteredPoles = poles.filter(pole =>
-    pole.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pole.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pole.length.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Handle sorting
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  // Get unique values for filters
+  const uniqueBrands = [...new Set(poles.map(pole => pole.brand))].sort();
+  const uniqueFlex = [...new Set(poles.map(pole => pole.flex).filter(Boolean))].sort();
+
+  // Filter and sort poles
+  const filteredAndSortedPoles = poles
+    .filter(pole => {
+      const matchesSearch =
+        pole.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pole.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pole.length.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (pole.serial && pole.serial.toLowerCase().includes(searchTerm.toLowerCase()));
+
+      const matchesBrand = brandFilter === 'all' || pole.brand === brandFilter;
+      const matchesFlex = flexFilter === 'all' || pole.flex === flexFilter;
+
+      return matchesSearch && matchesBrand && matchesFlex;
+    })
+    .sort((a, b) => {
+      let aValue: any = a[sortField as keyof typeof a];
+      let bValue: any = b[sortField as keyof typeof b];
+
+      // Handle numeric sorting for weight
+      if (sortField === 'pounds') {
+        aValue = parseFloat(aValue) || 0;
+        bValue = parseFloat(bValue) || 0;
+      }
+      // Handle length sorting (extract numeric value)
+      else if (sortField === 'length') {
+        aValue = parseFloat(aValue) || 0;
+        bValue = parseFloat(bValue) || 0;
+      }
+      // Handle string sorting
+      else {
+        aValue = (aValue || '').toString().toLowerCase();
+        bValue = (bValue || '').toString().toLowerCase();
+      }
+
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
 
   if (loading) {
     return (
@@ -119,43 +194,99 @@ const VaultEquipment = () => {
 
               <div className="flex gap-3">
                 <div className="bg-white rounded-lg px-4 py-2 border border-gray-200">
-                  <div className="text-2xl font-bold text-blue-600">{poles.length}</div>
-                  <div className="text-sm text-gray-600">Total Poles</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {filteredAndSortedPoles.length}
+                    {filteredAndSortedPoles.length !== poles.length && (
+                      <span className="text-lg text-gray-400">/{poles.length}</span>
+                    )}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {filteredAndSortedPoles.length !== poles.length ? 'Filtered Poles' : 'Total Poles'}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Search Bar & Layout Toggle */}
-          <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between">
-            <div className="relative max-w-md flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search poles by name, brand, or length..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+          {/* Search Bar & Filters */}
+          <div className="mb-6 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between">
+              <div className="relative max-w-md flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search poles by name, brand, length, or serial..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+
+              {/* Layout Toggle */}
+              <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="h-8 px-3"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="h-8 px-3"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
-            {/* Layout Toggle */}
-            <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-                className="h-8 px-3"
-              >
-                <LayoutGrid className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="h-8 px-3"
-              >
-                <List className="h-4 w-4" />
-              </Button>
+            {/* Filters */}
+            <div className="flex flex-wrap gap-4 items-center">
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 text-gray-500" />
+                <span className="text-sm font-medium text-gray-700">Filters:</span>
+              </div>
+
+              <Select value={brandFilter} onValueChange={setBrandFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="All Brands" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Brands</SelectItem>
+                  {uniqueBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={flexFilter} onValueChange={setFlexFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="All Flex Ratings" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Flex Ratings</SelectItem>
+                  {uniqueFlex.map(flex => (
+                    <SelectItem key={flex} value={flex}>{flex}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {(brandFilter !== 'all' || flexFilter !== 'all' || searchTerm) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setBrandFilter('all');
+                    setFlexFilter('all');
+                    setSearchTerm('');
+                  }}
+                  className="h-8"
+                >
+                  Clear Filters
+                </Button>
+              )}
             </div>
           </div>
 
@@ -175,7 +306,7 @@ const VaultEquipment = () => {
                     <p className="text-red-600">{error}</p>
                   </CardContent>
                 </Card>
-              ) : filteredPoles.length === 0 ? (
+              ) : filteredAndSortedPoles.length === 0 ? (
                 <Card>
                   <CardContent className="p-12 text-center">
                     {poles.length === 0 ? (
@@ -217,7 +348,7 @@ const VaultEquipment = () => {
               ) : viewMode === 'grid' ? (
                 // Grid View
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPoles.map((pole) => (
+                  {filteredAndSortedPoles.map((pole) => (
                     <Card key={pole.id} className="hover:shadow-lg transition-shadow">
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
@@ -275,18 +406,18 @@ const VaultEquipment = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Brand</TableHead>
-                        <TableHead>Length</TableHead>
-                        <TableHead>Weight</TableHead>
-                        <TableHead>Flex</TableHead>
-                        <TableHead>Serial</TableHead>
+                        <SortableHeader field="name">Name</SortableHeader>
+                        <SortableHeader field="brand">Brand</SortableHeader>
+                        <SortableHeader field="length">Length</SortableHeader>
+                        <SortableHeader field="pounds">Weight</SortableHeader>
+                        <SortableHeader field="flex">Flex</SortableHeader>
+                        <SortableHeader field="serial">Serial</SortableHeader>
                         <TableHead>Notes</TableHead>
                         <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredPoles.map((pole) => (
+                      {filteredAndSortedPoles.map((pole) => (
                         <TableRow key={pole.id} className="hover:bg-gray-50">
                           <TableCell className="font-medium">{pole.name}</TableCell>
                           <TableCell>
