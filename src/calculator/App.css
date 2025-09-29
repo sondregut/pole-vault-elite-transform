@@ -1,0 +1,1234 @@
+:root {
+  --primary: #6366f1;      /* Indigo */
+  --primary-light: #818cf8; /* Light Indigo */
+  --background: #0f172a;   /* Slate 900 */
+  --surface: #1e293b;      /* Slate 800 */
+  --surface-light: #334155; /* Slate 700 */
+  --text: #f8fafc;         /* Slate 50 */
+  --text-secondary: #cbd5e1; /* Slate 300 */
+  --error: #ef4444;        /* Red 500 */
+  --success: #22c55e;      /* Green 500 */
+  --border: #334155;       /* Slate 700 */
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: var(--background);
+  color: var(--text);
+  font-size: 14px;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.App {
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.content-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  min-height: calc(100vh - 100px);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.calculator-wrapper {
+  background: var(--surface);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.calculator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-size: 11px;
+}
+
+/* Toggle Styles */
+.toggle-container {
+  display: flex;
+  background: var(--surface-light);
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.toggle-option {
+  flex: 1;
+  padding: 0.3rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s ease;
+  color: var(--text-secondary);
+  font-size: 0.6rem;
+}
+
+.toggle-option.active {
+  color: var(--text);
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: calc(50% - 0.5rem);
+  height: calc(100% - 0.5rem);
+  background: var(--primary);
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.toggle-slider.right {
+  transform: translateX(100%);
+}
+
+/* Form Elements */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+input, select {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface-light);
+  color: var(--text);
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23cbd5e1'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.calculate-button {
+  background: var(--primary);
+  color: var(--text);
+  border: none;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-bottom: 0rem;
+}
+
+.calculate-button:hover {
+  background: var(--primary-light);
+}
+
+.calculate-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Results Section */
+.results {
+  margin-top: 0.75rem;
+  padding: 1.5rem;
+  background: var(--surface-light);
+  border-radius: 0.75rem;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.results h2 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.results .points {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.wind-adjustment-info {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .content-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .calculator-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .toggle-container {
+    font-size: 0.9rem;
+  }
+  
+  .points {
+    font-size: 10px;
+  }
+}
+
+/* Wind Section Styles */
+.wind-section {
+  background: var(--surface-light);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.wind-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.wind-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.wind-toggle input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.wind-info {
+  margin-top: 1rem;
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+/* Event Comparison Styles */
+.event-comparison {
+  height: 100%;
+}
+
+.event-comparison h2 {
+  color: var(--primary);
+  margin-bottom: 2rem;
+  font-size: 12px;
+  text-align: center;
+}
+
+.event-section {
+  margin-bottom: 2rem;
+}
+
+.event-section:last-child {
+  margin-bottom: 0;
+}
+
+.event-section h3 {
+  color: var(--text-secondary);
+  font-size: 11px;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--surface-light);
+}
+
+.event-section table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.event-section tr {
+  transition: background-color 0.2s ease;
+}
+
+.event-section tr:hover {
+  background: var(--surface-light);
+}
+
+.event-section td {
+  padding: 3px 6px;
+  color: var(--text);
+}
+
+.event-section td:first-child {
+  font-weight: 500;
+}
+
+.event-section td:last-child {
+  text-align: right;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Navbar Styles */
+.navbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+}
+
+.nav-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  color: var(--primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  padding: 4px 8px;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: var(--surface-light);
+}
+
+.nav-link.active {
+  color: var(--text);
+  background: var(--surface-light);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .nav-content {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .nav-link {
+    padding: 1px 3px;
+    font-size: 0.7rem;
+  }
+}
+
+.toggle-option.selected {
+  background: #6366f1;
+}
+
+/* Competition Table Styles */
+.competition-table {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.competition-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.competition-table th,
+.competition-table td {
+  padding: 3px 6px;
+  text-align: left;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.competition-table th {
+  background: rgba(30, 41, 59, 0.8);
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.competition-table tr:hover {
+  background: rgba(30, 41, 59, 0.3);
+}
+
+.competition-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Settings Grid Styles */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.setting-group label {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.setting-group select,
+.setting-group input {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #f8fafc;
+  width: 100%;
+}
+
+/* Headings */
+h1 { font-size: 14px; }
+h2 { font-size: 12px; }
+h3 { font-size: 11px; }
+h4, h5, h6 { font-size: 10px; }
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  body {
+    font-size: 11px;
+  }
+  
+  .calculator-form input,
+  .calculator-form select,
+  .calculator-form button {
+    font-size: 10px;
+  }
+  
+  .toggle-option {
+    font-size: 9px;
+  }
+  
+  .points {
+    font-size: 10px;
+  }
+}
+
+.competition-page {
+  display: flex;
+  width: 100%;
+  overflow-x: auto !important;
+  width: auto !important;
+}
+
+.competition-sidebar {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--background-secondary);
+}
+
+.competition-main {
+  width: 100%;
+  padding: 1rem;
+}
+
+/* Keep existing competition table styles */
+.competition-table {
+  width: 100%;
+}
+
+.calculator-page {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.calculator-sidebar {
+  width: 100%;
+}
+
+.calculator-main {
+  width: 100%;
+}
+
+/* New styles for the calculator form container */
+.calculator-form {
+  background-color: rgba(108, 117, 125, 0.3);  /* Reduced from solid #6c757d */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Container styles */
+.competition-table,
+.event-comparison {
+  width: 100%;
+  max-width: 100%;
+  padding: 1.5rem;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 8px;
+  margin: 0 auto; /* Center the container */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Ensure tables fill width but don't overflow */
+.competition-table table,
+.event-comparison table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto; /* Add horizontal scroll if needed */
+}
+
+/* Add consistent padding to table cells */
+.competition-table td,
+.competition-table th,
+.event-comparison td,
+.event-comparison th {
+  padding: 0.5rem;
+}
+
+.points-breakdown {
+  font-size: 1.1em;
+  font-weight: 500;
+  padding: 0.5rem;
+  background-color: var(--background-secondary);
+  border-radius: 4px;
+}
+
+/* Adjust mobile breakpoint if needed */
+@media (max-width: 768px) {
+  .navbar {
+    font-size: 1rem;
+  }
+  
+  .nav-logo {
+    font-size: 1.2rem;
+  }
+  
+  .nav-links .nav-link {
+    font-size: 1rem;
+  }
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.about-content {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 16px;
+  padding: 3rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.about-content h1 {
+  font-size: 1.8rem;  /* Reduced from 2rem */
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #f8fafc;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  border-bottom: 2px solid rgba(148, 163, 184, 0.2);
+  padding-bottom: 1.25rem;
+}
+
+.about-section {
+  margin-bottom: 1rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  padding: 1.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.about-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about-section:last-child {
+  margin-bottom: 0;
+}
+
+.about-section h2 {
+  color: #60a5fa;
+  margin-bottom: 1.25rem;
+  font-size: 1.1rem;  /* Reduced from 1.2rem */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.about-section p {
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+  color: #e2e8f0;
+  font-size: 0.85rem;  /* Reduced from 0.9rem */
+}
+
+.about-section ul {
+  list-style-type: none;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-section ul li {
+  margin-bottom: 0.75rem;
+  position: relative;
+  line-height: 1.5;
+  color: #e2e8f0;
+  font-size: 0.85rem;  /* Reduced from 0.9rem */
+}
+
+.about-section ul li:before {
+  content: "→";
+  color: #60a5fa;
+  position: absolute;
+  left: -1.5rem;
+  font-weight: bold;
+}
+
+.about-section strong {
+  color: #93c5fd; /* Lighter blue for emphasis */
+  font-weight: 600;
+}
+
+/* Competition levels specific styling */
+.about-section:nth-child(3) ul li {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 2rem;
+  background: rgba(30, 41, 59, 0.2);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.about-section:nth-child(3) ul li:before {
+  content: none;
+}
+
+/* Feature grid for calculator section */
+.calculator-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.feature-item {
+  background: rgba(30, 41, 59, 0.2);
+  padding: 1.25rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+
+/* Add subtle animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-section {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.about-section:nth-child(2) { animation-delay: 0.1s; }
+.about-section:nth-child(3) { animation-delay: 0.2s; }
+.about-section:nth-child(4) { animation-delay: 0.3s; }
+.about-section:nth-child(5) { animation-delay: 0.4s; }
+.about-section:nth-child(6) { animation-delay: 0.5s; }
+
+.author-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.author-section h2 {
+  color: #60a5fa;
+  font-size: 1.1rem;
+}
+
+.author-section p {
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+.about-section a {
+  color: #60a5fa;  /* Light blue color */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.about-section a:hover {
+  color: #93c5fd;  /* Lighter blue on hover */
+  text-decoration: underline;
+}
+
+/* Update the width of the calculator and results sections */
+.calculator {
+  width: 100%; 
+  padding-right: 20px;
+}
+
+.results {
+  width: 100%; 
+  padding-left: 10px;
+}
+
+/* Base layout */
+.App {
+  min-height: 100vh;
+}
+
+.calculator-page, .competition-page {
+  display: flex;
+  gap: 20px;
+}
+
+
+
+
+/* Change widths of calcualtor vs. output */
+.calculator-sidebar{ 
+  width: 50%;
+}
+.calculator-main{
+  width: 45%;
+}
+.competition-sidebar {
+  width: 35%;
+}
+.competition-main {
+  width: 65%;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .calculator-page, .competition-page {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .calculator-sidebar, .competition-sidebar,
+  .calculator-main, .competition-main {
+    width: 100%;
+  }
+
+  /* Form adjustments */
+  .calculator-form {
+    margin-bottom: 20px;
+    padding: 10px;
+  }
+
+  .competition-table table {
+    width: 100%;
+    min-width: 300px;   /* Minimum width to ensure readability */
+  }
+
+  .meet-row {
+    margin-bottom: 15px;
+  }
+
+  .performances {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  /* Event comparison adjustments */
+  .event-comparison {
+    margin-top: 20px;
+  }
+
+  .event-section {
+    padding: 10px;
+  }
+
+  /* Toggle container */
+  .toggle-container {
+    font-size: 14px;
+  }
+
+  /* Wind section */
+  .wind-section {
+    padding: 15px;
+  }
+
+  .wind-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Even smaller screens */
+@media (max-width: 480px) {
+  .performances {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  h1 {font-size: 1.2rem}
+  h2 {font-size: 1.0rem}
+
+  .calculator-form input,
+  .calculator-form select {
+    font-size: 0.7rem; /* Prevents iOS zoom on focus */
+  }
+
+  .calculator-sidebar{
+    width: 100%;
+  }
+
+  .competition-sidebar{
+    width: 100%;
+  }
+  /* Navbar adjustments */
+  .navbar {
+    padding: 10px;
+  }
+
+  .nav-links {
+    gap: 10px;
+  }
+
+}
+
+/* Optional: hide less important columns on very small screens */
+@media (max-width: 360px) {
+  .competition-table .optional-column {
+    display: none;
+  }
+}
+
+
+
+/* Remove dark mode changes */
+@media (prefers-color-scheme: dark) {
+  /* Remove this entire media query block */
+}
+
+.calculator-info {
+  margin: 10px 0 20px;
+  padding: 10px;
+  background: var(--surface-light);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.table-info {
+  margin: 10px 0 20px;
+  padding: 15px;
+  background: var(--surface-light);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.table-info p {
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.table-info p:last-child {
+  margin-bottom: 0;
+}
+
+.disclaimer-wrapper {
+  margin: 0.5rem auto;
+  max-width: 1200px;
+}
+
+.disclaimer-toggle {
+  background: none;
+  border: none;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.disclaimer-toggle:hover {
+  opacity: 1;
+}
+
+.disclaimer-content {
+  background-color: rgba(108, 117, 125, 0.3);
+  margin-top: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.disclaimer-content ul {
+  list-style-type: disc;
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.disclaimer-content li {
+  margin-bottom: 0.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .disclaimer-wrapper {
+    margin: 0;
+    padding: 0;
+    margin-bottom: -0.5rem;
+  }
+
+  .disclaimer-toggle {
+    padding: 0.1rem 0.5rem;
+  }
+
+  .disclaimer-content {
+    margin-top: 0;
+    padding: 0.2rem;
+    margin-bottom: -0.5rem;
+  }
+
+  .calculator-wrapper {
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
+
+/* Target the calculator form to reduce its top margin */
+.calculator-wrapper, 
+.main-content,
+.content-container {
+  margin-top: 0.1rem;
+}
+
+/* Ensure no extra spacing from paragraph margins */
+.disclaimer-content p {
+  margin: 0.5rem 0;
+}
+
+.accordion-section {
+  margin-bottom: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 15px;
+  background-color: var(--surface-light);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.section-header:hover {
+  background-color: var(--surface-hover);
+}
+
+.section-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.section-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.section-content {
+  padding: 20px;
+  background-color: var(--background);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Add smooth scrolling for touch devices */
+.competition-table {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  /* Calculator form elements */
+  .calculator-wrapper {
+    font-size: 0.8rem;
+  }
+
+  .calculator-wrapper input,
+  .calculator-wrapper select,
+  .calculator-wrapper button {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+
+  /* Results display */
+  .results {
+    font-size: 0.8rem;
+  }
+
+  .results .points {
+    font-size: 0.9rem;
+  }
+
+  /* Labels and headings */
+  .calculator-wrapper label,
+  .calculator-wrapper h2,
+  .calculator-wrapper h3 {
+    font-size: 0.9rem;
+  }
+
+  /* Settings and toggles */
+  .toggle-container,
+  .setting-group {
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive adjustments in about section*/
+@media (max-width: 768px) {
+  .about-container {
+    padding: 1rem;
+  }
+  
+  .about-content {
+    padding: 1.5rem;
+  }
+  
+  .about-content h1 {
+    font-size: 1.8rem;  /* Reduced from 2rem */
+  }
+  
+  .about-section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .about-section h2 {
+    font-size: 1.1rem;  /* Reduced from 1.2rem */
+  }
+  
+  .about-section p {
+    font-size: 0.85rem;  /* Reduced from 0.9rem */
+  }
+  
+  .about-section ul li {
+    font-size: 0.85rem;  /* Added to match paragraph size */
+  }
+}
+
+@media (max-width: 768px) {
+  /* Target all calculator instances */
+  .calculator-wrapper,
+  .rankings-calculator,
+  .points-calculator,
+  .world-rankings-section {  /* Add any other calculator container classes */
+    padding: 0.5rem 0;
+    margin: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  /* Remove padding from inner elements */
+  .calculator-wrapper form,
+  .calculator-wrapper .results,
+  .calculator-wrapper .wind-section,
+  .rankings-calculator form,
+  .rankings-calculator .results,
+  .points-calculator form,
+  .points-calculator .results,
+  .world-rankings-section form,
+  .world-rankings-section .results {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Ensure container elements don't add padding */
+  .content-container,
+  .main-content,
+  .rankings-content,
+  .points-content {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .competition-page {
+    display: flex;
+    width: 100%;
+  }
+
+  .calculator-sidebar{
+    width: 95%;
+  }
+
+
+  .competition-sidebar{
+    width: 95%;
+  }
+
+  .competition-table {
+    margin: 10px 0 20px;
+  }
+}
+
+.result-input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface-light);
+  color: var(--text);
+  font-size: 12px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.result-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Lock horizontal scrolling globally */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.App {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.content-container,
+.main-content {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Allow horizontal scrolling for competition page */
+.competition-page {
+  overflow-x: auto !important;  /* Override the global lock */
+  width: auto !important;
+}
+
+.competition-page .content-container,
+.competition-page .main-content {
+  overflow-x: auto !important;
+  width: auto !important;
+}
+
+@media (max-width: 768px) {
+  .content-container,
+  .main-content,
+  .calculator-page {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  /* Keep competition page scrollable */
+  .competition-page,
+  .competition-page .content-container,
+  .competition-page .main-content {
+    overflow-x: auto !important;
+    width: auto !important;
+  }
+}

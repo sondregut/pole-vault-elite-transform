@@ -32,6 +32,7 @@ import VaultDashboard from "./pages/VaultDashboard";
 import VaultEquipment from "./pages/VaultEquipment";
 import VaultSessions from "./pages/VaultSessions";
 import VaultSessionDetail from "./pages/VaultSessionDetail";
+import PointsCalculator from "./pages/PointsCalculator";
 
 const queryClient = new QueryClient();
 
@@ -71,6 +72,7 @@ const App = () => (
             <Route path="/vault/sessions" element={<VaultSessions />} />
             <Route path="/vault/sessions/:sessionId" element={<VaultSessionDetail />} />
             <Route path="/vault-app-secure" element={<VaultLanding />} />
+            <Route path="/points-calculator" element={<PointsCalculator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

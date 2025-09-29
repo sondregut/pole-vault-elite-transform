@@ -56,6 +56,7 @@ const Navbar = () => {
     // { name: "Video Library", href: "/video-library" }, // Temporarily hidden
     { name: "Vault App", href: "/vault" },
     { name: "Programs", href: "/shop" },
+    { name: "Points Calculator", href: "/points-calculator" },
     { name: "Contact", href: "/contact" },
   ];
 
