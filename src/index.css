@@ -1,3 +1,8 @@
+/* Add Inter and Pacifico fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -213,12 +218,7 @@
   }
 
   /* Helper for Remix Icons */
-  :where([class^="ri-"])::before { 
-    content: "\f3c2"; 
+  :where([class^="ri-"])::before {
+    content: "\f3c2";
   }
 }
-
-/* Add Inter and Pacifico fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css');
