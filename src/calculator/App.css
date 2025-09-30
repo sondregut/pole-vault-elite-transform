@@ -1,35 +1,32 @@
-:root {
-  --primary: #6366f1;      /* Indigo */
-  --primary-light: #818cf8; /* Light Indigo */
-  --background: #0f172a;   /* Slate 900 */
-  --surface: #1e293b;      /* Slate 800 */
-  --surface-light: #334155; /* Slate 700 */
-  --text: #f8fafc;         /* Slate 50 */
-  --text-secondary: #cbd5e1; /* Slate 300 */
-  --error: #ef4444;        /* Red 500 */
-  --success: #22c55e;      /* Green 500 */
-  --border: #334155;       /* Slate 700 */
-}
+.points-calculator-page {
+  --calc-primary: #6366f1;      /* Indigo */
+  --calc-primary-light: #818cf8; /* Light Indigo */
+  --calc-background: #0f172a;   /* Slate 900 */
+  --calc-surface: #1e293b;      /* Slate 800 */
+  --calc-surface-light: #334155; /* Slate 700 */
+  --calc-text: #f8fafc;         /* Slate 50 */
+  --calc-text-secondary: #cbd5e1; /* Slate 300 */
+  --calc-error: #ef4444;        /* Red 500 */
+  --calc-success: #22c55e;      /* Green 500 */
+  --calc-border: #334155;       /* Slate 700 */
 
-body {
-  margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: var(--background);
-  color: var(--text);
+  background: var(--calc-background);
+  color: var(--calc-text);
   font-size: 14px;
   overflow-x: hidden;
   width: 100%;
-  position: relative;
+  min-height: 100vh;
 }
 
-.App {
+.points-calculator-page .App {
   min-height: 100vh;
   overflow-x: hidden;
   width: 100%;
 }
 
-.main-content {
+.points-calculator-page .main-content {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
@@ -37,7 +34,7 @@ body {
   width: 100%;
 }
 
-.content-container {
+.points-calculator-page .content-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
@@ -46,14 +43,14 @@ body {
   width: 100%;
 }
 
-.calculator-wrapper {
-  background: var(--surface);
+.points-calculator-page .calculator-wrapper {
+  background: var(--calc-surface);
   border-radius: 1rem;
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.calculator-form {
+.points-calculator-page .calculator-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -63,7 +60,7 @@ body {
 /* Toggle Styles */
 .toggle-container {
   display: flex;
-  background: var(--surface-light);
+  background: var(--calc-surface-light);
   padding: 0.25rem;
   border-radius: 0.75rem;
   position: relative;
@@ -79,12 +76,12 @@ body {
   position: relative;
   z-index: 1;
   transition: all 0.2s ease;
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
   font-size: 0.6rem;
 }
 
 .toggle-option.active {
-  color: var(--text);
+  color: var(--calc-text);
 }
 
 .toggle-slider {
@@ -93,7 +90,7 @@ body {
   left: 0.25rem;
   width: calc(50% - 0.5rem);
   height: calc(100% - 0.5rem);
-  background: var(--primary);
+  background: var(--calc-primary);
   border-radius: 0.5rem;
   transition: transform 0.3s ease;
 }
@@ -107,24 +104,24 @@ label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
   font-size: 11px;
 }
 
 input, select {
   width: 100%;
   padding: 4px 6px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--calc-border);
   border-radius: 0.75rem;
-  background: var(--surface-light);
-  color: var(--text);
+  background: var(--calc-surface-light);
+  color: var(--calc-text);
   font-size: 12px;
   transition: all 0.2s ease;
 }
 
 input:focus, select:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: var(--calc-primary);
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
@@ -138,8 +135,8 @@ select {
 }
 
 .calculate-button {
-  background: var(--primary);
-  color: var(--text);
+  background: var(--calc-primary);
+  color: var(--calc-text);
   border: none;
   padding: 1rem;
   border-radius: 0.75rem;
@@ -152,7 +149,7 @@ select {
 }
 
 .calculate-button:hover {
-  background: var(--primary-light);
+  background: var(--calc-primary-light);
 }
 
 .calculate-button:disabled {
@@ -164,7 +161,7 @@ select {
 .results {
   margin-top: 0.75rem;
   padding: 1.5rem;
-  background: var(--surface-light);
+  background: var(--calc-surface-light);
   border-radius: 0.75rem;
   text-align: center;
   width: 100%;
@@ -213,7 +210,7 @@ select {
 
 /* Wind Section Styles */
 .wind-section {
-  background: var(--surface-light);
+  background: var(--calc-surface-light);
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-top: 1.5rem;
@@ -236,7 +233,7 @@ select {
 
 .wind-info {
   margin-top: 1rem;
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
   font-size: 10px;
 }
 
@@ -246,7 +243,7 @@ select {
 }
 
 .event-comparison h2 {
-  color: var(--primary);
+  color: var(--calc-primary);
   margin-bottom: 2rem;
   font-size: 12px;
   text-align: center;
@@ -261,11 +258,11 @@ select {
 }
 
 .event-section h3 {
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
   font-size: 11px;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--surface-light);
+  border-bottom: 1px solid var(--calc-surface-light);
 }
 
 .event-section table {
@@ -279,12 +276,12 @@ select {
 }
 
 .event-section tr:hover {
-  background: var(--surface-light);
+  background: var(--calc-surface-light);
 }
 
 .event-section td {
   padding: 3px 6px;
-  color: var(--text);
+  color: var(--calc-text);
 }
 
 .event-section td:first-child {
@@ -298,8 +295,8 @@ select {
 
 /* Navbar Styles */
 .navbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: var(--calc-surface);
+  border-bottom: 1px solid var(--calc-border);
   padding: 1rem 0;
   position: sticky;
   top: 0;
@@ -318,7 +315,7 @@ select {
 }
 
 .nav-logo {
-  color: var(--primary);
+  color: var(--calc-primary);
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: -0.025em;
@@ -331,7 +328,7 @@ select {
 
 .nav-link {
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
   border: none;
   padding: 4px 8px;
   border-radius: 0.75rem;
@@ -342,13 +339,13 @@ select {
 }
 
 .nav-link:hover {
-  color: var(--text);
-  background: var(--surface-light);
+  color: var(--calc-text);
+  background: var(--calc-surface-light);
 }
 
 .nav-link.active {
-  color: var(--text);
-  background: var(--surface-light);
+  color: var(--calc-text);
+  background: var(--calc-surface-light);
   font-weight: 600;
 }
 
@@ -885,20 +882,20 @@ h4, h5, h6 { font-size: 10px; }
 .calculator-info {
   margin: 10px 0 20px;
   padding: 10px;
-  background: var(--surface-light);
+  background: var(--calc-surface-light);
   border-radius: 8px;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
   line-height: 1.4;
 }
 
 .table-info {
   margin: 10px 0 20px;
   padding: 15px;
-  background: var(--surface-light);
+  background: var(--calc-surface-light);
   border-radius: 8px;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
 }
 
 .table-info p {
@@ -1009,7 +1006,7 @@ h4, h5, h6 { font-size: 10px; }
 
 .section-header {
   padding: 15px;
-  background-color: var(--surface-light);
+  background-color: var(--calc-surface-light);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -1027,12 +1024,12 @@ h4, h5, h6 { font-size: 10px; }
 .section-header p {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--calc-text-secondary);
 }
 
 .section-content {
   padding: 20px;
-  background-color: var(--background);
+  background-color: var(--calc-background);
   border-top: 1px solid var(--border-color);
 }
 
@@ -1169,10 +1166,10 @@ h4, h5, h6 { font-size: 10px; }
 .result-input {
   width: 100%;
   padding: 4px 6px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--calc-border);
   border-radius: 0.75rem;
-  background: var(--surface-light);
-  color: var(--text);
+  background: var(--calc-surface-light);
+  color: var(--calc-text);
   font-size: 12px;
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -1181,18 +1178,12 @@ h4, h5, h6 { font-size: 10px; }
 
 .result-input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: var(--calc-primary);
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
-/* Lock horizontal scrolling globally */
-html, body {
-  overflow-x: hidden;
-  width: 100%;
-  position: relative;
-}
-
-.App {
+/* Lock horizontal scrolling within calculator */
+.points-calculator-page .App {
   overflow-x: hidden;
   width: 100%;
 }
