@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import '../calculator/App.css';
-import CalculatorApp from '../calculator/App.js';
+import CalculatorApp from '../calculator/App.jsx';
 
 const PointsCalculator = () => {
   useEffect(() => {
