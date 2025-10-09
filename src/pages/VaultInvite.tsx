@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Loader2, Users, Copy, Check, Download } from 'lucide-react';
@@ -154,8 +155,56 @@ const VaultInvite = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-16 max-w-lg">
+    <>
+      <Helmet>
+        <title>
+          {inviteData
+            ? `${inviteData.inviter_name || inviteData.inviter_username} invited you to Vault!`
+            : 'You\'re invited to Vault!'}
+        </title>
+        <meta
+          name="description"
+          content={inviteData
+            ? `${inviteData.inviter_name || inviteData.inviter_username} wants to connect with you on Vault. Track your athletic journey together!`
+            : 'Join Vault to connect with athletes and track your training progress.'}
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta
+          property="og:title"
+          content={inviteData
+            ? `${inviteData.inviter_name || inviteData.inviter_username} invited you to Vault!`
+            : 'You\'re invited to Vault!'}
+        />
+        <meta
+          property="og:description"
+          content={inviteData
+            ? `${inviteData.inviter_name || inviteData.inviter_username} wants to connect with you on Vault!`
+            : 'Join Vault to connect with athletes and track your training progress.'}
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//app%20icon%20tracker.png" />
+        <meta property="og:url" content={`https://stavhopp.no/vault/invite/${inviteCode}`} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content={inviteData
+            ? `${inviteData.inviter_name || inviteData.inviter_username} invited you to Vault!`
+            : 'You\'re invited to Vault!'}
+        />
+        <meta
+          name="twitter:description"
+          content={inviteData
+            ? `${inviteData.inviter_name || inviteData.inviter_username} wants to connect with you on Vault!`
+            : 'Join Vault to connect with athletes and track your training progress.'}
+        />
+        <meta name="twitter:image" content="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//app%20icon%20tracker.png" />
+      </Helmet>
+
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <div className="container mx-auto px-4 py-16 max-w-lg">
         <Card className="overflow-hidden shadow-2xl">
           {/* Header with gradient */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white text-center">
@@ -261,6 +310,7 @@ const VaultInvite = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
