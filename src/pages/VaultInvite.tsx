@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Loader2, Users, Copy, Check, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { inviteService } from '@/services/inviteService';
 
 interface InviteData {
   inviter_username: string;
   inviter_name?: string;
   type: string;
-  expires_at: string;
+  expires_at: Date;
 }
 
 const VaultInvite = () => {
@@ -39,33 +39,31 @@ const VaultInvite = () => {
     try {
       setLoading(true);
 
-      // Fetch invite details from Supabase
-      const { data, error } = await supabase
-        .from('invite_links')
-        .select('*')
-        .eq('code', inviteCode)
-        .single();
+      // Fetch invite details from Firebase
+      const invite = await inviteService.getInvite(inviteCode!);
 
-      if (error) {
-        throw error;
-      }
-
-      if (!data) {
+      if (!invite) {
         setError('Invalid or expired invite code');
         return;
       }
 
       // Check if invite is expired
-      if (new Date(data.expires_at) < new Date()) {
+      if (invite.expires_at < new Date()) {
         setError('This invite link has expired');
         return;
       }
 
+      // Check if already used
+      if (invite.used) {
+        setError('This invite link has already been used');
+        return;
+      }
+
       setInviteData({
-        inviter_username: data.username,
-        inviter_name: data.display_name,
-        type: data.type,
-        expires_at: data.expires_at
+        inviter_username: invite.username,
+        inviter_name: invite.display_name,
+        type: invite.type,
+        expires_at: invite.expires_at
       });
 
     } catch (err) {

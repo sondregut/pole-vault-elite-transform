@@ -1,4 +1,5 @@
-import { supabase } from '@/integrations/supabase/client';
+import { firebaseDb } from '@/utils/firebase';
+import { collection, addDoc, doc, getDoc, updateDoc, query, where, getDocs, Timestamp } from 'firebase/firestore';
 
 export interface InviteLink {
   id: string;
@@ -7,11 +8,11 @@ export interface InviteLink {
   username: string;
   display_name?: string;
   type: string;
-  created_at: string;
-  expires_at: string;
+  created_at: Date;
+  expires_at: Date;
   used: boolean;
   used_by?: string;
-  used_at?: string;
+  used_at?: Date;
   metadata?: any;
 }
 
@@ -22,6 +23,53 @@ export interface CreateInviteResponse {
 }
 
 class InviteService {
+  private readonly INVITE_COLLECTION = 'invite_links';
+
+  /**
+   * Generates a unique 8-character invite code
+   */
+  private generateInviteCode(): string {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No ambiguous characters
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  }
+
+  /**
+   * Checks if an invite code already exists
+   */
+  private async codeExists(code: string): Promise<boolean> {
+    const q = query(
+      collection(firebaseDb, this.INVITE_COLLECTION),
+      where('code', '==', code)
+    );
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+  }
+
+  /**
+   * Generates a unique invite code (retry if duplicate)
+   */
+  private async generateUniqueCode(): Promise<string> {
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    while (attempts < maxAttempts) {
+      const code = this.generateInviteCode();
+      const exists = await this.codeExists(code);
+
+      if (!exists) {
+        return code;
+      }
+
+      attempts++;
+    }
+
+    throw new Error('Failed to generate unique invite code after multiple attempts');
+  }
+
   /**
    * Creates a new invite link
    */
@@ -32,33 +80,37 @@ class InviteService {
     displayName?: string
   ): Promise<CreateInviteResponse> {
     try {
-      // Call the create_invite_link function
-      const { data, error } = await supabase.rpc('create_invite_link', {
-        p_user_id: userId || null,
-        p_username: username,
-        p_display_name: displayName || null,
-        p_type: type
-      });
+      // Generate unique invite code
+      const code = await this.generateUniqueCode();
 
-      if (error) throw error;
-
-      if (!data || data.length === 0) {
-        throw new Error('Failed to create invite link');
-      }
-
-      const inviteData = data[0];
-      const baseUrl = window.location.origin;
-      const inviteUrl = `${baseUrl}/vault/invite/${inviteData.invite_code}`;
-
-      const expiresAt = new Date(inviteData.expires_at);
+      // Create expiration date (30 days from now)
       const now = new Date();
-      const daysUntilExpiry = Math.ceil(
-        (expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-      );
+      const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+      // Create invite document
+      const inviteData = {
+        code,
+        user_id: userId || 'anonymous',
+        username,
+        display_name: displayName || username,
+        type,
+        created_at: Timestamp.fromDate(now),
+        expires_at: Timestamp.fromDate(expiresAt),
+        used: false,
+        metadata: {}
+      };
+
+      await addDoc(collection(firebaseDb, this.INVITE_COLLECTION), inviteData);
+
+      // Generate invite URL
+      const baseUrl = window.location.origin;
+      const inviteUrl = `${baseUrl}/vault/invite/${code}`;
+
+      const daysUntilExpiry = 30;
 
       return {
         url: inviteUrl,
-        code: inviteData.invite_code,
+        code,
         expires_in_days: daysUntilExpiry
       };
     } catch (error) {
@@ -72,18 +124,33 @@ class InviteService {
    */
   async getInvite(code: string): Promise<InviteLink | null> {
     try {
-      const { data, error } = await supabase
-        .from('invite_links')
-        .select('*')
-        .eq('code', code)
-        .single();
+      const q = query(
+        collection(firebaseDb, this.INVITE_COLLECTION),
+        where('code', '==', code)
+      );
+      const snapshot = await getDocs(q);
 
-      if (error) {
-        console.error('Error fetching invite:', error);
+      if (snapshot.empty) {
         return null;
       }
 
-      return data;
+      const doc = snapshot.docs[0];
+      const data = doc.data();
+
+      return {
+        id: doc.id,
+        code: data.code,
+        user_id: data.user_id,
+        username: data.username,
+        display_name: data.display_name,
+        type: data.type,
+        created_at: data.created_at.toDate(),
+        expires_at: data.expires_at.toDate(),
+        used: data.used,
+        used_by: data.used_by,
+        used_at: data.used_at?.toDate(),
+        metadata: data.metadata
+      };
     } catch (error) {
       console.error('Error fetching invite:', error);
       return null;
@@ -95,14 +162,37 @@ class InviteService {
    */
   async useInvite(code: string, usedBy: string): Promise<boolean> {
     try {
-      const { data, error } = await supabase.rpc('use_invite_link', {
-        p_code: code,
-        p_used_by: usedBy
+      // Find the invite
+      const q = query(
+        collection(firebaseDb, this.INVITE_COLLECTION),
+        where('code', '==', code)
+      );
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        return false;
+      }
+
+      const inviteDoc = snapshot.docs[0];
+      const inviteData = inviteDoc.data();
+
+      // Check if already used or expired
+      if (inviteData.used) {
+        return false;
+      }
+
+      if (inviteData.expires_at.toDate() < new Date()) {
+        return false;
+      }
+
+      // Mark as used
+      await updateDoc(doc(firebaseDb, this.INVITE_COLLECTION, inviteDoc.id), {
+        used: true,
+        used_by: usedBy,
+        used_at: Timestamp.now()
       });
 
-      if (error) throw error;
-
-      return data === true;
+      return true;
     } catch (error) {
       console.error('Error using invite:', error);
       return false;
@@ -114,15 +204,29 @@ class InviteService {
    */
   async getUserInvites(userId: string): Promise<InviteLink[]> {
     try {
-      const { data, error } = await supabase
-        .from('invite_links')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+      const q = query(
+        collection(firebaseDb, this.INVITE_COLLECTION),
+        where('user_id', '==', userId)
+      );
+      const snapshot = await getDocs(q);
 
-      if (error) throw error;
-
-      return data || [];
+      return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          code: data.code,
+          user_id: data.user_id,
+          username: data.username,
+          display_name: data.display_name,
+          type: data.type,
+          created_at: data.created_at.toDate(),
+          expires_at: data.expires_at.toDate(),
+          used: data.used,
+          used_by: data.used_by,
+          used_at: data.used_at?.toDate(),
+          metadata: data.metadata
+        };
+      }).sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
     } catch (error) {
       console.error('Error fetching user invites:', error);
       return [];
