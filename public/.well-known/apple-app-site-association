@@ -9,10 +9,21 @@
           "/vault/friend/*",
           "/vault/app/*"
         ]
+      },
+      {
+        "appID": "4D4ADMM7XL.com.sondregut.pvtapp.dev",
+        "paths": [
+          "/vault/invite/*",
+          "/vault/friend/*",
+          "/vault/app/*"
+        ]
       }
     ]
   },
   "webcredentials": {
-    "apps": ["4D4ADMM7XL.com.sondregut.pvtapp"]
+    "apps": [
+      "4D4ADMM7XL.com.sondregut.pvtapp",
+      "4D4ADMM7XL.com.sondregut.pvtapp.dev"
+    ]
   }
 }
