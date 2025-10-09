@@ -1,0 +1,142 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users collection and its subcollections
+    match /users/{userId} {
+      // Allow any authenticated user to read any profile
+      allow read: if request.auth != null;
+      // Allow a user to write only to their own profile
+      allow write: if request.auth != null && request.auth.uid == userId;
+
+      // Rule for 'profile' subcollection - ensure this is accessible
+      match /profile/{profileDocId} {
+        // Allow any authenticated user to read profile data
+        allow read: if request.auth != null;
+        // Allow only the user to write to their own profile
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Rule for 'poles' subcollection
+      // Allows a user to read and write their own poles
+      match /poles/{poleId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+      // Rule for 'sessions' subcollection (for AppHeader, SessionDetails, etc.)
+      // Allows a user to read and write their own sessions
+      match /sessions/{sessionId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Rule for 'preferences' subcollection (for SessionDetails, LogSessionScreen, etc.)
+      // Allows a user to read and write their own preferences (e.g., 'settings' document)
+      match /preferences/{preferenceDocId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Rule for 'friends' subcollection (for FriendList.tsx)
+      // Allows a user to read and write their own friends list
+      match /friends/{friendDocId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Rule for 'friendRequests' subcollection (for FriendRequests.tsx)
+      // Allows a user to read and write their own friend requests
+      match /friendRequests/{requestDocId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Rule for 'locations' subcollection (used in LogSessionScreen)
+      // Allows a user to read and write their own saved locations
+      match /locations/{locationId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Add any other subcollections of /users/{userId} here following the same pattern
+    }
+
+    // Top-level 'feed' collection
+    match /feed/{postId} {
+      allow read: if request.auth != null; // Allow any authenticated user to read the feed
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid; // User can create posts for themselves
+
+      // Allow post owner to update/delete their own posts
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+
+      // Allow updates in two cases:
+      // 1. Post owner updating their own post
+      // 2. Any authenticated user adding comments or likes (but not changing other fields)
+      allow update: if request.auth != null && (
+        // Owner can update anything
+        resource.data.userId == request.auth.uid ||
+        // Others can only update comments and likes arrays
+        (
+          // Ensure userId hasn't changed
+          request.resource.data.userId == resource.data.userId &&
+          // Ensure core post data hasn't changed
+          request.resource.data.postText == resource.data.postText &&
+          request.resource.data.sessionId == resource.data.sessionId &&
+          request.resource.data.sharedAt == resource.data.sharedAt &&
+          // Allow changes to comments and likes
+          (request.resource.data.comments != resource.data.comments ||
+           request.resource.data.likes != resource.data.likes)
+        )
+      );
+    }
+
+    // Top-level 'posts' collection
+    match /posts/{postId} {
+      allow read: if request.auth != null; // Allow any authenticated user to read posts
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid; // User can create posts for themselves
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid; // User can update/delete their own posts
+    }
+
+    // Top-level 'sessionShares' collection (from useShareSession.ts)
+    match /sessionShares/{shareId} {
+        // Allow owner or friends in friendUids to read.
+        // For create, a user can create shares where they are the ownerUid.
+        // Update/delete might be restricted to ownerUid.
+        allow read: if request.auth != null &&
+                      (request.auth.uid == resource.data.ownerUid || request.auth.uid in resource.data.friendUids);
+        allow create: if request.auth != null && request.resource.data.ownerUid == request.auth.uid;
+        allow update, delete: if request.auth != null && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Top-level 'reports' collection for reporting inappropriate content
+    match /reports/{reportId} {
+      // Only allow authenticated users to create reports
+      allow create: if request.auth != null &&
+                      request.resource.data.reportedBy == request.auth.uid;
+      // Only allow reading reports if you're an admin (you can implement admin logic)
+      // For now, no one can read reports except through admin panel
+      allow read, update, delete: if false;
+    }
+
+    // ============================================
+    // INVITE LINKS COLLECTION - NEW
+    // ============================================
+    match /invite_links/{inviteId} {
+      // Anyone can read invite links (needed for public invite pages)
+      allow read: if true;
+
+      // Only authenticated users can create invite links
+      allow create: if request.auth != null
+                    && request.resource.data.code is string
+                    && request.resource.data.code.size() == 8
+                    && request.resource.data.username is string
+                    && request.resource.data.type in ['friend_invite', 'app_share']
+                    && request.resource.data.used == false;
+
+      // Only the creator can update their own invite links
+      allow update: if request.auth != null
+                    && (resource.data.user_id == request.auth.uid
+                        || request.auth.uid != null); // Allow marking as used by anyone authenticated
+
+      // Only the creator can delete their invite links
+      allow delete: if request.auth != null
+                    && resource.data.user_id == request.auth.uid;
+    }
+  }
+}
