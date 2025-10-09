@@ -8,6 +8,7 @@ import VaultTestimonials from '@/components/vault/VaultTestimonials';
 import VaultAboutCreators from '@/components/vault/VaultAboutCreators';
 import VaultFAQ from '@/components/vault/VaultFAQ';
 import VaultCTA from '@/components/vault/VaultCTA';
+import VaultShareSection from '@/components/vault/VaultShareSection';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -21,6 +22,7 @@ const VaultLanding = () => {
       <VaultHowItWorks />
       <VaultTestimonials />
       <VaultPricing />
+      <VaultShareSection />
       <VaultAboutCreators />
       <VaultFAQ />
       <VaultCTA />

@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "4D4ADMM7XL.com.sondregut.pvtapp",
+        "paths": [
+          "/vault/invite/*",
+          "/vault/friend/*",
+          "/vault/app/*"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["4D4ADMM7XL.com.sondregut.pvtapp"]
+  }
+}
