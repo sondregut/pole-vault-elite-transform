@@ -183,7 +183,10 @@ const VaultInvite = () => {
             : 'Join Vault to connect with athletes and track your training progress.'}
         />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//app%20icon%20tracker.png" />
+        <meta property="og:image" content="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/app%20icon%20tracker.png" />
+        <meta property="og:image:width" content="512" />
+        <meta property="og:image:height" content="512" />
+        <meta property="og:image:alt" content="Vault App Icon" />
         <meta property="og:url" content={`https://stavhopp.no/vault/invite/${inviteCode}`} />
 
         {/* Twitter */}
@@ -200,7 +203,8 @@ const VaultInvite = () => {
             ? `${inviteData.inviter_name || inviteData.inviter_username} wants to connect with you on Vault!`
             : 'Join Vault to connect with athletes and track your training progress.'}
         />
-        <meta name="twitter:image" content="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//app%20icon%20tracker.png" />
+        <meta name="twitter:image" content="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos/app%20icon%20tracker.png" />
+        <meta name="twitter:image:alt" content="Vault App Icon" />
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
