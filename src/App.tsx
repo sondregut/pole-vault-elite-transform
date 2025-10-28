@@ -34,6 +34,12 @@ import VaultEquipment from "./pages/VaultEquipment";
 import VaultSessions from "./pages/VaultSessions";
 import VaultSessionDetail from "./pages/VaultSessionDetail";
 import VaultInvite from "./pages/VaultInvite";
+import VaultAdmin from "./pages/VaultAdmin";
+import VaultAdminOverview from "./pages/VaultAdminOverview";
+import VaultAdminPromoCodes from "./pages/VaultAdminPromoCodes";
+import VaultAdminUsers from "./pages/VaultAdminUsers";
+import VaultPrivacyPolicy from "./pages/VaultPrivacyPolicy";
+import VaultTermsOfService from "./pages/VaultTermsOfService";
 import PointsCalculator from "./pages/PointsCalculator";
 
 const queryClient = new QueryClient();
@@ -75,6 +81,13 @@ const App = () => (
             <Route path="/vault/sessions" element={<VaultSessions />} />
             <Route path="/vault/sessions/:sessionId" element={<VaultSessionDetail />} />
             <Route path="/vault/invite/:inviteCode" element={<VaultInvite />} />
+            <Route path="/vault/admin" element={<VaultAdmin />}>
+              <Route index element={<VaultAdminOverview />} />
+              <Route path="promo-codes" element={<VaultAdminPromoCodes />} />
+              <Route path="users" element={<VaultAdminUsers />} />
+            </Route>
+            <Route path="/vault/privacy" element={<VaultPrivacyPolicy />} />
+            <Route path="/vault/terms" element={<VaultTermsOfService />} />
             <Route path="/vault-app-secure" element={<VaultLanding />} />
             <Route path="/points-calculator" element={<PointsCalculator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

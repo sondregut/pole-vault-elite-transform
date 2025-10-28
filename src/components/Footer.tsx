@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Mail, Phone, Home, Info, ShoppingCart, MessageSquare, LayoutGrid, Instagram, Youtube, Facebook, Twitter } from "lucide-react";
+import { Mail, Phone, Home, Info, ShoppingCart, MessageSquare, LayoutGrid, Instagram, Youtube, Facebook, Twitter, Shield, FileText } from "lucide-react";
 import Logo from "./Logo";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeToNewsletter } from "@/utils/newsletterSubscription";
@@ -91,6 +91,18 @@ const Footer = () => {
                 <Link to="/contact" className="text-gray-400 hover:text-white transition flex items-center gap-2">
                   <MessageSquare size={16} className="text-primary" />
                   Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/vault/privacy" className="text-gray-400 hover:text-white transition flex items-center gap-2">
+                  <Shield size={16} className="text-primary" />
+                  Vault Privacy
+                </Link>
+              </li>
+              <li>
+                <Link to="/vault/terms" className="text-gray-400 hover:text-white transition flex items-center gap-2">
+                  <FileText size={16} className="text-primary" />
+                  Vault Terms
                 </Link>
               </li>
             </ul>

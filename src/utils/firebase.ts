@@ -25,4 +25,7 @@ setPersistence(firebaseAuth, browserLocalPersistence);
 // Initialize Firestore
 export const firebaseDb = getFirestore(firebaseApp);
 
+// Export alias for convenience
+export const db = firebaseDb;
+
 console.log('[Firebase] Initialized for web dashboard');

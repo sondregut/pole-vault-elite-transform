@@ -3,12 +3,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return request.auth != null &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
     // Users collection and its subcollections
     match /users/{userId} {
       // Allow any authenticated user to read any profile
       allow read: if request.auth != null;
-      // Allow a user to write only to their own profile
-      allow write: if request.auth != null && request.auth.uid == userId;
+      // Allow a user to write to their own profile OR allow admins to write to any profile
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
 
       // Rule for 'profile' subcollection - ensure this is accessible
       match /profile/{profileDocId} {
@@ -137,6 +143,17 @@ service cloud.firestore {
       // Only the creator can delete their invite links
       allow delete: if request.auth != null
                     && resource.data.user_id == request.auth.uid;
+    }
+
+    // ============================================
+    // PROMO CODES COLLECTION - ADMIN ONLY
+    // ============================================
+    match /promoCodes/{codeId} {
+      // Anyone authenticated can read promo codes (needed for redemption)
+      allow read: if request.auth != null;
+
+      // Only admins can create, update, or delete promo codes
+      allow create, update, delete: if isAdmin();
     }
   }
 }

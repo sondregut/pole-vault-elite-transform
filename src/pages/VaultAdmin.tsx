@@ -1,0 +1,101 @@
+import { useEffect } from 'react';
+import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { Shield, BarChart3, Ticket, Users } from 'lucide-react';
+
+const VaultAdmin = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, isAdmin, loading } = useAdminAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/vault/login', { state: { from: location } });
+    } else if (!loading && user && !isAdmin) {
+      navigate('/vault/dashboard');
+    }
+  }, [user, isAdmin, loading, navigate, location]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00A6FF]"></div>
+      </div>
+    );
+  }
+
+  if (!user || !isAdmin) {
+    return null;
+  }
+
+  const currentPath = location.pathname;
+
+  const tabs = [
+    { name: 'Overview', path: '/vault/admin', icon: BarChart3 },
+    { name: 'Promo Codes', path: '/vault/admin/promo-codes', icon: Ticket },
+    { name: 'Users', path: '/vault/admin/users', icon: Users },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Shield className="w-8 h-8 text-[#00A6FF]" />
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
+                <p className="text-sm text-gray-600">Vault App Management</p>
+              </div>
+            </div>
+            <Link
+              to="/vault/dashboard"
+              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Tabs */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4">
+          <nav className="flex gap-1">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = currentPath === tab.path;
+
+              return (
+                <Link
+                  key={tab.path}
+                  to={tab.path}
+                  className={`
+                    flex items-center gap-2 px-4 py-3 text-sm font-medium
+                    border-b-2 transition-colors
+                    ${
+                      isActive
+                        ? 'border-[#00A6FF] text-gray-900'
+                        : 'border-transparent text-gray-600 hover:text-gray-900'
+                    }
+                  `}
+                >
+                  <Icon className="w-4 h-4" />
+                  {tab.name}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="container mx-auto px-4 py-8">
+        <Outlet />
+      </div>
+    </div>
+  );
+};
+
+export default VaultAdmin;

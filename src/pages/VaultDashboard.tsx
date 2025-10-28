@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useVaultSessions, useVaultStats } from '@/hooks/useVaultData';
 import { formatDate, formatHeight, ratingLabels } from '@/types/vault';
 import { toast } from 'sonner';
@@ -18,12 +19,14 @@ import {
   Download,
   Smartphone,
   Activity,
-  Clock
+  Clock,
+  Shield
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 
 const VaultDashboard = () => {
   const { user, loading: authLoading, signOut } = useFirebaseAuth();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
   const { sessions, loading: sessionsLoading } = useVaultSessions(user);
   const { stats, loading: statsLoading } = useVaultStats(user, sessions);
   const navigate = useNavigate();
@@ -31,12 +34,19 @@ const VaultDashboard = () => {
 
   const loading = authLoading || sessionsLoading || statsLoading;
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated or if admin-only user
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/vault/login', { state: { from: location } });
+    } else if (!authLoading && !adminLoading && user && isAdmin) {
+      // Check if this is an admin-only account (no regular user data)
+      // If they have no sessions, they're likely an admin-only account
+      if (!sessionsLoading && sessions.length === 0) {
+        // Redirect admin-only users directly to admin panel
+        navigate('/vault/admin');
+      }
     }
-  }, [user, authLoading, navigate, location]);
+  }, [user, authLoading, adminLoading, isAdmin, sessionsLoading, sessions, navigate, location]);
 
   const handleSignOut = async () => {
     const { error } = await signOut();
@@ -119,6 +129,14 @@ const VaultDashboard = () => {
               </div>
 
               <div className="flex gap-3">
+                {isAdmin && (
+                  <Link to="/vault/admin">
+                    <Button variant="outline" className="gap-2 border-[#00A6FF] text-[#00A6FF] hover:bg-[#00A6FF] hover:text-white">
+                      <Shield className="h-4 w-4" />
+                      Admin Panel
+                    </Button>
+                  </Link>
+                )}
                 <Button variant="outline" onClick={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" />
                   Sign Out
