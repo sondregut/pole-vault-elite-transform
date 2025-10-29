@@ -32,8 +32,10 @@ service cloud.firestore {
 
       // Rule for 'sessions' subcollection (for AppHeader, SessionDetails, etc.)
       // Allows a user to read and write their own sessions
+      // Allows admins to read sessions for analytics/video management
       match /sessions/{sessionId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+        allow write: if request.auth != null && request.auth.uid == userId;
       }
 
       // Rule for 'preferences' subcollection (for SessionDetails, LogSessionScreen, etc.)

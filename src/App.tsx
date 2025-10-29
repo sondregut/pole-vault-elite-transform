@@ -39,6 +39,10 @@ import VaultAdminOverview from "./pages/VaultAdminOverview";
 import VaultAdminUserInsights from "./pages/VaultAdminUserInsights";
 import VaultAdminRevenue from "./pages/VaultAdminRevenue";
 import VaultAdminModeration from "./pages/VaultAdminModeration";
+import VaultAdminNotifications from "./pages/VaultAdminNotifications";
+import VaultAdminSystemHealth from "./pages/VaultAdminSystemHealth";
+import VaultAdminVideoManagement from "./pages/VaultAdminVideoManagement";
+import VaultAdminVideoDiagnostic from "./pages/VaultAdminVideoDiagnostic";
 import VaultAdminPromoCodes from "./pages/VaultAdminPromoCodes";
 import VaultAdminUsers from "./pages/VaultAdminUsers";
 import VaultPrivacyPolicy from "./pages/VaultPrivacyPolicy";
@@ -89,6 +93,10 @@ const App = () => (
               <Route path="user-insights" element={<VaultAdminUserInsights />} />
               <Route path="revenue" element={<VaultAdminRevenue />} />
               <Route path="moderation" element={<VaultAdminModeration />} />
+              <Route path="notifications" element={<VaultAdminNotifications />} />
+              <Route path="system-health" element={<VaultAdminSystemHealth />} />
+              <Route path="videos" element={<VaultAdminVideoManagement />} />
+              <Route path="videos/diagnostic" element={<VaultAdminVideoDiagnostic />} />
               <Route path="promo-codes" element={<VaultAdminPromoCodes />} />
               <Route path="users" element={<VaultAdminUsers />} />
             </Route>
