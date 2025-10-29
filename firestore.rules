@@ -115,9 +115,10 @@ service cloud.firestore {
       // Only allow authenticated users to create reports
       allow create: if request.auth != null &&
                       request.resource.data.reportedBy == request.auth.uid;
-      // Only allow reading reports if you're an admin (you can implement admin logic)
-      // For now, no one can read reports except through admin panel
-      allow read, update, delete: if false;
+      // Admins can read and update reports (to mark as handled/dismissed)
+      allow read, update: if isAdmin();
+      // Reports cannot be deleted
+      allow delete: if false;
     }
 
     // ============================================
@@ -154,6 +155,105 @@ service cloud.firestore {
 
       // Only admins can create, update, or delete promo codes
       allow create, update, delete: if isAdmin();
+    }
+
+    // ============================================
+    // ANALYTICS & METRICS - ADMIN ONLY
+    // ============================================
+
+    // Cached metrics for analytics dashboard
+    match /metrics/{metricId} {
+      // Only admins can read metrics
+      allow read: if isAdmin();
+      // Only cloud functions/server can write
+      allow write: if false;
+    }
+
+    // Revenue events from webhooks (RevenueCat, etc.)
+    match /revenueEvents/{eventId} {
+      // Only admins can read revenue events
+      allow read: if isAdmin();
+      // Only cloud functions/webhooks can write
+      allow write: if false;
+    }
+
+    // Error logs from mobile app and web
+    match /errorLogs/{logId} {
+      // Users can create error logs from their app
+      allow create: if request.auth != null;
+      // Only admins can read error logs
+      allow read: if isAdmin();
+      // Error logs are immutable
+      allow update, delete: if false;
+    }
+
+    // ============================================
+    // FEATURE FLAGS - FOR A/B TESTING
+    // ============================================
+
+    match /featureFlags/{flagId} {
+      // All authenticated users can read feature flags
+      allow read: if request.auth != null;
+      // Only admins can manage feature flags
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ============================================
+    // NOTIFICATIONS - ADMIN MANAGED
+    // ============================================
+
+    // Scheduled notifications queue
+    match /scheduledNotifications/{notificationId} {
+      // Only admins can read scheduled notifications
+      allow read: if isAdmin();
+      // Only admins can create scheduled notifications
+      allow create: if isAdmin();
+      // Only cloud functions can mark as sent (update) or cleanup (delete)
+      allow update, delete: if false;
+    }
+
+    // Notification delivery logs
+    match /notificationLogs/{logId} {
+      // Only admins can read notification logs
+      allow read: if isAdmin();
+      // Only cloud functions can write logs
+      allow write: if false;
+    }
+
+    // ============================================
+    // GDPR & DATA COMPLIANCE
+    // ============================================
+
+    // Data export requests (GDPR)
+    match /dataExportRequests/{requestId} {
+      // Users can create export requests for their own data
+      allow create: if request.auth != null &&
+        request.resource.data.userId == request.auth.uid;
+      // Users can read their own export requests
+      allow read: if request.auth != null &&
+        resource.data.userId == request.auth.uid;
+      // Admins can read all export requests
+      allow read: if isAdmin();
+      // Only cloud functions can update request status
+      allow update: if false;
+      // Export requests cannot be deleted
+      allow delete: if false;
+    }
+
+    // Data deletion requests (GDPR)
+    match /dataDeletionRequests/{requestId} {
+      // Users can create deletion requests for their own data
+      allow create: if request.auth != null &&
+        request.resource.data.userId == request.auth.uid;
+      // Users can read their own deletion requests
+      allow read: if request.auth != null &&
+        resource.data.userId == request.auth.uid;
+      // Admins can read all deletion requests
+      allow read: if isAdmin();
+      // Only cloud functions can update request status
+      allow update: if false;
+      // Deletion requests cannot be deleted
+      allow delete: if false;
     }
   }
 }

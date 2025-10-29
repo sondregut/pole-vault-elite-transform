@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Shield, BarChart3, Ticket, Users } from 'lucide-react';
+import { Shield, BarChart3, Ticket, Users, TrendingUp, DollarSign, Flag } from 'lucide-react';
 
 const VaultAdmin = () => {
   const navigate = useNavigate();
@@ -32,6 +32,9 @@ const VaultAdmin = () => {
 
   const tabs = [
     { name: 'Overview', path: '/vault/admin', icon: BarChart3 },
+    { name: 'User Insights', path: '/vault/admin/user-insights', icon: TrendingUp },
+    { name: 'Revenue', path: '/vault/admin/revenue', icon: DollarSign },
+    { name: 'Moderation', path: '/vault/admin/moderation', icon: Flag },
     { name: 'Promo Codes', path: '/vault/admin/promo-codes', icon: Ticket },
     { name: 'Users', path: '/vault/admin/users', icon: Users },
   ];

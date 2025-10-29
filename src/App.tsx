@@ -36,6 +36,9 @@ import VaultSessionDetail from "./pages/VaultSessionDetail";
 import VaultInvite from "./pages/VaultInvite";
 import VaultAdmin from "./pages/VaultAdmin";
 import VaultAdminOverview from "./pages/VaultAdminOverview";
+import VaultAdminUserInsights from "./pages/VaultAdminUserInsights";
+import VaultAdminRevenue from "./pages/VaultAdminRevenue";
+import VaultAdminModeration from "./pages/VaultAdminModeration";
 import VaultAdminPromoCodes from "./pages/VaultAdminPromoCodes";
 import VaultAdminUsers from "./pages/VaultAdminUsers";
 import VaultPrivacyPolicy from "./pages/VaultPrivacyPolicy";
@@ -83,6 +86,9 @@ const App = () => (
             <Route path="/vault/invite/:inviteCode" element={<VaultInvite />} />
             <Route path="/vault/admin" element={<VaultAdmin />}>
               <Route index element={<VaultAdminOverview />} />
+              <Route path="user-insights" element={<VaultAdminUserInsights />} />
+              <Route path="revenue" element={<VaultAdminRevenue />} />
+              <Route path="moderation" element={<VaultAdminModeration />} />
               <Route path="promo-codes" element={<VaultAdminPromoCodes />} />
               <Route path="users" element={<VaultAdminUsers />} />
             </Route>
