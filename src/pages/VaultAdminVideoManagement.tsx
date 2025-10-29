@@ -17,12 +17,15 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { videoManagementService } from '@/services/videoManagementService';
-import { Video, HardDrive, DollarSign, Users, AlertCircle, ExternalLink } from 'lucide-react';
+import { Video, HardDrive, DollarSign, Users, AlertCircle, ExternalLink, Search, Trash2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 export default function VaultAdminVideoManagement() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedVideos, setSelectedVideos] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadVideoData();
@@ -86,6 +89,36 @@ export default function VaultAdminVideoManagement() {
       currency: 'USD',
       minimumFractionDigits: 2,
     }).format(value);
+  };
+
+  // Filter videos by search term
+  const filteredVideos = data?.videos?.filter((video: any) => {
+    if (!searchTerm) return true;
+    const search = searchTerm.toLowerCase();
+    return (
+      video.userName?.toLowerCase().includes(search) ||
+      video.userEmail?.toLowerCase().includes(search) ||
+      video.userId?.toLowerCase().includes(search)
+    );
+  }) || [];
+
+  const toggleVideoSelection = (videoId: string) => {
+    const newSelected = new Set(selectedVideos);
+    if (newSelected.has(videoId)) {
+      newSelected.delete(videoId);
+    } else {
+      newSelected.add(videoId);
+    }
+    setSelectedVideos(newSelected);
+  };
+
+  const selectAll = () => {
+    const allVideoIds = new Set(filteredVideos.map((v: any) => v.id));
+    setSelectedVideos(allVideoIds);
+  };
+
+  const deselectAll = () => {
+    setSelectedVideos(new Set());
   };
 
   // Prepare chart data for user usage (top 10)
@@ -239,19 +272,92 @@ export default function VaultAdminVideoManagement() {
         <TabsContent value="recent">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Videos</CardTitle>
-              <p className="text-sm text-gray-600">Last 50 uploaded videos</p>
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                  <CardTitle>Recent Videos</CardTitle>
+                  <p className="text-sm text-gray-600">
+                    {filteredVideos.length} video{filteredVideos.length !== 1 ? 's' : ''}
+                    {searchTerm && ` matching "${searchTerm}"`}
+                  </p>
+                </div>
+
+                <div className="flex gap-2 flex-wrap">
+                  {/* Search Bar */}
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Input
+                      placeholder="Search by user..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 w-64"
+                    />
+                  </div>
+
+                  {/* Bulk Selection */}
+                  {filteredVideos.length > 0 && (
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={selectAll}
+                        disabled={selectedVideos.size === filteredVideos.length}
+                      >
+                        Select All
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={deselectAll}
+                        disabled={selectedVideos.size === 0}
+                      >
+                        Deselect All
+                      </Button>
+                      {selectedVideos.size > 0 && (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          disabled
+                          title="Bulk delete requires Cloud Function implementation"
+                        >
+                          <Trash2 className="w-4 h-4 mr-1" />
+                          Delete ({selectedVideos.size})
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              {data.videos && data.videos.length > 0 ? (
+              {filteredVideos.length > 0 ? (
                 <div className="space-y-3">
-                  {data.videos.slice(0, 20).map((video: any) => (
+                  {filteredVideos.slice(0, 50).map((video: any) => (
                     <div
                       key={video.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                      className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
+                        selectedVideos.has(video.id)
+                          ? 'bg-blue-50 border-2 border-blue-300'
+                          : 'bg-gray-50 border-2 border-transparent'
+                      }`}
                     >
                       <div className="flex items-center gap-3 flex-1">
-                        <Video className="w-5 h-5 text-[#00A6FF] flex-shrink-0" />
+                        <input
+                          type="checkbox"
+                          checked={selectedVideos.has(video.id)}
+                          onChange={() => toggleVideoSelection(video.id)}
+                          className="w-4 h-4"
+                        />
+                        {video.thumbnailUrl ? (
+                          <img
+                            src={video.thumbnailUrl}
+                            alt="Video thumbnail"
+                            className="w-16 h-16 object-cover rounded flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                            <Video className="w-6 h-6 text-gray-400" />
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-gray-900 truncate">
                             {video.userName || 'Unknown User'}
@@ -268,7 +374,10 @@ export default function VaultAdminVideoManagement() {
                       </div>
                       <div className="flex items-center gap-3">
                         {video.sizeMB && (
-                          <Badge variant="secondary">{formatSize(video.sizeMB)}</Badge>
+                          <Badge variant="secondary">
+                            {formatSize(video.sizeMB)}
+                            {video.isEstimated && ' *'}
+                          </Badge>
                         )}
                         <a
                           href={video.url}
@@ -281,10 +390,16 @@ export default function VaultAdminVideoManagement() {
                       </div>
                     </div>
                   ))}
+
+                  {filteredVideos.length > 50 && (
+                    <p className="text-center text-sm text-gray-500 py-4">
+                      Showing first 50 of {filteredVideos.length} videos
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="text-center py-12 text-gray-500">
-                  No videos found
+                  {searchTerm ? 'No videos found matching your search' : 'No videos found'}
                 </div>
               )}
             </CardContent>

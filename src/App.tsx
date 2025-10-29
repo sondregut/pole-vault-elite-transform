@@ -38,6 +38,7 @@ import VaultAdmin from "./pages/VaultAdmin";
 import VaultAdminOverview from "./pages/VaultAdminOverview";
 import VaultAdminUserInsights from "./pages/VaultAdminUserInsights";
 import VaultAdminRevenue from "./pages/VaultAdminRevenue";
+import VaultAdminTrainingAnalytics from "./pages/VaultAdminTrainingAnalytics";
 import VaultAdminModeration from "./pages/VaultAdminModeration";
 import VaultAdminNotifications from "./pages/VaultAdminNotifications";
 import VaultAdminSystemHealth from "./pages/VaultAdminSystemHealth";
@@ -93,6 +94,7 @@ const App = () => (
               <Route index element={<VaultAdminOverview />} />
               <Route path="user-insights" element={<VaultAdminUserInsights />} />
               <Route path="revenue" element={<VaultAdminRevenue />} />
+              <Route path="training-analytics" element={<VaultAdminTrainingAnalytics />} />
               <Route path="moderation" element={<VaultAdminModeration />} />
               <Route path="notifications" element={<VaultAdminNotifications />} />
               <Route path="system-health" element={<VaultAdminSystemHealth />} />
