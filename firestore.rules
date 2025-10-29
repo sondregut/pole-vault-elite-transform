@@ -190,17 +190,6 @@ service cloud.firestore {
     }
 
     // ============================================
-    // FEATURE FLAGS - FOR A/B TESTING
-    // ============================================
-
-    match /featureFlags/{flagId} {
-      // All authenticated users can read feature flags
-      allow read: if request.auth != null;
-      // Only admins can manage feature flags
-      allow create, update, delete: if isAdmin();
-    }
-
-    // ============================================
     // NOTIFICATIONS - ADMIN MANAGED
     // ============================================
 
@@ -229,8 +218,9 @@ service cloud.firestore {
     // Data export requests (GDPR)
     match /dataExportRequests/{requestId} {
       // Users can create export requests for their own data
-      allow create: if request.auth != null &&
-        request.resource.data.userId == request.auth.uid;
+      // Admins can create export requests for any user
+      allow create: if (request.auth != null &&
+        request.resource.data.userId == request.auth.uid) || isAdmin();
       // Users can read their own export requests
       allow read: if request.auth != null &&
         resource.data.userId == request.auth.uid;

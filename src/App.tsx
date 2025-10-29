@@ -43,6 +43,7 @@ import VaultAdminNotifications from "./pages/VaultAdminNotifications";
 import VaultAdminSystemHealth from "./pages/VaultAdminSystemHealth";
 import VaultAdminVideoManagement from "./pages/VaultAdminVideoManagement";
 import VaultAdminVideoDiagnostic from "./pages/VaultAdminVideoDiagnostic";
+import VaultAdminDataManagement from "./pages/VaultAdminDataManagement";
 import VaultAdminPromoCodes from "./pages/VaultAdminPromoCodes";
 import VaultAdminUsers from "./pages/VaultAdminUsers";
 import VaultPrivacyPolicy from "./pages/VaultPrivacyPolicy";
@@ -97,6 +98,7 @@ const App = () => (
               <Route path="system-health" element={<VaultAdminSystemHealth />} />
               <Route path="videos" element={<VaultAdminVideoManagement />} />
               <Route path="videos/diagnostic" element={<VaultAdminVideoDiagnostic />} />
+              <Route path="data-management" element={<VaultAdminDataManagement />} />
               <Route path="promo-codes" element={<VaultAdminPromoCodes />} />
               <Route path="users" element={<VaultAdminUsers />} />
             </Route>

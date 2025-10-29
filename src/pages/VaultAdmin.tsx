@@ -38,6 +38,7 @@ const VaultAdmin = () => {
     { name: 'Notifications', path: '/vault/admin/notifications', icon: Bell },
     { name: 'System Health', path: '/vault/admin/system-health', icon: Activity },
     { name: 'Videos', path: '/vault/admin/videos', icon: Video },
+    { name: 'Data Management', path: '/vault/admin/data-management', icon: Shield },
     { name: 'Promo Codes', path: '/vault/admin/promo-codes', icon: Ticket },
     { name: 'Users', path: '/vault/admin/users', icon: Users },
   ];
