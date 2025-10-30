@@ -21,6 +21,7 @@ export interface AdminUser {
   // Subscription details
   subscriptionTier?: 'free' | 'athlete' | 'athlete_plus' | 'lifetime';
   subscriptionStatus?: string;
+  isTrialing?: boolean; // Firestore field - true if user is in trial period
   trialEndsAt?: string;
   trialDaysRemaining?: number;
   subscriptionExpiresAt?: string;

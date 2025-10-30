@@ -120,7 +120,7 @@ const VaultAdminUsers = () => {
                       {user.username && (
                         <p className="text-sm text-gray-600 mt-1">@{user.username}</p>
                       )}
-                      <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-center gap-2 mt-2 flex-wrap">
                         {/* Subscription Tier Badge */}
                         <Badge
                           variant={user.subscriptionTier === 'lifetime' ? 'default' : 'secondary'}
@@ -135,13 +135,55 @@ const VaultAdminUsers = () => {
                            user.subscriptionTier === 'athlete_plus' ? 'Athlete+' :
                            user.subscriptionTier === 'athlete' ? 'Athlete' : 'Free'}
                         </Badge>
-                        {/* Trial Badge */}
-                        {user.trialDaysRemaining && user.trialDaysRemaining > 0 && (
-                          <Badge variant="outline" className="border-orange-500 text-orange-600">
-                            <Clock className="w-3 h-3 mr-1" />
-                            Trial: {user.trialDaysRemaining}d left
+
+                        {/* Payment Status Indicator */}
+                        {user.hasLifetimeAccess && (
+                          <Badge variant="outline" className="border-green-500 text-green-600 bg-green-50">
+                            <Crown className="w-3 h-3 mr-1" />
+                            Comp (Not Paying)
                           </Badge>
                         )}
+
+                        {/* Trial Badge */}
+                        {user.trialDaysRemaining && user.trialDaysRemaining > 0 && !user.hasLifetimeAccess && (
+                          <Badge variant="outline" className="border-orange-500 text-orange-600">
+                            <Clock className="w-3 h-3 mr-1" />
+                            Trial: {user.trialDaysRemaining}d left (Not Paying)
+                          </Badge>
+                        )}
+
+                        {/* Paying Status - Must match revenue service logic EXACTLY */}
+                        {(() => {
+                          // EXCLUDE comp/lifetime (no recurring revenue)
+                          if (user.hasLifetimeAccess === true) return null;
+
+                          // EXCLUDE trial users (not paying yet) - check Firestore field
+                          if (user.isTrialing === true) return null;
+
+                          // EXCLUDE if not a paid tier
+                          if (user.subscriptionTier !== 'athlete' && user.subscriptionTier !== 'athlete_plus') return null;
+
+                          // Only count users with active subscriptions OR users with paid tiers (backwards compatibility)
+                          const status = user.subscriptionStatus?.toLowerCase();
+                          const tier = user.subscriptionTier?.toLowerCase();
+                          const isActive = status === 'active' ||
+                                          (!status && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus'));
+
+                          if (!isActive) return null;
+
+                          // EXCLUDE if subscription has expired
+                          if (user.subscriptionExpiresAt) {
+                            const expiresAt = new Date(user.subscriptionExpiresAt);
+                            if (expiresAt < new Date()) return null;
+                          }
+
+                          // If we got here, user is PAYING
+                          return (
+                            <Badge variant="outline" className="border-emerald-500 text-emerald-600 bg-emerald-50">
+                              💰 Paying
+                            </Badge>
+                          );
+                        })()}
                       </div>
                     </div>
                   </div>

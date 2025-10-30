@@ -55,9 +55,10 @@ const calculateSubscriptionDetails = (data: any) => {
     const tierLower = rawTier.toLowerCase();
     if (tierLower === 'athlete_plus' || tierLower === 'athleteplus') {
       subscriptionTier = 'athlete_plus';
-    } else if (tierLower === 'athlete' || tierLower === 'lite') {
-      // Map 'lite' to 'athlete' tier
+    } else if (tierLower === 'athlete') {
       subscriptionTier = 'athlete';
+    } else if (tierLower === 'lite') {
+      subscriptionTier = 'free'; // lite is the free tier!
     } else if (tierLower === 'lifetime') {
       subscriptionTier = 'lifetime';
     }
@@ -85,6 +86,7 @@ const calculateSubscriptionDetails = (data: any) => {
     hasLifetimeAccess,
     subscriptionTier,
     subscriptionStatus: status,
+    isTrialing: data.isTrialing || false, // Pass through the Firestore field
     trialEndsAt: data.trialEndsAt,
     trialDaysRemaining,
     subscriptionExpiresAt: data.subscriptionExpiresAt,
@@ -294,11 +296,69 @@ export const getAnalyticsData = async () => {
     const lifetimeAccessUsers = allUsers.filter(user => user.hasLifetimeAccess);
     const activePromoCodes = allPromoCodes.filter(code => code.active);
 
-    // Calculate subscription breakdown
-    const freeUsers = allUsers.filter(user => user.subscriptionTier === 'free').length;
-    const trialUsers = allUsers.filter(user => user.trialDaysRemaining && user.trialDaysRemaining > 0).length;
-    const athleteUsers = allUsers.filter(user => user.subscriptionTier === 'athlete').length;
-    const athletePlusUsers = allUsers.filter(user => user.subscriptionTier === 'athlete_plus').length;
+    // Calculate subscription breakdown - ONLY count actual paying customers
+    const freeUsers = allUsers.filter(user =>
+      user.subscriptionTier === 'free' ||
+      (!user.subscriptionTier && !user.hasLifetimeAccess)
+    ).length;
+
+    // Count ALL trial users (both active and expired trials) - they're not paying
+    const trialUsers = allUsers.filter(user =>
+      !user.hasLifetimeAccess &&
+      (
+        // Active trial with days remaining
+        (user.trialDaysRemaining && user.trialDaysRemaining > 0) ||
+        // OR has trial status in Firestore (includes expired trials)
+        user.subscriptionStatus === 'trial' ||
+        user.isTrialing === true
+      )
+    ).length;
+
+    // Only count PAYING athlete users (exclude trials, lifetime, expired)
+    const athleteUsers = allUsers.filter(user =>
+      user.subscriptionTier === 'athlete' &&
+      !user.hasLifetimeAccess &&
+      user.isTrialing !== true && // Check Firestore field directly!
+      (user.subscriptionStatus === 'active' || !user.subscriptionStatus) // Active or no status (backwards compat)
+    ).length;
+
+    // Only count PAYING athlete+ users (exclude trials, lifetime, expired)
+    const athletePlusUsers = allUsers.filter(user =>
+      user.subscriptionTier === 'athlete_plus' &&
+      !user.hasLifetimeAccess &&
+      user.isTrialing !== true && // Check Firestore field directly!
+      (user.subscriptionStatus === 'active' || !user.subscriptionStatus) // Active or no status (backwards compat)
+    ).length;
+
+    // Debug logging to help diagnose discrepancies
+    console.log('[Admin Service] User counts breakdown:', {
+      total: allUsers.length,
+      free: freeUsers,
+      trial: trialUsers,
+      athlete: athleteUsers,
+      athletePlus: athletePlusUsers,
+      lifetime: lifetimeAccessUsers.length
+    });
+
+    // Log users with athlete_plus tier to see who's being counted
+    const athletePlusUsersList = allUsers.filter(user => user.subscriptionTier === 'athlete_plus');
+    console.log('[Admin Service] All users with athlete_plus tier:', athletePlusUsersList.length);
+    console.log('[Admin Service] Breakdown:', {
+      withLifetime: athletePlusUsersList.filter(u => u.hasLifetimeAccess).length,
+      inTrial: athletePlusUsersList.filter(u => u.trialDaysRemaining && u.trialDaysRemaining > 0).length,
+      paying: athletePlusUsers,
+      withExpiredStatus: athletePlusUsersList.filter(u => u.subscriptionStatus === 'expired' || u.subscriptionStatus === 'cancelled').length,
+      withNoStatus: athletePlusUsersList.filter(u => !u.subscriptionStatus).length
+    });
+
+    // Log detailed status breakdown
+    console.log('[Admin Service] Athlete+ users by status:', {
+      active: athletePlusUsersList.filter(u => u.subscriptionStatus === 'active').length,
+      expired: athletePlusUsersList.filter(u => u.subscriptionStatus === 'expired').length,
+      cancelled: athletePlusUsersList.filter(u => u.subscriptionStatus === 'cancelled').length,
+      trial: athletePlusUsersList.filter(u => u.subscriptionStatus === 'trial').length,
+      noStatus: athletePlusUsersList.filter(u => !u.subscriptionStatus).length
+    });
 
     // Calculate total redemptions
     let totalRedemptions = 0;
