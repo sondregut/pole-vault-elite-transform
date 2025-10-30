@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trash2, EyeOff, Ban, User, Calendar } from 'lucide-react';
+import { Trash2, EyeOff, Ban, User, Calendar, Video, ExternalLink } from 'lucide-react';
 
 interface PostPreviewCardProps {
   post: {
@@ -76,14 +76,42 @@ export function PostPreviewCard({
           </div>
         )}
 
-        {/* Media Content */}
+        {/* Media Content - Video links from jumps */}
+        {(post as any).jumpsData?.some((jump: any) => jump.videoUrl) && (
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
+            <div className="flex items-center gap-2 text-blue-900 font-medium">
+              <Video className="w-4 h-4" />
+              Videos:
+            </div>
+            {(post as any).jumpsData.map((jump: any, index: number) => (
+              jump.videoUrl && (
+                <a
+                  key={index}
+                  href={jump.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  Jump {index + 1}: {jump.height} - {jump.rating}
+                </a>
+              )
+            ))}
+          </div>
+        )}
+
+        {/* Legacy single video support */}
         {post.videoUrl && (
-          <div className="rounded-lg overflow-hidden bg-black">
-            <video
-              src={post.videoUrl}
-              controls
-              className="w-full max-h-96 object-contain"
-            />
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <a
+              href={post.videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              <Video className="w-4 h-4" />
+              View Video
+            </a>
           </div>
         )}
 

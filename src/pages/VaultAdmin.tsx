@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Shield, BarChart3, Ticket, Users, TrendingUp, DollarSign, Flag, Bell, Activity, Video, Target } from 'lucide-react';
+import { Shield, BarChart3, Ticket, Users, TrendingUp, DollarSign, Flag, Bell, Activity, Video, Target, Trash2 } from 'lucide-react';
 
 const VaultAdmin = () => {
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ const VaultAdmin = () => {
     { name: 'System Health', path: '/vault/admin/system-health', icon: Activity },
     { name: 'Videos', path: '/vault/admin/videos', icon: Video },
     { name: 'Data Management', path: '/vault/admin/data-management', icon: Shield },
+    { name: 'Data Cleanup', path: '/vault/admin/data-cleanup', icon: Trash2 },
     { name: 'Promo Codes', path: '/vault/admin/promo-codes', icon: Ticket },
     { name: 'Users', path: '/vault/admin/users', icon: Users },
   ];

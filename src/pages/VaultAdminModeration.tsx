@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, Shield, Clock, CheckCircle } from 'lucide-react';
+import { AlertCircle, Shield, Clock, CheckCircle, Ban } from 'lucide-react';
 
 export default function VaultAdminModeration() {
   const [loading, setLoading] = useState(true);
@@ -237,19 +237,43 @@ export default function VaultAdminModeration() {
         <TabsList>
           <TabsTrigger value="reports" className="relative">
             Reported Posts
-            {data.reports.length > 0 && (
+            {data.reports.filter((r: any) => r.type === 'post').length > 0 && (
               <Badge variant="destructive" className="ml-2 px-1.5 py-0 text-xs">
-                {data.reports.length}
+                {data.reports.filter((r: any) => r.type === 'post').length}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="comments" className="relative">
+            Reported Comments
+            {data.reports.filter((r: any) => r.type === 'comment').length > 0 && (
+              <Badge variant="destructive" className="ml-2 px-1.5 py-0 text-xs">
+                {data.reports.filter((r: any) => r.type === 'comment').length}
               </Badge>
             )}
           </TabsTrigger>
           <TabsTrigger value="recent">Recent Posts</TabsTrigger>
+          <TabsTrigger value="hidden" className="relative">
+            Hidden Posts
+            {data.hiddenPosts?.length > 0 && (
+              <Badge variant="secondary" className="ml-2 px-1.5 py-0 text-xs">
+                {data.hiddenPosts.length}
+              </Badge>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="banned">Banned Users</TabsTrigger>
+          <TabsTrigger value="logs" className="relative">
+            Moderation History
+            {data.moderationLogs?.length > 0 && (
+              <Badge variant="secondary" className="ml-2 px-1.5 py-0 text-xs">
+                {data.moderationLogs.length}
+              </Badge>
+            )}
+          </TabsTrigger>
         </TabsList>
 
         {/* Reported Posts Tab */}
         <TabsContent value="reports" className="space-y-4">
-          {data.reports.length === 0 ? (
+          {data.reports.filter((r: any) => r.type === 'post').length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <CheckCircle className="w-12 h-12 text-green-500 mb-3" />
@@ -258,7 +282,7 @@ export default function VaultAdminModeration() {
               </CardContent>
             </Card>
           ) : (
-            data.reports.map((report: any) => (
+            data.reports.filter((r: any) => r.type === 'post').map((report: any) => (
               <div key={report.id} className="space-y-3">
                 {/* Report Details */}
                 <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
@@ -319,6 +343,116 @@ export default function VaultAdminModeration() {
           )}
         </TabsContent>
 
+        {/* Reported Comments Tab */}
+        <TabsContent value="comments" className="space-y-4">
+          {data.reports.filter((r: any) => r.type === 'comment').length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <CheckCircle className="w-12 h-12 text-green-500 mb-3" />
+                <p className="text-lg font-medium text-gray-900">No reported comments</p>
+                <p className="text-sm text-gray-600">All caught up!</p>
+              </CardContent>
+            </Card>
+          ) : (
+            data.reports.filter((r: any) => r.type === 'comment').map((report: any) => (
+              <Card key={report.id} className="bg-white border-gray-200">
+                <CardContent className="p-4 space-y-3">
+                  {/* Report Details */}
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4 text-orange-600" />
+                          <p className="font-medium text-orange-900">
+                            Reason: {report.reason}
+                          </p>
+                        </div>
+                        <p className="text-sm text-orange-700">
+                          Reported by: {report.reportedBy}
+                        </p>
+                        {report.commentText && (
+                          <div className="mt-2 p-3 bg-white border border-orange-200 rounded">
+                            <p className="text-sm font-medium text-gray-700 mb-1">Comment:</p>
+                            <p className="text-sm text-gray-900">"{report.commentText}"</p>
+                          </div>
+                        )}
+                        <p className="text-xs text-gray-500 mt-2">
+                          Comment ID: {report.commentId} • Post ID: {report.postId}
+                        </p>
+                        <p className="text-xs text-orange-600">
+                          {new Date(report.timestamp?.toDate?.() || report.timestamp).toLocaleString()}
+                        </p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDismissReport(report.id)}
+                        disabled={actionLoading}
+                      >
+                        Dismiss
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={async () => {
+                        setActionLoading(true);
+                        try {
+                          // Delete the comment
+                          const result = await moderationService.deleteComment(report.postId, report.commentId);
+                          if (result.success) {
+                            // Dismiss the report
+                            await moderationService.markReportHandled(report.id);
+                            await loadModerationData();
+                          } else {
+                            alert(`Error deleting comment: ${result.error}`);
+                          }
+                        } catch (error) {
+                          console.error('Error deleting comment:', error);
+                          alert('Failed to delete comment');
+                        } finally {
+                          setActionLoading(false);
+                        }
+                      }}
+                      disabled={actionLoading}
+                    >
+                      Delete Comment & Dismiss Report
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDismissReport(report.id)}
+                      disabled={actionLoading}
+                    >
+                      Dismiss Report Only
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() =>
+                        handleBanUserClick(
+                          report.reportedUserId,
+                          'User',
+                          ''
+                        )
+                      }
+                      disabled={actionLoading}
+                      className="ml-auto"
+                    >
+                      <Ban className="w-4 h-4 mr-2" />
+                      Ban User
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </TabsContent>
+
         {/* Recent Posts Tab */}
         <TabsContent value="recent" className="space-y-4">
           {data.recentPosts.length === 0 ? (
@@ -338,6 +472,64 @@ export default function VaultAdminModeration() {
                   handleBanUserClick(post.userId, post.userName || 'Unknown User', post.userEmail)
                 }
               />
+            ))
+          )}
+        </TabsContent>
+
+        {/* Hidden Posts Tab */}
+        <TabsContent value="hidden" className="space-y-4">
+          {!data.hiddenPosts || data.hiddenPosts.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center text-gray-500">
+                No hidden posts
+              </CardContent>
+            </Card>
+          ) : (
+            data.hiddenPosts.map((post: any) => (
+              <div key={post.id} className="space-y-2">
+                <PostPreviewCard
+                  post={post}
+                  onDelete={() => handleDeletePost(post.id)}
+                  onHide={() => {}} // Already hidden
+                  onBanUser={() =>
+                    handleBanUserClick(post.userId, post.userName || 'Unknown User', post.userEmail)
+                  }
+                  showActions={false}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      setActionLoading(true);
+                      try {
+                        const result = await moderationService.unhidePost(post.id);
+                        if (result.success) {
+                          await loadModerationData();
+                        } else {
+                          alert(`Error unhiding post: ${result.error}`);
+                        }
+                      } catch (error) {
+                        console.error('Error unhiding post:', error);
+                        alert('Failed to unhide post');
+                      } finally {
+                        setActionLoading(false);
+                      }
+                    }}
+                    disabled={actionLoading}
+                  >
+                    Unhide Post
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDeletePost(post.id)}
+                    disabled={actionLoading}
+                  >
+                    Delete Permanently
+                  </Button>
+                </div>
+              </div>
             ))
           )}
         </TabsContent>
@@ -398,6 +590,54 @@ export default function VaultAdminModeration() {
                 </Card>
               ))}
             </div>
+          )}
+        </TabsContent>
+
+        {/* Moderation History Tab */}
+        <TabsContent value="logs" className="space-y-4">
+          {!data.moderationLogs || data.moderationLogs.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center text-gray-500">
+                No moderation actions yet
+              </CardContent>
+            </Card>
+          ) : (
+            data.moderationLogs.map((log: any) => (
+              <Card key={log.id} className="bg-white border-gray-200">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1 flex-1">
+                      <div className="flex items-center gap-2">
+                        <Badge variant={log.action === 'delete_post' ? 'destructive' : 'secondary'}>
+                          {log.action === 'delete_post' ? 'Post Deleted' : 'Comment Deleted'}
+                        </Badge>
+                        <span className="text-xs text-gray-500">
+                          {new Date(log.deletedAt?.toDate?.() || log.deletedAt).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        <span className="font-medium">User ID:</span> {log.userId}
+                      </div>
+                      {log.action === 'delete_post' && (
+                        <div className="text-sm text-gray-600 mt-2 p-2 bg-gray-50 rounded">
+                          <span className="font-medium">Post text:</span> {log.postText || 'No text'}
+                        </div>
+                      )}
+                      {log.action === 'delete_comment' && (
+                        <div className="text-sm text-gray-600 mt-2 p-2 bg-gray-50 rounded">
+                          <span className="font-medium">Comment:</span> {log.commentText || 'No text'}
+                        </div>
+                      )}
+                      {log.postId && (
+                        <div className="text-xs text-gray-500 font-mono">
+                          Post ID: {log.postId}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
           )}
         </TabsContent>
       </Tabs>
