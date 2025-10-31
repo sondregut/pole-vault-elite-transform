@@ -160,15 +160,13 @@ const VaultAdminOverview = () => {
                 <Clock className="w-5 h-5" />
                 {analytics.trialUsers}
               </div>
-              <div className="text-sm text-orange-600 mt-1">In Trial</div>
-            </div>
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{analytics.athleteUsers}</div>
-              <div className="text-sm text-blue-600 mt-1">Athlete (Paying)</div>
+              <div className="text-sm text-orange-600 mt-1">On Pass</div>
+              <div className="text-xs text-orange-500 mt-0.5">Onboarding/Trial/Day</div>
             </div>
             <div className="text-center p-4 bg-purple-50 rounded-lg">
               <div className="text-2xl font-bold text-purple-600">{analytics.athletePlusUsers}</div>
-              <div className="text-sm text-purple-600 mt-1">Athlete+ (Paying)</div>
+              <div className="text-sm text-purple-600 mt-1">Pro (Paying)</div>
+              <div className="text-xs text-purple-500 mt-0.5">$9.99/mo or $79/yr</div>
             </div>
           </div>
           <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">

@@ -132,8 +132,8 @@ const VaultAdminUsers = () => {
                         >
                           {user.subscriptionTier === 'lifetime' && <Crown className="w-3 h-3 mr-1" />}
                           {user.subscriptionTier === 'lifetime' ? 'Lifetime' :
-                           user.subscriptionTier === 'athlete_plus' ? 'Athlete+' :
-                           user.subscriptionTier === 'athlete' ? 'Athlete' : 'Free'}
+                           user.subscriptionTier === 'athlete_plus' ? 'Pro' :
+                           user.subscriptionTier === 'athlete' ? 'Pro' : 'Free'}
                         </Badge>
 
                         {/* Payment Status Indicator */}

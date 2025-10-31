@@ -17,8 +17,7 @@ export interface RevenueMetrics {
 }
 
 export interface RevenueByTier {
-  athlete: number;
-  athlete_plus: number;
+  pro: number;
 }
 
 export interface ConversionFunnel {
@@ -50,8 +49,7 @@ export interface RevenueEvent {
 
 // Subscription tier pricing - matches RevenueCat monthly prices
 const PRICING = {
-  athlete: 7.49,        // athlete_monthly
-  athlete_plus: 11.99,  // athlete_plus_monthly
+  pro: 9.99,  // pro_monthly ($9.99/mo) or pro_yearly ($79/yr ÷ 12 = $6.58/mo)
 };
 
 class RevenueService {
@@ -76,22 +74,27 @@ class RevenueService {
           return;
         }
 
-        // EXCLUDE trial users (not paying yet)
+        // EXCLUDE passes (not paying - free passes)
+        if (data.subscriptionStatus === 'onboarding_pass' ||
+            data.subscriptionStatus === 'extended_trial' ||
+            data.subscriptionStatus === 'pro_day_pass') {
+          return;
+        }
+
+        // EXCLUDE trial users (old structure)
         if (data.isTrialing === true) {
           return;
         }
 
-        // Only count users with ACTIVE subscriptions OR users with paid tiers (backwards compatibility)
-        const isActive = status === 'active' ||
-                        (!status && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus'));
-
-        if (!isActive) return;
+        // Only count users with tier='pro' and active status
+        if (tier !== 'pro') return;
+        if (status !== 'active' && status !== undefined) return;
 
         // EXCLUDE if subscription has expired
         if (data.subscriptionExpiresAt) {
           const expiresAt = new Date(data.subscriptionExpiresAt);
           if (expiresAt < new Date()) {
-            return; // Subscription expired, don't count
+            return;
           }
         }
 
@@ -108,12 +111,8 @@ class RevenueService {
             mrr += actualPrice;
           }
         } else {
-          // Fallback to estimated pricing if no actual price available
-          if (tier === 'athlete') {
-            mrr += PRICING.athlete;
-          } else if (tier === 'athlete_plus' || tier === 'athleteplus') {
-            mrr += PRICING.athlete_plus;
-          }
+          // Fallback to estimated pricing
+          mrr += PRICING.pro;
         }
       });
 
@@ -141,29 +140,33 @@ class RevenueService {
       const usersRef = collection(db, 'users');
       const snapshot = await getDocs(usersRef);
 
-      let athleteRevenue = 0;
-      let athletePlusRevenue = 0;
+      let proRevenue = 0;
 
       snapshot.forEach((doc) => {
         const data = doc.data();
         const tier = data.subscriptionTier?.toLowerCase();
         const status = data.subscriptionStatus?.toLowerCase();
 
-        // EXCLUDE comp/lifetime accounts (no recurring revenue)
+        // EXCLUDE comp/lifetime accounts
         if (data.hasLifetimeAccess === true) {
           return;
         }
 
-        // EXCLUDE trial users (not paying yet)
+        // EXCLUDE passes (free, not paying)
+        if (status === 'onboarding_pass' ||
+            status === 'extended_trial' ||
+            status === 'pro_day_pass') {
+          return;
+        }
+
+        // EXCLUDE trial users (old structure)
         if (data.isTrialing === true) {
           return;
         }
 
-        // Only count active users or users with paid tiers (backwards compatibility)
-        const isActive = status === 'active' ||
-                        (!status && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus'));
-
-        if (!isActive) return;
+        // Only count pro tier with active status
+        if (tier !== 'pro') return;
+        if (status !== 'active' && status !== undefined) return;
 
         // EXCLUDE if subscription has expired
         if (data.subscriptionExpiresAt) {
@@ -174,7 +177,6 @@ class RevenueService {
         }
 
         const actualPrice = data.lastSubscriptionPrice;
-
         let monthlyPrice = 0;
 
         if (actualPrice && actualPrice > 0) {
@@ -186,31 +188,19 @@ class RevenueService {
             monthlyPrice = actualPrice;
           }
         } else {
-          // Fallback to estimated pricing
-          if (tier === 'athlete') {
-            monthlyPrice = PRICING.athlete;
-          } else if (tier === 'athlete_plus' || tier === 'athleteplus') {
-            monthlyPrice = PRICING.athlete_plus;
-          }
+          monthlyPrice = PRICING.pro;
         }
 
-        // Add to appropriate tier
-        if (tier === 'athlete') {
-          athleteRevenue += monthlyPrice;
-        } else if (tier === 'athlete_plus' || tier === 'athleteplus') {
-          athletePlusRevenue += monthlyPrice;
-        }
+        proRevenue += monthlyPrice;
       });
 
       return {
-        athlete: Math.round(athleteRevenue * 100) / 100,
-        athlete_plus: Math.round(athletePlusRevenue * 100) / 100,
+        pro: Math.round(proRevenue * 100) / 100,
       };
     } catch (error) {
       console.error('[Revenue Service] Error calculating revenue by tier:', error);
       return {
-        athlete: 0,
-        athlete_plus: 0,
+        pro: 0,
       };
     }
   }
@@ -226,73 +216,59 @@ class RevenueService {
 
       let totalUsers = 0;
       let freeUsers = 0;
-      let trialUsers = 0;
-      let athleteUsers = 0;
-      let athletePlusUsers = 0;
+      let passUsers = 0;  // Onboarding Pass, Extended Trial, Pro Day Pass
+      let paidUsers = 0;  // Paying Pro subscribers
 
       snapshot.forEach((doc) => {
         const data = doc.data();
         const tier = data.subscriptionTier?.toLowerCase();
         const status = data.subscriptionStatus?.toLowerCase();
-        const isTrialing = data.isTrialing;
         const hasLifetimeAccess = data.hasLifetimeAccess === true;
 
         totalUsers++;
 
-        // Lifetime/comp users don't count in funnel (they didn't go through trial/payment flow)
+        // Lifetime/comp users don't count in funnel
         if (hasLifetimeAccess) {
           return;
         }
 
-        // Check if user is actively trialing (NOT paying yet)
-        if (isTrialing && data.trialEndDate) {
-          const trialEnd = new Date(data.trialEndDate);
-          if (trialEnd > new Date()) {
-            trialUsers++;
-            return;
-          }
+        // Count users on passes (free access, not paying)
+        if (status === 'onboarding_pass' ||
+            status === 'extended_trial' ||
+            status === 'pro_day_pass') {
+          passUsers++;
+          return;
         }
 
-        // Count by tier, but only if subscription is ACTIVE and PAYING
-        const isActive = status === 'active' ||
-                        (!status && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus'));
-
-        // EXCLUDE if subscription has expired
-        if (isActive && data.subscriptionExpiresAt) {
-          const expiresAt = new Date(data.subscriptionExpiresAt);
-          if (expiresAt < new Date()) {
-            freeUsers++;
-            return;
+        // Count paying Pro subscribers
+        if (tier === 'pro' && status === 'active') {
+          // EXCLUDE if subscription has expired
+          if (data.subscriptionExpiresAt) {
+            const expiresAt = new Date(data.subscriptionExpiresAt);
+            if (expiresAt < new Date()) {
+              freeUsers++;
+              return;
+            }
           }
+          paidUsers++;
+          return;
         }
 
-        if (isActive) {
-          if (tier === 'athlete') {
-            athleteUsers++;
-          } else if (tier === 'athlete_plus' || tier === 'athleteplus') {
-            athletePlusUsers++;
-          }
-        } else if (tier === 'lite' || !tier || tier === 'free') {
-          freeUsers++;
-        } else {
-          // Inactive paid users count as free
-          freeUsers++;
-        }
+        // Everyone else is free
+        freeUsers++;
       });
 
-      const paidUsers = athleteUsers + athletePlusUsers;
       const conversionRate = totalUsers > 0 ? (paidUsers / totalUsers) * 100 : 0;
-      const trialToAthleteRate = paidUsers > 0 ? (athleteUsers / paidUsers) * 100 : 0;
-      const trialToAthletePlusRate = paidUsers > 0 ? (athletePlusUsers / paidUsers) * 100 : 0;
+      const passToProRate = passUsers > 0 ? (paidUsers / (passUsers + paidUsers)) * 100 : 0;
 
       return {
         totalUsers,
         freeUsers,
-        trialUsers,
+        trialUsers: passUsers,  // Renamed: passes are the new "trial"
         paidUsers,
         conversionRate,
-        trialToAthleteRate,
-        trialToAthletePlusRate,
+        trialToAthleteRate: passToProRate,      // Renamed but keeps old key for compatibility
+        trialToAthletePlusRate: 0,              // Deprecated
       };
     } catch (error) {
       console.error('[Revenue Service] Error calculating conversion funnel:', error);
@@ -329,48 +305,36 @@ class RevenueService {
         const status = data.subscriptionStatus?.toLowerCase();
         const cancelledAt = data.subscriptionCancelledAt;
 
-        // EXCLUDE comp/lifetime accounts (no recurring revenue)
+        // EXCLUDE comp/lifetime accounts
         if (data.hasLifetimeAccess === true) {
           return;
         }
 
-        // EXCLUDE trial users (not paying yet)
-        if (data.isTrialing === true) {
+        // EXCLUDE passes (free, not paying)
+        if (status === 'onboarding_pass' ||
+            status === 'extended_trial' ||
+            status === 'pro_day_pass') {
           return;
         }
 
-        // Count active paid users (with backwards compatibility)
-        const isActive = status === 'active' ||
-                        (!status && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus'));
-
-        // EXCLUDE if subscription has expired
-        if (data.subscriptionExpiresAt) {
-          const expiresAt = new Date(data.subscriptionExpiresAt);
-          if (expiresAt < new Date()) {
-            // Count as cancelled if expired
-            if (cancelledAt) {
-              const cancelDate = cancelledAt instanceof Timestamp
-                ? cancelledAt.toDate()
-                : new Date(cancelledAt);
-              if (cancelDate >= monthAgo) {
-                cancelledThisMonth++;
-              }
+        // Only count Pro tier paying customers
+        if (tier === 'pro' && status === 'active') {
+          // EXCLUDE if subscription has expired
+          if (data.subscriptionExpiresAt) {
+            const expiresAt = new Date(data.subscriptionExpiresAt);
+            if (expiresAt < new Date()) {
+              return;
             }
-            return;
           }
-        }
-
-        if (isActive && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus')) {
           activePaidUsers++;
         }
 
-        // Count cancellations in last 30 days
-        if (cancelledAt) {
-          const cancelDate = cancelledAt instanceof Timestamp
-            ? cancelledAt.toDate()
-            : new Date(cancelledAt);
+        // Count cancellations in last 30 days (churn tracking)
+        if (cancelledAt || data.lastChurnDate) {
+          const churnDate = data.lastChurnDate ? new Date(data.lastChurnDate) :
+                           (cancelledAt instanceof Timestamp ? cancelledAt.toDate() : new Date(cancelledAt));
 
-          if (cancelDate >= monthAgo) {
+          if (churnDate >= monthAgo) {
             cancelledThisMonth++;
           }
         }
@@ -423,7 +387,7 @@ class RevenueService {
       this.getARPU(),
     ]);
 
-    // Count total active PAYING users (with backwards compatibility)
+    // Count total active PAYING Pro users
     const usersRef = collection(db, 'users');
     const snapshot = await getDocs(usersRef);
     let totalPaidUsers = 0;
@@ -433,29 +397,27 @@ class RevenueService {
       const tier = data.subscriptionTier?.toLowerCase();
       const status = data.subscriptionStatus?.toLowerCase();
 
-      // EXCLUDE comp/lifetime accounts (no recurring revenue)
+      // EXCLUDE comp/lifetime accounts
       if (data.hasLifetimeAccess === true) {
         return;
       }
 
-      // EXCLUDE trial users (not paying yet)
-      if (data.isTrialing === true) {
+      // EXCLUDE passes (not paying)
+      if (status === 'onboarding_pass' ||
+          status === 'extended_trial' ||
+          status === 'pro_day_pass') {
         return;
       }
 
-      // Count users with active status OR paid tier (backwards compatibility)
-      const isActive = status === 'active' ||
-                      (!status && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus'));
-
-      // EXCLUDE if subscription has expired
-      if (data.subscriptionExpiresAt) {
-        const expiresAt = new Date(data.subscriptionExpiresAt);
-        if (expiresAt < new Date()) {
-          return;
+      // Only count Pro tier with active status
+      if (tier === 'pro' && status === 'active') {
+        // EXCLUDE if subscription has expired
+        if (data.subscriptionExpiresAt) {
+          const expiresAt = new Date(data.subscriptionExpiresAt);
+          if (expiresAt < new Date()) {
+            return;
+          }
         }
-      }
-
-      if (isActive && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'athleteplus')) {
         totalPaidUsers++;
       }
     });

@@ -230,15 +230,9 @@ export default function VaultAdminRevenue() {
 
                 <div className="mt-4 space-y-2">
                   <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                    <span className="text-sm font-medium text-gray-700">Athlete</span>
+                    <span className="text-sm font-medium text-gray-700">Pro Subscribers</span>
                     <span className="text-sm font-bold text-[#00A6FF]">
-                      {formatCurrency(data.tierRevenue.athlete)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                    <span className="text-sm font-medium text-gray-700">Athlete+</span>
-                    <span className="text-sm font-bold text-[#0095E8]">
-                      {formatCurrency(data.tierRevenue.athlete_plus)}
+                      {formatCurrency(data.tierRevenue.pro)}
                     </span>
                   </div>
                 </div>
