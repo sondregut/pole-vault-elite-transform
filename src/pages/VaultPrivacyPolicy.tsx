@@ -154,7 +154,7 @@ const VaultPrivacyPolicy = () => {
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li>Delete individual jumps, sessions, or videos</li>
                 <li>Request complete account deletion (removes all data)</li>
-                <li>Contact us at privacy@stavhopp.no for deletion requests</li>
+                <li>Contact us at simen@stavhopp.no for deletion requests</li>
               </ul>
 
               <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">6.4 Opt-Out</h3>
@@ -200,7 +200,7 @@ const VaultPrivacyPolicy = () => {
               <p className="text-gray-700 leading-relaxed mb-3">If you are in the European Economic Area (EEA), you have rights under GDPR:</p>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li><strong>Legal Basis:</strong> We process data based on consent or legitimate interests</li>
-                <li><strong>Data Protection Officer:</strong> Contact at dpo@polevaulttracker.com</li>
+                <li><strong>Data Protection Officer:</strong> Contact at simen@stavhopp.no</li>
                 <li><strong>Supervisory Authority:</strong> You may lodge complaints with your local authority</li>
               </ul>
             </section>
@@ -221,8 +221,8 @@ const VaultPrivacyPolicy = () => {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">12. Contact Us</h2>
               <p className="text-gray-700 leading-relaxed mb-3">If you have questions about this privacy policy or our practices, contact us:</p>
               <div className="bg-gray-50 p-6 rounded-lg">
-                <p className="text-gray-700"><strong>Email:</strong> privacy@stavhopp.no</p>
-                <p className="text-gray-700"><strong>Data Protection Officer:</strong> dpo@stavhopp.no</p>
+                <p className="text-gray-700"><strong>Email:</strong> simen@stavhopp.no</p>
+                <p className="text-gray-700"><strong>Data Protection Officer:</strong> simen@stavhopp.no</p>
               </div>
             </section>
 
