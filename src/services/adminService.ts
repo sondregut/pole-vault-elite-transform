@@ -52,10 +52,12 @@ const calculateSubscriptionDetails = (data: any) => {
   }
   // Check subscriptionTier field
   else if (rawTier) {
-    const tierLower = rawTier.toLowerCase();
-    if (tierLower === 'pro') {
-      subscriptionTier = 'athlete_plus'; // Map pro to athlete_plus for admin display
-    } else if (tierLower === 'lite') {
+    const tierLower = rawTier.toLowerCase().replace(/[_-]/g, '');
+    if (tierLower === 'pro' || tierLower === 'athleteplus') {
+      subscriptionTier = 'athlete_plus'; // Map pro/athletePlus to athlete_plus for admin display
+    } else if (tierLower === 'athlete' || tierLower === 'plus') {
+      subscriptionTier = 'athlete';
+    } else if (tierLower === 'lite' || tierLower === 'free') {
       subscriptionTier = 'free';
     } else if (tierLower === 'lifetime') {
       subscriptionTier = 'lifetime';

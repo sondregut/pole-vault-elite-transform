@@ -34,6 +34,11 @@ import VaultEquipment from "./pages/VaultEquipment";
 import VaultSessions from "./pages/VaultSessions";
 import VaultSessionDetail from "./pages/VaultSessionDetail";
 import VaultInvite from "./pages/VaultInvite";
+import VaultProfile from "./pages/VaultProfile";
+import VaultAnalytics from "./pages/VaultAnalytics";
+import VaultVideos from "./pages/VaultVideos";
+import VaultVideoTest from "./pages/VaultVideoTest";
+import VaultDashboardLayout from "./pages/VaultDashboardLayout";
 import VaultAdmin from "./pages/VaultAdmin";
 import VaultAdminOverview from "./pages/VaultAdminOverview";
 import VaultAdminUserInsights from "./pages/VaultAdminUserInsights";
@@ -86,11 +91,17 @@ const App = () => (
             <Route path="/admin/videos" element={<AdminVideos />} />
             <Route path="/vault" element={<VaultLanding />} />
             <Route path="/vault/login" element={<VaultLogin />} />
-            <Route path="/vault/dashboard" element={<VaultDashboard />} />
-            <Route path="/vault/equipment" element={<VaultEquipment />} />
-            <Route path="/vault/sessions" element={<VaultSessions />} />
-            <Route path="/vault/sessions/:sessionId" element={<VaultSessionDetail />} />
             <Route path="/vault/invite/:inviteCode" element={<VaultInvite />} />
+            <Route path="/vault" element={<VaultDashboardLayout />}>
+              <Route path="dashboard" element={<VaultDashboard />} />
+              <Route path="equipment" element={<VaultEquipment />} />
+              <Route path="sessions" element={<VaultSessions />} />
+              <Route path="sessions/:sessionId" element={<VaultSessionDetail />} />
+              <Route path="videos" element={<VaultVideos />} />
+              <Route path="video-test" element={<VaultVideoTest />} />
+              <Route path="profile" element={<VaultProfile />} />
+              <Route path="analytics" element={<VaultAnalytics />} />
+            </Route>
             <Route path="/vault/admin" element={<VaultAdmin />}>
               <Route index element={<VaultAdminOverview />} />
               <Route path="user-insights" element={<VaultAdminUserInsights />} />

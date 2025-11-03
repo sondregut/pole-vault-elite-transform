@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useVaultSessions, useVaultStats } from '@/hooks/useVaultData';
 import { formatDate, formatHeight, ratingLabels } from '@/types/vault';
-import { toast } from 'sonner';
 import {
   BarChart3,
   Calendar,
@@ -15,63 +13,18 @@ import {
   Wrench,
   Video,
   TrendingUp,
-  LogOut,
   Download,
   Smartphone,
   Activity,
-  Clock,
-  Shield
+  Clock
 } from 'lucide-react';
-import Navbar from '@/components/Navbar';
 
 const VaultDashboard = () => {
-  const { user, loading: authLoading, signOut } = useFirebaseAuth();
-  const { isAdmin, loading: adminLoading } = useAdminAuth();
+  const { user } = useFirebaseAuth();
   const { sessions, loading: sessionsLoading } = useVaultSessions(user);
   const { stats, loading: statsLoading } = useVaultStats(user, sessions);
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  const loading = authLoading || sessionsLoading || statsLoading;
-
-  // Redirect if not authenticated or if admin-only user
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/vault/login', { state: { from: location } });
-    } else if (!authLoading && !adminLoading && user && isAdmin) {
-      // Check if this is an admin-only account (no regular user data)
-      // If they have no sessions, they're likely an admin-only account
-      if (!sessionsLoading && sessions.length === 0) {
-        // Redirect admin-only users directly to admin panel
-        navigate('/vault/admin');
-      }
-    }
-  }, [user, authLoading, adminLoading, isAdmin, sessionsLoading, sessions, navigate, location]);
-
-  const handleSignOut = async () => {
-    const { error } = await signOut();
-    if (error) {
-      toast.error('Failed to sign out');
-    } else {
-      toast.success('Signed out successfully');
-      navigate('/vault');
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null; // Will redirect via useEffect
-  }
+  const loading = sessionsLoading || statsLoading;
 
   const dashboardStats = stats ? [
     {
@@ -79,73 +32,38 @@ const VaultDashboard = () => {
       value: stats.totalSessions.toString(),
       icon: Calendar,
       change: `+${stats.thisWeekSessions} this week`,
-      color: "text-blue-600"
+      color: "text-blue-600",
+      route: "/vault/sessions"
     },
     {
       title: "Personal Best",
       value: formatHeight(stats.personalBest, stats.personalBestUnits),
       icon: Target,
       change: stats.thisMonthPBImprovement !== '0.00' ? `+${stats.thisMonthPBImprovement}m this month` : 'No recent PB',
-      color: "text-green-600"
+      color: "text-green-600",
+      route: null
     },
     {
       title: "Active Poles",
       value: stats.activePoles.toString(),
       icon: Wrench,
       change: `${Math.min(stats.activePoles, 2)} most used`,
-      color: "text-purple-600"
+      color: "text-purple-600",
+      route: "/vault/equipment"
     },
     {
       title: "Training Videos",
       value: stats.totalVideos.toString(),
       icon: Video,
       change: `${Math.floor(stats.totalVideos / Math.max(stats.totalSessions, 1))} avg per session`,
-      color: "text-orange-600"
+      color: "text-orange-600",
+      route: "/vault/videos"
     }
   ] : [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <Badge variant="secondary">
-                    <BarChart3 className="mr-2 h-4 w-4" />
-                    Vault Dashboard
-                  </Badge>
-                </div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  Welcome back, {user.email?.split('@')[0]}!
-                </h1>
-                <p className="text-gray-600 mt-1">
-                  Track your progress and analyze your pole vault performance
-                </p>
-              </div>
-
-              <div className="flex gap-3">
-                {isAdmin && (
-                  <Link to="/vault/admin">
-                    <Button variant="outline" className="gap-2 border-[#00A6FF] text-[#00A6FF] hover:bg-[#00A6FF] hover:text-white">
-                      <Shield className="h-4 w-4" />
-                      Admin Panel
-                    </Button>
-                  </Link>
-                )}
-                <Button variant="outline" onClick={handleSignOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats Grid */}
+    <div>
+      {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {loading ? (
               // Loading skeleton
@@ -167,29 +85,39 @@ const VaultDashboard = () => {
                 </Card>
               ))
             ) : (
-              dashboardStats.map((stat, index) => (
-                <Card key={index} className="border-2 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center`}>
-                        <stat.icon className={`h-6 w-6 ${stat.color}`} />
+              dashboardStats.map((stat, index) => {
+                const cardContent = (
+                  <Card key={index} className={`border-2 hover:shadow-lg transition-shadow ${stat.route ? 'cursor-pointer' : ''}`}>
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className={`w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center`}>
+                          <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                        </div>
+                        <TrendingUp className="h-4 w-4 text-green-500" />
                       </div>
-                      <TrendingUp className="h-4 w-4 text-green-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 mb-1">
-                        {stat.title}
-                      </p>
-                      <p className="text-2xl font-bold text-gray-900 mb-1">
-                        {stat.value}
-                      </p>
-                      <p className="text-xs text-green-600 font-medium">
-                        {stat.change}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 mb-1">
+                          {stat.title}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 mb-1">
+                          {stat.value}
+                        </p>
+                        <p className="text-xs text-green-600 font-medium">
+                          {stat.change}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+
+                return stat.route ? (
+                  <Link key={index} to={stat.route} className="block">
+                    {cardContent}
+                  </Link>
+                ) : (
+                  cardContent
+                );
+              })
             )}
           </div>
 
@@ -208,15 +136,23 @@ const VaultDashboard = () => {
                   {loading ? (
                     // Loading skeleton for sessions
                     Array.from({ length: 3 }).map((_, index) => (
-                      <div key={index} className="p-4 bg-gray-50 rounded-lg animate-pulse">
-                        <div className="flex justify-between">
-                          <div className="space-y-2">
-                            <div className="h-4 bg-gray-200 rounded w-20"></div>
-                            <div className="h-3 bg-gray-200 rounded w-32"></div>
+                      <div key={index} className="flex items-center justify-between p-4 rounded-lg border animate-pulse">
+                        <div className="flex-1">
+                          <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                          <div className="h-3 bg-gray-200 rounded w-32"></div>
+                        </div>
+                        <div className="flex items-center gap-6">
+                          <div className="text-right">
+                            <div className="h-3 bg-gray-200 rounded w-8 mb-2"></div>
+                            <div className="h-4 bg-gray-200 rounded w-12"></div>
                           </div>
-                          <div className="space-y-2 text-right">
-                            <div className="h-4 bg-gray-200 rounded w-16"></div>
-                            <div className="h-3 bg-gray-200 rounded w-20"></div>
+                          <div className="text-right">
+                            <div className="h-3 bg-gray-200 rounded w-10 mb-2"></div>
+                            <div className="h-4 bg-gray-200 rounded w-8"></div>
+                          </div>
+                          <div className="text-right">
+                            <div className="h-3 bg-gray-200 rounded w-8 mb-2"></div>
+                            <div className="h-4 bg-gray-200 rounded w-10"></div>
                           </div>
                         </div>
                       </div>
@@ -265,31 +201,49 @@ const VaultDashboard = () => {
                           })
                         : null;
 
+                      const makeRate = jumps.length > 0
+                        ? Math.round((successfulJumps.length / jumps.length) * 100)
+                        : 0;
+
                       return (
                         <Link
                           key={session.id || index}
                           to={`/vault/sessions/${session.id}`}
                           className="block"
                         >
-                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                            <div>
-                              <p className="font-semibold text-gray-900">{dateLabel}</p>
-                              <p className="text-sm text-gray-600">{session.location || 'Training'}</p>
-                              {session.sessionType && (
-                                <Badge variant="secondary" className="text-xs mt-1">
-                                  {session.sessionType}
-                                </Badge>
+                          <div className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-1">
+                                <p className="font-semibold text-gray-900">{dateLabel}</p>
+                                {session.sessionType && (
+                                  <Badge variant="outline" className="text-xs">
+                                    {session.sessionType}
+                                  </Badge>
+                                )}
+                              </div>
+                              {session.location && (
+                                <p className="text-sm text-gray-600">{session.location}</p>
                               )}
                             </div>
-                            <div className="text-right">
-                              {bestJump ? (
-                                <p className="font-semibold text-gray-900">
-                                  {formatHeight(bestJump.height, bestJump.barUnits)}
-                                </p>
-                              ) : (
-                                <p className="font-semibold text-gray-500">No makes</p>
-                              )}
-                              <p className="text-sm text-gray-600">{jumps.length} jumps</p>
+                            <div className="flex items-center gap-6 text-right">
+                              <div>
+                                <p className="text-sm text-gray-600">Best</p>
+                                {bestJump ? (
+                                  <p className="font-semibold text-gray-900">
+                                    {formatHeight(bestJump.height, bestJump.barUnits)}
+                                  </p>
+                                ) : (
+                                  <p className="text-sm text-gray-500">-</p>
+                                )}
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-600">Jumps</p>
+                                <p className="font-semibold text-gray-900">{jumps.length}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-600">Rate</p>
+                                <p className="font-semibold text-gray-900">{makeRate}%</p>
+                              </div>
                             </div>
                           </div>
                         </Link>
@@ -297,11 +251,13 @@ const VaultDashboard = () => {
                     })
                   )}
                 </div>
-                <Button asChild variant="outline" className="w-full mt-4">
-                  <Link to="/vault/sessions">
-                    View All Sessions
-                  </Link>
-                </Button>
+                {!loading && sessions.length > 0 && (
+                  <Button asChild variant="outline" className="w-full mt-4">
+                    <Link to="/vault/sessions">
+                      View All Sessions
+                    </Link>
+                  </Button>
+                )}
               </CardContent>
             </Card>
 
@@ -311,10 +267,6 @@ const VaultDashboard = () => {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                  <Target className="mr-2 h-4 w-4" />
-                  Log New Session
-                </Button>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/vault/equipment">
                     <Wrench className="mr-2 h-4 w-4" />
@@ -322,30 +274,26 @@ const VaultDashboard = () => {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full">
-                  <Link to="/vault/sessions?filter=with-videos">
+                  <Link to="/vault/videos">
                     <Video className="mr-2 h-4 w-4" />
                     View Training Videos
                   </Link>
                 </Button>
-                <Button variant="outline" className="w-full">
-                  <BarChart3 className="mr-2 h-4 w-4" />
-                  Performance Analytics
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/vault/analytics">
+                    <BarChart3 className="mr-2 h-4 w-4" />
+                    Performance Analytics
+                  </Link>
                 </Button>
 
                 <div className="pt-4 border-t">
                   <p className="text-sm text-gray-600 mb-3">
-                    Sync with mobile app:
+                    Download mobile app:
                   </p>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1">
-                      <Smartphone className="mr-1 h-3 w-3" />
-                      iOS
-                    </Button>
-                    <Button size="sm" variant="outline" className="flex-1">
-                      <Download className="mr-1 h-3 w-3" />
-                      Android
-                    </Button>
-                  </div>
+                  <Button size="sm" variant="outline" className="w-full">
+                    <Smartphone className="mr-1 h-3 w-3" />
+                    iOS App
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -384,8 +332,6 @@ const VaultDashboard = () => {
               </CardContent>
             </Card>
           </div>
-        </div>
-      </main>
     </div>
   );
 };

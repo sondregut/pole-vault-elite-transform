@@ -45,19 +45,29 @@ class TrainingAnalyticsService {
    */
   private async getAllSessions(maxSessions: number = 1000): Promise<any[]> {
     try {
+      console.log('[Training Analytics] Fetching all users...');
       const usersRef = collection(db, 'users');
       const usersSnapshot = await getDocs(usersRef);
+      console.log(`[Training Analytics] Found ${usersSnapshot.size} users`);
 
       const allSessions: any[] = [];
+      let userCount = 0;
+      let sessionCount = 0;
 
       for (const userDoc of usersSnapshot.docs) {
         const userId = userDoc.id;
+        userCount++;
 
         try {
           const sessionsRef = collection(db, 'users', userId, 'sessions');
           const sessionsSnapshot = await getDocs(query(sessionsRef, limit(50)));
 
+          if (sessionsSnapshot.size > 0) {
+            console.log(`[Training Analytics] User ${userId}: ${sessionsSnapshot.size} sessions`);
+          }
+
           sessionsSnapshot.forEach((sessionDoc) => {
+            sessionCount++;
             allSessions.push({
               id: sessionDoc.id,
               userId,
@@ -65,10 +75,11 @@ class TrainingAnalyticsService {
             });
           });
         } catch (error) {
-          // User might not have sessions
+          console.error(`[Training Analytics] Error fetching sessions for user ${userId}:`, error);
         }
       }
 
+      console.log(`[Training Analytics] Total: ${sessionCount} sessions from ${userCount} users`);
       return allSessions.slice(0, maxSessions);
     } catch (error) {
       console.error('[Training Analytics] Error fetching sessions:', error);
@@ -336,7 +347,9 @@ class TrainingAnalyticsService {
    * Get comprehensive training analytics dashboard
    */
   async getDashboardAnalytics() {
+    console.log('[Training Analytics] getDashboardAnalytics called');
     try {
+      console.log('[Training Analytics] Starting Promise.all for all analytics...');
       const [
         sessionStats,
         heightDistribution,
@@ -354,6 +367,9 @@ class TrainingAnalyticsService {
         this.getSessionActivityHeatmap(),
         this.getSuccessRateByHeight(),
       ]);
+
+      console.log('[Training Analytics] All analytics fetched successfully');
+      console.log('[Training Analytics] Session stats:', sessionStats);
 
       return {
         sessionStats,

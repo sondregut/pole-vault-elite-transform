@@ -5,12 +5,35 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, Award, Calendar, Ticket, Shield, ShieldOff, Clock, Crown } from 'lucide-react';
+import { Search, Award, Calendar, Ticket, Shield, ShieldOff, Clock, Crown, Users, DollarSign, TrendingUp, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  calculateUserOverview,
+  calculateSubscriptionDistribution,
+  calculateUserGrowth,
+  getMostActiveUsers,
+  getRecentlyJoinedUsers
+} from '@/utils/adminAnalytics';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
 
 const VaultAdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [allUsers, setAllUsers] = useState<AdminUser[]>([]); // For analytics
   const [loading, setLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
 
@@ -25,6 +48,11 @@ const VaultAdminUsers = () => {
     try {
       const results = await searchUsers(searchTerm);
       setUsers(results);
+
+      // If no search term, store all users for analytics
+      if (!searchTerm) {
+        setAllUsers(results);
+      }
     } catch (error) {
       console.error('Error searching users:', error);
       toast.error('Failed to search users');
@@ -56,6 +84,16 @@ const VaultAdminUsers = () => {
     }
   };
 
+  // Calculate analytics
+  const userOverview = calculateUserOverview(allUsers);
+  const subscriptionDistribution = calculateSubscriptionDistribution(allUsers);
+  const userGrowth = calculateUserGrowth(allUsers);
+  const mostActiveUsers = getMostActiveUsers(allUsers, 5);
+  const recentlyJoinedUsers = getRecentlyJoinedUsers(allUsers, 5);
+
+  // Chart colors
+  const COLORS = ['#3176FF', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -63,6 +101,231 @@ const VaultAdminUsers = () => {
         <h2 className="text-3xl font-bold text-gray-900">User Management</h2>
         <p className="text-gray-600 mt-1">Search and manage user access</p>
       </div>
+
+      {/* User Overview Stats */}
+      {allUsers.length > 0 && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-blue-600" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Total Users</p>
+                  <p className="text-2xl font-bold text-gray-900 mb-1">
+                    {userOverview.totalUsers}
+                  </p>
+                  <p className="text-xs text-blue-600 font-medium">
+                    {userOverview.activeUsers} active (30d)
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                    <DollarSign className="h-6 w-6 text-green-600" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Paying Users</p>
+                  <p className="text-2xl font-bold text-gray-900 mb-1">
+                    {userOverview.payingUsers}
+                  </p>
+                  <p className="text-xs text-green-600 font-medium">
+                    {((userOverview.payingUsers / Math.max(userOverview.totalUsers, 1)) * 100).toFixed(1)}% of total
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                    <Clock className="h-6 w-6 text-orange-600" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Trial Users</p>
+                  <p className="text-2xl font-bold text-gray-900 mb-1">
+                    {userOverview.trialUsers}
+                  </p>
+                  <p className="text-xs text-orange-600 font-medium">
+                    Potential conversions
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                    <Crown className="h-6 w-6 text-purple-600" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Lifetime (Comp)</p>
+                  <p className="text-2xl font-bold text-gray-900 mb-1">
+                    {userOverview.lifetimeUsers}
+                  </p>
+                  <p className="text-xs text-purple-600 font-medium">
+                    Free access granted
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  User Growth (Last 6 Months)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {userGrowth.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={userGrowth}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="newUsers" stroke="#3176FF" strokeWidth={2} name="New Users" />
+                      <Line type="monotone" dataKey="cumulative" stroke="#10b981" strokeWidth={2} name="Total Users" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-64 flex items-center justify-center text-gray-500">
+                    No data available
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserPlus className="w-5 h-5" />
+                  Subscription Distribution
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {subscriptionDistribution.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <PieChart>
+                      <Pie
+                        data={subscriptionDistribution}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ tier, percentage }) => `${tier}: ${percentage.toFixed(0)}%`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="count"
+                      >
+                        {subscriptionDistribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-64 flex items-center justify-center text-gray-500">
+                    No data available
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Most Active & Recently Joined */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  Most Active Users
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {mostActiveUsers.map((user, index) => (
+                    <div key={user.id} className="flex items-center justify-between pb-3 border-b last:border-0">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{user.email}</p>
+                          <p className="text-xs text-gray-500">
+                            {user.lastActive && new Date(user.lastActive).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <Badge variant={user.hasLifetimeAccess ? 'default' : 'secondary'}>
+                        {user.subscriptionTier === 'lifetime' ? 'Lifetime' :
+                         user.subscriptionTier === 'athlete_plus' ? 'Pro' :
+                         user.subscriptionTier === 'athlete' ? 'Pro' : 'Free'}
+                      </Badge>
+                    </div>
+                  ))}
+                  {mostActiveUsers.length === 0 && (
+                    <p className="text-center text-gray-500 py-4">No active users yet</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserPlus className="w-5 h-5" />
+                  Recently Joined
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {recentlyJoinedUsers.map((user, index) => (
+                    <div key={user.id} className="flex items-center justify-between pb-3 border-b last:border-0">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-sm">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{user.email}</p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(user.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <Badge variant={user.hasLifetimeAccess ? 'default' : 'secondary'}>
+                        {user.subscriptionTier === 'lifetime' ? 'Lifetime' :
+                         user.subscriptionTier === 'athlete_plus' ? 'Pro' :
+                         user.subscriptionTier === 'athlete' ? 'Pro' : 'Free'}
+                      </Badge>
+                    </div>
+                  ))}
+                  {recentlyJoinedUsers.length === 0 && (
+                    <p className="text-center text-gray-500 py-4">No users yet</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </>
+      )}
 
       {/* Search Bar */}
       <div className="flex gap-3">

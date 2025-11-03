@@ -1,20 +1,37 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Shield, BarChart3, Ticket, Users, TrendingUp, DollarSign, Flag, Bell, Activity, Video, Target, Trash2 } from 'lucide-react';
+import { Shield, BarChart3, Ticket, Users, TrendingUp, DollarSign, Flag, Bell, Activity, Video, Target, Trash2, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const VaultAdmin = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, isAdmin, loading } = useAdminAuth();
+  const { user, isAdmin, loading, signOut } = useAdminAuth();
+
+  console.log('[VaultAdmin] Auth state:', { user: !!user, isAdmin, loading, path: location.pathname });
 
   useEffect(() => {
+    console.log('[VaultAdmin] useEffect:', { loading, user: !!user, isAdmin });
     if (!loading && !user) {
+      console.log('[VaultAdmin] No user, redirecting to login');
       navigate('/vault/login', { state: { from: location } });
     } else if (!loading && user && !isAdmin) {
+      console.log('[VaultAdmin] User is not admin, redirecting to dashboard');
       navigate('/vault/dashboard');
     }
   }, [user, isAdmin, loading, navigate, location]);
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast.error('Failed to sign out');
+    } else {
+      toast.success('Signed out successfully');
+      navigate('/vault/login');
+    }
+  };
 
   if (loading) {
     return (
@@ -58,12 +75,23 @@ const VaultAdmin = () => {
                 <p className="text-sm text-gray-600">Vault App Management</p>
               </div>
             </div>
-            <Link
-              to="/vault/dashboard"
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              Back to Dashboard
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link
+                to="/vault/dashboard"
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Back to Dashboard
+              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSignOut}
+                className="gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </Button>
+            </div>
           </div>
         </div>
       </div>

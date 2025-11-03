@@ -20,11 +20,14 @@ import { trainingAnalyticsService } from '@/services/trainingAnalyticsService';
 import { TrendingUp, Target, Star, CloudRain, Calendar } from 'lucide-react';
 
 export default function VaultAdminTrainingAnalytics() {
+  console.log('[VaultAdminTrainingAnalytics] Component mounted');
+
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('[VaultAdminTrainingAnalytics] useEffect triggered');
     loadAnalytics();
   }, []);
 
@@ -33,11 +36,13 @@ export default function VaultAdminTrainingAnalytics() {
     setError(null);
 
     try {
+      console.log('[VaultAdminTrainingAnalytics] Starting to load analytics...');
       const analyticsData = await trainingAnalyticsService.getDashboardAnalytics();
+      console.log('[VaultAdminTrainingAnalytics] Analytics data received:', analyticsData);
       setData(analyticsData);
-    } catch (err) {
-      console.error('Error loading training analytics:', err);
-      setError('Failed to load training analytics');
+    } catch (err: any) {
+      console.error('[VaultAdminTrainingAnalytics] Error loading training analytics:', err);
+      setError(`Failed to load training analytics: ${err.message || 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -45,8 +50,10 @@ export default function VaultAdminTrainingAnalytics() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00A6FF]"></div>
+      <div className="flex flex-col items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00A6FF] mb-4"></div>
+        <p className="text-gray-600">Loading training analytics...</p>
+        <p className="text-sm text-gray-500 mt-2">Check console for debug logs</p>
       </div>
     );
   }
@@ -66,7 +73,33 @@ export default function VaultAdminTrainingAnalytics() {
   }
 
   if (!data) {
-    return <div className="text-center text-gray-600">No training data available</div>;
+    return (
+      <div className="text-center py-12">
+        <div className="text-gray-600 mb-4">No training data available</div>
+        <p className="text-sm text-gray-500 mb-4">
+          Check the browser console for detailed error messages
+        </p>
+        <Button onClick={loadAnalytics} variant="outline">
+          Retry Loading
+        </Button>
+      </div>
+    );
+  }
+
+  // Check if data is empty
+  if (data.sessionStats?.totalSessions === 0) {
+    return (
+      <div className="text-center py-12">
+        <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Training Sessions Yet</h3>
+        <p className="text-gray-600 mb-4">
+          Training analytics will appear here once users start logging sessions in the app
+        </p>
+        <Button onClick={loadAnalytics} variant="outline">
+          Refresh
+        </Button>
+      </div>
+    );
   }
 
   const RATING_COLORS: Record<string, string> = {

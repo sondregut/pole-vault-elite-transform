@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Session, Jump, formatDate, formatHeight, ratingLabels } from '@/types/vault';
+import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
+import { useVaultPoles } from '@/hooks/useVaultData';
+import { getPoleDisplayName } from '@/utils/poleHelpers';
 import {
   Calendar,
   MapPin,
@@ -22,6 +25,8 @@ interface SessionCardProps {
 }
 
 const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) => {
+  const { user } = useFirebaseAuth();
+  const { poles } = useVaultPoles(user);
   const jumps = session.jumps || [];
   const successfulJumps = jumps.filter(jump => jump.result === 'make');
   const videoJumps = jumps.filter(jump => jump.videoUrl || jump.videoLocalUri);
@@ -111,10 +116,12 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) =>
 
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 mb-1">
-                {successRate >= 50 ? (
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                ) : (
-                  <XCircle className="h-4 w-4 text-orange-600" />
+                {session.sessionType !== 'training' && (
+                  successRate >= 50 ? (
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <XCircle className="h-4 w-4 text-orange-600" />
+                  )
                 )}
                 <span className="text-lg font-semibold text-gray-900">{successRate}%</span>
               </div>
@@ -137,7 +144,7 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) =>
               <div className="flex flex-wrap gap-1">
                 {uniquePoles.slice(0, 3).map((pole, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">
-                    {pole}
+                    {getPoleDisplayName(pole, poles)}
                   </Badge>
                 ))}
                 {uniquePoles.length > 3 && (

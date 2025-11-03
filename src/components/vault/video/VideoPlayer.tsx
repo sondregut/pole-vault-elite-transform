@@ -183,7 +183,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setHasError(false);
   };
 
-  const handleVideoError = () => {
+  const handleVideoError = (e: any) => {
+    console.error('[VideoPlayer] Video error occurred:', {
+      error: e,
+      videoUrl: actualVideoUrl,
+      networkState: videoRef.current?.networkState,
+      readyState: videoRef.current?.readyState,
+      errorCode: videoRef.current?.error?.code,
+      errorMessage: videoRef.current?.error?.message
+    });
     setIsLoading(false);
     setHasError(true);
   };
@@ -362,7 +370,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           onPause={() => setIsPlaying(false)}
           playsInline
           preload="metadata"
-          crossOrigin="anonymous"
           style={{ display: showThumbnail ? 'none' : 'block' }}
         />
 
