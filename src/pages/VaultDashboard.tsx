@@ -240,10 +240,12 @@ const VaultDashboard = () => {
                                 <p className="text-sm text-gray-600">Jumps</p>
                                 <p className="font-semibold text-gray-900">{jumps.length}</p>
                               </div>
-                              <div>
-                                <p className="text-sm text-gray-600">Rate</p>
-                                <p className="font-semibold text-gray-900">{makeRate}%</p>
-                              </div>
+                              {session.sessionType?.toLowerCase() !== 'training' && (
+                                <div>
+                                  <p className="text-sm text-gray-600">Rate</p>
+                                  <p className="font-semibold text-gray-900">{makeRate}%</p>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </Link>

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, Award, Calendar, Ticket, Shield, ShieldOff, Clock, Crown, Users, DollarSign, TrendingUp, UserPlus } from 'lucide-react';
+import { Search, Award, Calendar, Ticket, Shield, ShieldOff, Clock, Crown, Users, DollarSign, TrendingUp, UserPlus, Mail, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   calculateUserOverview,
@@ -37,6 +37,13 @@ const VaultAdminUsers = () => {
   const [loading, setLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
 
+  // Helper function to get user's contact info (email or phone)
+  const getUserContact = (user: AdminUser): string => {
+    if (user.email) return user.email;
+    if (user.phoneNumber) return user.phoneNumber;
+    return 'No contact info';
+  };
+
   useEffect(() => {
     // Load all users on mount
     handleSearch();
@@ -66,10 +73,11 @@ const VaultAdminUsers = () => {
     const result = await toggleUserLifetimeAccess(user.id, newStatus);
 
     if (result.success) {
+      const userContact = getUserContact(user);
       toast.success(
         newStatus
-          ? `Granted lifetime access to ${user.email}`
-          : `Revoked lifetime access from ${user.email}`
+          ? `Granted lifetime access to ${userContact}`
+          : `Revoked lifetime access from ${userContact}`
       );
       // Refresh the user list
       handleSearch();
@@ -268,14 +276,21 @@ const VaultAdminUsers = () => {
                           {index + 1}
                         </div>
                         <div>
-                          <p className="font-medium text-sm">{user.email}</p>
+                          <p className="font-medium text-sm">{getUserContact(user)}</p>
                           <p className="text-xs text-gray-500">
                             {user.lastActive && new Date(user.lastActive).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
-                      <Badge variant={user.hasLifetimeAccess ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={user.hasLifetimeAccess ? 'default' : 'secondary'}
+                        className={
+                          user.subscriptionTier === 'lifetime' ? 'bg-green-500' :
+                          user.isTrialing ? 'bg-orange-500' : ''
+                        }
+                      >
                         {user.subscriptionTier === 'lifetime' ? 'Lifetime' :
+                         user.isTrialing ? 'Pro (Onboarding)' :
                          user.subscriptionTier === 'athlete_plus' ? 'Pro' :
                          user.subscriptionTier === 'athlete' ? 'Pro' : 'Free'}
                       </Badge>
@@ -304,14 +319,21 @@ const VaultAdminUsers = () => {
                           {index + 1}
                         </div>
                         <div>
-                          <p className="font-medium text-sm">{user.email}</p>
+                          <p className="font-medium text-sm">{getUserContact(user)}</p>
                           <p className="text-xs text-gray-500">
                             {new Date(user.createdAt).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
-                      <Badge variant={user.hasLifetimeAccess ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={user.hasLifetimeAccess ? 'default' : 'secondary'}
+                        className={
+                          user.subscriptionTier === 'lifetime' ? 'bg-green-500' :
+                          user.isTrialing ? 'bg-orange-500' : ''
+                        }
+                      >
                         {user.subscriptionTier === 'lifetime' ? 'Lifetime' :
+                         user.isTrialing ? 'Pro (Onboarding)' :
                          user.subscriptionTier === 'athlete_plus' ? 'Pro' :
                          user.subscriptionTier === 'athlete' ? 'Pro' : 'Free'}
                       </Badge>
@@ -335,7 +357,7 @@ const VaultAdminUsers = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Search by email or username..."
+            placeholder="Search by email, phone, or username..."
             className="pl-10 bg-white border-gray-300"
           />
         </div>
@@ -379,7 +401,14 @@ const VaultAdminUsers = () => {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="text-lg text-gray-900">{user.email}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        {user.email ? (
+                          <Mail className="w-4 h-4 text-gray-500" />
+                        ) : user.phoneNumber ? (
+                          <Phone className="w-4 h-4 text-gray-500" />
+                        ) : null}
+                        <CardTitle className="text-lg text-gray-900">{getUserContact(user)}</CardTitle>
+                      </div>
                       {user.username && (
                         <p className="text-sm text-gray-600 mt-1">@{user.username}</p>
                       )}
@@ -389,12 +418,15 @@ const VaultAdminUsers = () => {
                           variant={user.subscriptionTier === 'lifetime' ? 'default' : 'secondary'}
                           className={
                             user.subscriptionTier === 'lifetime' ? 'bg-green-500' :
-                            user.subscriptionTier === 'athlete_plus' ? 'bg-purple-500' :
-                            user.subscriptionTier === 'athlete' ? 'bg-blue-500' : ''
+                            user.subscriptionTier === 'athlete_plus' && !user.isTrialing ? 'bg-purple-500' :
+                            user.subscriptionTier === 'athlete' && !user.isTrialing ? 'bg-blue-500' :
+                            user.isTrialing ? 'bg-orange-500' : ''
                           }
                         >
                           {user.subscriptionTier === 'lifetime' && <Crown className="w-3 h-3 mr-1" />}
+                          {user.isTrialing && <Clock className="w-3 h-3 mr-1" />}
                           {user.subscriptionTier === 'lifetime' ? 'Lifetime' :
+                           user.isTrialing ? 'Pro (Onboarding)' :
                            user.subscriptionTier === 'athlete_plus' ? 'Pro' :
                            user.subscriptionTier === 'athlete' ? 'Pro' : 'Free'}
                         </Badge>

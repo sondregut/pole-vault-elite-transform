@@ -96,12 +96,16 @@ export const calculateSubscriptionDistribution = (users: AdminUser[]): Subscript
 
     if (user.hasLifetimeAccess) {
       tier = 'Lifetime (Comp)';
+    } else if (user.subscriptionTier === 'athlete_plus' || user.subscriptionTier === 'athlete') {
+      // Differentiate between onboarding and paying Pro users
+      if (user.isTrialing) {
+        tier = 'Pro (Onboarding)';
+      } else {
+        tier = 'Pro (Paying)';
+      }
     } else if (user.isTrialing || (user.trialDaysRemaining && user.trialDaysRemaining > 0)) {
-      tier = 'Trial';
-    } else if (user.subscriptionTier === 'athlete_plus') {
-      tier = 'Pro';
-    } else if (user.subscriptionTier === 'athlete') {
-      tier = 'Pro';
+      // Free tier users on trial
+      tier = 'Free Trial';
     }
 
     tierCounts.set(tier, (tierCounts.get(tier) || 0) + 1);

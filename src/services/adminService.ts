@@ -187,7 +187,8 @@ export const getAllUsers = async (): Promise<AdminUser[]> => {
 
       return {
         id: doc.id,
-        email: data.email || '',
+        email: data.email,
+        phoneNumber: data.phoneNumber,
         username: data.username,
         ...subscriptionDetails,
         promoCodeUsed: data.promoCodeUsed,
@@ -212,7 +213,8 @@ export const searchUsers = async (searchTerm: string): Promise<AdminUser[]> => {
 
       return {
         id: doc.id,
-        email: data.email || '',
+        email: data.email,
+        phoneNumber: data.phoneNumber,
         username: data.username,
         ...subscriptionDetails,
         promoCodeUsed: data.promoCodeUsed,
@@ -221,10 +223,11 @@ export const searchUsers = async (searchTerm: string): Promise<AdminUser[]> => {
       };
     }) as AdminUser[];
 
-    // Filter by email or username
+    // Filter by email, phone number, or username
     const lowerSearchTerm = searchTerm.toLowerCase();
     return allUsers.filter(user =>
-      user.email.toLowerCase().includes(lowerSearchTerm) ||
+      (user.email && user.email.toLowerCase().includes(lowerSearchTerm)) ||
+      (user.phoneNumber && user.phoneNumber.includes(searchTerm)) ||
       (user.username && user.username.toLowerCase().includes(lowerSearchTerm))
     );
   } catch (error) {
@@ -340,7 +343,7 @@ export const getAnalyticsData = async () => {
     usersWithCodes.slice(0, 10).forEach(user => {
       recentRedemptions.push({
         userId: user.id,
-        userEmail: user.email,
+        userEmail: user.email || user.phoneNumber || 'Unknown',
         promoCode: user.promoCodeUsed || '',
         redeemedAt: user.createdAt, // Approximation
       });

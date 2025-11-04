@@ -328,10 +328,12 @@ const VaultVideos = () => {
                   <span className="text-lg font-bold text-gray-900">
                     {formatHeight(video.height, video.barUnits)}
                   </span>
-                  {video.result === 'make' ? (
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                  ) : (
-                    <XCircle className="h-5 w-5 text-red-600" />
+                  {video.sessionType?.toLowerCase() !== 'training' && (
+                    video.result === 'make' ? (
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                    ) : (
+                      <XCircle className="h-5 w-5 text-red-600" />
+                    )
                   )}
                 </div>
 

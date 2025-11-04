@@ -114,19 +114,19 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) =>
               <div className="text-xs text-gray-600">Jumps</div>
             </div>
 
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 mb-1">
-                {session.sessionType !== 'training' && (
-                  successRate >= 50 ? (
+            {session.sessionType?.toLowerCase() !== 'training' && (
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 mb-1">
+                  {successRate >= 50 ? (
                     <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (
                     <XCircle className="h-4 w-4 text-orange-600" />
-                  )
-                )}
-                <span className="text-lg font-semibold text-gray-900">{successRate}%</span>
+                  )}
+                  <span className="text-lg font-semibold text-gray-900">{successRate}%</span>
+                </div>
+                <div className="text-xs text-gray-600">Success</div>
               </div>
-              <div className="text-xs text-gray-600">Success</div>
-            </div>
+            )}
 
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 mb-1">

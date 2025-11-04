@@ -12,7 +12,8 @@ export interface PromoCode {
 
 export interface AdminUser {
   id: string;
-  email: string;
+  email?: string; // Optional - some users sign in with phone
+  phoneNumber?: string; // Phone number for users who sign in with phone
   username?: string;
   hasLifetimeAccess: boolean;
   promoCodeUsed?: string;
