@@ -188,7 +188,7 @@ export const getAllUsers = async (): Promise<AdminUser[]> => {
       return {
         id: doc.id,
         email: data.email,
-        phoneNumber: data.phoneNumber,
+        phoneNumber: data.phone_number, // Firestore stores as phone_number
         username: data.username,
         ...subscriptionDetails,
         promoCodeUsed: data.promoCodeUsed,
@@ -214,7 +214,7 @@ export const searchUsers = async (searchTerm: string): Promise<AdminUser[]> => {
       return {
         id: doc.id,
         email: data.email,
-        phoneNumber: data.phoneNumber,
+        phoneNumber: data.phone_number, // Firestore stores as phone_number
         username: data.username,
         ...subscriptionDetails,
         promoCodeUsed: data.promoCodeUsed,
