@@ -22,6 +22,7 @@ export default {
 			fontFamily: {
 				'pacifico': ['Pacifico', 'cursive'],
 				'inter': ['Inter', 'sans-serif'],
+				'roboto': ['Roboto', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -89,6 +90,23 @@ export default {
 					300: '#D1D5DB',
 					400: '#9CA3AF',
 					600: '#4B5563',
+				},
+				// VAULT App Brand Colors
+				vault: {
+					primary: '#072f57',
+					'primary-light': '#0a4a8a',
+					'primary-dark': '#051d38',
+					'primary-muted': '#e8eef4',
+					'bg-warm-start': '#f5f0eb',
+					'bg-warm-end': '#d9d0c7',
+					'text': '#072f57',
+					'text-secondary': '#404040',
+					'text-muted': '#6b6b6b',
+					'border': '#e5e5e5',
+					'border-light': '#f0f0f0',
+					success: '#198754',
+					warning: '#F59E0B',
+					error: '#EF4444',
 				}
 			},
 			borderRadius: {
@@ -146,6 +164,13 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.4s ease-out',
 				'fade-in-right': 'fade-in-right 0.4s ease-out'
+			},
+			boxShadow: {
+				'vault-sm': '0 2px 4px rgba(7, 47, 87, 0.04)',
+				'vault': '0 4px 8px rgba(7, 47, 87, 0.06)',
+				'vault-md': '0 8px 16px rgba(7, 47, 87, 0.08)',
+				'vault-lg': '0 12px 24px rgba(7, 47, 87, 0.1)',
+				'vault-card': '0 4px 12px rgba(7, 47, 87, 0.05)',
 			}
 		}
 	},

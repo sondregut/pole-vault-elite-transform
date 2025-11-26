@@ -56,6 +56,7 @@ import VaultAdminPromoCodes from "./pages/VaultAdminPromoCodes";
 import VaultAdminUsers from "./pages/VaultAdminUsers";
 import VaultPrivacyPolicy from "./pages/VaultPrivacyPolicy";
 import VaultTermsOfService from "./pages/VaultTermsOfService";
+import VaultAppLanding from "./pages/VaultAppLanding";
 import PointsCalculator from "./pages/PointsCalculator";
 
 const queryClient = new QueryClient();
@@ -122,6 +123,7 @@ const App = () => (
             <Route path="/vault/privacy" element={<VaultPrivacyPolicy />} />
             <Route path="/vault/terms" element={<VaultTermsOfService />} />
             <Route path="/vault-app-secure" element={<VaultLanding />} />
+            <Route path="/vault-app" element={<VaultAppLanding />} />
             <Route path="/points-calculator" element={<PointsCalculator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
