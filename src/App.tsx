@@ -21,6 +21,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Programs from "./pages/Programs";
 import MediaKit from "./pages/MediaKit";
+import MediaKitPro from "./pages/MediaKitPro";
 import PVT from "./pages/PVT";
 import VideoLibrary from "./pages/VideoLibrary";
 import AdminVideos from "./pages/AdminVideos";
@@ -84,7 +85,8 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/mediakit" element={<MediaKit />} />
+            <Route path="/media-kit" element={<MediaKit />} />
+            <Route path="/sondre-media" element={<MediaKitPro />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/pvt" element={<PVT />} />
             <Route path="/video-library" element={<VideoLibrary />} />

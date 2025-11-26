@@ -7,11 +7,26 @@ import { Instagram, Twitter, Linkedin, Globe, Mail, Phone } from "lucide-react";
 const MediaKit = () => {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header Section */}
-      <header className="w-full bg-gradient-to-r from-primary to-primary-dark py-16 text-white">
+      {/* Header Section with Background Image */}
+      <header
+        className="w-full relative py-32 text-white bg-cover bg-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//hero%20section%20image.jpg')`
+        }}
+      >
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">Sondre Guttormsen</h1>
-          <h2 className="text-xl md:text-2xl font-medium text-center">Olympic Pole Vaulter</h2>
+          <div className="flex flex-col md:flex-row items-center gap-8 max-w-4xl mx-auto">
+            <img
+              src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20adidas.jpg"
+              alt="Sondre Guttormsen"
+              className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-white shadow-xl"
+            />
+            <div className="text-center md:text-left">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">Sondre Guttormsen</h1>
+              <h2 className="text-xl md:text-2xl font-medium">Olympic Pole Vaulter</h2>
+              <p className="text-lg mt-2 opacity-90">2x Olympian | European Champion | Norwegian Record Holder</p>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -241,7 +256,7 @@ const MediaKit = () => {
         </section>
 
         {/* Main Sponsor */}
-        <section>
+        <section className="mb-16">
           <h2 className="text-2xl font-bold mb-6 text-primary-dark">MAIN SPONSOR</h2>
           <Card>
             <CardContent className="p-6">
@@ -249,6 +264,145 @@ const MediaKit = () => {
               <p className="text-gray-600">2023 - 2025</p>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Photo Gallery */}
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-primary-dark">PHOTO GALLERY</h2>
+          <p className="text-gray-600 mb-6">High-resolution images available for media use. Contact for full-size downloads.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre23%20jubel.jpeg"
+                alt="Sondre Guttormsen Celebration"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">European Championship Celebration</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20norway%20get%20ready%20pic.png"
+                alt="Sondre Guttormsen Competition"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Competition Ready</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-04-14%20at%202.10.32%20PM.png"
+                alt="Sondre Guttormsen Action Shot"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">In Action</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//flight%20mode.jpeg"
+                alt="Sondre Guttormsen Pole Vault Flight"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Mid-Vault Flight</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//weights.jpeg"
+                alt="Sondre Guttormsen Training"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Strength Training</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//coaching.jpeg"
+                alt="Sondre Guttormsen Coaching"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Coaching Session</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//training.jpg"
+                alt="Sondre Guttormsen Training"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Training Session</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//sondre%20and%20simen.jpg"
+                alt="Sondre Guttormsen with Coach"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">With Team Guttormsen</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//tempo%202.PNG"
+                alt="Sondre Guttormsen Technique"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Technique Analysis</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//Screenshot%202025-05-03%20at%202.46.16%20PM.png"
+                alt="Sondre Guttormsen"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Professional Headshot</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//dad%20simen%20sondre.JPG"
+                alt="Sondre Guttormsen with Family"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Team Guttormsen Family</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img
+                src="https://qmasltemgjtbwrwscxtj.supabase.co/storage/v1/object/public/website-photos//zoom%20.jpg"
+                alt="Sondre Guttormsen Interview"
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4">
+                <p className="text-sm text-gray-600">Media Interview</p>
+              </CardContent>
+            </Card>
+          </div>
         </section>
       </main>
     </div>
