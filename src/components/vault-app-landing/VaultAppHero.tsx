@@ -29,9 +29,23 @@ const VaultAppHero = () => {
             className="text-center lg:text-left"
           >
             {/* Badge */}
-            <Badge className="mb-6 bg-vault-primary-muted text-vault-primary-dark border-0 px-4 py-1.5 text-sm font-medium">
+            <Badge className="mb-4 bg-vault-primary-muted text-vault-primary-dark border-0 px-4 py-1.5 text-sm font-medium">
               Launching soon on iOS
             </Badge>
+
+            {/* Limited Time Offer Banner */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-6"
+            >
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-vault-warning to-orange-500 text-white px-5 py-2.5 rounded-full shadow-lg">
+                <Sparkles className="w-4 h-4" />
+                <span className="font-bold text-sm">50% OFF for the first 100 subscribers!</span>
+                <Sparkles className="w-4 h-4" />
+              </div>
+            </motion.div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-vault-text leading-tight mb-6">

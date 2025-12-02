@@ -10,6 +10,11 @@ import {
 const VaultAppFAQ = () => {
   const faqs = [
     {
+      question: 'Who is VAULT for?',
+      answer:
+        'VAULT is for every pole vaulter who wants to improve – from beginners just learning the basics to elite athletes chasing world records. Whether you\'re a high school athlete tracking your first season, a college vaulter analyzing technique, a masters athlete staying competitive, or a coach managing multiple athletes, VAULT adapts to your needs. If you\'re serious about pole vault and want to train smarter, VAULT is built for you.',
+    },
+    {
       question: 'Is the app available on Android?',
       answer:
         'We are launching on iOS first, with Android support coming shortly after. Join our waitlist to be notified when the Android version is available.',

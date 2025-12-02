@@ -26,6 +26,7 @@ const VaultAppNavbar = () => {
     { label: 'Features', id: 'features' },
     { label: 'Analytics', id: 'analytics' },
     { label: 'Pricing', id: 'pricing' },
+    { label: 'My Dashboard', id: 'dashboard', href: '/vault/dashboard' },
   ];
 
   return (
@@ -51,20 +52,24 @@ const VaultAppNavbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className="text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
-              >
-                {link.label}
-              </button>
+              link.href ? (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  className="text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className="text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+                >
+                  {link.label}
+                </button>
+              )
             ))}
-            <a
-              href="/vault/dashboard"
-              className="px-4 py-1.5 bg-vault-primary/10 text-vault-primary font-semibold rounded-lg border border-vault-primary/20 hover:bg-vault-primary hover:text-white transition-all"
-            >
-              My Dashboard
-            </a>
           </div>
 
           {/* Desktop CTA */}

@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Check, Zap, Star, Crown, Sparkles, Loader2 } from 'lucide-react';
+import { Check, Zap, Star, Crown, Sparkles, Loader2, Mail, CheckCircle } from 'lucide-react';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { checkCouponAvailability, redirectToCheckout, PriceId } from '@/services/stripeService';
 import { toast } from 'sonner';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 
 const VaultAppPricing = () => {
   const [isYearly, setIsYearly] = useState(true);
@@ -16,8 +19,53 @@ const VaultAppPricing = () => {
     discountPercent: number;
   } | null>(null);
   const [loadingCheckout, setLoadingCheckout] = useState<string | null>(null);
+  const [coachWaitlistEmail, setCoachWaitlistEmail] = useState('');
+  const [coachWaitlistLoading, setCoachWaitlistLoading] = useState(false);
+  const [coachWaitlistSuccess, setCoachWaitlistSuccess] = useState(false);
   const { user } = useFirebaseAuth();
   const navigate = useNavigate();
+
+  // Handle coach waitlist signup
+  const handleCoachWaitlistSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!coachWaitlistEmail || !coachWaitlistEmail.includes('@')) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    setCoachWaitlistLoading(true);
+
+    try {
+      // Check if email already exists in waitlist
+      const waitlistRef = collection(db, 'coachWaitlist');
+      const existingQuery = query(waitlistRef, where('email', '==', coachWaitlistEmail.toLowerCase()));
+      const existingDocs = await getDocs(existingQuery);
+
+      if (!existingDocs.empty) {
+        toast.info('You\'re already on the waitlist!');
+        setCoachWaitlistSuccess(true);
+        setCoachWaitlistLoading(false);
+        return;
+      }
+
+      // Add to waitlist
+      await addDoc(waitlistRef, {
+        email: coachWaitlistEmail.toLowerCase(),
+        signedUpAt: new Date().toISOString(),
+        source: 'pricing_page',
+        notified: false,
+      });
+
+      setCoachWaitlistSuccess(true);
+      toast.success('You\'re on the list! We\'ll notify you when Coach is ready.');
+    } catch (error) {
+      console.error('Waitlist signup error:', error);
+      toast.error('Failed to join waitlist. Please try again.');
+    } finally {
+      setCoachWaitlistLoading(false);
+    }
+  };
 
   // Fetch coupon availability on mount
   useEffect(() => {
@@ -88,9 +136,11 @@ const VaultAppPricing = () => {
 
   const monthlyPrice = 9.99;
   const yearlyPrice = 79;
-  const yearlyMonthlyEquivalent = yearlyPrice / 12; // $6.58/mo
+  const limitedTimeDiscount = 0.50; // 50% off
+  const yearlyPriceDiscounted = yearlyPrice * (1 - limitedTimeDiscount);
+  const yearlyMonthlyEquivalent = yearlyPriceDiscounted / 12; // $3.29/mo with 50% off
   const discountedMonthly = getDiscountedPrice(monthlyPrice);
-  const discountedYearly = getDiscountedPrice(yearlyPrice);
+  const discountedYearly = getDiscountedPrice(yearlyPriceDiscounted);
   const discountedYearlyMonthly = getDiscountedPrice(yearlyMonthlyEquivalent);
 
   const tiers = [
@@ -115,20 +165,16 @@ const VaultAppPricing = () => {
       name: 'Pro',
       icon: Star,
       price: isYearly
-        ? couponData?.available
-          ? `$${discountedYearlyMonthly.toFixed(2)}`
-          : `$${yearlyMonthlyEquivalent.toFixed(2)}`
-        : couponData?.available
-        ? `$${discountedMonthly.toFixed(2)}`
+        ? `$${yearlyMonthlyEquivalent.toFixed(2)}`
         : `$${monthlyPrice.toFixed(2)}`,
-      originalPrice: isYearly
-        ? (couponData?.available ? `$${yearlyMonthlyEquivalent.toFixed(2)}` : null)
-        : (couponData?.available ? `$${monthlyPrice.toFixed(2)}` : null),
+      originalPrice: isYearly ? `$${(yearlyPrice / 12).toFixed(2)}` : null,
       period: '/mo',
       yearlyBillingNote: isYearly
-        ? (couponData?.available ? `$${discountedYearly.toFixed(0)} billed annually` : `$${yearlyPrice} billed annually`)
+        ? `$${yearlyPriceDiscounted.toFixed(0)} billed annually`
         : '',
-      yearlyNote: isYearly ? 'Save ~30% vs monthly' : '',
+      originalYearlyPrice: isYearly ? `$${yearlyPrice}` : null,
+      limitedOffer: isYearly,
+      yearlyNote: isYearly ? '50% OFF – Limited Time!' : '',
       description: 'For serious competitors',
       features: [
         'Unlimited Sessions',
@@ -272,9 +318,19 @@ const VaultAppPricing = () => {
                   {tier.description}
                 </p>
 
+                {/* Limited Time Offer Badge */}
+                {tier.limitedOffer && (
+                  <div className="mb-3">
+                    <span className="inline-flex items-center gap-1 bg-vault-warning text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                      <Sparkles className="w-3 h-3" />
+                      50% OFF – LIMITED TIME
+                    </span>
+                  </div>
+                )}
+
                 <div className="mb-2">
-                  {/* Show original price with strikethrough if discount applies */}
-                  {tier.name === 'Pro' && couponData?.available && tier.originalPrice && (
+                  {/* Show original price with strikethrough for 50% off */}
+                  {tier.originalPrice && (
                     <span
                       className={`text-lg line-through mr-2 ${
                         tier.popular ? 'text-white/50' : 'text-vault-text-muted'
@@ -298,14 +354,17 @@ const VaultAppPricing = () => {
                     </span>
                   )}
                 </div>
-                {/* Show yearly billing note */}
+                {/* Show yearly billing note with original price crossed out */}
                 {tier.yearlyBillingNote && (
                   <p className={`text-sm mb-1 ${tier.popular ? 'text-white/70' : 'text-vault-text-muted'}`}>
+                    {tier.originalYearlyPrice && (
+                      <span className="line-through mr-1">{tier.originalYearlyPrice}</span>
+                    )}
                     {tier.yearlyBillingNote}
                   </p>
                 )}
                 {tier.yearlyNote && (
-                  <p className={`text-xs ${tier.popular ? 'text-white/70' : 'text-vault-success'}`}>
+                  <p className={`text-xs font-semibold ${tier.popular ? 'text-vault-warning' : 'text-vault-success'}`}>
                     {tier.yearlyNote}
                   </p>
                 )}
@@ -328,26 +387,68 @@ const VaultAppPricing = () => {
                 ))}
               </ul>
 
-              <Button
-                onClick={() => handleSubscribe(tier.name)}
-                disabled={tier.comingSoon || loadingCheckout === tier.name}
-                className={`w-full py-6 text-base font-semibold rounded-xl ${
-                  tier.popular
-                    ? 'bg-white text-vault-primary hover:bg-white/90'
-                    : tier.comingSoon
-                    ? 'bg-vault-border text-vault-text-muted cursor-not-allowed'
-                    : 'bg-vault-primary text-white hover:bg-vault-primary-light'
-                }`}
-              >
-                {loadingCheckout === tier.name ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  tier.cta
-                )}
-              </Button>
+              {/* Coach Waitlist Form */}
+              {tier.name === 'Coach' ? (
+                <div className="space-y-3">
+                  {coachWaitlistSuccess ? (
+                    <div className="flex flex-col items-center gap-2 py-4">
+                      <div className="w-12 h-12 rounded-full bg-vault-success/10 flex items-center justify-center">
+                        <CheckCircle className="w-6 h-6 text-vault-success" />
+                      </div>
+                      <p className="text-sm font-medium text-vault-success">You're on the list!</p>
+                      <p className="text-xs text-vault-text-muted text-center">We'll email you when Coach launches.</p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleCoachWaitlistSignup} className="space-y-3">
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-vault-text-muted" />
+                        <Input
+                          type="email"
+                          placeholder="Enter your email"
+                          value={coachWaitlistEmail}
+                          onChange={(e) => setCoachWaitlistEmail(e.target.value)}
+                          className="pl-10 py-5 rounded-xl border-vault-border focus:border-vault-primary focus:ring-vault-primary"
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        disabled={coachWaitlistLoading}
+                        className="w-full py-6 text-base font-semibold rounded-xl bg-vault-primary text-white hover:bg-vault-primary-light"
+                      >
+                        {coachWaitlistLoading ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Joining...
+                          </>
+                        ) : (
+                          'Join Waitlist for Early Access'
+                        )}
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  onClick={() => handleSubscribe(tier.name)}
+                  disabled={tier.comingSoon || loadingCheckout === tier.name}
+                  className={`w-full py-6 text-base font-semibold rounded-xl ${
+                    tier.popular
+                      ? 'bg-white text-vault-primary hover:bg-white/90'
+                      : tier.comingSoon
+                      ? 'bg-vault-border text-vault-text-muted cursor-not-allowed'
+                      : 'bg-vault-primary text-white hover:bg-vault-primary-light'
+                  }`}
+                >
+                  {loadingCheckout === tier.name ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    tier.cta
+                  )}
+                </Button>
+              )}
             </motion.div>
           ))}
         </div>
