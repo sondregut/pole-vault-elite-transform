@@ -210,9 +210,9 @@ const VaultAppPricing = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-vault-text mb-4">Invest in Your Vault</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-vault-text mb-4">Invest in Your Pole Vault Journey</h2>
           <p className="text-lg text-vault-text-secondary mb-4">
-            Less than a cup of coffee per week to track every jump, analyze your technique, and reach new heights.
+            Less than a cup of coffee per month to track every jump, analyze your technique, and reach new heights.
           </p>
           <p className="text-sm text-vault-text-muted">
             Join athletes who are already training smarter with VAULT.

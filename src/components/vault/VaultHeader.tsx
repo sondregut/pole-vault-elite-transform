@@ -108,12 +108,18 @@ const VaultHeader = () => {
 
           {/* Right: User Menu */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              to="/vault"
+            <a
+              href="/vault#features"
               className="text-sm text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
             >
-              About Vault
-            </Link>
+              Features
+            </a>
+            <a
+              href="/vault#pricing"
+              className="text-sm text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+            >
+              Pricing
+            </a>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -200,6 +206,20 @@ const VaultHeader = () => {
             })}
 
             <div className="pt-3 mt-3 border-t border-vault-border space-y-2">
+              <a
+                href="/vault#features"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg transition-all"
+              >
+                Features
+              </a>
+              <a
+                href="/vault#pricing"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg transition-all"
+              >
+                Pricing
+              </a>
               <Link
                 to="/vault/profile"
                 onClick={() => setIsMobileMenuOpen(false)}

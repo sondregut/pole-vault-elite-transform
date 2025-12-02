@@ -67,13 +67,13 @@ const VaultAppAnalytics = () => {
             className="flex justify-center lg:sticky lg:top-24"
           >
             <div className="relative">
-              {/* "Try it" arrow - on the left since phone is on the left */}
+              {/* "Try it" arrow - positioned far left of phone */}
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 1 }}
-                className="absolute -left-2 top-[45%] -translate-x-full hidden lg:flex items-center gap-2 z-10"
+                className="absolute -left-32 top-[45%] hidden lg:flex items-center gap-2 z-10"
               >
                 <span className="text-sm font-medium text-vault-text-secondary italic">Explore!</span>
                 <motion.svg

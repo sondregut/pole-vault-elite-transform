@@ -228,11 +228,13 @@ const VaultLogin = () => {
                   </p>
                   <Button
                     variant="outline"
-                    onClick={() => navigate('/vault#pricing')}
+                    asChild
                     className="border-vault-primary text-vault-primary hover:bg-vault-primary hover:text-white transition-colors"
                   >
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Sign Up – 50% Off
+                    <a href="/vault#pricing">
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Sign Up – 50% Off
+                    </a>
                   </Button>
                 </div>
               </div>

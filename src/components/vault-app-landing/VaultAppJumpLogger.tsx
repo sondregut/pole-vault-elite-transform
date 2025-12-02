@@ -90,6 +90,9 @@ const VaultAppJumpLogger = () => {
   const incrementSteps = () => setSteps(prev => Math.min(prev + 1, 15));
   const decrementSteps = () => setSteps(prev => Math.max(prev - 1, 1));
 
+  const incrementStandards = () => setStandards(prev => prev + 5);
+  const decrementStandards = () => setStandards(prev => Math.max(prev - 5, -80));
+
   const formatFeetInchesFromState = (feet: number, inches: number) => {
     return `${feet}'${inches}"`;
   };

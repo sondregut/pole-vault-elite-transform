@@ -99,27 +99,16 @@ const VaultAppHero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex justify-center lg:justify-end relative"
           >
-            {/* "Try it" arrow */}
+            {/* Try it out arrow - positioned to the LEFT of the phone */}
             <motion.div
-              initial={{ opacity: 0, x: 10 }}
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 1 }}
-              className="absolute -right-2 top-[45%] translate-x-full hidden lg:flex items-center gap-2 z-10"
+              className="absolute right-[300px] top-[40%] hidden lg:flex items-center gap-2"
             >
-              <motion.svg
-                width="32"
-                height="24"
-                viewBox="0 0 32 24"
-                fill="none"
-                animate={{ x: [0, -6, 0] }}
-                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                className="text-vault-primary"
-              >
-                <path d="M30 12H6M6 12L14 4M6 12L14 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </motion.svg>
-              <span className="text-sm font-medium text-vault-text-secondary italic">Try it out!</span>
+              <span className="text-vault-primary font-medium text-sm whitespace-nowrap">Try it out!</span>
+              <ArrowDown className="w-5 h-5 text-vault-primary rotate-[-90deg]" />
             </motion.div>
-
             <PhoneMockup>
               <SessionHistoryMock />
             </PhoneMockup>
