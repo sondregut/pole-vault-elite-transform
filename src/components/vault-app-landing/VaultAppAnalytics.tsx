@@ -1,55 +1,40 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Target, Award, Percent, Lightbulb, BarChart3 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { TrendingUp, Target, Award, BarChart3, PieChart, GitCompare, LineChart, Activity, Lightbulb } from 'lucide-react';
 import PhoneMockup from './mockups/PhoneMockup';
 import AnalyticsDashboardMock from './mockups/AnalyticsDashboardMock';
-import HeightProgressChart from './mockups/HeightProgressChart';
 
 const VaultAppAnalytics = () => {
-  const stats = [
+  const features = [
     {
-      label: 'Total Sessions',
-      value: '24',
-      subtext: '(8 Competitions)',
-      icon: Target,
+      icon: BarChart3,
+      title: 'Jump Distribution',
+      description: 'See how your jumps break down by runup steps. Identify your most practiced approaches.',
     },
     {
-      label: 'Total Jumps',
-      value: '342',
-      subtext: '+12% volume',
+      icon: PieChart,
+      title: 'Quality Breakdown',
+      description: 'Track the distribution of Great, Good, OK, and Glider jumps with beautiful donut charts.',
+    },
+    {
+      icon: GitCompare,
+      title: 'Training vs Competition',
+      description: 'Compare your performance metrics side-by-side between training and competition sessions.',
+    },
+    {
+      icon: LineChart,
+      title: 'Performance Patterns',
+      description: 'Visualize your rating progression within competitions to understand your warm-up patterns.',
+    },
+    {
+      icon: Activity,
+      title: 'Pole Statistics',
+      description: 'Track which poles you use most frequently and filter by approach length.',
+    },
+    {
       icon: TrendingUp,
-      subtextColor: 'text-vault-success',
-    },
-    {
-      label: 'Best Height',
-      value: '5.90m',
-      subtext: 'Season Best',
-      icon: Award,
-    },
-    {
-      label: 'Success Rate',
-      value: '68%',
-      subtext: 'Top 10% Avg',
-      icon: Percent,
-    },
-  ];
-
-  const insights = [
-    {
-      title: 'Strong Finish',
-      description:
-        'You clear 85% of bars on your 3rd attempt in competitions. You perform well under pressure.',
-    },
-    {
-      title: 'Pole Match',
-      description:
-        "Your highest clearance rate (92%) comes when using the 15'7 (175).",
-    },
-    {
-      title: 'Focus Area',
-      description:
-        '6-Step short approach sessions are averaging 0.15m lower than last month.',
+      title: 'Progress Tracking',
+      description: 'Monitor your jumps volume changes with percentage comparisons to previous periods.',
     },
   ];
 
@@ -68,7 +53,7 @@ const VaultAppAnalytics = () => {
             Professional Grade Analytics
           </h2>
           <p className="text-lg text-vault-text-secondary max-w-2xl mx-auto">
-            Data visualization that reveals your hidden patterns.
+            Data visualization that reveals your hidden patterns and helps you train smarter.
           </p>
         </motion.div>
 
@@ -94,100 +79,188 @@ const VaultAppAnalytics = () => {
             transition={{ duration: 0.6 }}
             className="space-y-8"
           >
-            {/* Stats Cards */}
+            {/* Overview Cards */}
             <div>
               <h3 className="text-lg font-semibold text-vault-text mb-4 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-vault-primary" />
+                <Target className="w-5 h-5 text-vault-primary" />
                 Key Metrics at a Glance
               </h3>
-              <div className="grid grid-cols-2 gap-3">
-                {stats.map((stat, index) => (
+              <div className="grid grid-cols-3 gap-3">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white rounded-xl p-4 shadow-vault border border-vault-border-light text-center"
+                >
+                  <p className="text-xs text-vault-text-muted mb-1">Total Sessions</p>
+                  <p className="text-2xl font-bold text-vault-primary">20</p>
+                  <p className="text-xs text-amber-500">5 Competitions</p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="bg-white rounded-xl p-4 shadow-vault border border-vault-border-light text-center"
+                >
+                  <p className="text-xs text-vault-text-muted mb-1">Total Jumps</p>
+                  <p className="text-2xl font-bold text-vault-primary">30</p>
+                  <p className="text-xs text-vault-success">+21% vs prev 30 days</p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="bg-white rounded-xl p-4 shadow-vault border border-vault-border-light text-center"
+                >
+                  <p className="text-xs text-vault-text-muted mb-1">Best Height</p>
+                  <p className="text-2xl font-bold text-vault-primary">5.90m</p>
+                  <p className="text-xs text-amber-500">Tokyo</p>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Feature Grid */}
+            <div>
+              <h3 className="text-lg font-semibold text-vault-text mb-4">
+                Analytics Features
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {features.map((feature, index) => (
                   <motion.div
-                    key={stat.label}
+                    key={feature.title}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="bg-white rounded-xl p-4 shadow-vault border border-vault-border-light hover:shadow-vault-md transition-shadow"
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="bg-vault-bg-warm-start rounded-xl p-4 hover:shadow-vault-sm transition-shadow"
                   >
-                    <div className="flex items-center gap-2 mb-2">
-                      <stat.icon className="w-4 h-4 text-vault-text-muted" />
-                      <span className="text-xs text-vault-text-muted">{stat.label}</span>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-vault-primary/10 flex items-center justify-center flex-shrink-0">
+                        <feature.icon className="w-5 h-5 text-vault-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-vault-text text-sm mb-1">{feature.title}</p>
+                        <p className="text-xs text-vault-text-secondary leading-relaxed">{feature.description}</p>
+                      </div>
                     </div>
-                    <p className="text-2xl font-bold text-vault-primary">{stat.value}</p>
-                    <p className={`text-xs ${stat.subtextColor || 'text-vault-text-muted'}`}>
-                      {stat.subtext}
-                    </p>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* Height Progress */}
-            <div>
-              <h3 className="text-lg font-semibold text-vault-text mb-4">Height Progress</h3>
-              <div className="bg-white rounded-xl p-6 shadow-vault border border-vault-border-light">
-                <p className="text-sm text-vault-text-muted mb-4">
-                  Max vs Average clearance over last 12 sessions
-                </p>
-                <HeightProgressChart />
-              </div>
-            </div>
-
-            {/* AI Insights */}
-            <div>
-              <h3 className="text-lg font-semibold text-vault-text mb-4 flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-vault-warning" />
-                AI Insights
-                <Badge className="bg-vault-warning/10 text-vault-warning border-0 text-xs ml-2">
-                  Coming Soon
-                </Badge>
-              </h3>
-              <div className="bg-gradient-to-br from-vault-primary-dark to-vault-primary rounded-xl p-5">
-                <div className="space-y-3">
-                  {insights.map((insight, index) => (
-                    <motion.div
-                      key={insight.title}
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className="bg-white/10 backdrop-blur-sm rounded-lg p-4"
-                    >
-                      <p className="text-sm font-semibold text-white mb-1">{insight.title}</p>
-                      <p className="text-sm text-white/80 leading-relaxed">{insight.description}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Training vs Competition */}
+            {/* Training vs Competition Preview */}
             <div>
               <h3 className="text-lg font-semibold text-vault-text mb-4">
                 Training vs Competition
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-vault-primary-muted rounded-xl p-4">
-                  <p className="text-sm text-vault-text-muted mb-2">Training</p>
-                  <p className="text-2xl font-bold text-vault-primary mb-1">5.75m</p>
-                  <p className="text-xs text-vault-text-muted">Avg Best</p>
-                  <div className="mt-3 pt-3 border-t border-vault-primary/10">
-                    <p className="text-lg font-semibold text-vault-text">62%</p>
-                    <p className="text-xs text-vault-text-muted">Success Rate</p>
+                <div className="bg-blue-50 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-vault-text mb-2">Training</p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Total jumps</span>
+                      <span className="text-xs font-semibold text-vault-text">22</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Jumps per session</span>
+                      <span className="text-xs font-semibold text-vault-text">3.1</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Avg height</span>
+                      <span className="text-xs font-semibold text-vault-text">5.40m</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Avg rating</span>
+                      <span className="text-xs font-semibold text-vault-text">Good</span>
+                    </div>
                   </div>
                 </div>
                 <div className="bg-amber-50 rounded-xl p-4">
-                  <p className="text-sm text-amber-700 mb-2">Competition</p>
-                  <p className="text-2xl font-bold text-amber-600 mb-1">5.90m</p>
-                  <p className="text-xs text-amber-600/70">Avg Best</p>
-                  <div className="mt-3 pt-3 border-t border-amber-200">
-                    <p className="text-lg font-semibold text-amber-700">78%</p>
-                    <p className="text-xs text-amber-600/70">Success Rate</p>
+                  <p className="text-sm font-semibold text-amber-600 mb-2">Competition</p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Total jumps</span>
+                      <span className="text-xs font-semibold text-vault-text">8</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Jumps per session</span>
+                      <span className="text-xs font-semibold text-vault-text">8.0</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Avg height</span>
+                      <span className="text-xs font-semibold text-vault-text">5.26m</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-vault-text-muted">Avg rating</span>
+                      <span className="text-xs font-semibold text-vault-text">Good</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Time Range Info */}
+            <div className="bg-vault-primary-muted rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Award className="w-5 h-5 text-vault-primary" />
+                <span className="font-semibold text-vault-text text-sm">Flexible Time Ranges</span>
+              </div>
+              <p className="text-xs text-vault-text-secondary leading-relaxed">
+                Filter your analytics by 30, 60, 90 days, 1 year, all time, or set custom date ranges to analyze specific training periods or competition seasons.
+              </p>
+            </div>
+
+            {/* AI Insights Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+            >
+              {/* Header - Outside the dark card */}
+              <div className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-amber-500" />
+                  <h3 className="text-base font-semibold text-vault-text">AI Insights</h3>
+                </div>
+                <span className="px-3 py-1 bg-amber-100 text-amber-600 rounded-full text-xs font-medium">
+                  Coming Soon
+                </span>
+              </div>
+
+              {/* Dark Card with Insights */}
+              <div className="bg-[#1a2a3a] rounded-2xl p-4">
+                {/* Insight Cards */}
+                <div className="space-y-3">
+                  {/* Strong Finish */}
+                  <div className="bg-[#243447] rounded-xl p-4">
+                    <p className="text-sm font-semibold text-white mb-1">Strong Finish</p>
+                    <p className="text-xs text-white/70 leading-relaxed">
+                      You clear 85% of bars on your 3rd attempt in competitions. You perform well under pressure.
+                    </p>
+                  </div>
+
+                  {/* Pole Match */}
+                  <div className="bg-[#243447] rounded-xl p-4">
+                    <p className="text-sm font-semibold text-white mb-1">Pole Match</p>
+                    <p className="text-xs text-white/70 leading-relaxed">
+                      Your highest clearance rate (92%) comes when using the 15'7 (175).
+                    </p>
+                  </div>
+
+                  {/* Focus Area */}
+                  <div className="bg-[#243447] rounded-xl p-4">
+                    <p className="text-sm font-semibold text-white mb-1">Focus Area</p>
+                    <p className="text-xs text-white/70 leading-relaxed">
+                      6-Step short approach sessions are averaging 0.15m lower than last month.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
