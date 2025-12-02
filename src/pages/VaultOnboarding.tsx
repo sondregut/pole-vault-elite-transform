@@ -10,6 +10,7 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { firebaseAuth, db, app } from '@/utils/firebase';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useToast } from '@/hooks/use-toast';
+import { redirectToCheckout } from '@/services/stripeService';
 
 // Competitive level options
 const competitiveLevels = [
@@ -669,7 +670,7 @@ const StepAuth = ({ onComplete }: { onComplete: () => void }) => {
       {subscriptionNotFound ? (
         <div className="space-y-3">
           <Button
-            onClick={() => navigate('/vault#pricing')}
+            onClick={() => redirectToCheckout('yearly', true)}
             className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all"
           >
             Get Your Subscription

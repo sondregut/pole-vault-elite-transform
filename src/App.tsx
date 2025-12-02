@@ -28,7 +28,6 @@ import AdminVideos from "./pages/AdminVideos";
 import Auth from "./pages/Auth";
 import Upload from "./pages/Upload";
 import SubmissionThankYou from "./pages/SubmissionThankYou";
-import VaultLanding from "./pages/VaultLanding";
 import VaultLogin from "./pages/VaultLogin";
 import VaultDashboard from "./pages/VaultDashboard";
 import VaultEquipment from "./pages/VaultEquipment";
@@ -126,7 +125,6 @@ const App = () => (
             </Route>
             <Route path="/vault/privacy" element={<VaultPrivacyPolicy />} />
             <Route path="/vault/terms" element={<VaultTermsOfService />} />
-            <Route path="/vault-app-secure" element={<VaultLanding />} />
             <Route path="/points-calculator" element={<PointsCalculator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
