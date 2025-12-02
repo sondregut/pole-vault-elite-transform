@@ -14,36 +14,36 @@ const SessionHistoryMock: React.FC = () => {
   };
 
   const jumpHistory = [
-    { id: 1, date: 'Nov 24', type: 'Comp', result: 'miss', height: '5.40', steps: 8, rating: 'Great', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
-    { id: 2, date: 'Nov 24', type: 'Comp', result: 'miss', height: '5.40', steps: 8, rating: 'OK', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
-    { id: 3, date: 'Nov 24', type: 'Comp', result: 'miss', height: '5.40', steps: 8, rating: 'OK', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
-    { id: 4, date: 'Nov 24', type: 'Comp', result: 'make', height: '5.30', steps: 8, rating: 'Good', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
-    { id: 5, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.50', steps: 18, rating: 'Run Thru', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 6, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.50', steps: 18, rating: 'OK', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: 'Perfect' },
-    { id: 7, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.50', steps: 12, rating: 'Glider', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 8, date: 'Nov 23', type: 'Comp', result: 'make', height: '5.20', steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 9, date: 'Nov 23', type: 'Comp', result: 'make', height: '5.00', steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 10, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.00', steps: 12, rating: 'OK', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 11, date: 'Nov 23', type: 'Comp-W', result: '—', height: '5.00', steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 12, date: 'Nov 23', type: 'Comp-W', result: '—', height: '5.00', steps: 6, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 13, date: 'Nov 22', type: 'Training', result: '—', height: '5.20', steps: 8, rating: 'OK', pole: '—', grip: '4.80', takeoff: '4.20', runup: '25.00', mid: '17.00', location: 'Gainesville...', notes: '—' },
-    { id: 14, date: 'Nov 22', type: 'Training', result: '—', height: '5.20', steps: 8, rating: '—', pole: '—', grip: '4.80', takeoff: '4.20', runup: '25.00', mid: '17.00', location: 'Gainesville...', notes: '—' },
-    { id: 15, date: 'Nov 22', type: 'Training', result: '—', height: '5.20', steps: 8, rating: 'Good', pole: "15'4 170lbs", grip: '4.80', takeoff: '4.20', runup: '25.00', mid: '17.00', location: 'Gainesville...', notes: '—' },
-    { id: 16, date: 'Nov 10', type: 'Training', result: '—', height: '4.30', steps: 8, rating: 'Great', pole: "16'1 190lbs 1...", grip: '4.10', takeoff: '4.20', runup: '40.15', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 17, date: 'Nov 10', type: 'Training', result: '—', height: '4.30', steps: 8, rating: 'Great', pole: "16'1 190lbs 1...", grip: '4.10', takeoff: '4.20', runup: '40.15', mid: '16.00', location: 'Gainesville...', notes: '—' },
-    { id: 18, date: 'Nov 8', type: 'Training', result: '—', height: '5.40', steps: 18, rating: 'Good', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Princeton...', notes: '—' },
-    { id: 19, date: 'Nov 8', type: 'Training', result: '—', height: '5.30', steps: 18, rating: 'OK', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Princeton...', notes: '—' },
-    { id: 20, date: 'Nov 8', type: 'Training', result: '—', height: '5.20', steps: 16, rating: 'Great', pole: "15'7 170lbs", grip: '4.80', takeoff: '4.25', runup: '25.00', mid: '15.00', location: 'Princeton...', notes: 'Perfect' },
-    { id: 21, date: 'Nov 5', type: 'Training', result: '—', height: '5.50', steps: 18, rating: 'Good', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.35', runup: '27.00', mid: '16.70', location: 'Home Track', notes: '—' },
-    { id: 22, date: 'Nov 5', type: 'Training', result: '—', height: '5.40', steps: 18, rating: 'Great', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Home Track', notes: '—' },
-    { id: 23, date: 'Nov 5', type: 'Training', result: '—', height: '5.30', steps: 16, rating: 'OK', pole: "15'7 170lbs", grip: '4.80', takeoff: '4.25', runup: '25.00', mid: '15.00', location: 'Home Track', notes: '—' },
-    { id: 24, date: 'Nov 3', type: 'Comp', result: 'make', height: '5.60', steps: 18, rating: 'Great', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: 'PR!' },
-    { id: 25, date: 'Nov 3', type: 'Comp', result: 'make', height: '5.50', steps: 18, rating: 'Good', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.35', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
-    { id: 26, date: 'Nov 3', type: 'Comp', result: 'miss', height: '5.70', steps: 18, rating: 'OK', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
-    { id: 27, date: 'Nov 3', type: 'Comp', result: 'miss', height: '5.70', steps: 18, rating: 'Glider', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
-    { id: 28, date: 'Nov 3', type: 'Comp', result: 'miss', height: '5.70', steps: 18, rating: 'OK', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
-    { id: 29, date: 'Nov 1', type: 'Training', result: '—', height: '5.40', steps: 18, rating: 'Good', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Home Track', notes: '—' },
-    { id: 30, date: 'Nov 1', type: 'Training', result: '—', height: '5.30', steps: 16, rating: 'Great', pole: "15'7 170lbs", grip: '4.80', takeoff: '4.25', runup: '25.00', mid: '15.00', location: 'Home Track', notes: 'Clean' },
+    { id: 1, date: 'Nov 24', type: 'Comp', result: 'miss', height: "17'9\"", steps: 8, rating: 'Great', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 2, date: 'Nov 24', type: 'Comp', result: 'miss', height: "17'9\"", steps: 8, rating: 'OK', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 3, date: 'Nov 24', type: 'Comp', result: 'miss', height: "17'9\"", steps: 8, rating: 'OK', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 4, date: 'Nov 24', type: 'Comp', result: 'make', height: "17'5\"", steps: 8, rating: 'Good', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 5, date: 'Nov 23', type: 'Comp', result: 'miss', height: "18'0\"", steps: 18, rating: 'Run Thru', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 6, date: 'Nov 23', type: 'Comp', result: 'miss', height: "18'0\"", steps: 18, rating: 'OK', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: 'Perfect' },
+    { id: 7, date: 'Nov 23', type: 'Comp', result: 'miss', height: "18'0\"", steps: 12, rating: 'Glider', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 8, date: 'Nov 23', type: 'Comp', result: 'make', height: "17'1\"", steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 9, date: 'Nov 23', type: 'Comp', result: 'make', height: "16'5\"", steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 10, date: 'Nov 23', type: 'Comp', result: 'miss', height: "16'5\"", steps: 12, rating: 'OK', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 11, date: 'Nov 23', type: 'Comp-W', result: '—', height: "16'5\"", steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 12, date: 'Nov 23', type: 'Comp-W', result: '—', height: "16'5\"", steps: 6, rating: 'Good', pole: "15'7 160lbs 1...", grip: "15'9\"", takeoff: "14'9\"", runup: '88\'7"', mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 13, date: 'Nov 22', type: 'Training', result: '—', height: "17'1\"", steps: 8, rating: 'OK', pole: '—', grip: "15'9\"", takeoff: "13'9\"", runup: "82'0\"", mid: "55'9\"", location: 'Gainesville...', notes: '—' },
+    { id: 14, date: 'Nov 22', type: 'Training', result: '—', height: "17'1\"", steps: 8, rating: '—', pole: '—', grip: "15'9\"", takeoff: "13'9\"", runup: "82'0\"", mid: "55'9\"", location: 'Gainesville...', notes: '—' },
+    { id: 15, date: 'Nov 22', type: 'Training', result: '—', height: "17'1\"", steps: 8, rating: 'Good', pole: "15'4 170lbs", grip: "15'9\"", takeoff: "13'9\"", runup: "82'0\"", mid: "55'9\"", location: 'Gainesville...', notes: '—' },
+    { id: 16, date: 'Nov 10', type: 'Training', result: '—', height: "14'1\"", steps: 8, rating: 'Great', pole: "16'1 190lbs 1...", grip: "13'5\"", takeoff: "13'9\"", runup: "131'9\"", mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 17, date: 'Nov 10', type: 'Training', result: '—', height: "14'1\"", steps: 8, rating: 'Great', pole: "16'1 190lbs 1...", grip: "13'5\"", takeoff: "13'9\"", runup: "131'9\"", mid: "52'6\"", location: 'Gainesville...', notes: '—' },
+    { id: 18, date: 'Nov 8', type: 'Training', result: '—', height: "17'9\"", steps: 18, rating: 'Good', pole: "16'5 180lbs", grip: "15'11\"", takeoff: "14'1\"", runup: '88\'7"', mid: "54'2\"", location: 'Princeton...', notes: '—' },
+    { id: 19, date: 'Nov 8', type: 'Training', result: '—', height: "17'5\"", steps: 18, rating: 'OK', pole: "16'5 180lbs", grip: "15'11\"", takeoff: "14'1\"", runup: '88\'7"', mid: "54'2\"", location: 'Princeton...', notes: '—' },
+    { id: 20, date: 'Nov 8', type: 'Training', result: '—', height: "17'1\"", steps: 16, rating: 'Great', pole: "15'7 170lbs", grip: "15'9\"", takeoff: "13'11\"", runup: "82'0\"", mid: "49'2\"", location: 'Princeton...', notes: 'Perfect' },
+    { id: 21, date: 'Nov 5', type: 'Training', result: '—', height: "18'0\"", steps: 18, rating: 'Good', pole: "16'9 185lbs", grip: "16'1\"", takeoff: "14'3\"", runup: '88\'7"', mid: "54'10\"", location: 'Home Track', notes: '—' },
+    { id: 22, date: 'Nov 5', type: 'Training', result: '—', height: "17'9\"", steps: 18, rating: 'Great', pole: "16'5 180lbs", grip: "15'11\"", takeoff: "14'1\"", runup: '88\'7"', mid: "54'2\"", location: 'Home Track', notes: '—' },
+    { id: 23, date: 'Nov 5', type: 'Training', result: '—', height: "17'5\"", steps: 16, rating: 'OK', pole: "15'7 170lbs", grip: "15'9\"", takeoff: "13'11\"", runup: "82'0\"", mid: "49'2\"", location: 'Home Track', notes: '—' },
+    { id: 24, date: 'Nov 3', type: 'Comp', result: 'make', height: "18'4\"", steps: 18, rating: 'Great', pole: "16'9 185lbs", grip: "16'1\"", takeoff: "14'5\"", runup: '88\'7"', mid: "54'10\"", location: 'Tokyo...', notes: 'PR!' },
+    { id: 25, date: 'Nov 3', type: 'Comp', result: 'make', height: "18'0\"", steps: 18, rating: 'Good', pole: "16'9 185lbs", grip: "16'1\"", takeoff: "14'3\"", runup: '88\'7"', mid: "54'10\"", location: 'Tokyo...', notes: '—' },
+    { id: 26, date: 'Nov 3', type: 'Comp', result: 'miss', height: "18'8\"", steps: 18, rating: 'OK', pole: "16'9 185lbs", grip: "16'1\"", takeoff: "14'5\"", runup: '88\'7"', mid: "54'10\"", location: 'Tokyo...', notes: '—' },
+    { id: 27, date: 'Nov 3', type: 'Comp', result: 'miss', height: "18'8\"", steps: 18, rating: 'Glider', pole: "16'9 185lbs", grip: "16'1\"", takeoff: "14'5\"", runup: '88\'7"', mid: "54'10\"", location: 'Tokyo...', notes: '—' },
+    { id: 28, date: 'Nov 3', type: 'Comp', result: 'miss', height: "18'8\"", steps: 18, rating: 'OK', pole: "16'9 185lbs", grip: "16'1\"", takeoff: "14'5\"", runup: '88\'7"', mid: "54'10\"", location: 'Tokyo...', notes: '—' },
+    { id: 29, date: 'Nov 1', type: 'Training', result: '—', height: "17'9\"", steps: 18, rating: 'Good', pole: "16'5 180lbs", grip: "15'11\"", takeoff: "14'1\"", runup: '88\'7"', mid: "54'2\"", location: 'Home Track', notes: '—' },
+    { id: 30, date: 'Nov 1', type: 'Training', result: '—', height: "17'5\"", steps: 16, rating: 'Great', pole: "15'7 170lbs", grip: "15'9\"", takeoff: "13'11\"", runup: "82'0\"", mid: "49'2\"", location: 'Home Track', notes: 'Clean' },
   ];
 
   const sessions = [
@@ -54,7 +54,7 @@ const SessionHistoryMock: React.FC = () => {
       competitionName: 'Olympic Games',
       day: 'SAT',
       date: 'August 3, 2024',
-      best: '5.90m',
+      best: "19'4\"",
       jumps: 8,
       rating: 5,
       hasVideo: true,
@@ -66,7 +66,7 @@ const SessionHistoryMock: React.FC = () => {
       type: 'training',
       day: 'THU',
       date: 'July 28, 2024',
-      best: '5.75m',
+      best: "18'10\"",
       jumps: 14,
       rating: 4,
       hasVideo: true,
@@ -78,7 +78,7 @@ const SessionHistoryMock: React.FC = () => {
       type: 'training',
       day: 'WED',
       date: 'July 24, 2024',
-      best: '5.60m',
+      best: "18'4\"",
       jumps: 12,
       rating: 3,
       hasVideo: false,
@@ -89,7 +89,7 @@ const SessionHistoryMock: React.FC = () => {
   const videos = [
     {
       id: 1,
-      height: '5.40',
+      height: "17'9\"",
       rating: 'OK',
       date: 'Nov 24',
       location: '',
@@ -97,7 +97,7 @@ const SessionHistoryMock: React.FC = () => {
     },
     {
       id: 2,
-      height: '5.50',
+      height: "18'0\"",
       rating: 'RUN THRU',
       date: 'Nov 23',
       location: 'Gainesville High School',
@@ -105,7 +105,7 @@ const SessionHistoryMock: React.FC = () => {
     },
     {
       id: 3,
-      height: '5.50',
+      height: "18'0\"",
       rating: '',
       date: 'Nov 22',
       location: '',
@@ -113,7 +113,7 @@ const SessionHistoryMock: React.FC = () => {
     },
     {
       id: 4,
-      height: '5.20',
+      height: "17'1\"",
       rating: '',
       date: 'Nov 21',
       location: '',
@@ -223,7 +223,7 @@ const SessionHistoryMock: React.FC = () => {
                   <div className="aspect-square relative overflow-hidden">
                     <img
                       src={video.thumbnail}
-                      alt={`Jump at ${video.height}m`}
+                      alt={`Jump at ${video.height}`}
                       className="w-full h-full object-cover"
                     />
                   </div>

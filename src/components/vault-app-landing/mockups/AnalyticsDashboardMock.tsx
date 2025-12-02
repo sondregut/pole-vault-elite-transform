@@ -106,7 +106,7 @@ const AnalyticsDashboardMock: React.FC = () => {
             <Trophy className="w-2.5 h-2.5 text-vault-text-muted" />
             <span className="text-[7px] text-vault-text-muted leading-tight">Best<br/>Height</span>
           </div>
-          <p className="text-[14px] font-bold text-vault-text">5.90m</p>
+          <p className="text-[14px] font-bold text-vault-text">19'4"</p>
           <p className="text-[6px] text-amber-500">Tokyo</p>
         </div>
       </div>
@@ -233,7 +233,7 @@ const AnalyticsDashboardMock: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[8px] text-vault-text-muted">Avg height</span>
-                  <span className="text-[8px] font-semibold text-vault-text">5.40m</span>
+                  <span className="text-[8px] font-semibold text-vault-text">17'9"</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[8px] text-vault-text-muted">Avg rating</span>
@@ -255,7 +255,7 @@ const AnalyticsDashboardMock: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[8px] text-vault-text-muted">Avg height</span>
-                  <span className="text-[8px] font-semibold text-vault-text">5.26m</span>
+                  <span className="text-[8px] font-semibold text-vault-text">17'3"</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[8px] text-vault-text-muted">Avg rating</span>

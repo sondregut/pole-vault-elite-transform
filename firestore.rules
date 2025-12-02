@@ -254,5 +254,24 @@ service cloud.firestore {
       // Deletion requests cannot be deleted
       allow delete: if false;
     }
+
+    // ============================================
+    // COACH WAITLIST - PUBLIC SIGNUP
+    // ============================================
+    match /coachWaitlist/{entryId} {
+      // Allow anyone to create a waitlist entry (for unauthenticated signups)
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.size() > 0
+                    && request.resource.data.email.size() < 255
+                    && request.resource.data.signedUpAt is string
+                    && request.resource.data.source is string
+                    && request.resource.data.notified == false;
+
+      // Allow anyone to read (needed for duplicate check)
+      allow read: if true;
+
+      // Only admins can update (e.g., mark as notified) or delete
+      allow update, delete: if isAdmin();
+    }
   }
 }

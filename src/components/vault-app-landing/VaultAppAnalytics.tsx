@@ -66,9 +66,33 @@ const VaultAppAnalytics = () => {
             transition={{ duration: 0.6 }}
             className="flex justify-center lg:sticky lg:top-24"
           >
-            <PhoneMockup>
-              <AnalyticsDashboardMock />
-            </PhoneMockup>
+            <div className="relative">
+              {/* "Try it" arrow - on the left since phone is on the left */}
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 1 }}
+                className="absolute -left-2 top-[45%] -translate-x-full hidden lg:flex items-center gap-2 z-10"
+              >
+                <span className="text-sm font-medium text-vault-text-secondary italic">Explore!</span>
+                <motion.svg
+                  width="32"
+                  height="24"
+                  viewBox="0 0 32 24"
+                  fill="none"
+                  animate={{ x: [0, 6, 0] }}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="text-amber-500"
+                >
+                  <path d="M2 12H26M26 12L18 4M26 12L18 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </motion.svg>
+              </motion.div>
+
+              <PhoneMockup>
+                <AnalyticsDashboardMock />
+              </PhoneMockup>
+            </div>
           </motion.div>
 
           {/* Right Column - Feature Details */}
@@ -116,7 +140,7 @@ const VaultAppAnalytics = () => {
                   className="bg-white rounded-xl p-4 shadow-vault border border-vault-border-light text-center"
                 >
                   <p className="text-xs text-vault-text-muted mb-1">Best Height</p>
-                  <p className="text-2xl font-bold text-vault-primary">5.90m</p>
+                  <p className="text-2xl font-bold text-vault-primary">19'4"</p>
                   <p className="text-xs text-amber-500">Tokyo</p>
                 </motion.div>
               </div>
@@ -170,7 +194,7 @@ const VaultAppAnalytics = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-xs text-vault-text-muted">Avg height</span>
-                      <span className="text-xs font-semibold text-vault-text">5.40m</span>
+                      <span className="text-xs font-semibold text-vault-text">17'9"</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-xs text-vault-text-muted">Avg rating</span>
@@ -191,7 +215,7 @@ const VaultAppAnalytics = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-xs text-vault-text-muted">Avg height</span>
-                      <span className="text-xs font-semibold text-vault-text">5.26m</span>
+                      <span className="text-xs font-semibold text-vault-text">17'3"</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-xs text-vault-text-muted">Avg rating</span>
@@ -255,7 +279,7 @@ const VaultAppAnalytics = () => {
                   <div className="bg-[#243447] rounded-xl p-4">
                     <p className="text-sm font-semibold text-white mb-1">Focus Area</p>
                     <p className="text-xs text-white/70 leading-relaxed">
-                      6-Step short approach sessions are averaging 0.15m lower than last month.
+                      6-Step short approach sessions are averaging 6" lower than last month.
                     </p>
                   </div>
                 </div>

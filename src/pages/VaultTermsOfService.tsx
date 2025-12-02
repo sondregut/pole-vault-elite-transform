@@ -78,22 +78,23 @@ const VaultTermsOfService = () => {
 
               <h3 className="text-xl font-semibold text-gray-900 mb-3">4.1 Subscription Tiers</h3>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li><strong>Lite (Free):</strong> Limited features with restrictions</li>
-                <li><strong>Athlete:</strong> Full features with monthly/annual payment</li>
-                <li><strong>Athlete+:</strong> Premium features with priority support</li>
+                <li><strong>Monthly:</strong> $9.99/month with full access to all features</li>
+                <li><strong>Annual:</strong> $79/year with 7-day free trial</li>
+                <li><strong>Coach:</strong> Coming soon – team management and coaching features</li>
               </ul>
 
               <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">4.2 Payment Terms</h3>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Payments are processed through App Store or Google Play</li>
+                <li>Web payments are processed securely through Stripe</li>
+                <li>Mobile payments are processed through the App Store</li>
                 <li>Subscriptions auto-renew unless cancelled</li>
-                <li>Refunds are subject to App Store/Google Play policies</li>
+                <li>Refunds are subject to Stripe or App Store policies</li>
                 <li>Prices may change with notice</li>
               </ul>
 
               <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">4.3 Free Trial</h3>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>New users receive a 14-day free trial of Athlete+</li>
+                <li>New users receive a 7-day free trial with the Annual subscription</li>
                 <li>You won't be charged during the trial period</li>
                 <li>Cancel anytime before trial ends to avoid charges</li>
               </ul>
@@ -190,8 +191,8 @@ const VaultTermsOfService = () => {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Third-Party Services</h2>
               <p className="text-gray-700 leading-relaxed mb-3">The App integrates with third-party services:</p>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Firebase (Google) for infrastructure</li>
-                <li>RevenueCat for subscriptions</li>
+                <li>Firebase (Google) for infrastructure and authentication</li>
+                <li>Stripe for payment processing</li>
                 <li>Weather APIs for conditions</li>
                 <li>Video processing services</li>
               </ul>
@@ -355,7 +356,7 @@ const VaultTermsOfService = () => {
 
             {/* App Store Terms */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">20. Additional Terms for App Stores</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">20. Additional Terms for App Store</h2>
 
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Apple App Store</h3>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -363,13 +364,6 @@ const VaultTermsOfService = () => {
                 <li>Apple has no obligation to provide support</li>
                 <li>Apple is not responsible for product claims</li>
                 <li>Apple is a third-party beneficiary with rights to enforce these Terms</li>
-              </ul>
-
-              <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">Google Play Store</h3>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>These Terms are between you and us, not Google</li>
-                <li>Google's Terms of Service also apply</li>
-                <li>Google is not responsible for the App</li>
               </ul>
             </section>
 

@@ -1,34 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Sparkles, ArrowRight, Smartphone } from 'lucide-react';
+import { CheckCircle, Sparkles, ArrowRight, Mail } from 'lucide-react';
 import VaultAppNavbar from '@/components/vault-app-landing/VaultAppNavbar';
 import VaultAppFooter from '@/components/vault-app-landing/VaultAppFooter';
 
 const VaultSubscriptionSuccess = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get('session_id');
   const planType = searchParams.get('plan'); // 'yearly' or 'monthly'
   const isYearly = planType === 'yearly';
-  const [countdown, setCountdown] = useState(10);
-
-  // Auto-redirect to dashboard after countdown
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          navigate('/vault/dashboard');
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-vault-bg-warm-start to-white font-roboto flex flex-col">
@@ -71,95 +53,55 @@ const VaultSubscriptionSuccess = () => {
               transition={{ delay: 0.4 }}
               className="text-lg text-vault-text-secondary mb-8"
             >
-              {isYearly
-                ? 'Your 14-day free trial has started. You now have full access to all Pro features.'
-                : 'Your subscription is now active. You have full access to all Pro features.'}
+              Your subscription is now active. You have full access to all Pro features.
             </motion.p>
+
+            {/* Important Email Notice */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="bg-vault-primary/5 rounded-xl p-4 mb-8 border border-vault-primary/10"
+            >
+              <div className="flex items-center justify-center gap-2 text-vault-primary mb-2">
+                <Mail className="w-5 h-5" />
+                <p className="text-sm font-semibold">Important</p>
+              </div>
+              <p className="text-sm text-vault-text-secondary">
+                Use the same email address you entered during checkout to create your account and activate your Pro subscription.
+              </p>
+            </motion.div>
 
             {/* What's Next Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.6 }}
               className="bg-white rounded-2xl shadow-vault border border-vault-border p-6 mb-8"
             >
               <h2 className="text-lg font-semibold text-vault-text mb-4 flex items-center justify-center gap-2">
                 <Sparkles className="w-5 h-5 text-vault-primary" />
-                What's Next?
+                Next Step
               </h2>
 
-              <div className="space-y-4 text-left">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-vault-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-vault-primary font-bold text-sm">1</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-vault-text">Download the iOS app</p>
-                    <p className="text-sm text-vault-text-secondary">
-                      Sign in with the same email to sync your subscription
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-vault-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-vault-primary font-bold text-sm">2</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-vault-text">Start logging your jumps</p>
-                    <p className="text-sm text-vault-text-secondary">
-                      Track every session with unlimited jumps and video analysis
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-vault-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-vault-primary font-bold text-sm">3</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-vault-text">Explore your analytics</p>
-                    <p className="text-sm text-vault-text-secondary">
-                      View detailed insights on the web dashboard
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <p className="text-vault-text-secondary mb-4">
+                Create your VAULT account to unlock all your Pro features and start tracking your pole vault progress.
+              </p>
             </motion.div>
 
-            {/* iOS App Reminder */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="bg-vault-primary/5 rounded-xl p-4 mb-8 border border-vault-primary/10"
-            >
-              <div className="flex items-center justify-center gap-2 text-vault-primary">
-                <Smartphone className="w-5 h-5" />
-                <p className="text-sm font-medium">
-                  The iOS app is coming soon to the App Store!
-                </p>
-              </div>
-            </motion.div>
-
-            {/* CTA Buttons */}
+            {/* CTA Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="space-y-3"
             >
               <Button
-                onClick={() => navigate('/vault/dashboard')}
+                onClick={() => navigate('/vault/onboarding')}
                 className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all text-base"
               >
-                Go to Dashboard
+                Create Your Account
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-
-              <p className="text-sm text-vault-text-muted">
-                Redirecting in {countdown} seconds...
-              </p>
             </motion.div>
           </motion.div>
         </div>

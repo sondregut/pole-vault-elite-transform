@@ -58,6 +58,7 @@ import VaultPrivacyPolicy from "./pages/VaultPrivacyPolicy";
 import VaultTermsOfService from "./pages/VaultTermsOfService";
 import VaultAppLanding from "./pages/VaultAppLanding";
 import VaultSubscriptionSuccess from "./pages/VaultSubscriptionSuccess";
+import VaultOnboarding from "./pages/VaultOnboarding";
 import PointsCalculator from "./pages/PointsCalculator";
 
 const queryClient = new QueryClient();
@@ -96,6 +97,7 @@ const App = () => (
             <Route path="/vault" element={<VaultAppLanding />} />
             <Route path="/vault/login" element={<VaultLogin />} />
             <Route path="/vault/subscription-success" element={<VaultSubscriptionSuccess />} />
+            <Route path="/vault/onboarding" element={<VaultOnboarding />} />
             <Route path="/vault/invite/:inviteCode" element={<VaultInvite />} />
             <Route path="/vault" element={<VaultDashboardLayout />}>
               <Route path="dashboard" element={<VaultDashboard />} />
@@ -125,7 +127,6 @@ const App = () => (
             <Route path="/vault/privacy" element={<VaultPrivacyPolicy />} />
             <Route path="/vault/terms" element={<VaultTermsOfService />} />
             <Route path="/vault-app-secure" element={<VaultLanding />} />
-            <Route path="/vault-app" element={<VaultLanding />} />
             <Route path="/points-calculator" element={<PointsCalculator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

@@ -7,8 +7,6 @@ export type PriceId = 'monthly' | 'yearly';
 
 export interface CheckoutRequest {
   priceId: PriceId;
-  userId: string;
-  userEmail: string;
   applyCoupon?: boolean;
 }
 
@@ -68,18 +66,14 @@ export const checkCouponAvailability = async (): Promise<CouponAvailability> => 
 };
 
 /**
- * Redirect user to Stripe Checkout
+ * Redirect user to Stripe Checkout (no login required)
  */
 export const redirectToCheckout = async (
   priceId: PriceId,
-  userId: string,
-  userEmail: string,
   applyCoupon: boolean = true
 ): Promise<{ couponApplied: boolean; couponRemaining?: number }> => {
   const response = await createCheckoutSession({
     priceId,
-    userId,
-    userEmail,
     applyCoupon,
   });
 

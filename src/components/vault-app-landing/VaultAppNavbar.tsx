@@ -100,20 +100,24 @@ const VaultAppNavbar = () => {
         <div className="md:hidden bg-white border-t border-vault-border">
           <div className="px-4 py-4 space-y-3">
             {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className="block w-full text-left py-2 text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
-              >
-                {link.label}
-              </button>
+              link.href ? (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  className="block w-full text-left py-2 text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className="block w-full text-left py-2 text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+                >
+                  {link.label}
+                </button>
+              )
             ))}
-            <a
-              href="/vault/dashboard"
-              className="block w-full text-center py-2.5 bg-vault-primary/10 text-vault-primary font-semibold rounded-lg border border-vault-primary/20 hover:bg-vault-primary hover:text-white transition-all"
-            >
-              My Dashboard
-            </a>
             <div className="pt-3 border-t border-vault-border">
               <Button
                 onClick={() => {

@@ -55,58 +55,60 @@ const ratingConfig = {
 };
 
 const initialJumps: Jump[] = [
-  { id: 1, height: '5.00', steps: 8, pole: "15'7 13,9", grip: '—', rating: 'OK' },
-  { id: 2, height: '5.00', steps: 18, pole: "16'5 14,0", grip: '4.90', rating: 'OK' },
-  { id: 3, height: '5.50', steps: 18, pole: "16'9 13,6", grip: '4.93', rating: 'Good' },
-  { id: 4, height: '5.50', steps: 18, pole: "16'9 13,6", grip: '4.95', rating: 'Great' },
-  { id: 5, height: '5.50', steps: 18, pole: "16'9 13,6", grip: '4.95', rating: 'Great', isFavorite: true },
-  { id: 6, height: '5.50', steps: 18, pole: "16'9 13,3", grip: '4.95', rating: 'Good' },
+  { id: 1, height: "16'5\"", steps: 4, pole: "15'7 13,9", grip: '—', rating: 'OK' },
+  { id: 2, height: "16'5\"", steps: 9, pole: "16'5 14,0", grip: "16'1\"", rating: 'OK' },
+  { id: 3, height: "18'0\"", steps: 9, pole: "16'9 13,6", grip: "16'2\"", rating: 'Good' },
+  { id: 4, height: "18'0\"", steps: 9, pole: "16'9 13,6", grip: "16'3\"", rating: 'Great' },
+  { id: 5, height: "18'0\"", steps: 9, pole: "16'9 13,6", grip: "16'3\"", rating: 'Great', isFavorite: true },
+  { id: 6, height: "18'0\"", steps: 9, pole: "16'9 13,3", grip: "16'3\"", rating: 'Good' },
 ];
 
 const VaultAppJumpLogger = () => {
   const [showPoleSelector, setShowPoleSelector] = useState(false);
   const [selectedPole, setSelectedPole] = useState("16'9 13,3");
-  const [steps, setSteps] = useState(18);
+  const [steps, setSteps] = useState(6);
+  const [showAddedPopup, setShowAddedPopup] = useState(false);
+  const [addedJumpNumber, setAddedJumpNumber] = useState(0);
   const [selectedRating, setSelectedRating] = useState<'Run Thru' | 'Glider' | 'OK' | 'Good' | 'Great'>('Great');
   const [jumps, setJumps] = useState<Jump[]>(initialJumps);
-  const [barHeight, setBarHeight] = useState(5.80);
-  const [gripHeight, setGripHeight] = useState(4.95);
-  const [midMark, setMidMark] = useState(16.70);
-  const [takeoff, setTakeoff] = useState(4.30);
-  const [runup, setRunup] = useState(41.40);
+  // Feet and inches state for each measurement
+  const [runupFeet, setRunupFeet] = useState(135);
+  const [runupInches, setRunupInches] = useState(10);
+  const [barHeightFeet, setBarHeightFeet] = useState(19);
+  const [barHeightInches, setBarHeightInches] = useState(0);
+  const [gripHeightFeet, setGripHeightFeet] = useState(16);
+  const [gripHeightInches, setGripHeightInches] = useState(3);
+  const [midMarkFeet, setMidMarkFeet] = useState(54);
+  const [midMarkInches, setMidMarkInches] = useState(10);
+  const [takeoffFeet, setTakeoffFeet] = useState(14);
+  const [takeoffInches, setTakeoffInches] = useState(1);
   const [sessionType, setSessionType] = useState<'training' | 'competition'>('training');
   const [standards, setStandards] = useState(0);
   const [result, setResult] = useState<'none' | 'make' | 'miss'>('none');
   const [landing, setLanding] = useState<'none' | 'shallow' | 'on' | 'deep' | 'thru'>('none');
 
-  const incrementSteps = () => setSteps(prev => Math.min(prev + 2, 30));
-  const decrementSteps = () => setSteps(prev => Math.max(prev - 2, 2));
-  const incrementStandards = () => setStandards(prev => Math.min(prev + 5, 80));
-  const decrementStandards = () => setStandards(prev => Math.max(prev - 5, 0));
+  const incrementSteps = () => setSteps(prev => Math.min(prev + 1, 15));
+  const decrementSteps = () => setSteps(prev => Math.max(prev - 1, 1));
 
-  const incrementBarHeight = () => setBarHeight(prev => Math.min(prev + 0.05, 6.50));
-  const decrementBarHeight = () => setBarHeight(prev => Math.max(prev - 0.05, 1.00));
-  const incrementGripHeight = () => setGripHeight(prev => Math.min(prev + 0.05, 5.50));
-  const decrementGripHeight = () => setGripHeight(prev => Math.max(prev - 0.05, 3.00));
-  const incrementMidMark = () => setMidMark(prev => Math.min(prev + 0.10, 25.00));
-  const decrementMidMark = () => setMidMark(prev => Math.max(prev - 0.10, 10.00));
-  const incrementTakeoff = () => setTakeoff(prev => Math.min(prev + 0.05, 5.50));
-  const decrementTakeoff = () => setTakeoff(prev => Math.max(prev - 0.05, 2.50));
-  const incrementRunup = () => setRunup(prev => Math.min(prev + 0.10, 50.00));
-  const decrementRunup = () => setRunup(prev => Math.max(prev - 0.10, 20.00));
+  const formatFeetInchesFromState = (feet: number, inches: number) => {
+    return `${feet}'${inches}"`;
+  };
 
   const addJump = () => {
+    const newJumpId = jumps.length + 1;
     const newJump: Jump = {
-      id: jumps.length + 1,
-      height: barHeight.toFixed(2),
+      id: newJumpId,
+      height: formatFeetInchesFromState(barHeightFeet, barHeightInches),
       steps: steps,
       pole: selectedPole,
-      grip: gripHeight.toFixed(2),
+      grip: formatFeetInchesFromState(gripHeightFeet, gripHeightInches),
       rating: selectedRating,
     };
     setJumps([...jumps, newJump]);
-    // Update bar height for next jump
-    setBarHeight(prev => prev + 0.10);
+    // Show popup
+    setAddedJumpNumber(newJumpId);
+    setShowAddedPopup(true);
+    setTimeout(() => setShowAddedPopup(false), 2000);
   };
   return (
     <section className="py-20 bg-gradient-to-b from-white to-vault-bg-warm-start font-roboto">
@@ -159,10 +161,48 @@ const VaultAppJumpLogger = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="flex justify-center"
+            className="flex justify-center relative"
           >
+            {/* Simple "Try it" arrow */}
+            <motion.div
+              initial={{ opacity: 0, x: 10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 1 }}
+              className="absolute -right-2 top-[45%] translate-x-full hidden lg:flex items-center gap-2 z-10"
+            >
+              <motion.svg
+                width="32"
+                height="24"
+                viewBox="0 0 32 24"
+                fill="none"
+                animate={{ x: [0, -6, 0] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                className="text-vault-success"
+              >
+                <path d="M30 12H6M6 12L14 4M6 12L14 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </motion.svg>
+              <span className="text-sm font-medium text-vault-text-secondary italic">Log a jump!</span>
+            </motion.div>
+
             <PhoneMockup>
-              <div className="h-full flex flex-col bg-gradient-to-b from-[#f5f0e8] to-[#ebe5db]">
+              <div className="h-full flex flex-col bg-gradient-to-b from-[#f5f0e8] to-[#ebe5db] relative">
+                {/* Added Jump Popup */}
+                <AnimatePresence>
+                  {showAddedPopup && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      className="absolute top-14 left-3 right-3 z-50"
+                    >
+                      <div className="bg-green-500 text-white text-center py-2 px-4 rounded-lg shadow-lg">
+                        <span className="text-sm font-semibold">Added Jump #{addedJumpNumber}</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* Status Bar Area */}
                 <div className="h-12 flex-shrink-0" />
 
@@ -307,11 +347,11 @@ const VaultAppJumpLogger = () => {
                       </div>
                     </button>
 
-                    {/* Steps and Run-up */}
+                    {/* Lefts and Run-up */}
                     <div className="bg-white rounded-lg shadow-sm">
-                      {/* Steps */}
+                      {/* Lefts */}
                       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
-                        <span className="text-xs font-medium text-[#1a3a5c]">Steps</span>
+                        <span className="text-xs font-medium text-[#1a3a5c]">Lefts</span>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={decrementSteps}
@@ -331,23 +371,23 @@ const VaultAppJumpLogger = () => {
                       {/* Run-up */}
                       <div className="flex items-center justify-between px-3 py-2">
                         <span className="text-xs font-medium text-[#1a3a5c]">Run-up</span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={decrementRunup}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-xs font-semibold text-[#1a3a5c] w-10 text-center">{runup.toFixed(2)}</span>
-                            <span className="text-[10px] text-[#6b7c8a]">m</span>
-                          </div>
-                          <button
-                            onClick={incrementRunup}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={runupFeet}
+                            onChange={(e) => setRunupFeet(Math.max(0, parseInt(e.target.value) || 0))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-10 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">'</span>
+                          <input
+                            type="number"
+                            value={runupInches}
+                            onChange={(e) => setRunupInches(Math.min(11, Math.max(0, parseInt(e.target.value) || 0)))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">"</span>
                         </div>
                       </div>
                     </div>
@@ -364,89 +404,89 @@ const VaultAppJumpLogger = () => {
                       {/* Bar Height */}
                       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
                         <span className="text-xs font-medium text-[#1a3a5c]">Bar Height</span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={decrementBarHeight}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{barHeight.toFixed(2)}</span>
-                            <span className="text-[10px] text-[#6b7c8a]">m</span>
-                          </div>
-                          <button
-                            onClick={incrementBarHeight}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={barHeightFeet}
+                            onChange={(e) => setBarHeightFeet(Math.max(0, parseInt(e.target.value) || 0))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">'</span>
+                          <input
+                            type="number"
+                            value={barHeightInches}
+                            onChange={(e) => setBarHeightInches(Math.min(11, Math.max(0, parseInt(e.target.value) || 0)))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">"</span>
                         </div>
                       </div>
                       {/* Grip Height */}
                       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
                         <span className="text-xs font-medium text-[#1a3a5c]">Grip Height</span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={decrementGripHeight}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{gripHeight.toFixed(2)}</span>
-                            <span className="text-[10px] text-[#6b7c8a]">m</span>
-                          </div>
-                          <button
-                            onClick={incrementGripHeight}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={gripHeightFeet}
+                            onChange={(e) => setGripHeightFeet(Math.max(0, parseInt(e.target.value) || 0))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">'</span>
+                          <input
+                            type="number"
+                            value={gripHeightInches}
+                            onChange={(e) => setGripHeightInches(Math.min(11, Math.max(0, parseInt(e.target.value) || 0)))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">"</span>
                         </div>
                       </div>
                       {/* Mid-Mark */}
                       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
                         <span className="text-xs font-medium text-[#1a3a5c]">Mid-Mark</span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={decrementMidMark}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{midMark.toFixed(2)}</span>
-                            <span className="text-[10px] text-[#6b7c8a]">m</span>
-                          </div>
-                          <button
-                            onClick={incrementMidMark}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={midMarkFeet}
+                            onChange={(e) => setMidMarkFeet(Math.max(0, parseInt(e.target.value) || 0))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">'</span>
+                          <input
+                            type="number"
+                            value={midMarkInches}
+                            onChange={(e) => setMidMarkInches(Math.min(11, Math.max(0, parseInt(e.target.value) || 0)))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">"</span>
                         </div>
                       </div>
                       {/* Take-off */}
                       <div className="flex items-center justify-between px-3 py-2">
                         <span className="text-xs font-medium text-[#1a3a5c]">Take-off</span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={decrementTakeoff}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{takeoff.toFixed(2)}</span>
-                            <span className="text-[10px] text-[#6b7c8a]">m</span>
-                          </div>
-                          <button
-                            onClick={incrementTakeoff}
-                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
-                          >
-                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
-                          </button>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={takeoffFeet}
+                            onChange={(e) => setTakeoffFeet(Math.max(0, parseInt(e.target.value) || 0))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">'</span>
+                          <input
+                            type="number"
+                            value={takeoffInches}
+                            onChange={(e) => setTakeoffInches(Math.min(11, Math.max(0, parseInt(e.target.value) || 0)))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-8 h-6 text-center text-xs font-semibold text-[#1a3a5c] bg-[#e8eef3] rounded border-0 focus:ring-1 focus:ring-vault-primary"
+                          />
+                          <span className="text-[10px] text-[#6b7c8a]">"</span>
                         </div>
                       </div>
                     </div>
@@ -540,7 +580,7 @@ const VaultAppJumpLogger = () => {
                     <div className="flex items-center bg-gray-50 border-y border-gray-200 px-2 py-1.5">
                       <span className="w-7 text-[7px] font-semibold text-gray-500 text-center">#</span>
                       <span className="w-11 text-[7px] font-semibold text-gray-500 text-center">Height</span>
-                      <span className="w-9 text-[7px] font-semibold text-gray-500 text-center">Steps</span>
+                      <span className="w-9 text-[7px] font-semibold text-gray-500 text-center">Lefts</span>
                       <span className="w-16 text-[7px] font-semibold text-gray-500">Pole</span>
                       <span className="w-9 text-[7px] font-semibold text-gray-500 text-center">Grip</span>
                       <span className="flex-1 text-[7px] font-semibold text-gray-500 text-center">Rating</span>
@@ -666,6 +706,7 @@ const VaultAppJumpLogger = () => {
                 </div>
               </div>
             </PhoneMockup>
+
           </motion.div>
         </div>
       </div>

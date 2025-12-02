@@ -154,9 +154,9 @@ export const createCheckout = functions.https.onCall(
       },
     };
 
-    // Add trial period only for yearly plans
+    // Add trial period only for yearly plans (7-day free trial)
     if (isYearly) {
-      subscriptionData.trial_period_days = 14;
+      subscriptionData.trial_period_days = 7;
     }
 
     // Create Checkout Session

@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Check, Zap, Star, Crown, Sparkles, Loader2, Mail, CheckCircle } from 'lucide-react';
-import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { checkCouponAvailability, redirectToCheckout, PriceId } from '@/services/stripeService';
 import { toast } from 'sonner';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 
 const VaultAppPricing = () => {
-  const [isYearly, setIsYearly] = useState(true);
   const [couponData, setCouponData] = useState<{
     available: boolean;
     remaining: number;
@@ -22,8 +19,6 @@ const VaultAppPricing = () => {
   const [coachWaitlistEmail, setCoachWaitlistEmail] = useState('');
   const [coachWaitlistLoading, setCoachWaitlistLoading] = useState(false);
   const [coachWaitlistSuccess, setCoachWaitlistSuccess] = useState(false);
-  const { user } = useFirebaseAuth();
-  const navigate = useNavigate();
 
   // Handle coach waitlist signup
   const handleCoachWaitlistSignup = async (e: React.FormEvent) => {
@@ -86,38 +81,21 @@ const VaultAppPricing = () => {
   }, []);
 
   const handleSubscribe = async (tierName: string) => {
-    if (tierName === 'Lite') {
-      // Free tier - just redirect to signup/login
-      if (user) {
-        navigate('/vault/dashboard');
-      } else {
-        navigate('/vault/login');
-      }
-      return;
-    }
-
     if (tierName === 'Coach') {
       // Coming soon
       return;
     }
 
-    // Pro tier - start checkout
-    if (!user) {
-      // Redirect to login with return URL
-      const priceId = isYearly ? 'yearly' : 'monthly';
-      navigate(`/vault/login?redirect=/vault&checkout=${priceId}`);
-      return;
-    }
+    // Determine price ID based on tier name
+    const priceId: PriceId = tierName === 'Annual' ? 'yearly' : 'monthly';
 
     setLoadingCheckout(tierName);
 
     try {
-      const priceId: PriceId = isYearly ? 'yearly' : 'monthly';
+      // Go directly to Stripe checkout (no login required)
       await redirectToCheckout(
         priceId,
-        user.uid,
-        user.email || '',
-        couponData?.available || false
+        tierName === 'Annual' && (couponData?.available || false)
       );
     } catch (error: any) {
       console.error('Checkout error:', error);
@@ -145,46 +123,43 @@ const VaultAppPricing = () => {
 
   const tiers = [
     {
-      name: 'Lite',
+      name: 'Monthly',
       icon: Zap,
-      price: 'Free',
-      period: '',
-      description: 'Perfect for casual jumpers',
+      price: `$${monthlyPrice.toFixed(2)}`,
+      period: '/mo',
+      description: 'Flexible month-to-month',
       features: [
-        '1 Session per week',
-        '5 Jumps per session',
-        '10 Poles max in library',
-        'Basic Stats',
-        'No Video',
+        'Unlimited Sessions & Jumps',
+        'Full Pole Library',
+        'Video Analysis',
+        'Advanced Analytics',
+        'Offline Mode',
+        'Cancel anytime',
       ],
-      cta: 'Get Started',
+      cta: 'Subscribe Monthly',
       popular: false,
       comingSoon: false,
     },
     {
-      name: 'Pro',
+      name: 'Annual',
       icon: Star,
-      price: isYearly
-        ? `$${yearlyMonthlyEquivalent.toFixed(2)}`
-        : `$${monthlyPrice.toFixed(2)}`,
-      originalPrice: isYearly ? `$${(yearlyPrice / 12).toFixed(2)}` : null,
+      price: `$${yearlyMonthlyEquivalent.toFixed(2)}`,
+      originalPrice: `$${(yearlyPrice / 12).toFixed(2)}`,
       period: '/mo',
-      yearlyBillingNote: isYearly
-        ? `$${yearlyPriceDiscounted.toFixed(0)} billed annually`
-        : '',
-      originalYearlyPrice: isYearly ? `$${yearlyPrice}` : null,
-      limitedOffer: isYearly,
-      yearlyNote: isYearly ? '50% OFF – Limited Time!' : '',
-      description: 'For serious competitors',
+      yearlyBillingNote: `$${yearlyPriceDiscounted.toFixed(0)} billed annually`,
+      originalYearlyPrice: `$${yearlyPrice}`,
+      limitedOffer: true,
+      yearlyNote: '50% OFF – Limited Time!',
+      description: 'Best value for serious athletes',
       features: [
-        'Unlimited Sessions',
-        'Unlimited Jumps',
-        'Unlimited Pole Library',
-        'Full Video Analysis',
-        'Advanced Analytics',
-        'Offline Mode',
+        'Everything in Monthly',
+        '7-Day Free Trial',
+        '50% savings vs monthly',
+        'Priority support',
+        'Early access to new features',
+        'Lock in founding member price',
       ],
-      cta: isYearly ? 'Start 14-Day Free Trial' : 'Subscribe Now',
+      cta: 'Start 7-Day Free Trial',
       popular: true,
       comingSoon: false,
     },
@@ -235,34 +210,13 @@ const VaultAppPricing = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-vault-text mb-4">Simple Pricing</h2>
-          <p className="text-lg text-vault-text-secondary mb-8">
-            Start for free. Upgrade for professional insights.
+          <h2 className="text-3xl sm:text-4xl font-bold text-vault-text mb-4">Invest in Your Vault</h2>
+          <p className="text-lg text-vault-text-secondary mb-4">
+            Less than a cup of coffee per week to track every jump, analyze your technique, and reach new heights.
           </p>
-
-          {/* Toggle */}
-          <div className="inline-flex items-center bg-vault-primary-muted rounded-full p-1">
-            <button
-              onClick={() => setIsYearly(false)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                !isYearly
-                  ? 'bg-vault-primary text-white shadow-vault-sm'
-                  : 'text-vault-text-secondary hover:text-vault-text'
-              }`}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setIsYearly(true)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                isYearly
-                  ? 'bg-vault-primary text-white shadow-vault-sm'
-                  : 'text-vault-text-secondary hover:text-vault-text'
-              }`}
-            >
-              Yearly (Save ~30%)
-            </button>
-          </div>
+          <p className="text-sm text-vault-text-muted">
+            Join athletes who are already training smarter with VAULT.
+          </p>
         </motion.div>
 
         {/* Pricing Cards */}
@@ -407,7 +361,7 @@ const VaultAppPricing = () => {
                           placeholder="Enter your email"
                           value={coachWaitlistEmail}
                           onChange={(e) => setCoachWaitlistEmail(e.target.value)}
-                          className="pl-10 py-5 rounded-xl border-vault-border focus:border-vault-primary focus:ring-vault-primary"
+                          className="pl-10 py-5 rounded-xl border-vault-primary ring-2 ring-vault-primary focus:border-vault-primary focus:ring-vault-primary"
                         />
                       </div>
                       <Button
@@ -461,7 +415,7 @@ const VaultAppPricing = () => {
           transition={{ delay: 0.5 }}
           className="text-center text-sm text-vault-text-muted mt-8"
         >
-          {isYearly ? 'Yearly plan includes a 14-day free trial. Credit card required.' : 'Monthly plan billed immediately. No trial period.'}
+          Annual plan includes a 7-day free trial. Cancel anytime. No questions asked.
         </motion.p>
       </div>
     </section>

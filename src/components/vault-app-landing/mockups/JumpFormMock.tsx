@@ -23,7 +23,7 @@ const JumpFormMock: React.FC<JumpFormMockProps> = ({ compact = false }) => {
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="bg-vault-primary-muted/50 rounded-lg p-2">
             <span className="text-vault-text-muted">Height</span>
-            <p className="font-bold text-vault-primary">5.40m</p>
+            <p className="font-bold text-vault-primary">17'9"</p>
           </div>
           <div className="bg-vault-primary-muted/50 rounded-lg p-2">
             <span className="text-vault-text-muted">Pole</span>
@@ -58,7 +58,7 @@ const JumpFormMock: React.FC<JumpFormMockProps> = ({ compact = false }) => {
         {/* Bar Height */}
         <div className="flex items-center justify-between py-3 border-b border-vault-border-light">
           <span className="text-sm text-vault-text-muted">Bar Height</span>
-          <span className="text-sm font-semibold text-vault-text">5.40m</span>
+          <span className="text-sm font-semibold text-vault-text">17'9"</span>
         </div>
 
         {/* Grip Height */}

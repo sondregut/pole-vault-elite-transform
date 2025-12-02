@@ -45,7 +45,7 @@ const VaultAppSessionFlow = () => {
           <div className="bg-white rounded-lg p-3 shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] text-gray-500">Height</span>
-              <span className="text-[12px] font-bold text-[#1a3a5c]">5.40m</span>
+              <span className="text-[12px] font-bold text-[#1a3a5c]">17'9"</span>
             </div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] text-gray-500">Pole</span>
@@ -68,7 +68,7 @@ const VaultAppSessionFlow = () => {
         <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100">
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-[#1a3a5c]">2025 Progress</span>
-            <span className="px-2 py-0.5 bg-green-100 text-green-700 text-[8px] font-medium rounded-full">+0.35m</span>
+            <span className="px-2 py-0.5 bg-green-100 text-green-700 text-[8px] font-medium rounded-full">+14"</span>
           </div>
           <p className="text-[8px] text-gray-400 mb-3">Best height per month</p>
           <div className="flex items-end justify-between gap-1 h-12">
