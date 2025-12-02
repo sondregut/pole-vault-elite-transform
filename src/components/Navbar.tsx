@@ -48,16 +48,19 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const navLinks: NavLink[] = [
+  const mainNavLinks: NavLink[] = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "1:1 Coaching", href: "/coaching" },
     { name: "Blog", href: "/blog" },
     // { name: "Video Library", href: "/video-library" }, // Temporarily hidden
-    { name: "Vault App", href: "/vault" },
     { name: "Programs", href: "/shop" },
     { name: "Points Calculator", href: "/points-calculator" },
     { name: "Contact", href: "/contact" },
+  ];
+
+  const vaultNavLinks: NavLink[] = [
+    { name: "Vault App", href: "/vault" },
   ];
 
   const handleLinkClick = () => {
@@ -82,7 +85,8 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
+          {/* Main site links */}
+          {mainNavLinks.map((link) => (
             link.external ? (
               <a
                 key={link.name}
@@ -107,21 +111,40 @@ const Navbar = () => {
             )
           ))}
 
-          {/* Vault Dashboard Link for authenticated users */}
-          {vaultUser && (
-            <Link
-              to="/vault/dashboard"
-              className={`text-blue-600 font-medium hover:text-blue-700 transition flex items-center gap-1 ${
-                location.pathname === "/vault/dashboard" ? "text-blue-800" : ""
-              }`}
-              onClick={handleLinkClick}
-            >
-              <BarChart3 className="h-4 w-4" />
-              Dashboard
-            </Link>
-          )}
-
           <CartIcon />
+
+          {/* Separator */}
+          <div className="h-6 w-px bg-gray-300" />
+
+          {/* Vault section */}
+          <div className="flex items-center space-x-4 pl-2">
+            {vaultNavLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.href}
+                className={`text-blue-600 font-medium hover:text-blue-700 transition ${
+                  location.pathname === link.href ? "text-blue-800" : ""
+                }`}
+                onClick={handleLinkClick}
+              >
+                {link.name}
+              </Link>
+            ))}
+
+            {/* Vault Dashboard Link for authenticated users */}
+            {vaultUser && (
+              <Link
+                to="/vault/dashboard"
+                className={`text-blue-600 font-medium hover:text-blue-700 transition flex items-center gap-1 ${
+                  location.pathname === "/vault/dashboard" ? "text-blue-800" : ""
+                }`}
+                onClick={handleLinkClick}
+              >
+                <BarChart3 className="h-4 w-4" />
+                Dashboard
+              </Link>
+            )}
+          </div>
           
           {/* Auth Button - Temporarily Hidden */}
           {/* {!loading && (
@@ -181,7 +204,8 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-md">
           <div className="container mx-auto py-4 flex flex-col">
-            {navLinks.map((link) => (
+            {/* Main site links */}
+            {mainNavLinks.map((link) => (
               link.external ? (
                 <a
                   key={link.name}
@@ -205,6 +229,25 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               )
+            ))}
+
+            {/* Vault section header */}
+            <div className="py-2 mt-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+              Vault App
+            </div>
+
+            {/* Vault links */}
+            {vaultNavLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.href}
+                className={`py-3 text-blue-600 hover:text-blue-700 border-b border-gray-100 ${
+                  location.pathname === link.href ? "text-blue-800" : ""
+                }`}
+                onClick={handleLinkClick}
+              >
+                {link.name}
+              </Link>
             ))}
 
             {/* Vault Dashboard Link for mobile */}

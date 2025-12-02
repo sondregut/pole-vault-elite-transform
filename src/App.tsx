@@ -92,7 +92,7 @@ const App = () => (
             <Route path="/pvt" element={<PVT />} />
             <Route path="/video-library" element={<VideoLibrary />} />
             <Route path="/admin/videos" element={<AdminVideos />} />
-            <Route path="/vault" element={<VaultLanding />} />
+            <Route path="/vault" element={<VaultAppLanding />} />
             <Route path="/vault/login" element={<VaultLogin />} />
             <Route path="/vault/invite/:inviteCode" element={<VaultInvite />} />
             <Route path="/vault" element={<VaultDashboardLayout />}>
@@ -123,7 +123,7 @@ const App = () => (
             <Route path="/vault/privacy" element={<VaultPrivacyPolicy />} />
             <Route path="/vault/terms" element={<VaultTermsOfService />} />
             <Route path="/vault-app-secure" element={<VaultLanding />} />
-            <Route path="/vault-app" element={<VaultAppLanding />} />
+            <Route path="/vault-app" element={<VaultLanding />} />
             <Route path="/points-calculator" element={<PointsCalculator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
