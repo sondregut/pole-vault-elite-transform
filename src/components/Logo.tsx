@@ -6,7 +6,7 @@ const Logo = () => {
     <Link to="/" className="flex items-center space-x-2">
       <div className="h-10 w-10">
         <img 
-          src="/lovable-uploads/d8bb7de8-16df-4057-b550-54a2932ea222.png" 
+          src="/images/logo.png" 
           alt="STAVHOPP.NO Logo" 
           className="h-full w-full object-contain"
         />

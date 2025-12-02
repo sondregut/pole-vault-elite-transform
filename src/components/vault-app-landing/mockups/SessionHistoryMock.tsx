@@ -2,8 +2,49 @@ import React, { useState } from 'react';
 import { MapPin, Video, Star, ChevronDown, Home, Users, Plus, List, TrendingUp, Search, Calendar } from 'lucide-react';
 
 const SessionHistoryMock: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'sessions' | 'jumps' | 'videos'>('videos');
+  const [activeTab, setActiveTab] = useState<'sessions' | 'jumps' | 'videos'>('sessions');
   const [activeSort, setActiveSort] = useState<'date' | 'height' | 'rating'>('date');
+
+  const ratingConfig: Record<string, { bg: string; text: string; label: string }> = {
+    'Run Thru': { bg: 'bg-red-100', text: 'text-red-600', label: 'Run Thru' },
+    'Glider': { bg: 'bg-orange-100', text: 'text-orange-600', label: 'Glider' },
+    'OK': { bg: 'bg-amber-100', text: 'text-amber-600', label: 'OK' },
+    'Good': { bg: 'bg-green-100', text: 'text-green-600', label: 'Good' },
+    'Great': { bg: 'bg-green-100', text: 'text-green-700', label: 'Great' },
+  };
+
+  const jumpHistory = [
+    { id: 1, date: 'Nov 24', type: 'Comp', result: 'miss', height: '5.40', steps: 8, rating: 'Great', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 2, date: 'Nov 24', type: 'Comp', result: 'miss', height: '5.40', steps: 8, rating: 'OK', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 3, date: 'Nov 24', type: 'Comp', result: 'miss', height: '5.40', steps: 8, rating: 'OK', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 4, date: 'Nov 24', type: 'Comp', result: 'make', height: '5.30', steps: 8, rating: 'Good', pole: "15'7 160lbs 1...", grip: '—', takeoff: '—', runup: '—', mid: '—', location: '—', notes: '—' },
+    { id: 5, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.50', steps: 18, rating: 'Run Thru', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 6, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.50', steps: 18, rating: 'OK', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: 'Perfect' },
+    { id: 7, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.50', steps: 12, rating: 'Glider', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 8, date: 'Nov 23', type: 'Comp', result: 'make', height: '5.20', steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 9, date: 'Nov 23', type: 'Comp', result: 'make', height: '5.00', steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 10, date: 'Nov 23', type: 'Comp', result: 'miss', height: '5.00', steps: 12, rating: 'OK', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 11, date: 'Nov 23', type: 'Comp-W', result: '—', height: '5.00', steps: 12, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 12, date: 'Nov 23', type: 'Comp-W', result: '—', height: '5.00', steps: 6, rating: 'Good', pole: "15'7 160lbs 1...", grip: '4.80', takeoff: '4.50', runup: '27.00', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 13, date: 'Nov 22', type: 'Training', result: '—', height: '5.20', steps: 8, rating: 'OK', pole: '—', grip: '4.80', takeoff: '4.20', runup: '25.00', mid: '17.00', location: 'Gainesville...', notes: '—' },
+    { id: 14, date: 'Nov 22', type: 'Training', result: '—', height: '5.20', steps: 8, rating: '—', pole: '—', grip: '4.80', takeoff: '4.20', runup: '25.00', mid: '17.00', location: 'Gainesville...', notes: '—' },
+    { id: 15, date: 'Nov 22', type: 'Training', result: '—', height: '5.20', steps: 8, rating: 'Good', pole: "15'4 170lbs", grip: '4.80', takeoff: '4.20', runup: '25.00', mid: '17.00', location: 'Gainesville...', notes: '—' },
+    { id: 16, date: 'Nov 10', type: 'Training', result: '—', height: '4.30', steps: 8, rating: 'Great', pole: "16'1 190lbs 1...", grip: '4.10', takeoff: '4.20', runup: '40.15', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 17, date: 'Nov 10', type: 'Training', result: '—', height: '4.30', steps: 8, rating: 'Great', pole: "16'1 190lbs 1...", grip: '4.10', takeoff: '4.20', runup: '40.15', mid: '16.00', location: 'Gainesville...', notes: '—' },
+    { id: 18, date: 'Nov 8', type: 'Training', result: '—', height: '5.40', steps: 18, rating: 'Good', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Princeton...', notes: '—' },
+    { id: 19, date: 'Nov 8', type: 'Training', result: '—', height: '5.30', steps: 18, rating: 'OK', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Princeton...', notes: '—' },
+    { id: 20, date: 'Nov 8', type: 'Training', result: '—', height: '5.20', steps: 16, rating: 'Great', pole: "15'7 170lbs", grip: '4.80', takeoff: '4.25', runup: '25.00', mid: '15.00', location: 'Princeton...', notes: 'Perfect' },
+    { id: 21, date: 'Nov 5', type: 'Training', result: '—', height: '5.50', steps: 18, rating: 'Good', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.35', runup: '27.00', mid: '16.70', location: 'Home Track', notes: '—' },
+    { id: 22, date: 'Nov 5', type: 'Training', result: '—', height: '5.40', steps: 18, rating: 'Great', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Home Track', notes: '—' },
+    { id: 23, date: 'Nov 5', type: 'Training', result: '—', height: '5.30', steps: 16, rating: 'OK', pole: "15'7 170lbs", grip: '4.80', takeoff: '4.25', runup: '25.00', mid: '15.00', location: 'Home Track', notes: '—' },
+    { id: 24, date: 'Nov 3', type: 'Comp', result: 'make', height: '5.60', steps: 18, rating: 'Great', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: 'PR!' },
+    { id: 25, date: 'Nov 3', type: 'Comp', result: 'make', height: '5.50', steps: 18, rating: 'Good', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.35', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
+    { id: 26, date: 'Nov 3', type: 'Comp', result: 'miss', height: '5.70', steps: 18, rating: 'OK', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
+    { id: 27, date: 'Nov 3', type: 'Comp', result: 'miss', height: '5.70', steps: 18, rating: 'Glider', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
+    { id: 28, date: 'Nov 3', type: 'Comp', result: 'miss', height: '5.70', steps: 18, rating: 'OK', pole: "16'9 185lbs", grip: '4.90', takeoff: '4.40', runup: '27.00', mid: '16.70', location: 'Tokyo...', notes: '—' },
+    { id: 29, date: 'Nov 1', type: 'Training', result: '—', height: '5.40', steps: 18, rating: 'Good', pole: "16'5 180lbs", grip: '4.85', takeoff: '4.30', runup: '27.00', mid: '16.50', location: 'Home Track', notes: '—' },
+    { id: 30, date: 'Nov 1', type: 'Training', result: '—', height: '5.30', steps: 16, rating: 'Great', pole: "15'7 170lbs", grip: '4.80', takeoff: '4.25', runup: '25.00', mid: '15.00', location: 'Home Track', notes: 'Clean' },
+  ];
 
   const sessions = [
     {
@@ -203,6 +244,75 @@ const SessionHistoryMock: React.FC = () => {
               ))}
             </div>
           </>
+        ) : activeTab === 'jumps' ? (
+          /* Jump History Tab - Horizontally Scrollable Table View */
+          <div className="px-2 pt-2 pb-16">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+              {/* Horizontal scroll container */}
+              <div className="overflow-x-auto">
+                <div className="min-w-[600px]">
+                  {/* Table Header */}
+                  <div className="flex items-center bg-gray-50 border-b border-gray-200 px-2 py-1.5">
+                    <span className="w-12 text-[7px] font-semibold text-gray-500 flex-shrink-0 flex items-center gap-0.5">Date <ChevronDown className="w-2 h-2" /></span>
+                    <span className="w-12 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Type</span>
+                    <span className="w-10 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Result</span>
+                    <span className="w-10 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Height</span>
+                    <span className="w-8 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Steps</span>
+                    <span className="w-14 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Rating</span>
+                    <span className="w-20 text-[7px] font-semibold text-gray-500 flex-shrink-0">Pole</span>
+                    <span className="w-8 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Grip</span>
+                    <span className="w-12 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Take-off</span>
+                    <span className="w-10 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Run-up</span>
+                    <span className="w-8 text-[7px] font-semibold text-gray-500 text-center flex-shrink-0">Mid</span>
+                    <span className="w-20 text-[7px] font-semibold text-gray-500 flex-shrink-0">Location</span>
+                    <span className="w-16 text-[7px] font-semibold text-gray-500 flex-shrink-0">Notes</span>
+                  </div>
+
+                  {/* Jump Rows */}
+                  <div className="max-h-[400px] overflow-y-auto">
+                    {jumpHistory.map((jump, idx) => (
+                      <div
+                        key={jump.id}
+                        className={`flex items-center px-2 py-1.5 border-b border-gray-100 last:border-0 ${
+                          idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                        }`}
+                      >
+                        <span className="w-12 text-[7px] text-gray-500 flex-shrink-0">{jump.date}</span>
+                        <span className="w-12 text-[7px] text-gray-600 text-center flex-shrink-0">{jump.type}</span>
+                        <div className="w-10 flex justify-center flex-shrink-0">
+                          {jump.result === 'make' ? (
+                            <span className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center text-white text-[6px] font-bold">✓</span>
+                          ) : jump.result === 'miss' ? (
+                            <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-[6px] font-bold">✕</span>
+                          ) : (
+                            <span className="text-[7px] text-gray-300">—</span>
+                          )}
+                        </div>
+                        <span className="w-10 text-[8px] font-semibold text-vault-text text-center flex-shrink-0">{jump.height}</span>
+                        <span className="w-8 text-[8px] text-vault-text text-center flex-shrink-0">{jump.steps}</span>
+                        <div className="w-14 flex justify-center flex-shrink-0">
+                          {jump.rating !== '—' ? (
+                            <span className={`px-1 py-0.5 rounded text-[6px] font-medium ${ratingConfig[jump.rating]?.bg || 'bg-gray-100'} ${ratingConfig[jump.rating]?.text || 'text-gray-600'}`}>
+                              {ratingConfig[jump.rating]?.label || jump.rating}
+                            </span>
+                          ) : (
+                            <span className="text-[7px] text-gray-300">—</span>
+                          )}
+                        </div>
+                        <span className="w-20 text-[6px] text-gray-600 truncate flex-shrink-0">{jump.pole}</span>
+                        <span className="w-8 text-[7px] text-vault-text text-center flex-shrink-0">{jump.grip}</span>
+                        <span className="w-12 text-[7px] text-gray-500 text-center flex-shrink-0">{jump.takeoff}</span>
+                        <span className="w-10 text-[7px] text-gray-500 text-center flex-shrink-0">{jump.runup}</span>
+                        <span className="w-8 text-[7px] text-gray-500 text-center flex-shrink-0">{jump.mid}</span>
+                        <span className="w-20 text-[6px] text-gray-500 truncate flex-shrink-0">{jump.location}</span>
+                        <span className="w-16 text-[6px] text-gray-500 truncate flex-shrink-0">{jump.notes}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           /* Sessions Tab Content */
           <div className="px-3 pt-3 space-y-2.5 pb-16">

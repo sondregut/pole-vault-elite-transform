@@ -17,7 +17,7 @@ const VaultAppFAQ = () => {
     {
       question: 'Can I use the app without internet?',
       answer:
-        'Yes! Vault is built offline-first. You can log sessions, jumps, and all your data without an internet connection. Everything syncs automatically when you reconnect.',
+        'Yes! VAULT is built offline-first. You can log sessions, jumps, and all your data without an internet connection. Everything syncs automatically when you reconnect.',
     },
     {
       question: 'How do I transfer my data from my old notes?',
@@ -46,7 +46,7 @@ const VaultAppFAQ = () => {
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-vault-text-secondary">
-            Everything you need to know about Vault
+            Everything you need to know about VAULT
           </p>
         </motion.div>
 

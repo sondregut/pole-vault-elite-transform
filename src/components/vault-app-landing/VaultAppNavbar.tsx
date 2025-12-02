@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Download } from 'lucide-react';
+import { Menu, X, Sparkles } from 'lucide-react';
 
 const VaultAppNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,9 +39,11 @@ const VaultAppNavbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <a href="#" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-vault-primary-dark to-vault-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">V</span>
-              </div>
+              <img
+                src="/images/vault-logo.png"
+                alt="VAULT Logo"
+                className="h-8 w-8 object-contain"
+              />
               <span className="text-vault-primary font-bold text-xl tracking-tight">VAULT</span>
             </a>
           </div>
@@ -57,21 +59,22 @@ const VaultAppNavbar = () => {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={() => scrollToSection('pricing')}
-              className="text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+            <a
+              href="/vault/dashboard"
+              className="px-4 py-1.5 bg-vault-primary/10 text-vault-primary font-semibold rounded-lg border border-vault-primary/20 hover:bg-vault-primary hover:text-white transition-all"
             >
-              Sign In
-            </button>
+              My Dashboard
+            </a>
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center">
             <Button
+              onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold px-5 py-2 rounded-lg hover:shadow-vault-md transition-all"
             >
-              <Download className="w-4 h-4 mr-2" />
-              Download App
+              <Sparkles className="w-4 h-4 mr-2" />
+              Get 50% Off
             </Button>
           </div>
 
@@ -100,18 +103,22 @@ const VaultAppNavbar = () => {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={() => scrollToSection('pricing')}
-              className="block w-full text-left py-2 text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+            <a
+              href="/vault/dashboard"
+              className="block w-full text-center py-2.5 bg-vault-primary/10 text-vault-primary font-semibold rounded-lg border border-vault-primary/20 hover:bg-vault-primary hover:text-white transition-all"
             >
-              Sign In
-            </button>
+              My Dashboard
+            </a>
             <div className="pt-3 border-t border-vault-border">
               <Button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-3 rounded-lg"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Download App
+                <Sparkles className="w-4 h-4 mr-2" />
+                Get 50% Off
               </Button>
             </div>
           </div>

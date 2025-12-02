@@ -1,11 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Zap, Star, Crown } from 'lucide-react';
+import { Check, Zap, Star, Crown, Sparkles, Loader2 } from 'lucide-react';
+import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
+import { checkCouponAvailability, redirectToCheckout, PriceId } from '@/services/stripeService';
+import { toast } from 'sonner';
 
 const VaultAppPricing = () => {
   const [isYearly, setIsYearly] = useState(true);
+  const [couponData, setCouponData] = useState<{
+    available: boolean;
+    remaining: number;
+    discountPercent: number;
+  } | null>(null);
+  const [loadingCheckout, setLoadingCheckout] = useState<string | null>(null);
+  const { user } = useFirebaseAuth();
+  const navigate = useNavigate();
+
+  // Fetch coupon availability on mount
+  useEffect(() => {
+    const fetchCouponData = async () => {
+      try {
+        const data = await checkCouponAvailability();
+        setCouponData({
+          available: data.available,
+          remaining: data.remaining,
+          discountPercent: data.discountPercent,
+        });
+      } catch (error) {
+        console.error('Failed to fetch coupon availability:', error);
+      }
+    };
+
+    fetchCouponData();
+  }, []);
+
+  const handleSubscribe = async (tierName: string) => {
+    if (tierName === 'Lite') {
+      // Free tier - just redirect to signup/login
+      if (user) {
+        navigate('/vault/dashboard');
+      } else {
+        navigate('/vault/login');
+      }
+      return;
+    }
+
+    if (tierName === 'Coach') {
+      // Coming soon
+      return;
+    }
+
+    // Pro tier - start checkout
+    if (!user) {
+      // Redirect to login with return URL
+      const priceId = isYearly ? 'yearly' : 'monthly';
+      navigate(`/vault/login?redirect=/vault&checkout=${priceId}`);
+      return;
+    }
+
+    setLoadingCheckout(tierName);
+
+    try {
+      const priceId: PriceId = isYearly ? 'yearly' : 'monthly';
+      await redirectToCheckout(
+        priceId,
+        user.uid,
+        user.email || '',
+        couponData?.available || false
+      );
+    } catch (error: any) {
+      console.error('Checkout error:', error);
+      toast.error(error.message || 'Failed to start checkout. Please try again.');
+      setLoadingCheckout(null);
+    }
+  };
+
+  // Calculate discounted prices
+  const getDiscountedPrice = (originalPrice: number) => {
+    if (couponData?.available && couponData.discountPercent) {
+      return originalPrice * (1 - couponData.discountPercent / 100);
+    }
+    return originalPrice;
+  };
+
+  const monthlyPrice = 9.99;
+  const yearlyPrice = 79;
+  const yearlyMonthlyEquivalent = yearlyPrice / 12; // $6.58/mo
+  const discountedMonthly = getDiscountedPrice(monthlyPrice);
+  const discountedYearly = getDiscountedPrice(yearlyPrice);
+  const discountedYearlyMonthly = getDiscountedPrice(yearlyMonthlyEquivalent);
 
   const tiers = [
     {
@@ -28,8 +114,20 @@ const VaultAppPricing = () => {
     {
       name: 'Pro',
       icon: Star,
-      price: isYearly ? '$79' : '$7.99',
-      period: isYearly ? '/year' : '/mo',
+      price: isYearly
+        ? couponData?.available
+          ? `$${discountedYearlyMonthly.toFixed(2)}`
+          : `$${yearlyMonthlyEquivalent.toFixed(2)}`
+        : couponData?.available
+        ? `$${discountedMonthly.toFixed(2)}`
+        : `$${monthlyPrice.toFixed(2)}`,
+      originalPrice: isYearly
+        ? (couponData?.available ? `$${yearlyMonthlyEquivalent.toFixed(2)}` : null)
+        : (couponData?.available ? `$${monthlyPrice.toFixed(2)}` : null),
+      period: '/mo',
+      yearlyBillingNote: isYearly
+        ? (couponData?.available ? `$${discountedYearly.toFixed(0)} billed annually` : `$${yearlyPrice} billed annually`)
+        : '',
       yearlyNote: isYearly ? 'Save ~30% vs monthly' : '',
       description: 'For serious competitors',
       features: [
@@ -40,7 +138,7 @@ const VaultAppPricing = () => {
         'Advanced Analytics',
         'Offline Mode',
       ],
-      cta: 'Start 14-Day Free Trial',
+      cta: isYearly ? 'Start 14-Day Free Trial' : 'Subscribe Now',
       popular: true,
       comingSoon: false,
     },
@@ -66,6 +164,23 @@ const VaultAppPricing = () => {
   return (
     <section id="pricing" className="py-20 bg-white font-roboto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Discount Banner */}
+        {couponData?.available && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 text-center"
+          >
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white px-6 py-3 rounded-full shadow-vault-md">
+              <Sparkles className="w-5 h-5" />
+              <span className="font-semibold">
+                {couponData.discountPercent}% OFF – Only {couponData.remaining} spots left!
+              </span>
+              <Sparkles className="w-5 h-5" />
+            </div>
+          </motion.div>
+        )}
+
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -158,6 +273,16 @@ const VaultAppPricing = () => {
                 </p>
 
                 <div className="mb-2">
+                  {/* Show original price with strikethrough if discount applies */}
+                  {tier.name === 'Pro' && couponData?.available && tier.originalPrice && (
+                    <span
+                      className={`text-lg line-through mr-2 ${
+                        tier.popular ? 'text-white/50' : 'text-vault-text-muted'
+                      }`}
+                    >
+                      {tier.originalPrice}
+                    </span>
+                  )}
                   <span
                     className={`text-4xl font-bold ${
                       tier.popular ? 'text-white' : 'text-vault-text'
@@ -173,6 +298,12 @@ const VaultAppPricing = () => {
                     </span>
                   )}
                 </div>
+                {/* Show yearly billing note */}
+                {tier.yearlyBillingNote && (
+                  <p className={`text-sm mb-1 ${tier.popular ? 'text-white/70' : 'text-vault-text-muted'}`}>
+                    {tier.yearlyBillingNote}
+                  </p>
+                )}
                 {tier.yearlyNote && (
                   <p className={`text-xs ${tier.popular ? 'text-white/70' : 'text-vault-success'}`}>
                     {tier.yearlyNote}
@@ -198,6 +329,8 @@ const VaultAppPricing = () => {
               </ul>
 
               <Button
+                onClick={() => handleSubscribe(tier.name)}
+                disabled={tier.comingSoon || loadingCheckout === tier.name}
                 className={`w-full py-6 text-base font-semibold rounded-xl ${
                   tier.popular
                     ? 'bg-white text-vault-primary hover:bg-white/90'
@@ -205,9 +338,15 @@ const VaultAppPricing = () => {
                     ? 'bg-vault-border text-vault-text-muted cursor-not-allowed'
                     : 'bg-vault-primary text-white hover:bg-vault-primary-light'
                 }`}
-                disabled={tier.comingSoon}
               >
-                {tier.cta}
+                {loadingCheckout === tier.name ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  tier.cta
+                )}
               </Button>
             </motion.div>
           ))}
@@ -221,7 +360,7 @@ const VaultAppPricing = () => {
           transition={{ delay: 0.5 }}
           className="text-center text-sm text-vault-text-muted mt-8"
         >
-          All paid plans include a 14-day free trial. No credit card required.
+          {isYearly ? 'Yearly plan includes a 14-day free trial. Credit card required.' : 'Monthly plan billed immediately. No trial period.'}
         </motion.p>
       </div>
     </section>

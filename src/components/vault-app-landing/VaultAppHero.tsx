@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Apple, ArrowDown } from 'lucide-react';
+import { Sparkles, ArrowDown } from 'lucide-react';
 import PhoneMockup from './mockups/PhoneMockup';
 import SessionHistoryMock from './mockups/SessionHistoryMock';
 
@@ -42,7 +42,7 @@ const VaultAppHero = () => {
 
             {/* Subheadline */}
             <p className="text-lg sm:text-xl text-vault-text-secondary leading-relaxed mb-4 max-w-xl mx-auto lg:mx-0">
-              Vault isn't just a training diary – it's your training partner.
+              VAULT isn't just a training diary – it's your training partner.
             </p>
 
             {/* Description */}
@@ -56,10 +56,11 @@ const VaultAppHero = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
               <Button
                 size="lg"
+                onClick={() => scrollToSection('pricing')}
                 className="bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold px-8 py-6 rounded-lg hover:shadow-vault-md transition-all text-base"
               >
-                <Apple className="w-5 h-5 mr-2" />
-                Download for iOS
+                <Sparkles className="w-5 h-5 mr-2" />
+                Sign Up – 50% Off
               </Button>
               <Button
                 size="lg"

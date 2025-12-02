@@ -27,5 +27,6 @@ export const firebaseDb = getFirestore(firebaseApp);
 
 // Export alias for convenience
 export const db = firebaseDb;
+export const app = firebaseApp;
 
 console.log('[Firebase] Initialized for web dashboard');

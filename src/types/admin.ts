@@ -26,6 +26,14 @@ export interface AdminUser {
   trialEndsAt?: string;
   trialDaysRemaining?: number;
   subscriptionExpiresAt?: string;
+  // Stripe-specific fields (for web subscriptions)
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  subscriptionPlatform?: 'ios' | 'web';
+  lastSubscriptionPrice?: number;
+  productId?: string;
+  subscriptionCancelledAt?: string;
+  lastChurnDate?: string;
 }
 
 export type SubscriptionTier = 'free' | 'athlete' | 'athlete_plus' | 'lifetime';

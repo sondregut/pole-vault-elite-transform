@@ -69,8 +69,11 @@ const VaultAppJumpLogger = () => {
   const [steps, setSteps] = useState(18);
   const [selectedRating, setSelectedRating] = useState<'Run Thru' | 'Glider' | 'OK' | 'Good' | 'Great'>('Great');
   const [jumps, setJumps] = useState<Jump[]>(initialJumps);
-  const [barHeight, setBarHeight] = useState('5.80');
-  const [gripHeight, setGripHeight] = useState('4.95');
+  const [barHeight, setBarHeight] = useState(5.80);
+  const [gripHeight, setGripHeight] = useState(4.95);
+  const [midMark, setMidMark] = useState(16.70);
+  const [takeoff, setTakeoff] = useState(4.30);
+  const [runup, setRunup] = useState(41.40);
   const [sessionType, setSessionType] = useState<'training' | 'competition'>('training');
   const [standards, setStandards] = useState(0);
   const [result, setResult] = useState<'none' | 'make' | 'miss'>('none');
@@ -81,19 +84,29 @@ const VaultAppJumpLogger = () => {
   const incrementStandards = () => setStandards(prev => Math.min(prev + 5, 80));
   const decrementStandards = () => setStandards(prev => Math.max(prev - 5, 0));
 
+  const incrementBarHeight = () => setBarHeight(prev => Math.min(prev + 0.05, 6.50));
+  const decrementBarHeight = () => setBarHeight(prev => Math.max(prev - 0.05, 1.00));
+  const incrementGripHeight = () => setGripHeight(prev => Math.min(prev + 0.05, 5.50));
+  const decrementGripHeight = () => setGripHeight(prev => Math.max(prev - 0.05, 3.00));
+  const incrementMidMark = () => setMidMark(prev => Math.min(prev + 0.10, 25.00));
+  const decrementMidMark = () => setMidMark(prev => Math.max(prev - 0.10, 10.00));
+  const incrementTakeoff = () => setTakeoff(prev => Math.min(prev + 0.05, 5.50));
+  const decrementTakeoff = () => setTakeoff(prev => Math.max(prev - 0.05, 2.50));
+  const incrementRunup = () => setRunup(prev => Math.min(prev + 0.10, 50.00));
+  const decrementRunup = () => setRunup(prev => Math.max(prev - 0.10, 20.00));
+
   const addJump = () => {
     const newJump: Jump = {
       id: jumps.length + 1,
-      height: barHeight,
+      height: barHeight.toFixed(2),
       steps: steps,
       pole: selectedPole,
-      grip: gripHeight,
+      grip: gripHeight.toFixed(2),
       rating: selectedRating,
     };
     setJumps([...jumps, newJump]);
     // Update bar height for next jump
-    const nextHeight = (parseFloat(barHeight) + 0.10).toFixed(2);
-    setBarHeight(nextHeight);
+    setBarHeight(prev => prev + 0.10);
   };
   return (
     <section className="py-20 bg-gradient-to-b from-white to-vault-bg-warm-start font-roboto">
@@ -318,9 +331,23 @@ const VaultAppJumpLogger = () => {
                       {/* Run-up */}
                       <div className="flex items-center justify-between px-3 py-2">
                         <span className="text-xs font-medium text-[#1a3a5c]">Run-up</span>
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-xs font-semibold text-[#1a3a5c]">41.40</span>
-                          <span className="text-[10px] text-[#6b7c8a]">m</span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={decrementRunup}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-xs font-semibold text-[#1a3a5c] w-10 text-center">{runup.toFixed(2)}</span>
+                            <span className="text-[10px] text-[#6b7c8a]">m</span>
+                          </div>
+                          <button
+                            onClick={incrementRunup}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -337,33 +364,89 @@ const VaultAppJumpLogger = () => {
                       {/* Bar Height */}
                       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
                         <span className="text-xs font-medium text-[#1a3a5c]">Bar Height</span>
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-xs font-semibold text-[#1a3a5c]">{barHeight}</span>
-                          <span className="text-[10px] text-[#6b7c8a]">m</span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={decrementBarHeight}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{barHeight.toFixed(2)}</span>
+                            <span className="text-[10px] text-[#6b7c8a]">m</span>
+                          </div>
+                          <button
+                            onClick={incrementBarHeight}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
                         </div>
                       </div>
                       {/* Grip Height */}
                       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
                         <span className="text-xs font-medium text-[#1a3a5c]">Grip Height</span>
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-xs font-semibold text-[#1a3a5c]">{gripHeight}</span>
-                          <span className="text-[10px] text-[#6b7c8a]">m</span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={decrementGripHeight}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{gripHeight.toFixed(2)}</span>
+                            <span className="text-[10px] text-[#6b7c8a]">m</span>
+                          </div>
+                          <button
+                            onClick={incrementGripHeight}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
                         </div>
                       </div>
                       {/* Mid-Mark */}
                       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
                         <span className="text-xs font-medium text-[#1a3a5c]">Mid-Mark</span>
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-xs font-semibold text-[#1a3a5c]">16.70</span>
-                          <span className="text-[10px] text-[#6b7c8a]">m</span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={decrementMidMark}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{midMark.toFixed(2)}</span>
+                            <span className="text-[10px] text-[#6b7c8a]">m</span>
+                          </div>
+                          <button
+                            onClick={incrementMidMark}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
                         </div>
                       </div>
                       {/* Take-off */}
                       <div className="flex items-center justify-between px-3 py-2">
                         <span className="text-xs font-medium text-[#1a3a5c]">Take-off</span>
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-xs font-semibold text-[#1a3a5c]">4.30</span>
-                          <span className="text-[10px] text-[#6b7c8a]">m</span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={decrementTakeoff}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Minus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-xs font-semibold text-[#1a3a5c] w-8 text-center">{takeoff.toFixed(2)}</span>
+                            <span className="text-[10px] text-[#6b7c8a]">m</span>
+                          </div>
+                          <button
+                            onClick={incrementTakeoff}
+                            className="w-6 h-6 rounded-full bg-[#e8eef3] flex items-center justify-center hover:bg-[#dce4eb] active:scale-95 transition-all"
+                          >
+                            <Plus className="w-3 h-3 text-[#6b7c8a]" />
+                          </button>
                         </div>
                       </div>
                     </div>

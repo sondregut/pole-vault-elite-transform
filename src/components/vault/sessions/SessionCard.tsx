@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Session, Jump, formatDate, formatHeight, ratingLabels } from '@/types/vault';
@@ -62,29 +61,29 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) =>
   const uniquePoles = [...new Set(jumps.map(jump => jump.pole).filter(Boolean))];
 
   return (
-    <Card className={`hover:shadow-lg transition-shadow cursor-pointer ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-vault border border-vault-border-light hover:shadow-vault-md hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden ${className}`}>
       <Link to={`/vault/sessions/${session.id}`}>
-        <CardHeader className="pb-4">
+        <div className="p-6 pb-4">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <CardTitle className="text-xl text-gray-900 mb-2">
+              <h3 className="text-xl font-bold text-vault-text mb-2">
                 {dateLabel}
-              </CardTitle>
+              </h3>
 
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+              <div className="flex items-center gap-4 text-sm text-vault-text-secondary mb-3">
                 <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
+                  <MapPin className="h-4 w-4 text-vault-text-muted" />
                   <span>{session.location || 'Training'}</span>
                 </div>
                 {session.sessionType && (
-                  <Badge variant="outline" className="text-xs">
+                  <Badge className="text-xs bg-vault-primary-muted text-vault-primary border-vault-primary/20">
                     {session.sessionType}
                   </Badge>
                 )}
               </div>
 
               {session.weather && (
-                <div className="text-sm text-gray-500 mb-2">
+                <div className="text-sm text-vault-text-muted mb-2">
                   <span>{session.weather}</span>
                   {session.temperature && <span> • {session.temperature}°</span>}
                   {session.windSpeed && <span> • Wind: {session.windSpeed}</span>}
@@ -93,62 +92,62 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) =>
             </div>
 
             <div className="text-right">
-              <div className="text-2xl font-bold text-gray-900 mb-1">
+              <div className="text-2xl font-bold text-vault-text mb-1">
                 {bestJump ? formatHeight(bestJump.height, bestJump.barUnits) : '—'}
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-vault-text-muted">
                 Personal best
               </div>
             </div>
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent>
+        <div className="px-6 pb-6">
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <div className="text-center">
+            <div className="text-center p-3 bg-vault-primary-muted rounded-xl">
               <div className="flex items-center justify-center gap-1 mb-1">
-                <Activity className="h-4 w-4 text-blue-600" />
-                <span className="text-lg font-semibold text-gray-900">{jumps.length}</span>
+                <Activity className="h-4 w-4 text-vault-primary" />
+                <span className="text-lg font-semibold text-vault-text">{jumps.length}</span>
               </div>
-              <div className="text-xs text-gray-600">Jumps</div>
+              <div className="text-xs text-vault-text-secondary">Jumps</div>
             </div>
 
             {session.sessionType?.toLowerCase() !== 'training' && (
-              <div className="text-center">
+              <div className="text-center p-3 bg-green-50 rounded-xl">
                 <div className="flex items-center justify-center gap-1 mb-1">
                   {successRate >= 50 ? (
-                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-vault-success" />
                   ) : (
-                    <XCircle className="h-4 w-4 text-orange-600" />
+                    <XCircle className="h-4 w-4 text-vault-warning" />
                   )}
-                  <span className="text-lg font-semibold text-gray-900">{successRate}%</span>
+                  <span className="text-lg font-semibold text-vault-text">{successRate}%</span>
                 </div>
-                <div className="text-xs text-gray-600">Success</div>
+                <div className="text-xs text-vault-text-secondary">Success</div>
               </div>
             )}
 
-            <div className="text-center">
+            <div className="text-center p-3 bg-amber-50 rounded-xl">
               <div className="flex items-center justify-center gap-1 mb-1">
-                <Video className="h-4 w-4 text-purple-600" />
-                <span className="text-lg font-semibold text-gray-900">{videoJumps.length}</span>
+                <Video className="h-4 w-4 text-vault-warning" />
+                <span className="text-lg font-semibold text-vault-text">{videoJumps.length}</span>
               </div>
-              <div className="text-xs text-gray-600">Videos</div>
+              <div className="text-xs text-vault-text-secondary">Videos</div>
             </div>
           </div>
 
           {/* Equipment Used */}
           {uniquePoles.length > 0 && (
             <div className="mb-4">
-              <div className="text-sm text-gray-600 mb-2">Equipment used:</div>
+              <div className="text-sm text-vault-text-secondary mb-2">Equipment used:</div>
               <div className="flex flex-wrap gap-1">
                 {uniquePoles.slice(0, 3).map((pole, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
+                  <Badge key={index} className="text-xs bg-vault-primary-muted text-vault-primary border-vault-primary/20">
                     {getPoleDisplayName(pole, poles)}
                   </Badge>
                 ))}
                 {uniquePoles.length > 3 && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge className="text-xs bg-vault-primary-muted text-vault-primary border-vault-primary/20">
                     +{uniquePoles.length - 3} more
                   </Badge>
                 )}
@@ -158,25 +157,25 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) =>
 
           {/* Session Goal */}
           {session.sessionGoal && (
-            <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <div className="text-sm font-medium text-blue-900 mb-1">Session Goal</div>
-              <div className="text-sm text-blue-800">{session.sessionGoal}</div>
+            <div className="mb-4 p-3 bg-vault-primary-muted rounded-xl border border-vault-primary/20">
+              <div className="text-sm font-semibold text-vault-primary mb-1">Session Goal</div>
+              <div className="text-sm text-vault-text-secondary">{session.sessionGoal}</div>
             </div>
           )}
 
           {/* View Details Button */}
-          <div className="flex justify-between items-center pt-3 border-t border-gray-100">
-            <div className="text-sm text-gray-500">
+          <div className="flex justify-between items-center pt-3 border-t border-vault-border-light">
+            <div className="text-sm text-vault-text-muted">
               {formatDate(session.date)} • {session.sessionType || 'Training'}
             </div>
-            <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+            <Button variant="ghost" size="sm" className="text-vault-primary hover:text-vault-primary-dark hover:bg-vault-primary-muted font-semibold">
               View Details
               <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
-        </CardContent>
+        </div>
       </Link>
-    </Card>
+    </div>
   );
 };
 

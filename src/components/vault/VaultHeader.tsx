@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -17,18 +18,29 @@ import {
   LogOut,
   ChevronDown,
   Shield,
-  Video
+  Video,
+  Menu,
+  X
 } from 'lucide-react';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
 
 const VaultHeader = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useFirebaseAuth();
   const { isAdmin } = useAdminAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const currentPath = location.pathname;
 
@@ -51,42 +63,39 @@ const VaultHeader = () => {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-      {/* Main Header */}
-      <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between py-4">
-          {/* Left: Logo/Brand */}
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8">
-              <img
-                src="/lovable-uploads/d8bb7de8-16df-4057-b550-54a2932ea222.png"
-                alt="Vault Logo"
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <div>
-              <span className="text-xl font-bold text-gray-900 block">Vault</span>
-              <p className="text-xs text-gray-600">Training Dashboard</p>
-            </div>
-          </div>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 font-roboto ${
+        isScrolled ? 'bg-white shadow-vault' : 'bg-white/80 backdrop-blur-sm'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo - Links to Vault Landing Page */}
+          <Link to="/vault" className="flex items-center gap-2">
+            <img
+              src="/images/vault-logo.png"
+              alt="VAULT Logo"
+              className="h-8 w-8 object-contain"
+            />
+            <span className="text-vault-primary font-bold text-xl tracking-tight">VAULT</span>
+          </Link>
 
-          {/* Center: Navigation (Desktop) */}
-          <nav className="hidden md:flex items-center gap-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = currentPath === item.path;
+              const isActive = currentPath === item.path || currentPath.startsWith(item.path + '/');
 
               return (
                 <Link
                   key={item.path}
                   to={item.path}
                   className={`
-                    flex items-center gap-2 px-5 py-3 text-sm font-medium
-                    border-b-2 transition-colors
+                    flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all
                     ${
                       isActive
-                        ? 'border-[#3176FF] text-gray-900'
-                        : 'border-transparent text-gray-600 hover:text-gray-900'
+                        ? 'bg-vault-primary text-white'
+                        : 'text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted'
                     }
                   `}
                 >
@@ -95,78 +104,135 @@ const VaultHeader = () => {
                 </Link>
               );
             })}
-          </nav>
+          </div>
 
           {/* Right: User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-2">
-                <User className="w-4 h-4" />
-                <span className="hidden md:inline">{user?.email?.split('@')[0]}</span>
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <div className="px-2 py-1.5 text-sm font-medium text-gray-900">
-                {user?.email}
-              </div>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/vault/profile" className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Profile & Settings
-                </Link>
-              </DropdownMenuItem>
-              {isAdmin && (
-                <>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/vault/admin" className="cursor-pointer">
-                      <Shield className="mr-2 h-4 w-4" />
-                      Admin Panel
-                    </Link>
-                  </DropdownMenuItem>
-                </>
-              )}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              to="/vault"
+              className="text-sm text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+            >
+              About Vault
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="gap-2 bg-vault-primary/10 text-vault-primary font-semibold rounded-lg border border-vault-primary/20 hover:bg-vault-primary hover:text-white transition-all"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="hidden lg:inline">{user?.email?.split('@')[0]}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-white border border-vault-border shadow-vault-lg rounded-xl">
+                <div className="px-3 py-2 text-sm font-medium text-vault-text">
+                  {user?.email}
+                </div>
+                <DropdownMenuSeparator className="bg-vault-border" />
+                <DropdownMenuItem asChild>
+                  <Link to="/vault/profile" className="cursor-pointer flex items-center text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Profile & Settings
+                  </Link>
+                </DropdownMenuItem>
+                {isAdmin && (
+                  <>
+                    <DropdownMenuSeparator className="bg-vault-border" />
+                    <DropdownMenuItem asChild>
+                      <Link to="/vault/admin" className="cursor-pointer flex items-center text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+                <DropdownMenuSeparator className="bg-vault-border" />
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="cursor-pointer text-vault-error hover:bg-red-50"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-lg text-vault-text-secondary hover:bg-vault-primary-muted transition-colors"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      <div className="md:hidden border-t border-gray-200">
-        <nav className="container mx-auto px-4 flex overflow-x-auto">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentPath === item.path;
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-vault-border shadow-vault-lg">
+          <div className="px-4 py-4 space-y-2">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentPath === item.path || currentPath.startsWith(item.path + '/');
 
-            return (
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`
+                    flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all
+                    ${
+                      isActive
+                        ? 'bg-vault-primary text-white'
+                        : 'text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted'
+                    }
+                  `}
+                >
+                  <Icon className="w-5 h-5" />
+                  {item.name}
+                </Link>
+              );
+            })}
+
+            <div className="pt-3 mt-3 border-t border-vault-border space-y-2">
               <Link
-                key={item.path}
-                to={item.path}
-                className={`
-                  flex flex-col items-center gap-1 px-4 py-4 text-xs font-medium
-                  border-b-2 transition-colors whitespace-nowrap min-h-[44px]
-                  ${
-                    isActive
-                      ? 'border-[#3176FF] text-[#3176FF]'
-                      : 'border-transparent text-gray-600'
-                  }
-                `}
+                to="/vault/profile"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg transition-all"
               >
-                <Icon className="w-5 h-5" />
-                {item.name}
+                <Settings className="w-5 h-5" />
+                Profile & Settings
               </Link>
-            );
-          })}
-        </nav>
-      </div>
-    </div>
+              {isAdmin && (
+                <Link
+                  to="/vault/admin"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg transition-all"
+                >
+                  <Shield className="w-5 h-5" />
+                  Admin Panel
+                </Link>
+              )}
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleSignOut();
+                }}
+                className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-vault-error hover:bg-red-50 rounded-lg transition-all"
+              >
+                <LogOut className="w-5 h-5" />
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
   );
 };
 

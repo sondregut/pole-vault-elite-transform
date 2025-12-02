@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Apple, Mail } from 'lucide-react';
+import { Sparkles, Mail } from 'lucide-react';
 
 const VaultAppFooter = () => {
   const [email, setEmail] = useState('');
@@ -75,13 +75,14 @@ const VaultAppFooter = () => {
               No spam. Just launch updates, behind-the-scenes progress, and early invites.
             </p>
 
-            {/* App Store Button */}
+            {/* Early Access Button */}
             <Button
               size="lg"
+              onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-white/10 backdrop-blur border border-white/20 text-white font-semibold px-8 py-6 rounded-xl hover:bg-white/20 transition-all"
             >
-              <Apple className="w-5 h-5 mr-2" />
-              Download on App Store
+              <Sparkles className="w-5 h-5 mr-2" />
+              Sign Up – 50% Off
             </Button>
           </motion.div>
         </div>
@@ -93,9 +94,11 @@ const VaultAppFooter = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Logo & Copyright */}
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">V</span>
-              </div>
+              <img
+                src="/images/vault-logo.png"
+                alt="VAULT Logo"
+                className="h-8 w-8 object-contain"
+              />
               <span className="text-white/80 text-sm">
                 © 2025 VAULT. Built by Sondre & Simen Guttormsen.
               </span>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -54,12 +53,12 @@ const VaultEquipment = () => {
 
     return (
       <TableHead
-        className="cursor-pointer hover:bg-gray-50 select-none"
+        className="cursor-pointer hover:bg-vault-primary-muted select-none"
         onClick={() => handleSort(field)}
       >
         <div className="flex items-center gap-2">
           {children}
-          <Icon className={`h-4 w-4 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+          <Icon className={`h-4 w-4 ${isActive ? 'text-vault-primary' : 'text-vault-text-muted'}`} />
         </div>
       </TableHead>
     );
@@ -142,28 +141,28 @@ const VaultEquipment = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
-            <Badge variant="secondary">
+            <Badge className="bg-vault-primary-muted text-vault-primary border-vault-primary/20">
           <Wrench className="mr-2 h-4 w-4" />
           Equipment Management
             </Badge>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-vault-text">
             Manage Your Poles
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-vault-text-secondary mt-1">
             Track and organize your pole vault equipment
             </p>
           </div>
 
           <div className="flex gap-3">
-            <div className="bg-white rounded-lg px-4 py-2 border border-gray-200">
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="bg-white rounded-xl px-4 py-3 border border-vault-border-light shadow-vault">
+            <div className="text-2xl font-bold text-vault-primary">
           {filteredAndSortedPoles.length}
           {filteredAndSortedPoles.length !== poles.length && (
-            <span className="text-lg text-gray-400">/{poles.length}</span>
+            <span className="text-lg text-vault-text-muted">/{poles.length}</span>
           )}
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-vault-text-secondary">
           {filteredAndSortedPoles.length !== poles.length ? 'Filtered Poles' : 'Total Poles'}
             </div>
             </div>
@@ -175,22 +174,22 @@ const VaultEquipment = () => {
           <div className="mb-6 space-y-4">
             <div className="flex flex-col sm:flex-row gap-4 justify-between">
           <div className="relative max-w-md flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vault-text-muted" />
             <Input
             placeholder="Search poles by name, brand, length, or serial..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 border-vault-border rounded-xl focus:border-vault-primary focus:ring-vault-primary"
             />
           </div>
 
           {/* Layout Toggle */}
-          <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+          <div className="flex items-center bg-white rounded-xl border border-vault-border-light shadow-vault-sm p-1">
             <Button
             variant={viewMode === 'grid' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => setViewMode('grid')}
-            className="h-8 px-3"
+            className={`h-8 px-3 rounded-lg ${viewMode === 'grid' ? 'bg-vault-primary hover:bg-vault-primary-dark text-white' : 'text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted'}`}
             >
             <LayoutGrid className="h-4 w-4" />
             </Button>
@@ -198,7 +197,7 @@ const VaultEquipment = () => {
             variant={viewMode === 'list' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => setViewMode('list')}
-            className="h-8 px-3"
+            className={`h-8 px-3 rounded-lg ${viewMode === 'list' ? 'bg-vault-primary hover:bg-vault-primary-dark text-white' : 'text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted'}`}
             >
             <List className="h-4 w-4" />
             </Button>
@@ -208,15 +207,15 @@ const VaultEquipment = () => {
             {/* Filters */}
             <div className="flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">Filters:</span>
+            <Filter className="h-4 w-4 text-vault-text-muted" />
+            <span className="text-sm font-medium text-vault-text-secondary">Filters:</span>
           </div>
 
           <Select value={brandFilter} onValueChange={setBrandFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] border-vault-border rounded-xl">
             <SelectValue placeholder="All Brands" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl border-vault-border">
             <SelectItem value="all">All Brands</SelectItem>
             {uniqueBrands.map(brand => (
           <SelectItem key={brand} value={brand}>{brand}</SelectItem>
@@ -225,10 +224,10 @@ const VaultEquipment = () => {
           </Select>
 
           <Select value={flexFilter} onValueChange={setFlexFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] border-vault-border rounded-xl">
             <SelectValue placeholder="All Flex Ratings" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl border-vault-border">
             <SelectItem value="all">All Flex Ratings</SelectItem>
             {uniqueFlex.map(flex => (
           <SelectItem key={flex} value={flex}>{flex}</SelectItem>
@@ -245,7 +244,7 @@ const VaultEquipment = () => {
           setFlexFilter('all');
           setSearchTerm('');
             }}
-            className="h-8"
+            className="h-8 border-vault-primary text-vault-primary hover:bg-vault-primary-muted rounded-lg"
             >
             Clear Filters
             </Button>
@@ -255,38 +254,37 @@ const VaultEquipment = () => {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={handleTabChange}>
-            <TabsList className="grid w-full grid-cols-3 max-w-md">
-          <TabsTrigger value="my-poles">My Poles</TabsTrigger>
-          <TabsTrigger value="add-pole">Add Pole</TabsTrigger>
-          <TabsTrigger value="bulk-import">Bulk Import</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 max-w-md bg-vault-primary-muted rounded-xl p-1">
+          <TabsTrigger value="my-poles" className="rounded-lg data-[state=active]:bg-vault-primary data-[state=active]:text-white">My Poles</TabsTrigger>
+          <TabsTrigger value="add-pole" className="rounded-lg data-[state=active]:bg-vault-primary data-[state=active]:text-white">Add Pole</TabsTrigger>
+          <TabsTrigger value="bulk-import" className="rounded-lg data-[state=active]:bg-vault-primary data-[state=active]:text-white">Bulk Import</TabsTrigger>
             </TabsList>
 
             {/* My Poles Tab */}
             <TabsContent value="my-poles" className="mt-6">
           {error ? (
-            <Card className="border-red-200 bg-red-50">
-            <CardContent className="p-6 text-center">
-          <p className="text-red-600">{error}</p>
-            </CardContent>
-            </Card>
+            <div className="bg-red-50 rounded-2xl border border-red-200 p-6 text-center">
+          <p className="text-vault-error">{error}</p>
+            </div>
           ) : filteredAndSortedPoles.length === 0 ? (
-            <Card>
-            <CardContent className="p-12 text-center">
+            <div className="bg-white rounded-2xl shadow-vault border border-vault-border-light p-12 text-center">
           {poles.length === 0 ? (
             <>
-              <Wrench className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <div className="w-16 h-16 bg-vault-primary-muted rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Wrench className="h-8 w-8 text-vault-primary" />
+              </div>
+              <h3 className="text-lg font-bold text-vault-text mb-2">
                 No poles in your library yet
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-vault-text-secondary mb-6">
                 Add your first pole to start tracking your equipment
               </p>
               <div className="flex gap-3 justify-center">
-                <Button onClick={() => handleTabChange('add-pole')}>
+                <Button onClick={() => handleTabChange('add-pole')} className="bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold rounded-xl hover:shadow-vault-md transition-all">
                   <Plus className="mr-2 h-4 w-4" />
                   Add Your First Pole
                 </Button>
-                <Button variant="outline" onClick={() => handleTabChange('bulk-import')}>
+                <Button variant="outline" onClick={() => handleTabChange('bulk-import')} className="border-vault-primary text-vault-primary hover:bg-vault-primary-muted font-semibold rounded-xl">
                   <Upload className="mr-2 h-4 w-4" />
                   Bulk Import
                 </Button>
@@ -294,81 +292,82 @@ const VaultEquipment = () => {
             </>
           ) : (
             <>
-              <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <div className="w-16 h-16 bg-vault-primary-muted rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Search className="h-8 w-8 text-vault-primary" />
+              </div>
+              <h3 className="text-lg font-bold text-vault-text mb-2">
                 No poles match your search
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-vault-text-secondary mb-4">
                 Try adjusting your search terms
               </p>
-              <Button variant="outline" onClick={() => setSearchTerm('')}>
+              <Button variant="outline" onClick={() => setSearchTerm('')} className="border-vault-primary text-vault-primary hover:bg-vault-primary-muted font-semibold rounded-xl">
                 Clear Search
               </Button>
             </>
           )}
-            </CardContent>
-            </Card>
+            </div>
           ) : viewMode === 'grid' ? (
             // Grid View
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAndSortedPoles.map((pole) => (
-          <Card key={pole.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
+          <div key={pole.id} className="bg-white rounded-2xl shadow-vault border border-vault-border-light hover:shadow-vault-md hover:-translate-y-1 transition-all duration-200 overflow-hidden">
+            <div className="p-6 pb-3">
               <div className="flex items-start justify-between">
                 <div>
-                  <CardTitle className="text-lg">{pole.name}</CardTitle>
-                  <Badge variant="secondary" className="mt-1">
+                  <h3 className="text-lg font-bold text-vault-text">{pole.name}</h3>
+                  <Badge className="mt-1 bg-vault-primary-muted text-vault-primary border-vault-primary/20">
                     {pole.brand}
                   </Badge>
                 </div>
                 <div className="flex gap-1">
-                  <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                  <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-text-muted hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
+                  <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-error hover:bg-red-50 rounded-lg">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="px-6 pb-6">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Length:</span>
-                  <span className="font-medium">{pole.length}</span>
+                  <span className="text-vault-text-muted">Length:</span>
+                  <span className="font-medium text-vault-text">{pole.length}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Weight:</span>
-                  <span className="font-medium">{pole.pounds} lbs</span>
+                  <span className="text-vault-text-muted">Weight:</span>
+                  <span className="font-medium text-vault-text">{pole.pounds} lbs</span>
                 </div>
                 {pole.flex && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Flex:</span>
-                    <span className="font-medium">{pole.flex}</span>
+                    <span className="text-vault-text-muted">Flex:</span>
+                    <span className="font-medium text-vault-text">{pole.flex}</span>
                   </div>
                 )}
                 {pole.serial && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Serial:</span>
-                    <span className="font-medium">{pole.serial}</span>
+                    <span className="text-vault-text-muted">Serial:</span>
+                    <span className="font-medium text-vault-text">{pole.serial}</span>
                   </div>
                 )}
                 {pole.notes && (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <p className="text-sm text-gray-600">{pole.notes}</p>
+                  <div className="mt-3 pt-3 border-t border-vault-border-light">
+                    <p className="text-sm text-vault-text-secondary">{pole.notes}</p>
                   </div>
                 )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
             ))}
             </div>
           ) : (
             // Table View
-            <Card>
+            <div className="bg-white rounded-2xl shadow-vault border border-vault-border-light overflow-hidden">
             <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-vault-primary-muted/50">
               <SortableHeader field="name">Name</SortableHeader>
               <SortableHeader field="brand">Brand</SortableHeader>
               <SortableHeader field="length">Length</SortableHeader>
@@ -381,30 +380,30 @@ const VaultEquipment = () => {
           </TableHeader>
           <TableBody>
             {filteredAndSortedPoles.map((pole) => (
-              <TableRow key={pole.id} className="hover:bg-gray-50">
-                <TableCell className="font-medium">{pole.name}</TableCell>
+              <TableRow key={pole.id} className="hover:bg-vault-primary-muted/30">
+                <TableCell className="font-medium text-vault-text">{pole.name}</TableCell>
                 <TableCell>
-                  <Badge variant="secondary">{pole.brand}</Badge>
+                  <Badge className="bg-vault-primary-muted text-vault-primary border-vault-primary/20">{pole.brand}</Badge>
                 </TableCell>
-                <TableCell>{pole.length}</TableCell>
-                <TableCell>{pole.pounds} lbs</TableCell>
-                <TableCell>{pole.flex || '-'}</TableCell>
-                <TableCell className="font-mono text-sm">{pole.serial || '-'}</TableCell>
+                <TableCell className="text-vault-text-secondary">{pole.length}</TableCell>
+                <TableCell className="text-vault-text-secondary">{pole.pounds} lbs</TableCell>
+                <TableCell className="text-vault-text-secondary">{pole.flex || '-'}</TableCell>
+                <TableCell className="font-mono text-sm text-vault-text-muted">{pole.serial || '-'}</TableCell>
                 <TableCell className="max-w-xs">
                   {pole.notes ? (
-                    <span className="text-sm text-gray-600 truncate block" title={pole.notes}>
+                    <span className="text-sm text-vault-text-secondary truncate block" title={pole.notes}>
                       {pole.notes}
                     </span>
                   ) : (
-                    '-'
+                    <span className="text-vault-text-muted">-</span>
                   )}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-1 justify-end">
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-text-muted hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
+                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-error hover:bg-red-50 rounded-lg">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -413,7 +412,7 @@ const VaultEquipment = () => {
             ))}
           </TableBody>
             </Table>
-            </Card>
+            </div>
           )}
             </TabsContent>
 
