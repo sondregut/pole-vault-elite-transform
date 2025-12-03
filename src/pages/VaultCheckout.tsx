@@ -256,7 +256,7 @@ const VaultCheckout = () => {
           {/* Headline */}
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8">
             {isYearly && checkoutData.couponApplied ? '50% off ' : ''}
-            {isYearly ? 'annual' : 'monthly'} membership
+            {isYearly ? 'Annual' : 'Monthly'} Membership
           </h1>
 
           {/* What's Included */}
