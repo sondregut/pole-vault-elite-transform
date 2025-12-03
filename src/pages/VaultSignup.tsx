@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +24,7 @@ import { toast } from 'sonner';
 
 const VaultSignup = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const plan = (searchParams.get('plan') as PriceId) || 'yearly';
 
@@ -38,6 +39,16 @@ const VaultSignup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const [error, setError] = useState('');
+
+  // Check for error message passed from login page (e.g., phone auth with no account)
+  useEffect(() => {
+    const locationState = location.state as { error?: string } | null;
+    if (locationState?.error) {
+      setError(locationState.error);
+      // Clear the state so it doesn't persist on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   // Validation
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

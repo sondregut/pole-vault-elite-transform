@@ -210,12 +210,13 @@ const VaultLogin = () => {
       const userDoc = await getDoc(doc(db, 'users', result.user.uid));
 
       if (!userDoc.exists()) {
-        // No existing account - sign them out and show error
+        // No existing account - sign them out and redirect to signup with error
         await signOut(firebaseAuth);
-        setError('No account found with this phone number. Please sign up with email first, or use the mobile app to create an account.');
-        setShowVerificationInput(false);
-        setVerificationCode('');
-        setConfirmationResult(null);
+        navigate('/vault/signup?plan=yearly', {
+          state: {
+            error: 'No account found with this phone number. Please sign up with email to create an account.',
+          },
+        });
         return;
       }
 
