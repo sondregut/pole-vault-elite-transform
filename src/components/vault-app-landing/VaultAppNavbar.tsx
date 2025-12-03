@@ -3,7 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Sparkles } from 'lucide-react';
 
-const VaultAppNavbar = () => {
+interface VaultAppNavbarProps {
+  hasBanner?: boolean;
+}
+
+const VaultAppNavbar = ({ hasBanner = false }: VaultAppNavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -44,9 +48,9 @@ const VaultAppNavbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 font-roboto ${
+      className={`fixed left-0 right-0 z-50 transition-all duration-200 font-roboto ${
         isScrolled ? 'bg-white shadow-vault' : 'bg-white/80 backdrop-blur-sm'
-      }`}
+      } ${hasBanner ? 'top-[44px] sm:top-[48px]' : 'top-0'}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
