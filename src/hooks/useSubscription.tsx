@@ -1,111 +1,168 @@
-
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
+import { useFirebaseAuth } from './useFirebaseAuth';
 
-interface SubscriptionStatus {
-  subscribed: boolean;
-  subscription_tier: string;
-  subscription_end: string | null;
-  loading: boolean;
-  error: string | null;
+export type SubscriptionTier = 'pro' | 'lite';
+export type SubscriptionStatus = 'active' | 'trialing' | 'free' | 'expired' | 'pending';
+
+export interface Subscription {
+  tier: SubscriptionTier;
+  status: SubscriptionStatus;
+  isActive: boolean;
+  isTrialing: boolean;
+  trialEndsAt: string | null;
+  expiresAt: string | null;
+  hasLifetimeAccess: boolean;
 }
 
-export const useSubscription = () => {
-  const { user } = useAuth();
-  const [subscription, setSubscription] = useState<SubscriptionStatus>({
-    subscribed: false,
-    subscription_tier: 'free',
-    subscription_end: null,
-    loading: true,
-    error: null
-  });
+interface UseSubscriptionReturn {
+  subscription: Subscription | null;
+  loading: boolean;
+}
 
-  const checkSubscription = async () => {
-    if (!user) {
-      setSubscription({
-        subscribed: false,
-        subscription_tier: 'free',
-        subscription_end: null,
-        loading: false,
-        error: null
-      });
-      return;
-    }
-
-    try {
-      setSubscription(prev => ({ ...prev, loading: true, error: null }));
-      
-      const { data, error } = await supabase.functions.invoke('check-subscription');
-      
-      if (error) throw error;
-      
-      setSubscription({
-        subscribed: data.subscribed || false,
-        subscription_tier: data.subscription_tier || 'free',
-        subscription_end: data.subscription_end,
-        loading: false,
-        error: null
-      });
-    } catch (error: any) {
-      console.error('Error checking subscription:', error);
-      setSubscription(prev => ({
-        ...prev,
-        loading: false,
-        error: error.message || 'Failed to check subscription'
-      }));
-    }
-  };
-
-  const createCheckout = async () => {
-    if (!user) {
-      toast.error('Please sign in to subscribe');
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.functions.invoke('create-checkout');
-      
-      if (error) throw error;
-      
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error: any) {
-      console.error('Error creating checkout:', error);
-      toast.error('Failed to create checkout session');
-    }
-  };
-
-  const manageSubscription = async () => {
-    if (!user) {
-      toast.error('Please sign in to manage subscription');
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.functions.invoke('customer-portal');
-      
-      if (error) throw error;
-      
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error: any) {
-      console.error('Error opening customer portal:', error);
-      toast.error('Failed to open subscription management');
-    }
-  };
+/**
+ * Hook to check user's subscription status from Firestore
+ * Matches mobile app's SubscriptionContext logic
+ */
+export const useSubscription = (): UseSubscriptionReturn => {
+  const { user, loading: authLoading } = useFirebaseAuth();
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkSubscription();
-  }, [user]);
+    // If auth is still loading, wait
+    if (authLoading) {
+      return;
+    }
 
-  return {
-    ...subscription,
-    checkSubscription,
-    createCheckout,
-    manageSubscription
-  };
+    // If no user, no subscription
+    if (!user) {
+      setSubscription(null);
+      setLoading(false);
+      return;
+    }
+
+    // Listen to user document in real-time
+    const userRef = doc(db, 'users', user.uid);
+
+    const unsubscribe = onSnapshot(
+      userRef,
+      (docSnapshot) => {
+        if (!docSnapshot.exists()) {
+          // User doc doesn't exist yet (new user)
+          setSubscription({
+            tier: 'lite',
+            status: 'pending',
+            isActive: false,
+            isTrialing: false,
+            trialEndsAt: null,
+            expiresAt: null,
+            hasLifetimeAccess: false,
+          });
+          setLoading(false);
+          return;
+        }
+
+        const data = docSnapshot.data();
+        const subscriptionData = determineSubscriptionStatus(data);
+        setSubscription(subscriptionData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error listening to user subscription:', error);
+        // On error, assume no active subscription
+        setSubscription({
+          tier: 'lite',
+          status: 'free',
+          isActive: false,
+          isTrialing: false,
+          trialEndsAt: null,
+          expiresAt: null,
+          hasLifetimeAccess: false,
+        });
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [user, authLoading]);
+
+  return { subscription, loading };
 };
+
+/**
+ * Determine subscription status from Firestore user data
+ * Matches mobile app's determineSubscriptionStatus logic
+ */
+function determineSubscriptionStatus(userData: any): Subscription {
+  const hasLifetimeAccess = userData.hasLifetimeAccess === true;
+  const subscriptionStatus = userData.subscriptionStatus;
+  const subscriptionTier = userData.subscriptionTier;
+  const isTrialing = userData.isTrialing === true;
+  const trialEndsAt = userData.trialEndsAt || null;
+  const expiresAt = userData.subscriptionExpiresAt || null;
+
+  // 1. Lifetime Access = PRO active
+  if (hasLifetimeAccess) {
+    return {
+      tier: 'pro',
+      status: 'active',
+      isActive: true,
+      isTrialing: false,
+      trialEndsAt: null,
+      expiresAt: null,
+      hasLifetimeAccess: true,
+    };
+  }
+
+  // 2. Active subscription = PRO active
+  if (subscriptionStatus === 'active') {
+    // Check tier - map various formats to pro/lite
+    const isPro = subscriptionTier === 'pro' ||
+                  subscriptionTier === 'athlete' ||
+                  subscriptionTier === 'athlete_plus' ||
+                  subscriptionTier === 'athletePlus';
+
+    return {
+      tier: isPro ? 'pro' : 'lite',
+      status: 'active',
+      isActive: true,
+      isTrialing: false,
+      trialEndsAt,
+      expiresAt,
+      hasLifetimeAccess: false,
+    };
+  }
+
+  // 3. Trialing with future end date = PRO active
+  if (isTrialing && trialEndsAt) {
+    const trialEndDate = new Date(trialEndsAt);
+    const now = new Date();
+
+    if (trialEndDate > now) {
+      return {
+        tier: 'pro',
+        status: 'trialing',
+        isActive: true,
+        isTrialing: true,
+        trialEndsAt,
+        expiresAt,
+        hasLifetimeAccess: false,
+      };
+    }
+  }
+
+  // 4. Default = LITE/free (not active)
+  return {
+    tier: 'lite',
+    status: subscriptionStatus === 'pending' ? 'pending' : 'free',
+    isActive: false,
+    isTrialing: false,
+    trialEndsAt,
+    expiresAt,
+    hasLifetimeAccess: false,
+  };
+}
+
+export default useSubscription;
