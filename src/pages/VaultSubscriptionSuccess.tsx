@@ -96,10 +96,10 @@ const VaultSubscriptionSuccess = () => {
             >
               <Button
                 onClick={() => navigate('/vault/onboarding')}
-                className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all text-base"
+                className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-bold py-8 rounded-2xl hover:shadow-vault-lg hover:scale-[1.02] transition-all text-xl"
               >
                 Create Your Account
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowRight className="w-6 h-6 ml-3" />
               </Button>
             </motion.div>
           </motion.div>
