@@ -275,30 +275,24 @@ const VaultDashboard = () => {
                 <h2 className="text-xl font-bold text-vault-text">Quick Actions</h2>
               </div>
               <div className="p-6 space-y-3">
-                <Button asChild variant="outline" className="w-full justify-start border-vault-border hover:bg-vault-primary-muted hover:border-vault-primary/20 text-vault-text-secondary hover:text-vault-primary transition-all rounded-xl">
-                  <Link to="/vault/equipment">
-                    <div className="w-8 h-8 rounded-lg bg-vault-primary-muted flex items-center justify-center mr-3">
-                      <Wrench className="h-4 w-4 text-vault-primary" />
-                    </div>
-                    Manage Equipment
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full justify-start border-vault-border hover:bg-vault-primary-muted hover:border-vault-primary/20 text-vault-text-secondary hover:text-vault-primary transition-all rounded-xl">
-                  <Link to="/vault/videos">
-                    <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center mr-3">
-                      <Video className="h-4 w-4 text-vault-warning" />
-                    </div>
-                    View Training Videos
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full justify-start border-vault-border hover:bg-vault-primary-muted hover:border-vault-primary/20 text-vault-text-secondary hover:text-vault-primary transition-all rounded-xl">
-                  <Link to="/vault/analytics">
-                    <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center mr-3">
-                      <BarChart3 className="h-4 w-4 text-vault-success" />
-                    </div>
-                    Performance Analytics
-                  </Link>
-                </Button>
+                <Link to="/vault/equipment" className="flex items-center gap-3 p-3 rounded-xl border border-vault-border hover:bg-vault-primary-muted/50 hover:border-vault-primary/30 transition-all group">
+                  <div className="w-10 h-10 rounded-full bg-vault-primary/10 flex items-center justify-center group-hover:bg-vault-primary/20 transition-colors">
+                    <Wrench className="h-5 w-5 text-vault-primary" />
+                  </div>
+                  <span className="font-medium text-vault-text group-hover:text-vault-primary transition-colors">Manage Equipment</span>
+                </Link>
+                <Link to="/vault/videos" className="flex items-center gap-3 p-3 rounded-xl border border-vault-border hover:bg-amber-50/50 hover:border-amber-200 transition-all group">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+                    <Video className="h-5 w-5 text-amber-600" />
+                  </div>
+                  <span className="font-medium text-vault-text group-hover:text-amber-600 transition-colors">View Training Videos</span>
+                </Link>
+                <Link to="/vault/analytics" className="flex items-center gap-3 p-3 rounded-xl border border-vault-border hover:bg-green-50/50 hover:border-green-200 transition-all group">
+                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                    <BarChart3 className="h-5 w-5 text-green-600" />
+                  </div>
+                  <span className="font-medium text-vault-text group-hover:text-green-600 transition-colors">Performance Analytics</span>
+                </Link>
 
                 <div className="pt-4 mt-4 border-t border-vault-border-light">
                   <p className="text-sm text-vault-text-secondary mb-3">

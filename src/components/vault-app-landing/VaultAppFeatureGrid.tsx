@@ -187,7 +187,7 @@ const VaultAppFeatureGrid = () => {
                             </div>
                             <div className="flex items-center gap-2 text-xs text-vault-text-muted">
                               <TrendingUp className="w-3.5 h-3.5" />
-                              <span>5.92m best · 2 jumps</span>
+                              <span>5.90m best · 2 jumps</span>
                             </div>
                           </div>
 
@@ -209,13 +209,13 @@ const VaultAppFeatureGrid = () => {
                           </div>
 
                           {/* Stats Bar */}
-                          <div className="bg-vault-bg-warm-start px-3 py-2.5 flex items-center justify-around">
+                          <div className="px-3 py-2.5 flex items-center justify-around">
                             <div className="text-center">
-                              <p className="text-base font-bold text-vault-primary">5.92m</p>
+                              <p className="text-base font-bold text-vault-primary">5.90m</p>
                               <p className="text-[10px] text-vault-text-muted">Height</p>
                             </div>
                             <div className="text-center">
-                              <p className="text-base font-bold text-vault-text">8</p>
+                              <p className="text-base font-bold text-vault-text">18</p>
                               <p className="text-[10px] text-vault-text-muted">Steps</p>
                             </div>
                             <div className="text-center">
@@ -264,7 +264,7 @@ const VaultAppFeatureGrid = () => {
                           </div>
 
                           {/* Stats Bar */}
-                          <div className="bg-vault-bg-warm-start px-3 py-2.5 flex items-center justify-around border-t border-vault-border-light">
+                          <div className="px-3 py-2.5 flex items-center justify-around border-t border-vault-border-light">
                             <div className="text-center">
                               <p className="text-base font-bold text-vault-primary">4.20m</p>
                               <p className="text-[10px] text-vault-text-muted">Height</p>

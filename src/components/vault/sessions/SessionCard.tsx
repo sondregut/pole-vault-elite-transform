@@ -1,21 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Session, Jump, formatDate, formatHeight, ratingLabels } from '@/types/vault';
-import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
-import { useVaultPoles } from '@/hooks/useVaultData';
-import { getPoleDisplayName } from '@/utils/poleHelpers';
+import { Session, formatHeight } from '@/types/vault';
 import {
-  Calendar,
   MapPin,
-  Target,
-  Activity,
+  Cloud,
   Video,
-  TrendingUp,
-  ArrowRight,
-  CheckCircle,
-  XCircle
+  Star
 } from 'lucide-react';
 
 interface SessionCardProps {
@@ -24,8 +14,6 @@ interface SessionCardProps {
 }
 
 const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) => {
-  const { user } = useFirebaseAuth();
-  const { poles } = useVaultPoles(user);
   const jumps = session.jumps || [];
   const successfulJumps = jumps.filter(jump => jump.result === 'make');
   const videoJumps = jumps.filter(jump => jump.videoUrl || jump.videoLocalUri);
@@ -39,143 +27,175 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, className = '' }) =>
       })
     : null;
 
-  // Calculate success rate
-  const successRate = jumps.length > 0 ? Math.round((successfulJumps.length / jumps.length) * 100) : 0;
+  // Calculate average rating (1-5 scale)
+  const ratingMap: Record<string, number> = {
+    'Run Thru': 1,
+    'Glider': 2,
+    'OK': 3,
+    'Good': 4,
+    'Great': 5
+  };
+
+  const jumpsWithRating = jumps.filter(j => j.rating && ratingMap[j.rating]);
+  const avgRating = jumpsWithRating.length > 0
+    ? jumpsWithRating.reduce((sum, j) => sum + (ratingMap[j.rating] || 0), 0) / jumpsWithRating.length
+    : 0;
 
   // Format date
   const sessionDate = new Date(session.date);
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
+  const dayOfWeek = sessionDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+  const fullDate = sessionDate.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
 
-  let dateLabel;
-  if (sessionDate.toDateString() === today.toDateString()) {
-    dateLabel = 'Today';
-  } else if (sessionDate.toDateString() === yesterday.toDateString()) {
-    dateLabel = 'Yesterday';
-  } else {
-    dateLabel = formatDate(session.date);
-  }
+  // Determine if competition
+  const isCompetition = session.sessionType?.toLowerCase().includes('competition') ||
+                        session.sessionType?.toLowerCase().includes('meet') ||
+                        session.sessionType?.toLowerCase() === 'comp';
 
-  // Get unique poles used
-  const uniquePoles = [...new Set(jumps.map(jump => jump.pole).filter(Boolean))];
+  // Get competition/meet name if available
+  const meetName = session.competitionName || session.meetName || (isCompetition ? session.location : null);
+
+  // Weather display
+  const hasWeather = session.weather || session.temperature;
+  const weatherText = [
+    session.weather,
+    session.temperature ? `${session.temperature}°F` : null
+  ].filter(Boolean).join(', ');
+
+  // Render stars for rating
+  const renderStars = (rating: number) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <Star
+          key={i}
+          className={`w-3.5 h-3.5 ${
+            i <= Math.round(rating)
+              ? 'text-amber-500 fill-amber-500'
+              : 'text-stone-300 fill-stone-300'
+          }`}
+        />
+      );
+    }
+    return stars;
+  };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-vault border border-vault-border-light hover:shadow-vault-md hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden ${className}`}>
-      <Link to={`/vault/sessions/${session.id}`}>
-        <div className="p-6 pb-4">
-          <div className="flex items-start justify-between">
+    <Link to={`/vault/sessions/${session.id}`} className={`block ${className}`}>
+      <div className="bg-[#fefdfb] rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] border border-[#e8e4df] hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-all duration-200 overflow-hidden">
+        {/* Header */}
+        <div className="px-5 pt-5 pb-3">
+          <div className="flex justify-between items-start">
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-vault-text mb-2">
-                {dateLabel}
-              </h3>
-
-              <div className="flex items-center gap-4 text-sm text-vault-text-secondary mb-3">
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4 text-vault-text-muted" />
-                  <span>{session.location || 'Training'}</span>
-                </div>
-                {session.sessionType && (
-                  <Badge className="text-xs bg-vault-primary-muted text-vault-primary border-vault-primary/20">
-                    {session.sessionType}
-                  </Badge>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-bold text-[#8b9299] tracking-wider">
+                  {dayOfWeek}
+                </span>
+                {meetName && (
+                  <span className="text-xs font-bold text-[#d4a056]">
+                    {meetName}
+                  </span>
                 )}
               </div>
-
-              {session.weather && (
-                <div className="text-sm text-vault-text-muted mb-2">
-                  <span>{session.weather}</span>
-                  {session.temperature && <span> • {session.temperature}°</span>}
-                  {session.windSpeed && <span> • Wind: {session.windSpeed}</span>}
+              <p className="text-lg font-bold text-[#1a3a5c]">
+                {fullDate}
+              </p>
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              <span className={`px-3 py-1 text-[11px] font-bold rounded-lg tracking-wide uppercase ${
+                isCompetition
+                  ? 'bg-[#fef7ed] text-[#d4a056] border border-[#f5dfc4]'
+                  : 'bg-[#e8f4f8] text-[#1a6b8a] border border-[#c5e4ed]'
+              }`}>
+                {isCompetition ? 'Comp' : 'Training'}
+              </span>
+              {videoJumps.length > 0 && (
+                <div className="flex items-center gap-1.5 text-[#6b7c8a]">
+                  <Video className="w-4 h-4" />
+                  <span className="text-xs font-semibold">
+                    {videoJumps.length}
+                  </span>
                 </div>
               )}
             </div>
-
-            <div className="text-right">
-              <div className="text-2xl font-bold text-vault-text mb-1">
-                {bestJump ? formatHeight(bestJump.height, bestJump.barUnits) : '—'}
-              </div>
-              <div className="text-sm text-vault-text-muted">
-                Personal best
-              </div>
-            </div>
           </div>
         </div>
 
-        <div className="px-6 pb-6">
-          {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div className="text-center p-3 bg-vault-primary-muted rounded-xl">
-              <div className="flex items-center justify-center gap-1 mb-1">
-                <Activity className="h-4 w-4 text-vault-primary" />
-                <span className="text-lg font-semibold text-vault-text">{jumps.length}</span>
-              </div>
-              <div className="text-xs text-vault-text-secondary">Jumps</div>
-            </div>
+        {/* Divider */}
+        <div className="mx-5 border-t border-[#e8e4df]" />
 
-            {session.sessionType?.toLowerCase() !== 'training' && (
-              <div className="text-center p-3 bg-green-50 rounded-xl">
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  {successRate >= 50 ? (
-                    <CheckCircle className="h-4 w-4 text-vault-success" />
-                  ) : (
-                    <XCircle className="h-4 w-4 text-vault-warning" />
-                  )}
-                  <span className="text-lg font-semibold text-vault-text">{successRate}%</span>
-                </div>
-                <div className="text-xs text-vault-text-secondary">Success</div>
+        {/* Location & Weather */}
+        {(session.location || hasWeather) && (
+          <div className="px-5 py-3 flex flex-wrap items-center gap-3">
+            {session.location && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#f5f3f0] rounded-full">
+                <MapPin className="w-3.5 h-3.5 text-[#8b9299]" />
+                <span className="text-xs text-[#5a6670] font-medium">
+                  {session.location}
+                </span>
               </div>
             )}
-
-            <div className="text-center p-3 bg-amber-50 rounded-xl">
-              <div className="flex items-center justify-center gap-1 mb-1">
-                <Video className="h-4 w-4 text-vault-warning" />
-                <span className="text-lg font-semibold text-vault-text">{videoJumps.length}</span>
+            {hasWeather && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#f5f3f0] rounded-full">
+                <Cloud className="w-3.5 h-3.5 text-[#8b9299]" />
+                <span className="text-xs text-[#5a6670] font-medium">
+                  {weatherText}
+                </span>
               </div>
-              <div className="text-xs text-vault-text-secondary">Videos</div>
-            </div>
+            )}
           </div>
+        )}
 
-          {/* Equipment Used */}
-          {uniquePoles.length > 0 && (
-            <div className="mb-4">
-              <div className="text-sm text-vault-text-secondary mb-2">Equipment used:</div>
-              <div className="flex flex-wrap gap-1">
-                {uniquePoles.slice(0, 3).map((pole, index) => (
-                  <Badge key={index} className="text-xs bg-vault-primary-muted text-vault-primary border-vault-primary/20">
-                    {getPoleDisplayName(pole, poles)}
-                  </Badge>
-                ))}
-                {uniquePoles.length > 3 && (
-                  <Badge className="text-xs bg-vault-primary-muted text-vault-primary border-vault-primary/20">
-                    +{uniquePoles.length - 3} more
-                  </Badge>
+        {/* Metrics Grid */}
+        <div className="mx-5 mb-5 bg-gradient-to-b from-[#f8f6f3] to-[#f3f1ed] rounded-xl border border-[#e8e4df]">
+          <div className="flex divide-x divide-[#e8e4df]">
+            {/* Best Height */}
+            <div className="flex-1 py-4 px-3 text-center">
+              <p className="text-[10px] text-[#8b9299] uppercase tracking-wider font-bold mb-1.5">
+                {isCompetition ? 'Official' : 'Max'}
+              </p>
+              <p className="text-xl font-bold text-[#1a6b8a]">
+                {bestJump ? formatHeight(bestJump.height, bestJump.barUnits) : '—'}
+              </p>
+            </div>
+
+            {/* Jumps */}
+            <div className="flex-1 py-4 px-3 text-center">
+              <p className="text-[10px] text-[#8b9299] uppercase tracking-wider font-bold mb-1.5">
+                Jumps
+              </p>
+              <p className="text-xl font-bold text-[#1a3a5c]">
+                {jumps.length}
+              </p>
+            </div>
+
+            {/* Rating */}
+            <div className="flex-1 py-4 px-3 text-center">
+              <p className="text-[10px] text-[#8b9299] uppercase tracking-wider font-bold mb-1.5">
+                Rating
+              </p>
+              <div className="flex justify-center gap-0.5">
+                {avgRating > 0 ? renderStars(avgRating) : (
+                  <span className="text-sm text-[#8b9299]">—</span>
                 )}
               </div>
             </div>
-          )}
-
-          {/* Session Goal */}
-          {session.sessionGoal && (
-            <div className="mb-4 p-3 bg-vault-primary-muted rounded-xl border border-vault-primary/20">
-              <div className="text-sm font-semibold text-vault-primary mb-1">Session Goal</div>
-              <div className="text-sm text-vault-text-secondary">{session.sessionGoal}</div>
-            </div>
-          )}
-
-          {/* View Details Button */}
-          <div className="flex justify-between items-center pt-3 border-t border-vault-border-light">
-            <div className="text-sm text-vault-text-muted">
-              {formatDate(session.date)} • {session.sessionType || 'Training'}
-            </div>
-            <Button variant="ghost" size="sm" className="text-vault-primary hover:text-vault-primary-dark hover:bg-vault-primary-muted font-semibold">
-              View Details
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
           </div>
         </div>
-      </Link>
-    </div>
+
+        {/* Session Notes */}
+        {session.sessionGoal && (
+          <div className="mx-5 mb-5 pl-3 border-l-3 border-[#1a6b8a]/40">
+            <p className="text-sm text-[#5a6670] italic line-clamp-2">
+              {session.sessionGoal}
+            </p>
+          </div>
+        )}
+      </div>
+    </Link>
   );
 };
 
