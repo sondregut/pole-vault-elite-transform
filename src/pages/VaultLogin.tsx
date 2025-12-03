@@ -16,9 +16,11 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
   ConfirmationResult,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from 'firebase/auth';
-import { firebaseAuth } from '@/utils/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { firebaseAuth, db } from '@/utils/firebase';
 
 type AuthMethod = 'select' | 'email' | 'phone';
 
@@ -202,8 +204,22 @@ const VaultLogin = () => {
     setError('');
 
     try {
-      await confirmationResult.confirm(verificationCode);
-      // No toast - useEffect will handle redirect
+      const result = await confirmationResult.confirm(verificationCode);
+
+      // Check if user already exists in Firestore (has an account from app)
+      const userDoc = await getDoc(doc(db, 'users', result.user.uid));
+
+      if (!userDoc.exists()) {
+        // No existing account - sign them out and show error
+        await signOut(firebaseAuth);
+        setError('No account found with this phone number. Please sign up with email first, or use the mobile app to create an account.');
+        setShowVerificationInput(false);
+        setVerificationCode('');
+        setConfirmationResult(null);
+        return;
+      }
+
+      // User exists - useEffect will handle redirect
     } catch (err: any) {
       console.error('Verification error:', err);
       if (err.code === 'auth/invalid-verification-code') {
