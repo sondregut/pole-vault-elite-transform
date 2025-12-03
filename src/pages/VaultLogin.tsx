@@ -35,7 +35,7 @@ const VaultLogin = () => {
       if (user && checkoutPriceId) {
         try {
           toast.info('Redirecting to checkout...');
-          await redirectToCheckout(checkoutPriceId, true);
+          await redirectToCheckout(checkoutPriceId, true, user.uid, user.email || undefined);
         } catch (error: any) {
           console.error('Checkout error:', error);
           toast.error('Failed to start checkout. Please try again from the pricing page.');
@@ -227,20 +227,12 @@ const VaultLogin = () => {
                     asChild
                     className="border-vault-primary text-vault-primary hover:bg-vault-primary hover:text-white transition-colors"
                   >
-                    <a href="/vault#pricing">
+                    <Link to="/vault/signup?plan=yearly">
                       <Sparkles className="mr-2 h-4 w-4" />
                       Sign Up – 50% Off
-                    </a>
+                    </Link>
                   </Button>
                 </div>
-
-                {/* Already paid - create account (subtle link) */}
-                <p className="text-sm text-vault-text-secondary">
-                  Already paid?{' '}
-                  <Link to="/vault/onboarding" className="text-vault-primary font-medium hover:underline">
-                    Create your account
-                  </Link>
-                </p>
               </div>
             </div>
           </div>

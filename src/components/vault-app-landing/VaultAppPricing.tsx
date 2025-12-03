@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Check, Zap, Star, Crown, Sparkles, Loader2, Mail, CheckCircle } from 'lucide-react';
-import { checkCouponAvailability, redirectToCheckout, PriceId } from '@/services/stripeService';
+import { checkCouponAvailability, PriceId } from '@/services/stripeService';
 import { toast } from 'sonner';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 
 const VaultAppPricing = () => {
+  const navigate = useNavigate();
   const [couponData, setCouponData] = useState<{
     available: boolean;
     remaining: number;
     discountPercent: number;
   } | null>(null);
-  const [loadingCheckout, setLoadingCheckout] = useState<string | null>(null);
   const [coachWaitlistEmail, setCoachWaitlistEmail] = useState('');
   const [coachWaitlistLoading, setCoachWaitlistLoading] = useState(false);
   const [coachWaitlistSuccess, setCoachWaitlistSuccess] = useState(false);
@@ -80,7 +81,7 @@ const VaultAppPricing = () => {
     fetchCouponData();
   }, []);
 
-  const handleSubscribe = async (tierName: string) => {
+  const handleSubscribe = (tierName: string) => {
     if (tierName === 'Coach') {
       // Coming soon
       return;
@@ -89,19 +90,8 @@ const VaultAppPricing = () => {
     // Determine price ID based on tier name
     const priceId: PriceId = tierName === 'Annual' ? 'yearly' : 'monthly';
 
-    setLoadingCheckout(tierName);
-
-    try {
-      // Go directly to Stripe checkout (no login required)
-      await redirectToCheckout(
-        priceId,
-        tierName === 'Annual' && (couponData?.available || false)
-      );
-    } catch (error: any) {
-      console.error('Checkout error:', error);
-      toast.error(error.message || 'Failed to start checkout. Please try again.');
-      setLoadingCheckout(null);
-    }
+    // Navigate to signup page with plan parameter
+    navigate(`/vault/signup?plan=${priceId}`);
   };
 
   // Calculate discounted prices
@@ -384,7 +374,7 @@ const VaultAppPricing = () => {
               ) : (
                 <Button
                   onClick={() => handleSubscribe(tier.name)}
-                  disabled={tier.comingSoon || loadingCheckout === tier.name}
+                  disabled={tier.comingSoon}
                   className={`w-full py-6 text-base font-semibold rounded-xl ${
                     tier.popular
                       ? 'bg-white text-vault-primary hover:bg-white/90'
@@ -393,14 +383,7 @@ const VaultAppPricing = () => {
                       : 'bg-vault-primary text-white hover:bg-vault-primary-light'
                   }`}
                 >
-                  {loadingCheckout === tier.name ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Loading...
-                    </>
-                  ) : (
-                    tier.cta
-                  )}
+                  {tier.cta}
                 </Button>
               )}
             </motion.div>

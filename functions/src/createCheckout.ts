@@ -12,8 +12,8 @@ const LAUNCH_COUPON_ID = process.env.LAUNCH_COUPON_ID || 'LAUNCH50';
 
 interface CheckoutRequest {
   priceId: 'monthly' | 'yearly';
-  userId: string;
-  userEmail: string;
+  userId?: string;
+  userEmail?: string;
   applyCoupon?: boolean;
 }
 
@@ -33,13 +33,24 @@ export const createCheckout = functions.https.onCall(
       );
     }
 
-    const { priceId, userId, userEmail, applyCoupon } = data;
+    const { priceId, applyCoupon } = data;
+
+    // Use authenticated user's ID (more secure than client-provided)
+    const userId = context.auth.uid;
+    const userEmail = data.userEmail || context.auth.token.email;
 
     // Validate input
-    if (!priceId || !userId || !userEmail) {
+    if (!priceId) {
       throw new functions.https.HttpsError(
         'invalid-argument',
-        'Missing required fields: priceId, userId, userEmail'
+        'Missing required field: priceId'
+      );
+    }
+
+    if (!userEmail) {
+      throw new functions.https.HttpsError(
+        'invalid-argument',
+        'User email is required'
       );
     }
 

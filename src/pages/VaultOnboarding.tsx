@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, User, AtSign, Trophy, Ruler, Target, Mail } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, User, AtSign, Trophy, Ruler, Target, Loader2 } from 'lucide-react';
 import { OnboardingProvider, useOnboarding } from '@/contexts/OnboardingContext';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { firebaseAuth, db, app } from '@/utils/firebase';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useToast } from '@/hooks/use-toast';
-import { redirectToCheckout } from '@/services/stripeService';
 
 // Competitive level options
 const competitiveLevels = [
@@ -483,43 +482,27 @@ const StepGoal = ({ onComplete, onBack }: { onComplete: () => void; onBack: () =
     }
 
     try {
-      // Save complete profile to Firestore
+      // Save/update profile to Firestore (merge with existing data from signup/webhook)
       await setDoc(doc(db, 'users', data.userId), {
         fullName: data.name,
         username: data.username,
-        email: data.email,
         sport: 'Track & Field - Pole Vault',
         competitiveLevel: data.competitiveLevel,
         preferredUnits: data.preferredUnits,
         personalRecord: data.personalRecord || 'Not set',
         goalHeight: goal || 'Not set',
         onboardingCompleted: true,
-        subscriptionTier: 'lite',
-        subscriptionStatus: 'free',
-        authProvider: 'email',
-        createdAt: serverTimestamp(),
-        lastLoginAt: serverTimestamp(),
         onboardingCompletedAt: serverTimestamp(),
-      });
-
-      // Claim the Stripe subscription for this user
-      try {
-        const functions = getFunctions(app);
-        const claimSubscription = httpsCallable(functions, 'claimSubscription');
-        const result = await claimSubscription({ userId: data.userId, email: data.email });
-        const claimData = result.data as { claimed: boolean; subscriptionTier?: string };
-
-        if (claimData.claimed) {
-          toast({
-            title: 'Pro Subscription Activated!',
-            description: 'Your VAULT Pro subscription has been linked to your account.',
-          });
-        }
-      } catch (claimError) {
-        console.error('Failed to claim subscription:', claimError);
-      }
+        lastLoginAt: serverTimestamp(),
+      }, { merge: true });
 
       updateData({ goalHeight: goal });
+
+      toast({
+        title: 'Welcome to VAULT!',
+        description: 'Your profile is all set up.',
+      });
+
       onComplete();
     } catch (err) {
       console.error('Failed to save profile:', err);
@@ -650,187 +633,17 @@ const StepGoal = ({ onComplete, onBack }: { onComplete: () => void; onBack: () =
   );
 };
 
-const StepAuth = ({ onNext }: { onNext: () => void }) => {
-  const { data, updateData } = useOnboarding();
-  const [email, setEmail] = useState(data.email);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCheckingSubscription, setIsCheckingSubscription] = useState(false);
-  const [error, setError] = useState('');
-  const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
-
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const isValidPassword = password.length >= 6;
-  const passwordsMatch = password === confirmPassword;
-  const canSubmit = isValidEmail && isValidPassword && passwordsMatch && !isLoading && !isCheckingSubscription;
-
-  const handleCreateAccount = async () => {
-    if (!canSubmit) return;
-
-    setIsLoading(true);
-    setIsCheckingSubscription(true);
-    setError('');
-    setSubscriptionNotFound(false);
-
-    const normalizedEmail = email.toLowerCase().trim();
-
-    try {
-      // FIRST: Check if this email has a valid Stripe subscription
-      const functions = getFunctions(app);
-      const checkSubscription = httpsCallable(functions, 'checkSubscriptionByEmail');
-
-      let hasValidSubscription = false;
-      try {
-        const checkResult = await checkSubscription({ email: normalizedEmail });
-        const checkData = checkResult.data as { exists: boolean; status?: string };
-        hasValidSubscription = checkData.exists && checkData.status === 'active';
-      } catch (checkError) {
-        console.error('Subscription check failed:', checkError);
-        setError('Unable to verify subscription. Please try again.');
-        setIsLoading(false);
-        setIsCheckingSubscription(false);
-        return;
-      }
-
-      if (!hasValidSubscription) {
-        setSubscriptionNotFound(true);
-        setError('No active subscription found for this email. Please subscribe first to create your account.');
-        setIsLoading(false);
-        setIsCheckingSubscription(false);
-        return;
-      }
-
-      setIsCheckingSubscription(false);
-
-      // Subscription verified - now create the account
-      const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-      const user = userCredential.user;
-
-      // Store email and userId for later profile save
-      updateData({ email: normalizedEmail, userId: user.uid });
-      onNext();
-    } catch (err: any) {
-      console.error('Account creation error:', err);
-      if (err.code === 'auth/email-already-in-use') {
-        setError('An account with this email already exists. Please sign in instead.');
-      } else if (err.code === 'auth/weak-password') {
-        setError('Password is too weak. Please use at least 6 characters.');
-      } else {
-        setError('Failed to create account. Please try again.');
-      }
-    } finally {
-      setIsLoading(false);
-      setIsCheckingSubscription(false);
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-center">
-        <div className="w-16 h-16 rounded-full bg-vault-primary/10 flex items-center justify-center">
-          <Mail className="w-8 h-8 text-vault-primary" />
-        </div>
-      </div>
-
-      <div className="bg-vault-primary/5 rounded-xl p-4 border border-vault-primary/10">
-        <p className="text-sm text-vault-text-secondary text-center">
-          <strong className="text-vault-primary">Important:</strong> Use the same email you used during checkout to activate your Pro subscription.
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-vault-text mb-1">Email</label>
-          <Input
-            type="email"
-            placeholder="your@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full py-5"
-            autoFocus
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-vault-text mb-1">Password</label>
-          <div className="relative">
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full py-5 pr-12"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-vault-text-muted hover:text-vault-text"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
-          </div>
-          {password && password.length < 6 && (
-            <p className="text-sm text-amber-600 mt-1">Password must be at least 6 characters</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-vault-text mb-1">Confirm Password</label>
-          <Input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Confirm your password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full py-5"
-          />
-          {confirmPassword && !passwordsMatch && (
-            <p className="text-sm text-red-500 mt-1">Passwords don't match</p>
-          )}
-        </div>
-      </div>
-
-      {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
-          {error}
-        </div>
-      )}
-
-      {subscriptionNotFound ? (
-        <div className="space-y-3">
-          <Button
-            onClick={() => redirectToCheckout('yearly', true)}
-            className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all"
-          >
-            Get Your Subscription
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
-          <p className="text-center text-sm text-vault-text-muted">
-            Already subscribed? Make sure to use the same email you used during checkout.
-          </p>
-        </div>
-      ) : (
-        <Button
-          onClick={handleCreateAccount}
-          disabled={!canSubmit}
-          className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all disabled:opacity-50"
-        >
-          {isLoading ? (isCheckingSubscription ? 'Verifying subscription...' : 'Creating Account...') : 'Create Account'}
-          {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
-        </Button>
-      )}
-    </div>
-  );
-};
-
 // Main Onboarding Component
 const OnboardingContent = () => {
   const navigate = useNavigate();
-  const { currentStep, setCurrentStep, totalSteps } = useOnboarding();
+  const { currentStep, setCurrentStep, updateData } = useOnboarding();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Total steps is now 6 (removed auth step)
+  const totalSteps = 6;
 
   const titles = [
-    'Create your account',
     "What's your name?",
     'Choose a username',
     "What's your competitive level?",
@@ -840,7 +653,6 @@ const OnboardingContent = () => {
   ];
 
   const subtitles = [
-    'Verify your subscription to get started',
     "Let's get to know you",
     'This is how other athletes will find you',
     'Help us personalize your experience',
@@ -848,6 +660,40 @@ const OnboardingContent = () => {
     'Your best vault so far',
     'Dream big - what are you working towards?',
   ];
+
+  // Check authentication on mount
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
+      if (user) {
+        // User is authenticated, store their info
+        updateData({
+          userId: user.uid,
+          email: user.email || '',
+          name: user.displayName || '',
+        });
+
+        // Check if user has already completed onboarding
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists() && userDoc.data()?.onboardingCompleted) {
+            // Already onboarded, redirect to dashboard
+            navigate('/vault/dashboard');
+            return;
+          }
+        } catch (err) {
+          console.error('Error checking onboarding status:', err);
+        }
+
+        setIsAuthenticated(true);
+      } else {
+        // Not authenticated, redirect to signup
+        navigate('/vault/signup');
+      }
+      setIsCheckingAuth(false);
+    });
+
+    return () => unsubscribe();
+  }, [navigate, updateData]);
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -866,6 +712,23 @@ const OnboardingContent = () => {
   };
 
   const progress = (currentStep / totalSteps) * 100;
+
+  // Show loading while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-vault-bg-warm-start to-white font-roboto flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-vault-primary mx-auto mb-4" />
+          <p className="text-vault-text-secondary">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If not authenticated, don't render (will redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-vault-bg-warm-start to-white font-roboto flex flex-col">
@@ -916,14 +779,13 @@ const OnboardingContent = () => {
               <p className="text-vault-text-secondary">{subtitles[currentStep - 1]}</p>
             </div>
 
-            {/* Step content */}
-            {currentStep === 1 && <StepAuth onNext={handleNext} />}
-            {currentStep === 2 && <StepName onNext={handleNext} />}
-            {currentStep === 3 && <StepUsername onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 4 && <StepLevel onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 5 && <StepUnits onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 6 && <StepPR onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 7 && <StepGoal onComplete={handleComplete} onBack={handleBack} />}
+            {/* Step content - now 6 steps instead of 7 */}
+            {currentStep === 1 && <StepName onNext={handleNext} />}
+            {currentStep === 2 && <StepUsername onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 3 && <StepLevel onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 4 && <StepUnits onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 5 && <StepPR onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 6 && <StepGoal onComplete={handleComplete} onBack={handleBack} />}
           </motion.div>
         </AnimatePresence>
       </main>

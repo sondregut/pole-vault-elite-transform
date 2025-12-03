@@ -8,6 +8,8 @@ export type PriceId = 'monthly' | 'yearly';
 export interface CheckoutRequest {
   priceId: PriceId;
   applyCoupon?: boolean;
+  userId?: string;
+  userEmail?: string;
 }
 
 export interface CheckoutResponse {
@@ -66,15 +68,23 @@ export const checkCouponAvailability = async (): Promise<CouponAvailability> => 
 };
 
 /**
- * Redirect user to Stripe Checkout (no login required)
+ * Redirect user to Stripe Checkout
+ * @param priceId - 'monthly' or 'yearly'
+ * @param applyCoupon - Whether to apply launch discount
+ * @param userId - Firebase user ID (required for authenticated flow)
+ * @param userEmail - User's email address (required for authenticated flow)
  */
 export const redirectToCheckout = async (
   priceId: PriceId,
-  applyCoupon: boolean = true
+  applyCoupon: boolean = true,
+  userId?: string,
+  userEmail?: string
 ): Promise<{ couponApplied: boolean; couponRemaining?: number }> => {
   const response = await createCheckoutSession({
     priceId,
     applyCoupon,
+    userId,
+    userEmail,
   });
 
   // Redirect to Stripe Checkout

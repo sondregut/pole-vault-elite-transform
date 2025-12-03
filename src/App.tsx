@@ -58,6 +58,7 @@ import VaultTermsOfService from "./pages/VaultTermsOfService";
 import VaultAppLanding from "./pages/VaultAppLanding";
 import VaultSubscriptionSuccess from "./pages/VaultSubscriptionSuccess";
 import VaultOnboarding from "./pages/VaultOnboarding";
+import VaultSignup from "./pages/VaultSignup";
 import PointsCalculator from "./pages/PointsCalculator";
 
 const queryClient = new QueryClient();
@@ -95,6 +96,7 @@ const App = () => (
             <Route path="/admin/videos" element={<AdminVideos />} />
             <Route path="/vault" element={<VaultAppLanding />} />
             <Route path="/vault/login" element={<VaultLogin />} />
+            <Route path="/vault/signup" element={<VaultSignup />} />
             <Route path="/vault/subscription-success" element={<VaultSubscriptionSuccess />} />
             <Route path="/vault/onboarding" element={<VaultOnboarding />} />
             <Route path="/vault/invite/:inviteCode" element={<VaultInvite />} />

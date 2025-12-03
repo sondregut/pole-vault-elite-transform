@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Sparkles, ArrowRight, Mail } from 'lucide-react';
+import { CheckCircle, Sparkles, ArrowRight } from 'lucide-react';
 import VaultAppNavbar from '@/components/vault-app-landing/VaultAppNavbar';
 
 const VaultSubscriptionSuccess = () => {
@@ -55,36 +55,20 @@ const VaultSubscriptionSuccess = () => {
               Your subscription is now active. You have full access to all Pro features.
             </motion.p>
 
-            {/* Important Email Notice */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="bg-vault-primary/5 rounded-xl p-4 mb-8 border border-vault-primary/10"
-            >
-              <div className="flex items-center justify-center gap-2 text-vault-primary mb-2">
-                <Mail className="w-5 h-5" />
-                <p className="text-sm font-semibold">Important</p>
-              </div>
-              <p className="text-sm text-vault-text-secondary">
-                Use the same email address you entered during checkout to create your account and activate your Pro subscription.
-              </p>
-            </motion.div>
-
             {/* What's Next Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
+              transition={{ delay: 0.5 }}
               className="bg-white rounded-2xl shadow-vault border border-vault-border p-6 mb-8"
             >
               <h2 className="text-lg font-semibold text-vault-text mb-4 flex items-center justify-center gap-2">
                 <Sparkles className="w-5 h-5 text-vault-primary" />
-                Next Step
+                Final Step
               </h2>
 
               <p className="text-vault-text-secondary mb-4">
-                Create your VAULT account to unlock all your Pro features and start tracking your pole vault progress.
+                Complete your profile to unlock all your Pro features and start tracking your pole vault progress.
               </p>
             </motion.div>
 
@@ -92,13 +76,13 @@ const VaultSubscriptionSuccess = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
+              transition={{ delay: 0.6 }}
             >
               <Button
                 onClick={() => navigate('/vault/onboarding')}
                 className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-bold py-8 rounded-2xl hover:shadow-vault-lg hover:scale-[1.02] transition-all text-xl"
               >
-                Create Your Account
+                Complete Your Profile
                 <ArrowRight className="w-6 h-6 ml-3" />
               </Button>
             </motion.div>
