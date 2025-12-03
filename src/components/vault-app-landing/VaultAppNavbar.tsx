@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Sparkles } from 'lucide-react';
 
 const VaultAppNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Check if we're on the landing page
+  const isOnLandingPage = location.pathname === '/vault' || location.pathname === '/vault/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,11 +21,18 @@ const VaultAppNavbar = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
     setIsMobileMenuOpen(false);
+
+    if (isOnLandingPage) {
+      // On landing page - scroll to section
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // On different page - navigate to landing page with hash
+      navigate(`/vault#${id}`);
+    }
   };
 
   const navLinks = [
@@ -39,7 +52,7 @@ const VaultAppNavbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="#" className="flex items-center gap-2">
+            <a href="/vault" className="flex items-center gap-2">
               <img
                 src="/images/vault-logo.png"
                 alt="VAULT Logo"
@@ -75,7 +88,7 @@ const VaultAppNavbar = () => {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center">
             <Button
-              onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => scrollToSection('pricing')}
               className="bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold px-5 py-2 rounded-lg hover:shadow-vault-md transition-all"
             >
               <Sparkles className="w-4 h-4 mr-2" />
@@ -120,10 +133,7 @@ const VaultAppNavbar = () => {
             ))}
             <div className="pt-3 border-t border-vault-border">
               <Button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+                onClick={() => scrollToSection('pricing')}
                 className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-3 rounded-lg"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
