@@ -9,6 +9,7 @@ export interface OnboardingData {
   goalHeight: string;
   email: string;
   password: string;
+  userId: string;
 }
 
 interface OnboardingContextType {
@@ -28,6 +29,7 @@ const defaultData: OnboardingData = {
   goalHeight: '',
   email: '',
   password: '',
+  userId: '',
 };
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);

@@ -217,9 +217,10 @@ const VaultLogin = () => {
                   Use the same email and password from your VAULT mobile app
                 </p>
 
+                {/* New user - sign up */}
                 <div className="bg-vault-primary/5 rounded-xl p-4 border border-vault-primary/10">
                   <p className="text-sm text-vault-text font-medium mb-3">
-                    Don't have an account yet?
+                    New to VAULT?
                   </p>
                   <Button
                     variant="outline"
@@ -232,6 +233,14 @@ const VaultLogin = () => {
                     </a>
                   </Button>
                 </div>
+
+                {/* Already paid - create account (subtle link) */}
+                <p className="text-sm text-vault-text-secondary">
+                  Already paid?{' '}
+                  <Link to="/vault/onboarding" className="text-vault-primary font-medium hover:underline">
+                    Create your account
+                  </Link>
+                </p>
               </div>
             </div>
           </div>

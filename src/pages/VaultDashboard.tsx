@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { useVaultSessions, useVaultStats } from '@/hooks/useVaultData';
 import { formatDate, formatHeight, ratingLabels } from '@/types/vault';
@@ -15,15 +22,42 @@ import {
   Download,
   Smartphone,
   Activity,
-  Clock
+  Clock,
+  PartyPopper,
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
 
 const VaultDashboard = () => {
   const { user } = useFirebaseAuth();
   const { sessions, loading: sessionsLoading } = useVaultSessions(user);
   const { stats, loading: statsLoading } = useVaultStats(user, sessions);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   const loading = sessionsLoading || statsLoading;
+
+  // Check if this is the user's first visit to the dashboard
+  useEffect(() => {
+    if (user) {
+      const welcomeKey = `vault_welcome_shown_${user.uid}`;
+      const hasSeenWelcome = localStorage.getItem(welcomeKey);
+
+      if (!hasSeenWelcome) {
+        // Small delay so the page loads first
+        const timer = setTimeout(() => {
+          setShowWelcome(true);
+        }, 500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [user]);
+
+  const handleCloseWelcome = () => {
+    if (user) {
+      localStorage.setItem(`vault_welcome_shown_${user.uid}`, 'true');
+    }
+    setShowWelcome(false);
+  };
 
   const dashboardStats = stats ? [
     {
@@ -66,6 +100,57 @@ const VaultDashboard = () => {
 
   return (
     <div>
+      {/* Welcome Dialog for First-Time Users */}
+      <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-vault-primary to-vault-primary-dark rounded-full flex items-center justify-center">
+                <PartyPopper className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <DialogTitle className="text-2xl font-bold text-vault-text text-center">
+              Welcome to VAULT Pro!
+            </DialogTitle>
+            <DialogDescription className="text-center text-vault-text-secondary pt-2">
+              Your account is all set up and ready to go. Here's what you can do:
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-4">
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-vault-primary-muted/50">
+              <Smartphone className="w-5 h-5 text-vault-primary mt-0.5" />
+              <div>
+                <p className="font-medium text-vault-text text-sm">Download the Mobile App</p>
+                <p className="text-xs text-vault-text-secondary">Log training sessions, videos, and track your progress on the go</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-vault-primary-muted/50">
+              <BarChart3 className="w-5 h-5 text-vault-primary mt-0.5" />
+              <div>
+                <p className="font-medium text-vault-text text-sm">View Your Analytics</p>
+                <p className="text-xs text-vault-text-secondary">Your training data syncs here automatically for deeper analysis</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-vault-primary-muted/50">
+              <Sparkles className="w-5 h-5 text-vault-primary mt-0.5" />
+              <div>
+                <p className="font-medium text-vault-text text-sm">Enjoy Pro Features</p>
+                <p className="text-xs text-vault-text-secondary">Unlimited sessions, video storage, and advanced analytics</p>
+              </div>
+            </div>
+          </div>
+
+          <Button
+            onClick={handleCloseWelcome}
+            className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all"
+          >
+            Let's Go!
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
+        </DialogContent>
+      </Dialog>
+
       {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {loading ? (
@@ -328,7 +413,7 @@ const VaultDashboard = () => {
                         Learn More About Vault
                       </Link>
                     </Button>
-                    <Button asChild size="sm" variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-lg">
+                    <Button asChild size="sm" variant="outline" className="border-white/30 bg-white text-vault-primary hover:bg-white/90 rounded-lg font-medium">
                       <a href="mailto:support@vaultapp.com">
                         Need Help?
                       </a>

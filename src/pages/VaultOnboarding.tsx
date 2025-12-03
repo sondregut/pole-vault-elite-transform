@@ -343,11 +343,48 @@ const StepPR = ({ onNext, onBack }: { onNext: () => void; onBack: () => void }) 
   };
 
   const handleMetersChange = (value: string) => {
-    // Allow only numbers and one decimal point
-    const cleaned = value.replace(/[^0-9.]/g, '');
-    const parts = cleaned.split('.');
-    if (parts.length > 2) return;
-    if (parts[1]?.length > 2) return;
+    // If empty, clear everything
+    if (value === '') {
+      setMeters('');
+      return;
+    }
+
+    // Remove any non-numeric characters except period
+    let cleaned = value.replace(/[^\d.]/g, '');
+
+    // Remove all periods to count digits
+    const digitsOnly = cleaned.replace(/\./g, '');
+
+    // If no digits, clear
+    if (digitsOnly.length === 0) {
+      setMeters('');
+      return;
+    }
+
+    // If user is deleting from "X." (single digit), clear everything
+    // Detect this by checking if input is just one digit with no period
+    const currentDigitsOnly = meters.replace(/[^\d]/g, '');
+    if (currentDigitsOnly.length === 1 && digitsOnly.length === 1 && !value.includes('.')) {
+      setMeters('');
+      return;
+    }
+
+    // Format based on number of digits
+    if (digitsOnly.length === 1) {
+      // Single digit: show as "X."
+      cleaned = digitsOnly + '.';
+    } else {
+      // Multiple digits: show as "X.XX"
+      cleaned = digitsOnly.charAt(0) + '.' + digitsOnly.slice(1);
+    }
+
+    // Limit to 3 digits total (X.XX format)
+    const maxDigits = 3;
+    if (digitsOnly.length > maxDigits) {
+      const limitedDigits = digitsOnly.slice(0, maxDigits);
+      cleaned = limitedDigits.charAt(0) + '.' + limitedDigits.slice(1);
+    }
+
     setMeters(cleaned);
   };
 
@@ -423,15 +460,19 @@ const StepPR = ({ onNext, onBack }: { onNext: () => void; onBack: () => void }) 
   );
 };
 
-const StepGoal = ({ onNext, onBack }: { onNext: () => void; onBack: () => void }) => {
+const StepGoal = ({ onComplete, onBack }: { onComplete: () => void; onBack: () => void }) => {
   const { data, updateData } = useOnboarding();
   const [feet, setFeet] = useState('');
   const [inches, setInches] = useState('');
   const [meters, setMeters] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const isMetric = data.preferredUnits === 'metric';
 
-  const handleNext = () => {
+  const handleComplete = async () => {
+    setIsLoading(true);
+
     let goal = '';
     if (isMetric) {
       goal = meters ? `${meters}m` : '';
@@ -440,15 +481,101 @@ const StepGoal = ({ onNext, onBack }: { onNext: () => void; onBack: () => void }
         goal = `${feet || '0'}'${inches || '0'}"`;
       }
     }
-    updateData({ goalHeight: goal });
-    onNext();
+
+    try {
+      // Save complete profile to Firestore
+      await setDoc(doc(db, 'users', data.userId), {
+        fullName: data.name,
+        username: data.username,
+        email: data.email,
+        sport: 'Track & Field - Pole Vault',
+        competitiveLevel: data.competitiveLevel,
+        preferredUnits: data.preferredUnits,
+        personalRecord: data.personalRecord || 'Not set',
+        goalHeight: goal || 'Not set',
+        onboardingCompleted: true,
+        subscriptionTier: 'lite',
+        subscriptionStatus: 'free',
+        authProvider: 'email',
+        createdAt: serverTimestamp(),
+        lastLoginAt: serverTimestamp(),
+        onboardingCompletedAt: serverTimestamp(),
+      });
+
+      // Claim the Stripe subscription for this user
+      try {
+        const functions = getFunctions(app);
+        const claimSubscription = httpsCallable(functions, 'claimSubscription');
+        const result = await claimSubscription({ userId: data.userId, email: data.email });
+        const claimData = result.data as { claimed: boolean; subscriptionTier?: string };
+
+        if (claimData.claimed) {
+          toast({
+            title: 'Pro Subscription Activated!',
+            description: 'Your VAULT Pro subscription has been linked to your account.',
+          });
+        }
+      } catch (claimError) {
+        console.error('Failed to claim subscription:', claimError);
+      }
+
+      updateData({ goalHeight: goal });
+      onComplete();
+    } catch (err) {
+      console.error('Failed to save profile:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to save your profile. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleMetersChange = (value: string) => {
-    const cleaned = value.replace(/[^0-9.]/g, '');
-    const parts = cleaned.split('.');
-    if (parts.length > 2) return;
-    if (parts[1]?.length > 2) return;
+    // If empty, clear everything
+    if (value === '') {
+      setMeters('');
+      return;
+    }
+
+    // Remove any non-numeric characters except period
+    let cleaned = value.replace(/[^\d.]/g, '');
+
+    // Remove all periods to count digits
+    const digitsOnly = cleaned.replace(/\./g, '');
+
+    // If no digits, clear
+    if (digitsOnly.length === 0) {
+      setMeters('');
+      return;
+    }
+
+    // If user is deleting from "X." (single digit), clear everything
+    // Detect this by checking if input is just one digit with no period
+    const currentDigitsOnly = meters.replace(/[^\d]/g, '');
+    if (currentDigitsOnly.length === 1 && digitsOnly.length === 1 && !value.includes('.')) {
+      setMeters('');
+      return;
+    }
+
+    // Format based on number of digits
+    if (digitsOnly.length === 1) {
+      // Single digit: show as "X."
+      cleaned = digitsOnly + '.';
+    } else {
+      // Multiple digits: show as "X.XX"
+      cleaned = digitsOnly.charAt(0) + '.' + digitsOnly.slice(1);
+    }
+
+    // Limit to 3 digits total (X.XX format)
+    const maxDigits = 3;
+    if (digitsOnly.length > maxDigits) {
+      const limitedDigits = digitsOnly.slice(0, maxDigits);
+      cleaned = limitedDigits.charAt(0) + '.' + limitedDigits.slice(1);
+    }
+
     setMeters(cleaned);
   };
 
@@ -503,30 +630,28 @@ const StepGoal = ({ onNext, onBack }: { onNext: () => void; onBack: () => void }
 
       <div className="space-y-3">
         <Button
-          onClick={handleNext}
-          className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all"
+          onClick={handleComplete}
+          disabled={isLoading}
+          className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all disabled:opacity-50"
         >
-          Continue
-          <ArrowRight className="w-5 h-5 ml-2" />
+          {isLoading ? 'Finishing Setup...' : 'Complete Setup'}
+          {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
         </Button>
         <Button
-          onClick={() => {
-            updateData({ goalHeight: '' });
-            onNext();
-          }}
+          onClick={handleComplete}
+          disabled={isLoading}
           variant="ghost"
           className="w-full text-vault-text-secondary"
         >
-          Skip for now
+          {isLoading ? 'Please wait...' : 'Skip for now'}
         </Button>
       </div>
     </div>
   );
 };
 
-const StepAuth = ({ onComplete }: { onComplete: () => void }) => {
+const StepAuth = ({ onNext }: { onNext: () => void }) => {
   const { data, updateData } = useOnboarding();
-  const navigate = useNavigate();
   const [email, setEmail] = useState(data.email);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -535,7 +660,6 @@ const StepAuth = ({ onComplete }: { onComplete: () => void }) => {
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(false);
   const [error, setError] = useState('');
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
-  const { toast } = useToast();
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isValidPassword = password.length >= 6;
@@ -584,43 +708,9 @@ const StepAuth = ({ onComplete }: { onComplete: () => void }) => {
       const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
       const user = userCredential.user;
 
-      // Save user profile to Firestore
-      await setDoc(doc(db, 'users', user.uid), {
-        fullName: data.name,
-        username: data.username,
-        email: normalizedEmail,
-        sport: 'Track & Field - Pole Vault',
-        competitiveLevel: data.competitiveLevel,
-        preferredUnits: data.preferredUnits,
-        personalRecord: data.personalRecord || 'Not set',
-        goalHeight: data.goalHeight || 'Not set',
-        onboardingCompleted: true,
-        subscriptionTier: 'lite',
-        subscriptionStatus: 'free',
-        authProvider: 'email',
-        createdAt: serverTimestamp(),
-        lastLoginAt: serverTimestamp(),
-        onboardingCompletedAt: serverTimestamp(),
-      });
-
-      // Claim the Stripe subscription for this user
-      try {
-        const claimSubscription = httpsCallable(functions, 'claimSubscription');
-        const result = await claimSubscription({ userId: user.uid, email: normalizedEmail });
-        const claimData = result.data as { claimed: boolean; subscriptionTier?: string };
-
-        if (claimData.claimed) {
-          toast({
-            title: 'Pro Subscription Activated!',
-            description: 'Your VAULT Pro subscription has been linked to your account.',
-          });
-        }
-      } catch (claimError) {
-        console.error('Failed to claim subscription:', claimError);
-      }
-
-      updateData({ email, password });
-      onComplete();
+      // Store email and userId for later profile save
+      updateData({ email: normalizedEmail, userId: user.uid });
+      onNext();
     } catch (err: any) {
       console.error('Account creation error:', err);
       if (err.code === 'auth/email-already-in-use') {
@@ -740,23 +830,23 @@ const OnboardingContent = () => {
   const { currentStep, setCurrentStep, totalSteps } = useOnboarding();
 
   const titles = [
+    'Create your account',
     "What's your name?",
     'Choose a username',
     "What's your competitive level?",
     'Preferred units',
     "What's your personal record?",
     "What's your goal height?",
-    'Create your account',
   ];
 
   const subtitles = [
+    'Verify your subscription to get started',
     "Let's get to know you",
     'This is how other athletes will find you',
     'Help us personalize your experience',
     'How would you like to track your heights?',
     'Your best vault so far',
     'Dream big - what are you working towards?',
-    'Almost there! Set up your login',
   ];
 
   const handleNext = () => {
@@ -827,13 +917,13 @@ const OnboardingContent = () => {
             </div>
 
             {/* Step content */}
-            {currentStep === 1 && <StepName onNext={handleNext} />}
-            {currentStep === 2 && <StepUsername onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 3 && <StepLevel onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 4 && <StepUnits onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 5 && <StepPR onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 6 && <StepGoal onNext={handleNext} onBack={handleBack} />}
-            {currentStep === 7 && <StepAuth onComplete={handleComplete} />}
+            {currentStep === 1 && <StepAuth onNext={handleNext} />}
+            {currentStep === 2 && <StepName onNext={handleNext} />}
+            {currentStep === 3 && <StepUsername onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 4 && <StepLevel onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 5 && <StepUnits onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 6 && <StepPR onNext={handleNext} onBack={handleBack} />}
+            {currentStep === 7 && <StepGoal onComplete={handleComplete} onBack={handleBack} />}
           </motion.div>
         </AnimatePresence>
       </main>
