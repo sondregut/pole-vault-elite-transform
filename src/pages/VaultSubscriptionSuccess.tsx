@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Sparkles, ArrowRight, Mail } from 'lucide-react';
 import VaultAppNavbar from '@/components/vault-app-landing/VaultAppNavbar';
-import VaultAppFooter from '@/components/vault-app-landing/VaultAppFooter';
 
 const VaultSubscriptionSuccess = () => {
   const navigate = useNavigate();
@@ -107,7 +106,43 @@ const VaultSubscriptionSuccess = () => {
         </div>
       </main>
 
-      <VaultAppFooter />
+      {/* Simple Footer - No CTA */}
+      <div className="bg-vault-primary-dark py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <img
+                src="/images/vault-logo.png"
+                alt="VAULT Logo"
+                className="h-8 w-8 object-contain"
+              />
+              <span className="text-white/80 text-sm">
+                © 2025 VAULT. Built by Sondre & Simen Guttormsen.
+              </span>
+            </div>
+            <div className="flex items-center gap-6">
+              <a
+                href="/vault/privacy"
+                className="text-white/60 text-sm hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="/vault/terms"
+                className="text-white/60 text-sm hover:text-white transition-colors"
+              >
+                Terms of Service
+              </a>
+              <a
+                href="/contact"
+                className="text-white/60 text-sm hover:text-white transition-colors"
+              >
+                Contact
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

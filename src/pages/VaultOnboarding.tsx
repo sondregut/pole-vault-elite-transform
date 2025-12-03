@@ -68,10 +68,13 @@ const StepUsername = ({ onNext, onBack }: { onNext: () => void; onBack: () => vo
   const { data, updateData } = useOnboarding();
   const [username, setUsername] = useState(data.username);
   const [error, setError] = useState('');
+  const [isChecking, setIsChecking] = useState(false);
+  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
 
   const validateUsername = (value: string) => {
     const cleaned = value.toLowerCase().replace(/\s/g, '');
     setUsername(cleaned);
+    setIsAvailable(null);
 
     if (cleaned.length < 3) {
       setError('Username must be at least 3 characters');
@@ -84,11 +87,45 @@ const StepUsername = ({ onNext, onBack }: { onNext: () => void; onBack: () => vo
     }
   };
 
-  const isValid = username.length >= 3 && username.length <= 20 && /^[a-z0-9_.\-]+$/.test(username);
+  const isValidFormat = username.length >= 3 && username.length <= 20 && /^[a-z0-9_.\-]+$/.test(username);
 
-  const handleNext = () => {
-    updateData({ username });
-    onNext();
+  const checkUsernameAvailability = async () => {
+    if (!isValidFormat) return;
+
+    setIsChecking(true);
+    setError('');
+
+    try {
+      const functions = getFunctions(app);
+      const checkUsername = httpsCallable(functions, 'checkUsernameAvailable');
+      const result = await checkUsername({ username });
+      const data = result.data as { available: boolean; message: string; reason?: string };
+
+      setIsAvailable(data.available);
+      if (!data.available) {
+        setError(data.message || 'This username is already taken');
+      }
+    } catch (err) {
+      console.error('Username check failed:', err);
+      // If the check fails, allow the user to continue (will be checked again on account creation)
+      setIsAvailable(true);
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const handleNext = async () => {
+    if (!isValidFormat) return;
+
+    // Check availability before proceeding
+    if (isAvailable === null) {
+      await checkUsernameAvailability();
+    }
+
+    if (isAvailable) {
+      updateData({ username });
+      onNext();
+    }
   };
 
   return (
@@ -107,23 +144,32 @@ const StepUsername = ({ onNext, onBack }: { onNext: () => void; onBack: () => vo
             placeholder="username"
             value={username}
             onChange={(e) => validateUsername(e.target.value)}
+            onBlur={checkUsernameAvailability}
             className="text-center text-xl py-6 pl-10 border-0 border-b-2 border-vault-border rounded-none focus:border-vault-primary focus:ring-0 bg-transparent"
             autoFocus
           />
         </div>
-        {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
-        <p className="text-vault-text-muted text-sm mt-2 text-center">
-          Use letters, numbers, underscores, hyphens, and periods
-        </p>
+        {isChecking && (
+          <p className="text-vault-text-muted text-sm mt-2 text-center">Checking availability...</p>
+        )}
+        {!isChecking && error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
+        {!isChecking && !error && isAvailable === true && (
+          <p className="text-green-600 text-sm mt-2 text-center">Username is available!</p>
+        )}
+        {!isChecking && !error && isAvailable === null && (
+          <p className="text-vault-text-muted text-sm mt-2 text-center">
+            Use letters, numbers, underscores, hyphens, and periods
+          </p>
+        )}
       </div>
 
       <Button
         onClick={handleNext}
-        disabled={!isValid}
+        disabled={!isValidFormat || isChecking || isAvailable === false}
         className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all disabled:opacity-50"
       >
-        Continue
-        <ArrowRight className="w-5 h-5 ml-2" />
+        {isChecking ? 'Checking...' : 'Continue'}
+        {!isChecking && <ArrowRight className="w-5 h-5 ml-2" />}
       </Button>
     </div>
   );
@@ -517,17 +563,11 @@ const StepAuth = ({ onComplete }: { onComplete: () => void }) => {
         const checkData = checkResult.data as { exists: boolean; status?: string };
         hasValidSubscription = checkData.exists && checkData.status === 'active';
       } catch (checkError) {
-        // If the function doesn't exist yet, fall back to allowing account creation
-        // This is a temporary measure - remove once the function is deployed
-        console.log('Subscription check failed, checking stripeSubscriptions directly');
-
-        // Direct Firestore check as fallback
-        const { getDoc } = await import('firebase/firestore');
-        const subDoc = await getDoc(doc(db, 'stripeSubscriptions', normalizedEmail));
-        if (subDoc.exists()) {
-          const subData = subDoc.data();
-          hasValidSubscription = subData.subscriptionStatus === 'active' || subData.isTrialing === true;
-        }
+        console.error('Subscription check failed:', checkError);
+        setError('Unable to verify subscription. Please try again.');
+        setIsLoading(false);
+        setIsCheckingSubscription(false);
+        return;
       }
 
       if (!hasValidSubscription) {

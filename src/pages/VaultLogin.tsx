@@ -35,12 +35,7 @@ const VaultLogin = () => {
       if (user && checkoutPriceId) {
         try {
           toast.info('Redirecting to checkout...');
-          await redirectToCheckout(
-            checkoutPriceId,
-            user.uid,
-            user.email || '',
-            true // Apply coupon if available
-          );
+          await redirectToCheckout(checkoutPriceId, true);
         } catch (error: any) {
           console.error('Checkout error:', error);
           toast.error('Failed to start checkout. Please try again from the pricing page.');
