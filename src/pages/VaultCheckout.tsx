@@ -236,7 +236,7 @@ const VaultCheckout = () => {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Side - Plan Details (white background like Headspace) */}
-      <div className="lg:w-1/2 bg-white p-6 lg:p-12 flex flex-col">
+      <div className="lg:w-1/2 bg-white p-6 lg:p-12 flex flex-col justify-center">
         {/* Logo */}
         <div className="flex items-center gap-3 mb-8">
           <img
@@ -248,59 +248,52 @@ const VaultCheckout = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* Headline */}
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8">
-              {isYearly && checkoutData.couponApplied ? '50% off ' : ''}
-              {isYearly ? 'annual' : 'monthly'} membership
-            </h1>
-
-            {/* What's Included */}
-            <div className="mb-8">
-              <h2 className="text-base font-semibold text-gray-900 mb-4">What's included</h2>
-              <ul className="space-y-4">
-                {features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-vault-primary flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Pricing Summary */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="border-t border-gray-200 pt-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <div className="flex items-baseline justify-between mb-2">
-            <span className="text-base font-semibold text-gray-900">Total due today</span>
-            <div className="text-right">
-              {checkoutData.couponApplied && (
-                <span className="text-gray-400 line-through mr-2">
-                  ${checkoutData.originalPrice.toFixed(2)}
-                </span>
-              )}
-              <span className="text-2xl font-bold text-gray-900">
-                {isYearly ? '$0.00' : `$${checkoutData.discountedPrice.toFixed(2)}`}
-              </span>
-            </div>
+          {/* Headline */}
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8">
+            {isYearly && checkoutData.couponApplied ? '50% off ' : ''}
+            {isYearly ? 'annual' : 'monthly'} membership
+          </h1>
+
+          {/* What's Included */}
+          <div className="mb-8">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">What's included</h2>
+            <ul className="space-y-4">
+              {features.map((feature, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-vault-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">{feature}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <p className="text-sm text-gray-500">
-            {isYearly
-              ? `$${checkoutData.discountedPrice.toFixed(2)} for first year after trial, then renews annually at $${checkoutData.originalPrice.toFixed(2)}. You can cancel anytime.`
-              : `$${checkoutData.discountedPrice.toFixed(2)}/month. You can cancel anytime.`
-            }
-          </p>
+
+          {/* Pricing Summary */}
+          <div className="border-t border-gray-200 pt-6">
+            <div className="flex items-baseline justify-between mb-2">
+              <span className="text-base font-semibold text-gray-900">Total due today</span>
+              <div className="text-right">
+                {checkoutData.couponApplied && (
+                  <span className="text-gray-400 line-through mr-2">
+                    ${checkoutData.originalPrice.toFixed(2)}
+                  </span>
+                )}
+                <span className="text-2xl font-bold text-gray-900">
+                  {isYearly ? '$0.00' : `$${checkoutData.discountedPrice.toFixed(2)}`}
+                </span>
+              </div>
+            </div>
+            <p className="text-sm text-gray-500">
+              {isYearly
+                ? `$${checkoutData.discountedPrice.toFixed(2)} for first year after trial, then renews annually at $${checkoutData.originalPrice.toFixed(2)}. You can cancel anytime.`
+                : `$${checkoutData.discountedPrice.toFixed(2)}/month. You can cancel anytime.`
+              }
+            </p>
+          </div>
         </motion.div>
       </div>
 
