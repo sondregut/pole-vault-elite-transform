@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { getUser } from '@/services/adminService';
+import { redirectToPortal } from '@/services/stripeService';
 import { AdminUser } from '@/types/admin';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { User, Crown, Mail, Smartphone, LogOut, HelpCircle } from 'lucide-react';
+import { User, Crown, Mail, Smartphone, LogOut, HelpCircle, CreditCard, Loader2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
 const VaultProfile = () => {
@@ -13,6 +14,7 @@ const VaultProfile = () => {
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -38,6 +40,20 @@ const VaultProfile = () => {
     } else {
       toast.success('Signed out successfully');
       navigate('/vault/login');
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    if (!user?.uid) return;
+
+    setPortalLoading(true);
+    try {
+      await redirectToPortal(user.uid);
+    } catch (error) {
+      console.error('Failed to open customer portal:', error);
+      toast.error('Failed to open subscription management. Please try again.');
+    } finally {
+      setPortalLoading(false);
     }
   };
 
@@ -135,15 +151,43 @@ const VaultProfile = () => {
             {loading ? (
               <div className="animate-pulse h-4 bg-vault-primary-muted rounded w-1/2"></div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-vault-text-secondary">Current Plan:</span>
                   {getSubscriptionBadge()}
                 </div>
                 {userProfile?.subscriptionStatus === 'active' && (
-                  <p className="text-sm text-vault-text-muted">
-                    Manage your subscription in the mobile app
-                  </p>
+                  // Show Manage Subscription if: platform is 'web' OR has stripeCustomerId (fallback)
+                  (userProfile?.subscriptionPlatform === 'web' || userProfile?.stripeCustomerId) ? (
+                    <div className="space-y-2">
+                      <Button
+                        onClick={handleManageSubscription}
+                        variant="outline"
+                        className="w-full sm:w-auto border-vault-primary text-vault-primary hover:bg-vault-primary hover:text-white transition-colors"
+                        disabled={portalLoading}
+                      >
+                        {portalLoading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Opening...
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Manage Subscription
+                            <ExternalLink className="w-3 h-3 ml-2" />
+                          </>
+                        )}
+                      </Button>
+                      <p className="text-xs text-vault-text-muted">
+                        Update payment method, change plan, or cancel subscription
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-vault-text-muted">
+                      Manage your subscription in the mobile app
+                    </p>
+                  )
                 )}
               </div>
             )}

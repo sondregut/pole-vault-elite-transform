@@ -270,6 +270,10 @@ export const getUser = async (userId: string): Promise<AdminUser | null> => {
         promoCodeUsed: data.promoCodeUsed,
         createdAt: data.createdAt || '',
         lastActive: data.lastActive,
+        // Stripe-specific fields for web subscriptions
+        stripeCustomerId: data.stripeCustomerId,
+        stripeSubscriptionId: data.stripeSubscriptionId,
+        subscriptionPlatform: data.subscriptionPlatform,
       };
     }
     return null;
