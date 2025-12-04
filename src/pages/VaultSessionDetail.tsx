@@ -21,8 +21,18 @@ import {
   Wind,
   Thermometer,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Minus,
+  X
 } from 'lucide-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 const VaultSessionDetail = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -181,95 +191,152 @@ const VaultSessionDetail = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Session Info */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-blue-600" />
-          Session Details
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {session.weather && (
-          <div>
-            <div className="text-sm font-medium text-gray-900 mb-1">Weather</div>
-            <div className="text-sm text-gray-600">{session.weather}</div>
-          </div>
-            )}
-
-            {session.temperature && (
-          <div className="flex items-center gap-2">
-            <Thermometer className="h-4 w-4 text-orange-500" />
-            <span className="text-sm text-gray-600">
-            {session.temperature}° {session.temperatureScale || 'F'}
-            </span>
-          </div>
-            )}
-
-            {session.windSpeed && (
-          <div className="flex items-center gap-2">
-            <Wind className="h-4 w-4 text-blue-500" />
-            <span className="text-sm text-gray-600">
-            {session.windSpeed} {session.windDirection && `(${session.windDirection})`}
-            </span>
-          </div>
-            )}
-
-            {session.sessionGoal && (
-          <div>
-            <div className="text-sm font-medium text-gray-900 mb-1">Session Goal</div>
-            <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded border border-blue-200">
-            {session.sessionGoal}
+      {/* Session Details - Grid of info boxes */}
+      {(bestJump || session.weather || session.temperature || session.windSpeed || session.energyLevel || session.sessionGoal) && (
+        <div className="mb-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          {/* Session Best */}
+          {bestJump && (
+            <div className="bg-white rounded-lg px-4 py-3 border border-gray-200 text-center">
+              <div className="text-xs text-gray-500 mb-1">Best</div>
+              <div className="text-lg font-bold text-green-600">
+                {formatHeight(bestJump.height, bestJump.barUnits)}
+              </div>
             </div>
-          </div>
-            )}
+          )}
 
-            {session.energyLevel && (
-          <div>
-            <div className="text-sm font-medium text-gray-900 mb-1">Energy Level</div>
-            <div className="flex items-center gap-2">
-            <div className="flex">
-          {[1, 2, 3, 4, 5].map((level) => (
-            <Star
-              key={level}
-              className={`h-4 w-4 ${
-                level <= session.energyLevel
-                  ? 'text-yellow-400 fill-yellow-400'
-                  : 'text-gray-300'
-              }`}
-            />
-          ))}
+          {/* Temperature */}
+          {session.temperature && (
+            <div className="bg-white rounded-lg px-4 py-3 border border-gray-200 text-center">
+              <div className="text-xs text-gray-500 mb-1">Temp</div>
+              <div className="flex items-center justify-center gap-1">
+                <Thermometer className="h-4 w-4 text-orange-500" />
+                <span className="text-lg font-bold text-gray-900">
+                  {session.temperature}°{session.temperatureScale || 'F'}
+                </span>
+              </div>
             </div>
-            <span className="text-sm text-gray-600">
-          {session.energyLevel}/5
-            </span>
-            </div>
-          </div>
-            )}
+          )}
 
-            {bestJump && (
-          <div>
-            <div className="text-sm font-medium text-gray-900 mb-1">Session Best</div>
-            <div className="text-2xl font-bold text-green-600">
-            {formatHeight(bestJump.height, bestJump.barUnits)}
+          {/* Wind */}
+          {session.windSpeed && (
+            <div className="bg-white rounded-lg px-4 py-3 border border-gray-200 text-center">
+              <div className="text-xs text-gray-500 mb-1">Wind</div>
+              <div className="flex items-center justify-center gap-1">
+                <Wind className="h-4 w-4 text-blue-500" />
+                <span className="text-lg font-bold text-gray-900">{session.windSpeed}</span>
+              </div>
+              {session.windDirection && (
+                <div className="text-xs text-gray-500">{session.windDirection}</div>
+              )}
             </div>
-          </div>
-            )}
-          </CardContent>
-        </Card>
+          )}
 
-        {/* Jumps List */}
-        <Card className="lg:col-span-2">
+          {/* Weather */}
+          {session.weather && (
+            <div className="bg-white rounded-lg px-4 py-3 border border-gray-200 text-center">
+              <div className="text-xs text-gray-500 mb-1">Weather</div>
+              <div className="text-sm font-medium text-gray-900">{session.weather}</div>
+            </div>
+          )}
+
+          {/* Energy Level */}
+          {session.energyLevel && (
+            <div className="bg-white rounded-lg px-4 py-3 border border-gray-200 text-center">
+              <div className="text-xs text-gray-500 mb-1">Energy</div>
+              <div className="flex justify-center">
+                {[1, 2, 3, 4, 5].map((level) => (
+                  <Star
+                    key={level}
+                    className={`h-4 w-4 ${
+                      level <= session.energyLevel
+                        ? 'text-yellow-400 fill-yellow-400'
+                        : 'text-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Session Goal */}
+          {session.sessionGoal && (
+            <div className="bg-white rounded-lg px-4 py-3 border border-gray-200 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-6">
+              <div className="text-xs text-gray-500 mb-1">Goal</div>
+              <div className="text-sm text-gray-900">{session.sessionGoal}</div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Competition Progress - X's and O's */}
+      {isCompetition && competitionJumps.length > 0 && (() => {
+        // Group competition jumps by height and calculate attempts
+        const heightAttempts = new Map<string, { height: string; attempts: ('make' | 'miss' | 'pass')[] }>();
+
+        competitionJumps.forEach(jump => {
+          const height = jump.height;
+          if (!heightAttempts.has(height)) {
+            heightAttempts.set(height, { height, attempts: [] });
+          }
+          const entry = heightAttempts.get(height)!;
+          if (jump.result === 'make') {
+            entry.attempts.push('make');
+          } else if (jump.result === 'miss' || jump.result === 'no-make') {
+            entry.attempts.push('miss');
+          } else {
+            entry.attempts.push('pass');
+          }
+        });
+
+        // Sort by height
+        const sortedHeights = Array.from(heightAttempts.values()).sort((a, b) => {
+          return parseFloat(a.height) - parseFloat(b.height);
+        });
+
+        return (
+          <Card className="mb-6">
+            <CardContent className="py-4 px-6">
+              <div className="overflow-x-auto">
+                <div className="flex gap-6 min-w-max">
+                  {sortedHeights.map(({ height, attempts }) => (
+                    <div key={height} className="text-center">
+                      <div className="text-lg font-bold text-gray-900 mb-1">
+                        {formatHeight(height, competitionJumps[0]?.barUnits)}
+                      </div>
+                      <div className="flex justify-center gap-0.5 text-base font-mono">
+                        {attempts.map((attempt, idx) => (
+                          <span
+                            key={idx}
+                            className={
+                              attempt === 'make' ? 'text-green-600' :
+                              attempt === 'miss' ? 'text-red-600' :
+                              'text-gray-400'
+                            }
+                          >
+                            {attempt === 'make' ? 'O' : attempt === 'miss' ? 'X' : '-'}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })()}
+
+      {/* Jumps List - Full Width */}
+      <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
           <Activity className="h-5 w-5 text-blue-600" />
           {isCompetition ? 'Competition Jumps' : 'Jumps'} ({jumps.length})
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {jumps.length === 0 ? (
-          <div className="text-center py-8">
+          <div className="text-center py-8 px-6">
             <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600">No jumps recorded in this session</p>
           </div>
@@ -277,186 +344,241 @@ const VaultSessionDetail = () => {
           <>
             {/* Warmup Jumps Section - Only for competitions */}
             {isCompetition && warmupJumps.length > 0 && (
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <h3 className="text-sm font-semibold text-gray-700 uppercase">Warmup ({warmupJumps.length})</h3>
-                  <div className="flex-1 h-px bg-gray-200"></div>
+              <div className="mb-4">
+                <div className="flex items-center gap-2 px-4 py-2 bg-yellow-50 border-b">
+                  <h3 className="text-sm font-semibold text-yellow-800 uppercase">Warmup ({warmupJumps.length})</h3>
                 </div>
-                <div className="space-y-3">
-                  {warmupJumps.map((jump, index) => (
-                    <Card
-                      key={jump.id || `warmup-${index}`}
-                      className="hover:shadow-md transition-shadow cursor-pointer bg-yellow-50"
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-gray-50">
+                        <TableHead className="w-12 text-center">#</TableHead>
+                        <TableHead>Height</TableHead>
+                        <TableHead className="hidden sm:table-cell">Steps</TableHead>
+                        <TableHead>Rating</TableHead>
+                        <TableHead className="hidden md:table-cell">Pole</TableHead>
+                        <TableHead className="hidden lg:table-cell">Grip</TableHead>
+                        <TableHead className="hidden lg:table-cell">Take-off</TableHead>
+                        <TableHead className="hidden xl:table-cell">Run-up</TableHead>
+                        <TableHead className="hidden xl:table-cell">Mid</TableHead>
+                        <TableHead className="hidden md:table-cell">Notes</TableHead>
+                        <TableHead className="w-20 text-center">Video</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {warmupJumps.map((jump, index) => (
+                        <TableRow
+                          key={jump.id || `warmup-${index}`}
+                          className="cursor-pointer hover:bg-yellow-50 transition-colors"
+                          onClick={() => setSelectedJump(jump)}
+                        >
+                          <TableCell className="text-center">
+                            <span className="text-sm font-medium text-yellow-700">W{index + 1}</span>
+                          </TableCell>
+                          <TableCell className="font-semibold">
+                            {formatHeight(jump.height, jump.barUnits)}
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell text-gray-600">
+                            {jump.steps || <Minus className="h-4 w-4 text-gray-300" />}
+                          </TableCell>
+                          <TableCell>
+                            {jump.rating ? (
+                              <Badge
+                                variant="secondary"
+                                className="text-xs"
+                                style={{
+                                  backgroundColor: `${ratingColors[jump.rating]}20`,
+                                  color: ratingColors[jump.rating]
+                                }}
+                              >
+                                {ratingLabels[jump.rating] || jump.rating}
+                              </Badge>
+                            ) : (
+                              <Minus className="h-4 w-4 text-gray-300" />
+                            )}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell text-gray-600 text-sm max-w-[150px] truncate">
+                            {getPoleDisplayName(jump.pole, poles) || <Minus className="h-4 w-4 text-gray-300" />}
+                          </TableCell>
+                          <TableCell className="hidden lg:table-cell text-gray-600">
+                            {jump.gripHeight || <Minus className="h-4 w-4 text-gray-300" />}
+                          </TableCell>
+                          <TableCell className="hidden lg:table-cell text-gray-600">
+                            {jump.takeOff || <Minus className="h-4 w-4 text-gray-300" />}
+                          </TableCell>
+                          <TableCell className="hidden xl:table-cell text-gray-600">
+                            {jump.runUpLength || <Minus className="h-4 w-4 text-gray-300" />}
+                          </TableCell>
+                          <TableCell className="hidden xl:table-cell text-gray-600">
+                            {jump.midMark || <Minus className="h-4 w-4 text-gray-300" />}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell text-gray-600 text-sm max-w-[120px] truncate">
+                            {jump.notes || <Minus className="h-4 w-4 text-gray-300" />}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {(jump.videoUrl || jump.videoLocalUri) ? (
+                              <div className="flex items-center justify-center gap-1">
+                                {jump.thumbnailUrl ? (
+                                  <div className="w-12 h-9 bg-gray-100 rounded overflow-hidden">
+                                    <img
+                                      src={jump.thumbnailUrl}
+                                      alt="Jump thumbnail"
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                ) : (
+                                  <Video className={`h-4 w-4 ${
+                                    jump.videoUploadStatus === 'completed' ? 'text-green-600' :
+                                    jump.videoUploadStatus === 'pending' ? 'text-yellow-600' :
+                                    'text-gray-400'
+                                  }`} />
+                                )}
+                              </div>
+                            ) : (
+                              <Minus className="h-4 w-4 text-gray-300 mx-auto" />
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            )}
+
+            {/* Competition Jumps Header */}
+            {isCompetition && competitionJumps.length > 0 && (
+              <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 border-b">
+                <h3 className="text-sm font-semibold text-blue-800 uppercase">Competition ({competitionJumps.length})</h3>
+              </div>
+            )}
+
+            {/* Main Jumps Table */}
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="w-12 text-center">#</TableHead>
+                    {!isCompetition && session.sessionType !== 'training' && (
+                      <TableHead className="w-16 text-center">Result</TableHead>
+                    )}
+                    {isCompetition && <TableHead className="w-16 text-center">Result</TableHead>}
+                    <TableHead>Height</TableHead>
+                    <TableHead className="hidden sm:table-cell">Steps</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead className="hidden md:table-cell">Pole</TableHead>
+                    <TableHead className="hidden lg:table-cell">Grip</TableHead>
+                    <TableHead className="hidden lg:table-cell">Take-off</TableHead>
+                    <TableHead className="hidden xl:table-cell">Run-up</TableHead>
+                    <TableHead className="hidden xl:table-cell">Mid</TableHead>
+                    <TableHead className="hidden md:table-cell">Notes</TableHead>
+                    <TableHead className="w-20 text-center">Video</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {competitionJumps.map((jump, index) => (
+                    <TableRow
+                      key={jump.id || index}
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => setSelectedJump(jump)}
                     >
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                              <span className="text-sm font-bold text-yellow-700">
-                                W{index + 1}
-                              </span>
-                            </div>
-
-                            <div>
-                              <div className="flex items-center gap-3 mb-1">
-                                <span className="text-lg font-semibold text-gray-900">
-                                  {formatHeight(jump.height, jump.barUnits)}
-                                </span>
-                                {jump.rating && (
-                                  <Badge
-                                    variant="secondary"
-                                    className="text-xs"
-                                    style={{
-                                      backgroundColor: `${ratingColors[jump.rating]}20`,
-                                      color: ratingColors[jump.rating]
-                                    }}
-                                  >
-                                    {ratingLabels[jump.rating] || jump.rating}
-                                  </Badge>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-3 text-sm text-gray-600">
-                                <span>{getPoleDisplayName(jump.pole, poles)}</span>
-                                {jump.gripHeight && <span>Grip: {jump.gripHeight}</span>}
-                                {(jump.videoUrl || jump.videoLocalUri) && (
-                                  <div className="flex items-center gap-1">
-                                    <Video className="h-4 w-4" />
-                                    <span
-                                      className={
-                                        jump.videoUploadStatus === 'completed' ? 'text-green-600' :
-                                        jump.videoUploadStatus === 'uploading' ? 'text-blue-600' :
-                                        jump.videoUploadStatus === 'failed' ? 'text-red-600' :
-                                        jump.videoUploadStatus === 'pending' ? 'text-yellow-600' :
-                                        'text-gray-600'
-                                      }
-                                    >
-                                      {jump.videoUploadStatus === 'completed' ? 'Video Ready' :
-                                       jump.videoUploadStatus === 'uploading' ? 'Uploading...' :
-                                       jump.videoUploadStatus === 'failed' ? 'Upload Failed' :
-                                       jump.videoUploadStatus === 'pending' ? 'Upload Pending' :
-                                       'Video'}
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          {(jump.videoUrl || jump.videoLocalUri) && jump.thumbnailUrl && (
-                            <div className="w-16 h-12 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                              <img
-                                src={jump.thumbnailUrl}
-                                alt="Jump thumbnail"
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
+                      <TableCell className="text-center">
+                        <span className="text-sm font-medium text-blue-600">{index + 1}</span>
+                      </TableCell>
+                      {(!isCompetition && session.sessionType !== 'training') && (
+                        <TableCell className="text-center">
+                          {jump.result === 'make' ? (
+                            <CheckCircle className="h-5 w-5 text-green-600 mx-auto" />
+                          ) : jump.result === 'miss' || jump.result === 'no-make' ? (
+                            <XCircle className="h-5 w-5 text-red-600 mx-auto" />
+                          ) : (
+                            <Minus className="h-4 w-4 text-gray-300 mx-auto" />
                           )}
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </TableCell>
+                      )}
+                      {isCompetition && (
+                        <TableCell className="text-center">
+                          {jump.result === 'make' ? (
+                            <CheckCircle className="h-5 w-5 text-green-600 mx-auto" />
+                          ) : jump.result === 'miss' || jump.result === 'no-make' ? (
+                            <XCircle className="h-5 w-5 text-red-600 mx-auto" />
+                          ) : (
+                            <Minus className="h-4 w-4 text-gray-300 mx-auto" />
+                          )}
+                        </TableCell>
+                      )}
+                      <TableCell className="font-semibold">
+                        {formatHeight(jump.height, jump.barUnits)}
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell text-gray-600">
+                        {jump.steps || <Minus className="h-4 w-4 text-gray-300" />}
+                      </TableCell>
+                      <TableCell>
+                        {jump.rating ? (
+                          <Badge
+                            variant="secondary"
+                            className="text-xs"
+                            style={{
+                              backgroundColor: `${ratingColors[jump.rating]}20`,
+                              color: ratingColors[jump.rating]
+                            }}
+                          >
+                            {ratingLabels[jump.rating] || jump.rating}
+                          </Badge>
+                        ) : (
+                          <Minus className="h-4 w-4 text-gray-300" />
+                        )}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell text-gray-600 text-sm max-w-[150px] truncate">
+                        {getPoleDisplayName(jump.pole, poles) || <Minus className="h-4 w-4 text-gray-300" />}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell text-gray-600">
+                        {jump.gripHeight || <Minus className="h-4 w-4 text-gray-300" />}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell text-gray-600">
+                        {jump.takeOff || <Minus className="h-4 w-4 text-gray-300" />}
+                      </TableCell>
+                      <TableCell className="hidden xl:table-cell text-gray-600">
+                        {jump.runUpLength || <Minus className="h-4 w-4 text-gray-300" />}
+                      </TableCell>
+                      <TableCell className="hidden xl:table-cell text-gray-600">
+                        {jump.midMark || <Minus className="h-4 w-4 text-gray-300" />}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell text-gray-600 text-sm max-w-[120px] truncate">
+                        {jump.notes || <Minus className="h-4 w-4 text-gray-300" />}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {(jump.videoUrl || jump.videoLocalUri) ? (
+                          <div className="flex items-center justify-center gap-1">
+                            {jump.thumbnailUrl ? (
+                              <div className="w-12 h-9 bg-gray-100 rounded overflow-hidden">
+                                <img
+                                  src={jump.thumbnailUrl}
+                                  alt="Jump thumbnail"
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <Video className={`h-4 w-4 ${
+                                jump.videoUploadStatus === 'completed' ? 'text-green-600' :
+                                jump.videoUploadStatus === 'pending' ? 'text-yellow-600' :
+                                'text-gray-400'
+                              }`} />
+                            )}
+                          </div>
+                        ) : (
+                          <Minus className="h-4 w-4 text-gray-300 mx-auto" />
+                        )}
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </div>
-              </div>
-            )}
-
-            {/* Competition Jumps Section */}
-            {isCompetition && competitionJumps.length > 0 && (
-              <div className="mb-3">
-                <div className="flex items-center gap-2 mb-3">
-                  <h3 className="text-sm font-semibold text-gray-700 uppercase">Competition ({competitionJumps.length})</h3>
-                  <div className="flex-1 h-px bg-gray-200"></div>
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-3">
-            {competitionJumps.map((jump, index) => (
-            <Card
-          key={jump.id || index}
-          className="hover:shadow-md transition-shadow cursor-pointer"
-          onClick={() => setSelectedJump(jump)}
-            >
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold text-blue-600">
-                    {index + 1}
-                  </span>
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="text-lg font-semibold text-gray-900">
-                      {formatHeight(jump.height, jump.barUnits)}
-                    </span>
-                    {!jump.isWarmup && session.sessionType !== 'training' && (
-                      jump.result === 'make' ? (
-                        <CheckCircle className="h-5 w-5 text-green-600" />
-                      ) : jump.result === 'miss' ? (
-                        <XCircle className="h-5 w-5 text-red-600" />
-                      ) : null
-                    )}
-                    {jump.rating && (
-                      <Badge
-                        variant="secondary"
-                        className="text-xs"
-                        style={{
-                          backgroundColor: `${ratingColors[jump.rating]}20`,
-                          color: ratingColors[jump.rating]
-                        }}
-                      >
-                        {ratingLabels[jump.rating] || jump.rating}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <span>{getPoleDisplayName(jump.pole, poles)}</span>
-                    {jump.gripHeight && <span>Grip: {jump.gripHeight}</span>}
-                    {(jump.videoUrl || jump.videoLocalUri) && (
-                      <div className="flex items-center gap-1">
-                        <Video className="h-4 w-4" />
-                        <span
-                          className={
-                            jump.videoUploadStatus === 'completed' ? 'text-green-600' :
-                            jump.videoUploadStatus === 'uploading' ? 'text-blue-600' :
-                            jump.videoUploadStatus === 'failed' ? 'text-red-600' :
-                            jump.videoUploadStatus === 'pending' ? 'text-yellow-600' :
-                            'text-gray-600'
-                          }
-                        >
-                          {jump.videoUploadStatus === 'completed' ? 'Video Ready' :
-                           jump.videoUploadStatus === 'uploading' ? 'Uploading...' :
-                           jump.videoUploadStatus === 'failed' ? 'Upload Failed' :
-                           jump.videoUploadStatus === 'pending' ? 'Upload Pending' :
-                           'Video'}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {(jump.videoUrl || jump.videoLocalUri) && jump.thumbnailUrl && (
-                <div className="w-16 h-12 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                  <img
-                    src={jump.thumbnailUrl}
-                    alt="Jump thumbnail"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+                </TableBody>
+              </Table>
             </div>
-          </CardContent>
-            </Card>
-            ))}
-          </div>
           </>
             )}
           </CardContent>
         </Card>
-      </div>
 
       {/* Jump Detail Modal */}
       {selectedJump && (
@@ -464,172 +586,178 @@ const VaultSessionDetail = () => {
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedJump(null)}
         >
+          {/* Previous Button */}
+          {currentJumpIndex > 0 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => { e.stopPropagation(); goToPreviousJump(); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-100 shadow-lg rounded-full h-12 w-12"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+          )}
+
+          {/* Next Button */}
+          {currentJumpIndex < jumps.length - 1 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => { e.stopPropagation(); goToNextJump(); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-100 shadow-lg rounded-full h-12 w-12"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </Button>
+          )}
+
           <Card
-            className="max-w-4xl w-full max-h-[90vh] overflow-auto"
+            className="max-w-2xl w-full max-h-[90vh] overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-900">
-              Jump {currentJumpIndex + 1} - {formatHeight(selectedJump.height, selectedJump.barUnits)}
-            </h3>
-            <Button variant="ghost" onClick={() => setSelectedJump(null)}>
-              ×
-            </Button>
-          </div>
-
-          {/* Video Player with Navigation */}
-          {(selectedJump.videoUrl || selectedJump.videoLocalUri) && (
-            <>
-              <div className="mb-4 relative">
-                {/* Previous Button */}
-                {currentJumpIndex > 0 && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={goToPreviousJump}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded-full h-12 w-12"
-                  >
-                    <ChevronLeft className="h-8 w-8" />
-                  </Button>
-                )}
-
-                {/* Next Button */}
-                {currentJumpIndex < jumps.length - 1 && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={goToNextJump}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded-full h-12 w-12"
-                  >
-                    <ChevronRight className="h-8 w-8" />
-                  </Button>
-                )}
-
-                <div className="bg-black rounded-lg overflow-hidden">
-                  {selectedJump.videoUrl && selectedJump.videoUrl.startsWith('https://') ? (
-                    <video
-                      controls
-                      className="w-full h-auto max-h-[60vh]"
-                      preload="metadata"
-                      playsInline
-                      autoPlay
-                    >
-                      <source src={selectedJump.videoUrl} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : selectedJump.videoLocalUri && selectedJump.videoLocalUri.startsWith('https://') ? (
-                    <video
-                      controls
-                      className="w-full h-auto max-h-[60vh]"
-                      preload="metadata"
-                      playsInline
-                      autoPlay
-                    >
-                      <source src={selectedJump.videoLocalUri} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div className="p-8 text-center text-white">
-                      <Video className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                      <p className="text-gray-300 mb-2">Video not available</p>
-                      <p className="text-sm text-gray-400">
-                        This video is stored locally on your mobile device and hasn't been uploaded to the cloud yet.
-                      </p>
-                    </div>
-                  )}
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      {formatHeight(selectedJump.height, selectedJump.barUnits)}
+                    </h3>
+                    {selectedJump.result === 'make' ? (
+                      <CheckCircle className="h-6 w-6 text-green-600" />
+                    ) : selectedJump.result === 'miss' || selectedJump.result === 'no-make' ? (
+                      <XCircle className="h-6 w-6 text-red-600" />
+                    ) : null}
+                    {selectedJump.rating && (
+                      <Badge
+                        variant="secondary"
+                        style={{
+                          backgroundColor: `${ratingColors[selectedJump.rating]}20`,
+                          color: ratingColors[selectedJump.rating]
+                        }}
+                      >
+                        {ratingLabels[selectedJump.rating] || selectedJump.rating}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-500">
+                    {selectedJump.isWarmup && <span className="text-yellow-600 font-medium">Warmup</span>}
+                    {session.location && (
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        <span>{session.location}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
+                <Button variant="ghost" size="icon" onClick={() => setSelectedJump(null)}>
+                  <X className="h-5 w-5" />
+                </Button>
               </div>
 
               {/* Jump Counter */}
-              <div className="text-center text-sm text-gray-600 mb-4">
+              <div className="text-center text-sm text-gray-500 mb-4">
                 Jump {currentJumpIndex + 1} of {jumps.length}
               </div>
-            </>
-          )}
 
-          {/* Jump Info */}
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <div className="text-sm font-medium text-gray-900 mb-1">Height</div>
-              <div className="text-2xl font-bold text-gray-900">
-                {formatHeight(selectedJump.height, selectedJump.barUnits)}
-              </div>
-            </div>
-            {!selectedJump.isWarmup && session.sessionType !== 'training' && (
-              <div>
-                <div className="text-sm font-medium text-gray-900 mb-1">Result</div>
-                <div className="flex items-center gap-2">
-                  {selectedJump.result === 'make' ? (
-                    <>
-                      <CheckCircle className="h-5 w-5 text-green-600" />
-                      <span className="capitalize">Make</span>
-                    </>
-                  ) : selectedJump.result === 'miss' ? (
-                    <>
-                      <XCircle className="h-5 w-5 text-red-600" />
-                      <span className="capitalize">Miss</span>
-                    </>
-                  ) : (
-                    <span className="text-gray-500">Not tracked</span>
-                  )}
+              {/* Video Player */}
+              {(selectedJump.videoUrl || selectedJump.videoLocalUri) && (
+                <div className="mb-6">
+                  <div className="bg-black rounded-lg overflow-hidden">
+                    {selectedJump.videoUrl && selectedJump.videoUrl.startsWith('https://') ? (
+                      <video
+                        key={selectedJump.videoUrl}
+                        controls
+                        className="w-full h-auto max-h-[50vh]"
+                        preload="metadata"
+                        playsInline
+                        autoPlay
+                      >
+                        <source src={selectedJump.videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : selectedJump.videoLocalUri && selectedJump.videoLocalUri.startsWith('https://') ? (
+                      <video
+                        key={selectedJump.videoLocalUri}
+                        controls
+                        className="w-full h-auto max-h-[50vh]"
+                        preload="metadata"
+                        playsInline
+                        autoPlay
+                      >
+                        <source src={selectedJump.videoLocalUri} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <div className="p-8 text-center text-white">
+                        <Video className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                        <p className="text-gray-300 mb-2">Video not available</p>
+                        <p className="text-sm text-gray-400">
+                          This video is stored locally on your mobile device and hasn't been uploaded yet.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Jump Details Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {/* Pole */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">Pole</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {getPoleDisplayName(selectedJump.pole, poles) || '—'}
+                  </div>
+                </div>
+
+                {/* Steps */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">Steps</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {selectedJump.steps || '—'}
+                  </div>
+                </div>
+
+                {/* Grip */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">Grip</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {selectedJump.gripHeight || '—'}
+                  </div>
+                </div>
+
+                {/* Take-off */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">Take-off</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {selectedJump.takeOff || '—'}
+                  </div>
+                </div>
+
+                {/* Run-up */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">Run-up</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {selectedJump.runUpLength || '—'}
+                  </div>
+                </div>
+
+                {/* Mid Mark */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">Mid Mark</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {selectedJump.midMark || '—'}
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
 
-          <div className="flex flex-wrap gap-4 mb-4">
-            {selectedJump.rating && (
-              <div className="flex-1 min-w-[150px]">
-                <div className="text-sm font-medium text-gray-900 mb-1">Rating</div>
-                <Badge
-                  variant="secondary"
-                  style={{
-                    backgroundColor: `${ratingColors[selectedJump.rating]}20`,
-                    color: ratingColors[selectedJump.rating]
-                  }}
-                >
-                  {ratingLabels[selectedJump.rating] || selectedJump.rating}
-                </Badge>
-              </div>
-            )}
-
-            <div className="flex-1 min-w-[150px]">
-              <div className="text-sm font-medium text-gray-900 mb-1">Equipment</div>
-              <div className="text-sm text-gray-600">{getPoleDisplayName(selectedJump.pole, poles)}</div>
-              {selectedJump.gripHeight && (
-                <div className="text-sm text-gray-500">Grip: {selectedJump.gripHeight}</div>
+              {/* Notes */}
+              {selectedJump.notes && (
+                <div className="mt-4 bg-gray-50 rounded-lg p-3">
+                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">Notes</div>
+                  <div className="text-sm text-gray-900">{selectedJump.notes}</div>
+                </div>
               )}
-            </div>
-
-            {selectedJump.steps && (
-              <div className="flex-1 min-w-[150px]">
-                <div className="text-sm font-medium text-gray-900 mb-1">Approach</div>
-                <div className="text-sm text-gray-600">{selectedJump.steps} steps</div>
-              </div>
-            )}
-          </div>
-
-          {selectedJump.notes && (
-            <div>
-              <div className="text-sm font-medium text-gray-900 mb-1">Notes</div>
-              <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded border">
-                {selectedJump.notes}
-              </div>
-            </div>
-          )}
-
-          {!selectedJump.videoUrl && !selectedJump.videoLocalUri && (
-            <Card className="p-8 text-center border-dashed border-2 border-gray-300 mt-4">
-              <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No Video Available
-              </h3>
-              <p className="text-gray-600">
-                This jump doesn't have a video recording
-              </p>
-            </Card>
-          )}
             </CardContent>
           </Card>
         </div>

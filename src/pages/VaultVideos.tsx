@@ -421,20 +421,24 @@ const VaultVideos = () => {
                 <div className="bg-vault-primary-dark rounded-xl overflow-hidden">
                 {selectedVideo.videoUrl && selectedVideo.videoUrl.startsWith('https://') ? (
                   <video
+                    key={selectedVideo.videoUrl}
                     controls
                     className="w-full h-auto max-h-[60vh]"
                     preload="metadata"
                     playsInline
+                    autoPlay
                   >
                     <source src={selectedVideo.videoUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 ) : selectedVideo.videoLocalUri && selectedVideo.videoLocalUri.startsWith('https://') ? (
                   <video
+                    key={selectedVideo.videoLocalUri}
                     controls
                     className="w-full h-auto max-h-[60vh]"
                     preload="metadata"
                     playsInline
+                    autoPlay
                   >
                     <source src={selectedVideo.videoLocalUri} type="video/mp4" />
                     Your browser does not support the video tag.
