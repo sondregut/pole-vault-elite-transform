@@ -14,6 +14,7 @@ export interface Subscription {
   trialEndsAt: string | null;
   expiresAt: string | null;
   hasLifetimeAccess: boolean;
+  hasHadSubscription: boolean;
 }
 
 interface UseSubscriptionReturn {
@@ -59,6 +60,7 @@ export const useSubscription = (): UseSubscriptionReturn => {
             trialEndsAt: null,
             expiresAt: null,
             hasLifetimeAccess: false,
+            hasHadSubscription: false,
           });
           setLoading(false);
           return;
@@ -80,6 +82,7 @@ export const useSubscription = (): UseSubscriptionReturn => {
           trialEndsAt: null,
           expiresAt: null,
           hasLifetimeAccess: false,
+          hasHadSubscription: false,
         });
         setLoading(false);
       }
@@ -97,6 +100,7 @@ export const useSubscription = (): UseSubscriptionReturn => {
  */
 function determineSubscriptionStatus(userData: any): Subscription {
   const hasLifetimeAccess = userData.hasLifetimeAccess === true;
+  const hasHadSubscription = userData.hasHadSubscription === true;
   const subscriptionStatus = userData.subscriptionStatus;
   const subscriptionTier = userData.subscriptionTier;
   const isTrialing = userData.isTrialing === true;
@@ -113,6 +117,7 @@ function determineSubscriptionStatus(userData: any): Subscription {
       trialEndsAt: null,
       expiresAt: null,
       hasLifetimeAccess: true,
+      hasHadSubscription: true,
     };
   }
 
@@ -132,6 +137,7 @@ function determineSubscriptionStatus(userData: any): Subscription {
       trialEndsAt,
       expiresAt,
       hasLifetimeAccess: false,
+      hasHadSubscription: true,
     };
   }
 
@@ -149,11 +155,26 @@ function determineSubscriptionStatus(userData: any): Subscription {
         trialEndsAt,
         expiresAt,
         hasLifetimeAccess: false,
+        hasHadSubscription: true,
       };
     }
   }
 
-  // 4. Default = LITE/free (not active)
+  // 4. Cancelled subscriber with hasHadSubscription = Lite access
+  if (hasHadSubscription) {
+    return {
+      tier: 'lite',
+      status: 'free',
+      isActive: true, // Allow access with Lite tier
+      isTrialing: false,
+      trialEndsAt,
+      expiresAt,
+      hasLifetimeAccess: false,
+      hasHadSubscription: true,
+    };
+  }
+
+  // 5. Default = No access (new user who never subscribed)
   return {
     tier: 'lite',
     status: subscriptionStatus === 'pending' ? 'pending' : 'free',
@@ -162,6 +183,7 @@ function determineSubscriptionStatus(userData: any): Subscription {
     trialEndsAt,
     expiresAt,
     hasLifetimeAccess: false,
+    hasHadSubscription: false,
   };
 }
 
