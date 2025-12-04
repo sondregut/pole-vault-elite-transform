@@ -79,7 +79,7 @@ const VaultTermsOfService = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-3">4.1 Subscription Tiers</h3>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li><strong>Monthly:</strong> $9.99/month with full access to all features</li>
-                <li><strong>Annual:</strong> $79/year with 7-day free trial</li>
+                <li><strong>Annual:</strong> $79/year (50% off for founding members)</li>
                 <li><strong>Coach:</strong> Coming soon – team management and coaching features</li>
               </ul>
 
@@ -92,12 +92,6 @@ const VaultTermsOfService = () => {
                 <li>Prices may change with notice</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">4.3 Free Trial</h3>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>New users receive a 7-day free trial with the Annual subscription</li>
-                <li>You won't be charged during the trial period</li>
-                <li>Cancel anytime before trial ends to avoid charges</li>
-              </ul>
             </section>
 
             {/* User Content */}

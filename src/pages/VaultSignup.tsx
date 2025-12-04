@@ -192,7 +192,7 @@ const VaultSignup = () => {
     }
   };
 
-  const planDisplay = plan === 'yearly' ? '7-Day Free Trial' : 'Monthly Subscription';
+  const planDisplay = plan === 'yearly' ? 'Annual Plan – 50% Off the first year' : 'Monthly Subscription';
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">

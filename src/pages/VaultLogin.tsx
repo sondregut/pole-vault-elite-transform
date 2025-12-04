@@ -581,8 +581,7 @@ const VaultLogin = () => {
                   className="border-vault-primary text-vault-primary hover:bg-vault-primary hover:text-white transition-colors"
                 >
                   <Link to="/vault/signup?plan=yearly">
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Sign Up – 50% Off
+                    Sign Up
                   </Link>
                 </Button>
               </div>

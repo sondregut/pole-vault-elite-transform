@@ -143,13 +143,12 @@ const VaultAppPricing = () => {
       description: 'Best value for serious athletes',
       features: [
         'Everything in Monthly',
-        '7-Day Free Trial',
         '50% savings vs monthly',
         'Priority support',
         'Early access to new features',
         'Lock in founding member price',
       ],
-      cta: 'Start 7-Day Free Trial',
+      cta: 'Get Started',
       popular: true,
       comingSoon: false,
     },
@@ -163,7 +162,6 @@ const VaultAppPricing = () => {
         'Manage Multiple Athletes',
         'Team Analytics',
         'Remote Coaching Tools',
-        'Video Feedback Drawing',
         'Export Team Reports',
       ],
       cta: 'Coming Soon',
@@ -185,7 +183,7 @@ const VaultAppPricing = () => {
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white px-6 py-3 rounded-full shadow-vault-md">
               <Sparkles className="w-5 h-5" />
               <span className="font-semibold">
-                {couponData.discountPercent}% OFF – Only {couponData.remaining} spots left!
+                {couponData.discountPercent}% OFF for First 100 Subscribers!
               </span>
               <Sparkles className="w-5 h-5" />
             </div>
@@ -390,16 +388,6 @@ const VaultAppPricing = () => {
           ))}
         </div>
 
-        {/* Bottom Note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="text-center text-sm text-vault-text-muted mt-8"
-        >
-          Annual plan includes a 7-day free trial. Cancel anytime. No questions asked.
-        </motion.p>
       </div>
     </section>
   );

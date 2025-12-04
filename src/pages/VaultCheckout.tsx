@@ -61,21 +61,13 @@ const CheckoutForm = ({
     setErrorMessage(null);
 
     try {
-      const { error } = checkoutData.isTrialPeriod
-        ? await stripe.confirmSetup({
-            elements,
-            confirmParams: {
-              return_url: `${window.location.origin}/vault/onboarding?subscription=success`,
-            },
-            redirect: 'if_required',
-          })
-        : await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-              return_url: `${window.location.origin}/vault/onboarding?subscription=success`,
-            },
-            redirect: 'if_required',
-          });
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/vault/onboarding?subscription=success`,
+        },
+        redirect: 'if_required',
+      });
 
       if (error) {
         setErrorMessage(error.message || 'An error occurred during payment.');
@@ -115,8 +107,6 @@ const CheckoutForm = ({
             <Loader2 className="w-5 h-5 mr-2 animate-spin" />
             Processing...
           </>
-        ) : checkoutData.isTrialPeriod ? (
-          'Start 7-Day Free Trial'
         ) : (
           <>
             <CreditCard className="w-5 h-5 mr-2" />
@@ -283,13 +273,13 @@ const VaultCheckout = () => {
                   </span>
                 )}
                 <span className="text-2xl font-bold text-gray-900">
-                  {isYearly ? '$0.00' : `$${checkoutData.discountedPrice.toFixed(2)}`}
+                  ${checkoutData.discountedPrice.toFixed(2)}
                 </span>
               </div>
             </div>
             <p className="text-sm text-gray-500">
               {isYearly
-                ? `$${checkoutData.discountedPrice.toFixed(2)} for first year after trial, then renews annually at $${checkoutData.originalPrice.toFixed(2)}. You can cancel anytime.`
+                ? `$${checkoutData.discountedPrice.toFixed(2)} for first year, then renews annually at $${checkoutData.originalPrice.toFixed(2)}. You can cancel anytime.`
                 : `$${checkoutData.discountedPrice.toFixed(2)}/month. You can cancel anytime.`
               }
             </p>
