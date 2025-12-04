@@ -418,13 +418,13 @@ const VaultVideos = () => {
                   </Button>
                 )}
 
-                <div className="bg-vault-primary-dark rounded-xl overflow-hidden">
+                <div className="bg-vault-primary-dark rounded-xl overflow-hidden min-h-[60vh] flex items-center justify-center">
                 {selectedVideo.videoUrl && selectedVideo.videoUrl.startsWith('https://') ? (
                   <video
                     key={selectedVideo.videoUrl}
                     controls
                     className="w-full h-auto max-h-[60vh]"
-                    preload="metadata"
+                    preload="auto"
                     playsInline
                     autoPlay
                   >
@@ -436,7 +436,7 @@ const VaultVideos = () => {
                     key={selectedVideo.videoLocalUri}
                     controls
                     className="w-full h-auto max-h-[60vh]"
-                    preload="metadata"
+                    preload="auto"
                     playsInline
                     autoPlay
                   >

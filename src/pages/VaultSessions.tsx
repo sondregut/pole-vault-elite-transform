@@ -957,13 +957,13 @@ const VaultSessions = () => {
               {/* Video Player */}
               {(selectedJump.videoUrl || selectedJump.videoLocalUri) && (
                 <div className="mb-6">
-                  <div className="bg-black rounded-lg overflow-hidden">
+                  <div className="bg-black rounded-lg overflow-hidden min-h-[60vh] flex items-center justify-center">
                     {selectedJump.videoUrl && selectedJump.videoUrl.startsWith('https://') ? (
                       <video
                         key={selectedJump.videoUrl}
                         controls
                         className="w-full h-auto max-h-[50vh]"
-                        preload="metadata"
+                        preload="auto"
                         playsInline
                         autoPlay
                       >
@@ -975,7 +975,7 @@ const VaultSessions = () => {
                         key={selectedJump.videoLocalUri}
                         controls
                         className="w-full h-auto max-h-[50vh]"
-                        preload="metadata"
+                        preload="auto"
                         playsInline
                         autoPlay
                       >
