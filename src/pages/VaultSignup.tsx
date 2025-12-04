@@ -293,6 +293,15 @@ const VaultSignup = () => {
               <p className="text-gray-600">
                 Sign up to start your {planDisplay}
               </p>
+              {plan === 'yearly' ? (
+                <p className="text-sm text-gray-500 mt-2">
+                  Or <Link to="/vault/signup?plan=monthly" className="text-vault-primary hover:underline">subscribe monthly</Link> for $9.99/mo
+                </p>
+              ) : (
+                <p className="text-sm text-gray-500 mt-2">
+                  Or <Link to="/vault/signup?plan=yearly" className="text-vault-primary hover:underline">get the annual plan</Link> for just $39.50/year
+                </p>
+              )}
             </div>
 
             {/* Social Sign-In Buttons */}

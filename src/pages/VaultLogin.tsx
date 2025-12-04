@@ -575,15 +575,12 @@ const VaultLogin = () => {
 
               {/* Sign Up Link */}
               <div className="text-center">
-                <Button
-                  variant="outline"
-                  asChild
-                  className="border-vault-primary text-vault-primary hover:bg-vault-primary hover:text-white transition-colors"
+                <Link
+                  to="/vault/signup?plan=yearly"
+                  className="text-vault-primary font-semibold hover:underline"
                 >
-                  <Link to="/vault/signup?plan=yearly">
-                    Sign Up
-                  </Link>
-                </Button>
+                  Sign Up
+                </Link>
               </div>
             </div>
           </div>
