@@ -16,6 +16,19 @@ const VaultDashboardLayout = () => {
   const { subscription, loading: subscriptionLoading } = useSubscription();
   const { sessions, loading: sessionsLoading } = useVaultSessions(user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    // Load collapsed state from localStorage
+    const stored = localStorage.getItem('vault-sidebar-collapsed');
+    return stored === 'true';
+  });
+
+  const toggleSidebarCollapse = () => {
+    setSidebarCollapsed(prev => {
+      const newValue = !prev;
+      localStorage.setItem('vault-sidebar-collapsed', String(newValue));
+      return newValue;
+    });
+  };
 
   const loading = authLoading || adminLoading || subscriptionLoading || sessionsLoading;
 
@@ -68,9 +81,12 @@ const VaultDashboardLayout = () => {
 
   return (
     <div className="flex h-screen overflow-hidden font-roboto">
-      {/* Desktop Sidebar - Fixed width */}
-      <div className="w-64 flex-shrink-0 hidden lg:block">
-        <VaultSidebar />
+      {/* Desktop Sidebar - Collapsible */}
+      <div className={`flex-shrink-0 hidden lg:block transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'}`}>
+        <VaultSidebar
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={toggleSidebarCollapse}
+        />
       </div>
 
       {/* Mobile Sidebar Drawer */}

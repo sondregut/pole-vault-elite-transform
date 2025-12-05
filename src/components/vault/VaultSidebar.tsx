@@ -10,6 +10,8 @@ import {
   Shield,
   X,
   Sparkles,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 
 // DEV FLAG: Set to true locally to show AI Chat, false before pushing
@@ -22,9 +24,11 @@ interface VaultSidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
   isMobile?: boolean;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-const VaultSidebar = ({ isOpen = true, onClose, isMobile = false }: VaultSidebarProps) => {
+const VaultSidebar = ({ isOpen = true, onClose, isMobile = false, collapsed = false, onToggleCollapse }: VaultSidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useFirebaseAuth();
@@ -106,6 +110,8 @@ const VaultSidebar = ({ isOpen = true, onClose, isMobile = false }: VaultSidebar
         isAdmin={isAdmin}
         handleNavClick={handleNavClick}
         handleSignOut={handleSignOut}
+        collapsed={collapsed}
+        onToggleCollapse={onToggleCollapse}
       />
     </div>
   );
@@ -121,6 +127,8 @@ interface SidebarContentProps {
   handleSignOut: () => void;
   showCloseButton?: boolean;
   onClose?: () => void;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 const SidebarContent = ({
@@ -132,22 +140,26 @@ const SidebarContent = ({
   handleSignOut,
   showCloseButton,
   onClose,
+  collapsed = false,
+  onToggleCollapse,
 }: SidebarContentProps) => {
   return (
     <div className="flex flex-col h-full">
       {/* Logo/Header */}
-      <div className="p-6 border-b border-gray-200">
+      <div className={`border-b border-gray-200 ${collapsed ? 'p-4' : 'p-6'}`}>
         <div className="flex items-center justify-between">
           <Link to="/vault" className="flex items-center gap-3">
             <img
               src="/images/vault-logo.png"
               alt="VAULT Logo"
-              className="h-10 w-10 object-contain"
+              className={`object-contain ${collapsed ? 'h-8 w-8' : 'h-10 w-10'}`}
             />
-            <div>
-              <h1 className="text-lg font-bold text-vault-primary">VAULT</h1>
-              <p className="text-xs text-gray-600">Pole Vault Training</p>
-            </div>
+            {!collapsed && (
+              <div>
+                <h1 className="text-lg font-bold text-vault-primary">VAULT</h1>
+                <p className="text-xs text-gray-600">Pole Vault Training</p>
+              </div>
+            )}
           </Link>
           {showCloseButton && onClose && (
             <button
@@ -161,7 +173,7 @@ const SidebarContent = ({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className={`flex-1 space-y-1 ${collapsed ? 'p-2' : 'p-4'}`}>
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentPath === item.path || currentPath.startsWith(item.path + '/');
@@ -171,8 +183,10 @@ const SidebarContent = ({
               key={item.path}
               to={item.path}
               onClick={handleNavClick}
+              title={collapsed ? item.name : undefined}
               className={`
-                flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
+                flex items-center rounded-lg transition-colors
+                ${collapsed ? 'justify-center p-3' : 'gap-3 px-4 py-3'}
                 ${
                   isActive
                     ? 'bg-vault-primary/10 text-vault-primary font-medium'
@@ -181,40 +195,73 @@ const SidebarContent = ({
               `}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'text-vault-primary' : 'text-gray-500'}`} />
-              <span>{item.name}</span>
+              {!collapsed && <span>{item.name}</span>}
             </Link>
           );
         })}
       </nav>
 
       {/* Bottom Actions */}
-      <div className="p-4 border-t border-gray-200 space-y-1">
+      <div className={`border-t border-gray-200 space-y-1 ${collapsed ? 'p-2' : 'p-4'}`}>
+        {/* Collapse Toggle Button - Desktop only */}
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className={`
+              w-full flex items-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors
+              ${collapsed ? 'justify-center p-3' : 'gap-3 px-4 py-3'}
+            `}
+          >
+            {collapsed ? (
+              <ChevronRight className="w-5 h-5" />
+            ) : (
+              <>
+                <ChevronLeft className="w-5 h-5" />
+                <span className="text-gray-700">Collapse</span>
+              </>
+            )}
+          </button>
+        )}
+
         <Link
           to="/vault/profile"
           onClick={handleNavClick}
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          title={collapsed ? 'Settings' : undefined}
+          className={`
+            flex items-center rounded-lg text-gray-700 hover:bg-gray-50 transition-colors
+            ${collapsed ? 'justify-center p-3' : 'gap-3 px-4 py-3'}
+          `}
         >
           <Settings className="w-5 h-5 text-gray-500" />
-          <span>Settings</span>
+          {!collapsed && <span>Settings</span>}
         </Link>
 
         {isAdmin && (
           <Link
             to="/vault/admin"
             onClick={handleNavClick}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+            title={collapsed ? 'Admin Panel' : undefined}
+            className={`
+              flex items-center rounded-lg text-gray-700 hover:bg-gray-50 transition-colors
+              ${collapsed ? 'justify-center p-3' : 'gap-3 px-4 py-3'}
+            `}
           >
             <Shield className="w-5 h-5 text-gray-500" />
-            <span>Admin Panel</span>
+            {!collapsed && <span>Admin Panel</span>}
           </Link>
         )}
 
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          title={collapsed ? 'Sign Out' : undefined}
+          className={`
+            w-full flex items-center rounded-lg text-gray-700 hover:bg-gray-50 transition-colors
+            ${collapsed ? 'justify-center p-3' : 'gap-3 px-4 py-3'}
+          `}
         >
           <LogOut className="w-5 h-5 text-gray-500" />
-          <span>Sign Out</span>
+          {!collapsed && <span>Sign Out</span>}
         </button>
       </div>
     </div>
