@@ -10,8 +10,8 @@ import {
   Shield,
   X,
   Sparkles,
-  ChevronLeft,
-  ChevronRight,
+  PanelLeftClose,
+  PanelLeft,
 } from 'lucide-react';
 
 // DEV FLAG: Set to true locally to show AI Chat, false before pushing
@@ -146,9 +146,9 @@ const SidebarContent = ({
   return (
     <div className="flex flex-col h-full">
       {/* Logo/Header */}
-      <div className={`border-b border-gray-200 ${collapsed ? 'p-4' : 'p-6'}`}>
+      <div className={`border-b border-gray-200 ${collapsed ? 'p-3' : 'p-6'}`}>
         <div className="flex items-center justify-between">
-          <Link to="/vault" className="flex items-center gap-3">
+          <Link to="/vault" className={`flex items-center ${collapsed ? '' : 'gap-3'}`}>
             <img
               src="/images/vault-logo.png"
               alt="VAULT Logo"
@@ -161,6 +161,21 @@ const SidebarContent = ({
               </div>
             )}
           </Link>
+          {/* Collapse toggle - Desktop only */}
+          {onToggleCollapse && (
+            <button
+              onClick={onToggleCollapse}
+              title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            >
+              {collapsed ? (
+                <PanelLeft className="w-5 h-5" />
+              ) : (
+                <PanelLeftClose className="w-5 h-5" />
+              )}
+            </button>
+          )}
+          {/* Close button - Mobile only */}
           {showCloseButton && onClose && (
             <button
               onClick={onClose}
@@ -203,27 +218,6 @@ const SidebarContent = ({
 
       {/* Bottom Actions */}
       <div className={`border-t border-gray-200 space-y-1 ${collapsed ? 'p-2' : 'p-4'}`}>
-        {/* Collapse Toggle Button - Desktop only */}
-        {onToggleCollapse && (
-          <button
-            onClick={onToggleCollapse}
-            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className={`
-              w-full flex items-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors
-              ${collapsed ? 'justify-center p-3' : 'gap-3 px-4 py-3'}
-            `}
-          >
-            {collapsed ? (
-              <ChevronRight className="w-5 h-5" />
-            ) : (
-              <>
-                <ChevronLeft className="w-5 h-5" />
-                <span className="text-gray-700">Collapse</span>
-              </>
-            )}
-          </button>
-        )}
-
         <Link
           to="/vault/profile"
           onClick={handleNavClick}

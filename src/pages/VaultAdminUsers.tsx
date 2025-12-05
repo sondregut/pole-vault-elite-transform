@@ -475,7 +475,7 @@ const VaultAdminUsers = () => {
                           // If we got here, user is PAYING
                           return (
                             <Badge variant="outline" className="border-emerald-500 text-emerald-600 bg-emerald-50">
-                              💰 Paying
+                              Paying
                             </Badge>
                           );
                         })()}

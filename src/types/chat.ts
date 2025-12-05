@@ -12,10 +12,11 @@ export interface ChatMessage {
 }
 
 export interface NavigationIntent {
-  destination: 'session' | 'video' | 'analytics' | 'equipment' | 'sessions_list';
+  destination: 'session' | 'video' | 'analytics' | 'equipment' | 'sessions_list' | 'videos_list' | 'jump_history';
   sessionId?: string;
   jumpId?: string;
   jumpIndex?: number;
+  searchQuery?: string; // For pre-filtering the view
 }
 
 export interface SessionResult {

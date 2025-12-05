@@ -51,7 +51,7 @@ exports.toolDefinitions = [
         type: 'function',
         function: {
             name: 'search_sessions',
-            description: 'Search training sessions. Use this to find sessions by date range, location, competition name, or type. Returns a list of matching sessions with jump counts and best heights. Always search before answering questions about sessions.',
+            description: 'Search training sessions. Use this to find sessions by date range, location, competition name, or type. Returns a list of matching sessions with jump counts and best heights.',
             parameters: {
                 type: 'object',
                 properties: {
@@ -64,7 +64,8 @@ exports.toolDefinitions = [
                         description: 'Filter by Training (practice) or Competition (meets). Use for "my competitions", "training sessions" queries.'
                     },
                     competitionName: { type: 'string', description: 'Competition/meet name (partial match). Use for "World Championships", "Nationals", "Diamond League" queries.' },
-                    limit: { type: 'number', description: 'Max results to return (default 10). Increase for comprehensive searches.' }
+                    limit: { type: 'number', description: 'Max results to return (default 10). Increase for comprehensive searches.' },
+                    queryOnly: { type: 'boolean', description: 'Set true to query data WITHOUT showing cards to user. Use when answering questions like "what was my best at X" where you just need the answer, not visual results.' }
                 }
             }
         }
@@ -73,7 +74,7 @@ exports.toolDefinitions = [
         type: 'function',
         function: {
             name: 'search_jumps',
-            description: 'Search individual jumps across all sessions. You can filter by height, rating, result, or video. Use sortBy to control result order. Use limit=1 when user asks for ONE specific jump (e.g., "lowest", "highest", "most recent").',
+            description: 'Search individual jumps across all sessions. You can filter by height, rating, result, location, or video. Use sortBy to control result order.',
             parameters: {
                 type: 'object',
                 properties: {
@@ -81,14 +82,17 @@ exports.toolDefinitions = [
                     maxHeight: { type: 'number', description: 'Maximum bar height in meters (e.g., 5.0).' },
                     rating: { type: 'string', description: 'Filter by rating: great, good, ok, glider, or runthru.' },
                     result: { type: 'string', description: 'Filter by result: make or no-make.' },
+                    location: { type: 'string', description: 'Location name (partial match). Use for "at location X" queries.' },
+                    sessionType: { type: 'string', enum: ['Training', 'Competition'], description: 'Filter by Training or Competition sessions.' },
                     hasVideo: { type: 'boolean', description: 'Set true to only get jumps with video.' },
                     isFavorite: { type: 'boolean', description: 'Set true for favorited jumps only.' },
                     sortBy: {
                         type: 'string',
                         enum: ['date_desc', 'date_asc', 'height_desc', 'height_asc'],
-                        description: 'Sort order: date_desc (most recent first, default), date_asc (oldest first), height_desc (highest first), height_asc (lowest first). Use height_asc for "lowest jump", height_desc for "highest jump".'
+                        description: 'Sort order: date_desc (most recent first, default), date_asc (oldest first), height_desc (highest first), height_asc (lowest first).'
                     },
-                    limit: { type: 'number', description: 'Max results to return (default 10). Use limit=1 for "show me THE lowest/highest/etc".' }
+                    limit: { type: 'number', description: 'Max results to return (default 10). Use limit=1 for single best/highest/etc.' },
+                    queryOnly: { type: 'boolean', description: 'IMPORTANT: Set true to query data WITHOUT showing cards to user. Use when answering questions like "what was my best jump at X" - you just need the data to answer, not show cards. Only set false or omit when user explicitly asks to SEE/SHOW results.' }
                 }
             }
         }
@@ -128,17 +132,26 @@ exports.toolDefinitions = [
         type: 'function',
         function: {
             name: 'navigate_to',
-            description: 'Navigate user to view content in the app. Use when user says "show me", "take me to", "open", "watch", "view". Always offer navigation after showing search results.',
+            description: 'Navigate user to different pages/views in the app. Use when user wants to GO somewhere, not just see data inline.',
             parameters: {
                 type: 'object',
                 properties: {
                     destination: {
                         type: 'string',
-                        enum: ['session', 'video', 'analytics', 'equipment', 'sessions_list'],
-                        description: 'Where to go: session (view one session), video (watch jump video), analytics (stats page), equipment (poles), sessions_list (all sessions).'
+                        enum: ['session', 'video', 'analytics', 'equipment', 'sessions_list', 'videos_list', 'jump_history'],
+                        description: `Where to navigate:
+- session: Opens the SESSION PAGE showing all jumps from that day. Use when user says "take me to that session", "show me that training day", "open the session".
+- video: Opens a specific JUMP VIDEO player. Use when user says "play the video", "show me that jump", "yes" (after asking about a jump).
+- analytics: Stats/charts page
+- equipment: Poles page
+- sessions_list: All sessions list
+- videos_list: All videos page
+- jump_history: Jump history tab
+IMPORTANT: "session" = session page with all jumps. "video" = specific jump video. Choose correctly based on what user asks for!`
                     },
-                    sessionId: { type: 'string', description: 'Required for session/video destinations. Get from search results.' },
-                    jumpIndex: { type: 'number', description: 'For video: which jump in the session (0-indexed). Get from search_jumps results.' }
+                    sessionId: { type: 'string', description: 'Required for session/video. Get from search results or find via search_sessions first.' },
+                    jumpIndex: { type: 'number', description: 'For video destination ONLY: which jump in session (0-indexed). Get from search_jumps jumpIndex field. Do NOT include for session destination.' },
+                    searchQuery: { type: 'string', description: 'Optional: pre-fill search on destination page. E.g., navigate to sessions_list with searchQuery="Tokyo" to show Tokyo sessions.' }
                 },
                 required: ['destination']
             }
@@ -188,14 +201,17 @@ exports.toolDefinitions = [
         type: 'function',
         function: {
             name: 'get_pole_analysis',
-            description: 'Analyze pole performance - which poles work best at different heights, success rates by pole, recommendations. Use for "which pole for 4.50m", "my best pole", "success rate on Spirit 15" queries.',
+            description: 'Analyze pole performance and inventory. Use for: "biggest/longest pole", "stiffest/steepest pole", "softest pole", "which pole for 4.50m", "my best pole", "success rate on Spirit 15". Returns pole list sorted by length and stiffness.',
             parameters: {
                 type: 'object',
                 properties: {
                     poleBrand: { type: 'string', description: 'Filter by pole brand (e.g., "Spirit", "Pacer", "UCS")' },
                     poleLength: { type: 'string', description: 'Filter by pole length (e.g., "15\'", "4.60m")' },
                     targetHeight: { type: 'number', description: 'Target bar height in meters to find best pole for' },
-                    analyzeAll: { type: 'boolean', description: 'Set true to analyze all poles and compare them' }
+                    analyzeAll: { type: 'boolean', description: 'Set true to get full pole inventory with stiffness rankings' },
+                    findBiggest: { type: 'boolean', description: 'Set true to find the longest/stiffest poles' },
+                    findStiffest: { type: 'boolean', description: 'Set true to find stiffest pole (highest weight rating)' },
+                    findSoftest: { type: 'boolean', description: 'Set true to find softest pole (lowest weight rating)' }
                 }
             }
         }
@@ -337,12 +353,18 @@ async function searchJumps(userId, params) {
     const snapshot = await sessionsRef.orderBy('date', 'desc').get(); // Get ALL sessions
     const allJumps = [];
     snapshot.docs.forEach(doc => {
+        var _a;
         const session = doc.data();
         const jumps = session.jumps || [];
+        // Session-level filters
+        if (params.location && !((_a = session.location) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(params.location.toLowerCase())))
+            return;
+        if (params.sessionType && session.sessionType !== params.sessionType)
+            return;
         jumps.forEach((jump, index) => {
             var _a;
             const heightMeters = parseHeight(jump.height);
-            // Apply filters
+            // Apply jump-level filters
             if (params.minHeight !== undefined && heightMeters < params.minHeight)
                 return;
             if (params.maxHeight !== undefined && heightMeters > params.maxHeight)
@@ -367,6 +389,13 @@ async function searchJumps(userId, params) {
                 location: session.location,
                 sessionType: session.sessionType,
                 competitionName: session.competitionName,
+                // Session weather/environment (important for weather questions)
+                weather: session.weather || null,
+                temperature: session.temperature || null,
+                temperatureScale: session.temperatureScale || 'C',
+                windDirection: session.windDirection || null,
+                windSpeed: session.windSpeed || null,
+                isIndoor: session.isIndoor || false,
                 // Jump basics
                 height: jump.height,
                 barUnits: jump.barUnits || 'm',
@@ -677,6 +706,23 @@ async function comparePerformance(userId, params) {
         }
     };
 }
+// Helper to parse pole length to inches for sorting
+function parsePoleLength(length) {
+    if (!length)
+        return 0;
+    // Handle formats like "15'0", "15'6", "15ft", "4.60m"
+    const ftMatch = length.match(/(\d+)'(\d+)?/);
+    if (ftMatch) {
+        const feet = parseInt(ftMatch[1]);
+        const inches = parseInt(ftMatch[2] || '0');
+        return feet * 12 + inches;
+    }
+    const mMatch = length.match(/([\d.]+)\s*m/i);
+    if (mMatch) {
+        return parseFloat(mMatch[1]) * 39.37; // Convert meters to inches
+    }
+    return 0;
+}
 // Analyze pole performance
 async function getPoleAnalysis(userId, params) {
     const db = admin.firestore();
@@ -703,7 +749,9 @@ async function getPoleAnalysis(userId, params) {
                     name: poleName,
                     brand: poleDetails.brand,
                     length: poleDetails.length,
-                    weight: `${poleDetails.pounds}lbs`,
+                    lengthInches: parsePoleLength(poleDetails.length),
+                    weightLbs: parseFloat(poleDetails.pounds) || 0,
+                    flexNumber: poleDetails.flex ? parseFloat(poleDetails.flex) : null,
                     attempts: 0,
                     makes: 0,
                     heights: [],
@@ -728,15 +776,33 @@ async function getPoleAnalysis(userId, params) {
         avgHeight: pole.heights.length > 0
             ? `${(pole.heights.reduce((a, b) => a + b, 0) / pole.heights.length).toFixed(2)}m`
             : null,
-        bestHeight: pole.bestHeight > 0 ? `${pole.bestHeight.toFixed(2)}m` : null
+        bestHeightStr: pole.bestHeight > 0 ? `${pole.bestHeight.toFixed(2)}m` : null
     }));
-    // Sort by success rate
+    // Handle specific queries
+    let biggestPole = null;
+    let stiffestPole = null;
+    let softestPole = null;
+    if (poles.length > 0) {
+        // Find biggest (longest first, then stiffest at same length)
+        const sortedBySize = [...poles].sort((a, b) => {
+            if (b.lengthInches !== a.lengthInches)
+                return b.lengthInches - a.lengthInches;
+            return b.weightLbs - a.weightLbs;
+        });
+        biggestPole = sortedBySize[0];
+        // Find stiffest (highest weight rating)
+        const sortedByStiffness = [...poles].sort((a, b) => b.weightLbs - a.weightLbs);
+        stiffestPole = sortedByStiffness[0];
+        // Find softest (lowest weight rating)
+        const sortedBySoftness = [...poles].sort((a, b) => a.weightLbs - b.weightLbs);
+        softestPole = sortedBySoftness[0];
+    }
+    // Sort by success rate for general listing
     poles.sort((a, b) => b.successRate - a.successRate);
     // Find best pole for target height if specified
     let recommendedPole = null;
     if (params.targetHeight) {
-        const polesAtHeight = poles.filter(p => p.heights.some(h => Math.abs(h - params.targetHeight) < 0.15) // Within 15cm
-        );
+        const polesAtHeight = poles.filter(p => p.heights.some(h => Math.abs(h - params.targetHeight) < 0.15));
         if (polesAtHeight.length > 0) {
             recommendedPole = polesAtHeight[0];
         }
@@ -744,6 +810,27 @@ async function getPoleAnalysis(userId, params) {
     return {
         poles: poles.slice(0, 10),
         totalPolesUsed: poles.length,
+        biggestPole: biggestPole ? {
+            name: biggestPole.name,
+            length: biggestPole.length,
+            weight: `${biggestPole.weightLbs}lbs`,
+            successRate: biggestPole.successRate,
+            bestHeight: biggestPole.bestHeightStr
+        } : null,
+        stiffestPole: stiffestPole ? {
+            name: stiffestPole.name,
+            length: stiffestPole.length,
+            weight: `${stiffestPole.weightLbs}lbs`,
+            successRate: stiffestPole.successRate,
+            bestHeight: stiffestPole.bestHeightStr
+        } : null,
+        softestPole: softestPole ? {
+            name: softestPole.name,
+            length: softestPole.length,
+            weight: `${softestPole.weightLbs}lbs`,
+            successRate: softestPole.successRate,
+            bestHeight: softestPole.bestHeightStr
+        } : null,
         recommendedForHeight: recommendedPole ? {
             pole: recommendedPole.name,
             successRate: recommendedPole.successRate,
@@ -752,7 +839,7 @@ async function getPoleAnalysis(userId, params) {
         bestOverall: poles[0] ? {
             pole: poles[0].name,
             successRate: poles[0].successRate,
-            bestHeight: poles[0].bestHeight
+            bestHeight: poles[0].bestHeightStr
         } : null
     };
 }

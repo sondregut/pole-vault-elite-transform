@@ -65,6 +65,8 @@ export function useVaultChat() {
   }, [messages]);
 
   const handleNavigation = useCallback((intent: NavigationIntent) => {
+    const searchParam = intent.searchQuery ? `?search=${encodeURIComponent(intent.searchQuery)}` : '';
+
     switch (intent.destination) {
       case 'session':
         if (intent.sessionId) {
@@ -73,8 +75,8 @@ export function useVaultChat() {
         break;
       case 'video':
         if (intent.sessionId) {
-          // Navigate to session with jump highlighted
-          const jumpParam = intent.jumpIndex !== undefined ? `?jump=${intent.jumpIndex}` : '';
+          // Navigate to session with jump highlighted and open video
+          const jumpParam = intent.jumpIndex !== undefined ? `?jump=${intent.jumpIndex}&autoplay=true` : '';
           navigate(`/vault/sessions/${intent.sessionId}${jumpParam}`);
         }
         break;
@@ -85,7 +87,15 @@ export function useVaultChat() {
         navigate('/vault/equipment');
         break;
       case 'sessions_list':
-        navigate('/vault/sessions');
+        navigate(`/vault/sessions${searchParam}`);
+        break;
+      case 'videos_list':
+        // Navigate to videos page (sessions with video filter or dedicated videos view)
+        navigate(`/vault/videos${searchParam}`);
+        break;
+      case 'jump_history':
+        // Navigate to sessions page with Jump History tab active
+        navigate(`/vault/sessions?tab=jumps${intent.searchQuery ? `&search=${encodeURIComponent(intent.searchQuery)}` : ''}`);
         break;
     }
   }, [navigate]);

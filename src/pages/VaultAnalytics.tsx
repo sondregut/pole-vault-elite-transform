@@ -483,6 +483,7 @@ const VaultAnalytics = () => {
                   strokeWidth={2}
                   dot={{ fill: '#198754', strokeWidth: 2 }}
                   activeDot={{ r: 6 }}
+                  isAnimationActive={false}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -513,7 +514,7 @@ const VaultAnalytics = () => {
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6b6b6b' }} />
                 <YAxis tick={{ fontSize: 11, fill: '#6b6b6b' }} />
                 <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e5e5e5' }} />
-                <Bar dataKey="count" fill="#072f57" name="Total Jumps" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" fill="#072f57" name="Total Jumps" radius={[4, 4, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -602,8 +603,8 @@ const VaultAnalytics = () => {
                   <YAxis tick={{ fontSize: 12, fill: '#6b6b6b' }} label={{ value: 'Height (m)', angle: -90, position: 'insideLeft', fill: '#6b6b6b' }} />
                   <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e5e5e5' }} />
                   <Legend />
-                  <Line type="monotone" dataKey="bestHeight" stroke="#072f57" strokeWidth={2} name="Best Height" />
-                  <Line type="monotone" dataKey="avgHeight" stroke="#198754" strokeWidth={2} name="Avg Height" />
+                  <Line type="monotone" dataKey="bestHeight" stroke="#072f57" strokeWidth={2} name="Best Height" isAnimationActive={false} />
+                  <Line type="monotone" dataKey="avgHeight" stroke="#198754" strokeWidth={2} name="Avg Height" isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
             ) : (
@@ -673,6 +674,7 @@ const VaultAnalytics = () => {
                       outerRadius={90}
                       fill="#8884d8"
                       dataKey="count"
+                      isAnimationActive={false}
                     >
                       {ratingDistribution.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={RATING_COLORS[entry.rating] || COLORS[index % COLORS.length]} />
@@ -744,7 +746,7 @@ const VaultAnalytics = () => {
                     return [value, name];
                   }}
                 />
-                <Bar dataKey="jumps" fill="#072f57" radius={[0, 4, 4, 0]} name="jumps" />
+                <Bar dataKey="jumps" fill="#072f57" radius={[0, 4, 4, 0]} name="jumps" isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -948,7 +950,7 @@ const VaultAnalytics = () => {
                 <YAxis tick={{ fontSize: 12, fill: '#6b6b6b' }} label={{ value: 'Grip Height (m)', angle: -90, position: 'insideLeft', fill: '#6b6b6b' }} />
                 <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e5e5e5' }} />
                 <Legend />
-                <Line type="monotone" dataKey="avgGrip" stroke="#8b5cf6" strokeWidth={2} name="Avg Grip Height" />
+                <Line type="monotone" dataKey="avgGrip" stroke="#8b5cf6" strokeWidth={2} name="Avg Grip Height" isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>

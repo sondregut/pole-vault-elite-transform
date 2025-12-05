@@ -242,7 +242,7 @@ const Cart = () => {
                 {hasFreeProductsOnly && (
                   <div className="mb-4 p-3 bg-green-50 rounded-md">
                     <p className="text-sm text-green-700">
-                      🎉 This is a free download! Click below to get it.
+                      This is a free download! Click below to get it.
                     </p>
                   </div>
                 )}
