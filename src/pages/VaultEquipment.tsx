@@ -39,10 +39,38 @@ const VaultEquipment = () => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [brandFilter, setBrandFilter] = useState<string>('all');
   const [flexFilter, setFlexFilter] = useState<string>('all');
+  const [editingPole, setEditingPole] = useState<typeof poles[0] | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   const loading = polesLoading;
+
+  // Handle editing a pole
+  const handleEditPole = (pole: typeof poles[0]) => {
+    setEditingPole(pole);
+  };
+
+  // Handle saving an edited pole
+  const handleSaveEditedPole = async (poleData: Omit<typeof poles[0], 'id' | 'createdAt' | 'updatedAt'>) => {
+    if (!editingPole) return { success: false, error: 'No pole selected for editing' };
+    const result = await updatePole(editingPole.id, poleData);
+    if (result.success) {
+      setEditingPole(null);
+    }
+    return result;
+  };
+
+  // Handle deleting a pole
+  const handleDeletePole = async (poleId: string, poleName: string) => {
+    if (window.confirm(`Are you sure you want to delete "${poleName}"? This action cannot be undone.`)) {
+      const result = await deletePole(poleId);
+      if (result.success) {
+        toast.success('Pole deleted successfully');
+      } else {
+        toast.error(result.error || 'Failed to delete pole');
+      }
+    }
+  };
 
   // Sortable header component
   const SortableHeader = ({ field, children }: { field: string; children: React.ReactNode }) => {
@@ -321,10 +349,20 @@ const VaultEquipment = () => {
                   </Badge>
                 </div>
                 <div className="flex gap-1">
-                  <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-text-muted hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 w-8 p-0 text-vault-text-muted hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg"
+                    onClick={() => handleEditPole(pole)}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-error hover:bg-red-50 rounded-lg">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 w-8 p-0 text-vault-error hover:bg-red-50 rounded-lg"
+                    onClick={() => handleDeletePole(pole.id, pole.name)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -400,10 +438,20 @@ const VaultEquipment = () => {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-1 justify-end">
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-text-muted hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 text-vault-text-muted hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg"
+                      onClick={() => handleEditPole(pole)}
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-vault-error hover:bg-red-50 rounded-lg">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 text-vault-error hover:bg-red-50 rounded-lg"
+                      onClick={() => handleDeletePole(pole.id, pole.name)}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -426,6 +474,20 @@ const VaultEquipment = () => {
           <PoleImport onImport={bulkImportPoles} />
             </TabsContent>
           </Tabs>
+
+          {/* Edit Pole Modal */}
+          {editingPole && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl shadow-vault-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <PoleForm
+                  pole={editingPole}
+                  onSave={handleSaveEditedPole}
+                  onCancel={() => setEditingPole(null)}
+                  isEditing
+                />
+              </div>
+            </div>
+          )}
     </div>
   );
 };
