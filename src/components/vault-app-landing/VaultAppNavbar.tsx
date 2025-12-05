@@ -90,7 +90,13 @@ const VaultAppNavbar = ({ hasBanner = false }: VaultAppNavbarProps) => {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-4">
+            <a
+              href="/vault/login"
+              className="text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
+            >
+              Sign In
+            </a>
             <Button
               onClick={() => scrollToSection('pricing')}
               className="bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold px-5 py-2 rounded-lg hover:shadow-vault-md transition-all"
