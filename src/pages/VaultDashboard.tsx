@@ -18,7 +18,6 @@ import {
   Target,
   Wrench,
   Video,
-  TrendingUp,
   Download,
   Smartphone,
   Activity,
@@ -152,22 +151,14 @@ const VaultDashboard = () => {
       </Dialog>
 
       {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {loading ? (
               // Loading skeleton
               Array.from({ length: 4 }).map((_, index) => (
-                <div key={index} className="bg-white rounded-2xl p-6 shadow-vault border border-vault-border-light">
-                  <div className="animate-pulse">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-vault-primary-muted"></div>
-                      <div className="w-4 h-4 bg-vault-primary-muted rounded"></div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="h-4 bg-vault-primary-muted rounded w-3/4"></div>
-                      <div className="h-6 bg-vault-primary-muted rounded w-1/2"></div>
-                      <div className="h-3 bg-vault-primary-muted rounded w-2/3"></div>
-                    </div>
-                  </div>
+                <div key={index} className="bg-white rounded-xl p-4 border border-vault-border-light animate-pulse">
+                  <div className="h-3 bg-vault-primary-muted rounded w-20 mb-2" />
+                  <div className="h-7 bg-vault-primary-muted rounded w-16 mb-1" />
+                  <div className="h-3 bg-vault-primary-muted rounded w-24" />
                 </div>
               ))
             ) : (
@@ -175,25 +166,20 @@ const VaultDashboard = () => {
                 const cardContent = (
                   <div
                     key={index}
-                    className={`bg-white rounded-2xl p-6 shadow-vault border border-vault-border-light hover:shadow-vault-md hover:-translate-y-1 transition-all duration-200 ${stat.route ? 'cursor-pointer' : ''}`}
+                    className={`bg-white rounded-xl p-4 border border-vault-border-light hover:border-vault-primary/20 hover:bg-slate-50 transition-colors ${stat.route ? 'cursor-pointer' : ''}`}
                   >
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`w-12 h-12 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
-                        <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                      </div>
-                      <TrendingUp className="h-4 w-4 text-vault-success" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-vault-text-secondary mb-1">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <stat.icon className={`h-3.5 w-3.5 ${stat.color}`} />
+                      <p className="text-xs font-medium text-vault-text-secondary">
                         {stat.title}
                       </p>
-                      <p className="text-2xl font-bold text-vault-text mb-1">
-                        {stat.value}
-                      </p>
-                      <p className="text-xs text-vault-success font-medium">
-                        {stat.change}
-                      </p>
                     </div>
+                    <p className="text-2xl font-bold text-vault-text mb-0.5">
+                      {stat.value}
+                    </p>
+                    <p className="text-xs text-vault-text-muted">
+                      {stat.change}
+                    </p>
                   </div>
                 );
 
