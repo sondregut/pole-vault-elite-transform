@@ -20,8 +20,12 @@ import {
   Shield,
   Video,
   Menu,
-  X
+  X,
+  Sparkles
 } from 'lucide-react';
+
+// DEV FLAG: Set to true locally to show AI Chat, false before pushing
+const SHOW_AI_CHAT = false;
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { toast } from 'sonner';
@@ -44,13 +48,18 @@ const VaultHeader = () => {
 
   const currentPath = location.pathname;
 
-  const navItems = [
+  const baseNavItems = [
     { name: 'Dashboard', path: '/vault/dashboard', icon: LayoutDashboard },
     { name: 'Training', path: '/vault/sessions', icon: Calendar },
     { name: 'Videos', path: '/vault/videos', icon: Video },
     { name: 'Equipment', path: '/vault/equipment', icon: Wrench },
     { name: 'Analytics', path: '/vault/analytics', icon: BarChart3 },
   ];
+
+  // Conditionally add AI Chat based on dev flag
+  const navItems = SHOW_AI_CHAT
+    ? [...baseNavItems, { name: 'AI Chat', path: '/vault/chat', icon: Sparkles }]
+    : baseNavItems;
 
   const handleSignOut = async () => {
     const { error } = await signOut();

@@ -20,7 +20,9 @@ import {
   MapPin,
   Star,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Trophy,
+  Dumbbell
 } from 'lucide-react';
 
 interface VideoWithContext extends Jump {
@@ -28,6 +30,8 @@ interface VideoWithContext extends Jump {
   sessionDate: string;
   sessionLocation?: string;
   sessionType?: string;
+  competitionName?: string;
+  competitionPhase?: 'warmup' | 'competition';
   jumpIndex: number;
 }
 
@@ -54,6 +58,8 @@ const VaultVideos = () => {
               sessionDate: session.date,
               sessionLocation: session.location,
               sessionType: session.sessionType,
+              competitionName: session.competitionName,
+              competitionPhase: session.competitionPhase,
               jumpIndex: index
             });
           }
@@ -352,6 +358,26 @@ const VaultVideos = () => {
                 )}
 
                 <div className="space-y-1 text-sm text-vault-text-secondary">
+                  {/* Session Type Badge */}
+                  <div className="flex items-center gap-1">
+                    {video.sessionType?.toLowerCase().includes('competition') ? (
+                      <>
+                        <Trophy className="h-3 w-3 text-vault-warning" />
+                        <span className="text-vault-warning font-medium">Competition</span>
+                      </>
+                    ) : (
+                      <>
+                        <Dumbbell className="h-3 w-3 text-vault-primary" />
+                        <span className="text-vault-primary font-medium">Training</span>
+                      </>
+                    )}
+                  </div>
+                  {/* Competition Name */}
+                  {video.competitionName && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs text-vault-text-muted truncate">@ {video.competitionName}</span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3 text-vault-text-muted" />
                     <span>{formatDate(video.sessionDate)}</span>
@@ -460,28 +486,56 @@ const VaultVideos = () => {
                 Video {currentVideoIndex + 1} of {filteredVideos.length}
               </div>
 
-              <div className="flex flex-wrap gap-4 mt-4">
+              {/* Session Type & Competition Info */}
+              <div className="flex items-center gap-3 mt-4 mb-2">
+                <Badge
+                  className={selectedVideo.sessionType?.toLowerCase().includes('competition')
+                    ? 'bg-vault-warning/20 text-vault-warning border-vault-warning/30'
+                    : 'bg-vault-primary/20 text-vault-primary border-vault-primary/30'}
+                >
+                  {selectedVideo.sessionType?.toLowerCase().includes('competition') ? (
+                    <><Trophy className="h-3 w-3 mr-1" /> Competition</>
+                  ) : (
+                    <><Dumbbell className="h-3 w-3 mr-1" /> Training</>
+                  )}
+                </Badge>
+                {selectedVideo.competitionName && (
+                  <span className="text-sm text-vault-text-secondary">@ {selectedVideo.competitionName}</span>
+                )}
+                {selectedVideo.competitionPhase && (
+                  <Badge variant="outline" className="text-xs capitalize">
+                    {selectedVideo.competitionPhase}
+                  </Badge>
+                )}
+              </div>
+
+              {/* Jump Details Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
                 {/* Only show Result for competition sessions */}
                 {selectedVideo.sessionType?.toLowerCase().includes('competition') && (
-                  <div className="flex-1 min-w-[150px] p-3 bg-vault-primary-muted rounded-xl">
-                    <div className="text-sm font-semibold text-vault-text mb-1">Result</div>
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Result</div>
                     <div className="flex items-center gap-2">
                       {selectedVideo.result === 'make' ? (
                         <CheckCircle className="h-4 w-4 text-vault-success" />
                       ) : (
                         <XCircle className="h-4 w-4 text-vault-error" />
                       )}
-                      <span className="capitalize text-vault-text-secondary">{selectedVideo.result || 'Unknown'}</span>
+                      <span className="capitalize text-sm font-medium text-vault-text">{selectedVideo.result || 'Unknown'}</span>
                     </div>
                   </div>
                 )}
-                <div className="flex-1 min-w-[150px] p-3 bg-vault-primary-muted rounded-xl">
-                  <div className="text-sm font-semibold text-vault-text mb-1">Equipment</div>
-                  <div className="text-sm text-vault-text-secondary">{getPoleDisplayName(selectedVideo.pole, poles)}</div>
+
+                {/* Equipment/Pole */}
+                <div className="p-3 bg-vault-primary-muted rounded-xl">
+                  <div className="text-xs font-semibold text-vault-text-muted mb-1">Pole</div>
+                  <div className="text-sm font-medium text-vault-text">{getPoleDisplayName(selectedVideo.pole, poles)}</div>
                 </div>
+
+                {/* Rating */}
                 {selectedVideo.rating && (
-                  <div className="flex-1 min-w-[150px] p-3 bg-vault-primary-muted rounded-xl">
-                    <div className="text-sm font-semibold text-vault-text mb-1">Rating</div>
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Rating</div>
                     <Badge
                       style={{
                         backgroundColor: `${ratingColors[selectedVideo.rating]}20`,
@@ -492,11 +546,79 @@ const VaultVideos = () => {
                     </Badge>
                   </div>
                 )}
+
+                {/* Steps */}
+                {selectedVideo.steps && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Steps</div>
+                    <div className="text-sm font-medium text-vault-text">{selectedVideo.steps} steps</div>
+                  </div>
+                )}
+
+                {/* Run Up Length */}
+                {selectedVideo.runUpLength && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Run Up</div>
+                    <div className="text-sm font-medium text-vault-text">{selectedVideo.runUpLength}</div>
+                  </div>
+                )}
+
+                {/* Grip Height */}
+                {selectedVideo.gripHeight && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Grip Height</div>
+                    <div className="text-sm font-medium text-vault-text">{selectedVideo.gripHeight}</div>
+                  </div>
+                )}
+
+                {/* Take Off */}
+                {selectedVideo.takeOff && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Take Off</div>
+                    <div className="text-sm font-medium text-vault-text">{selectedVideo.takeOff}</div>
+                  </div>
+                )}
+
+                {/* Mid Mark */}
+                {selectedVideo.midMark && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Mid Mark</div>
+                    <div className="text-sm font-medium text-vault-text">{selectedVideo.midMark}</div>
+                  </div>
+                )}
+
+                {/* Standards */}
+                {selectedVideo.standards !== undefined && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Standards</div>
+                    <div className="text-sm font-medium text-vault-text">{selectedVideo.standards}</div>
+                  </div>
+                )}
+
+                {/* Bar Clearance */}
+                {selectedVideo.barClearance && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Bar Clearance</div>
+                    <div className="text-sm font-medium text-vault-text capitalize">{selectedVideo.barClearance}</div>
+                  </div>
+                )}
+
+                {/* Location */}
+                {selectedVideo.sessionLocation && (
+                  <div className="p-3 bg-vault-primary-muted rounded-xl">
+                    <div className="text-xs font-semibold text-vault-text-muted mb-1">Location</div>
+                    <div className="text-sm font-medium text-vault-text flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      {selectedVideo.sessionLocation}
+                    </div>
+                  </div>
+                )}
               </div>
 
+              {/* Notes */}
               {selectedVideo.notes && (
                 <div className="mt-4">
-                  <div className="text-sm font-semibold text-vault-text mb-1">Notes</div>
+                  <div className="text-xs font-semibold text-vault-text-muted mb-1">Notes</div>
                   <div className="text-sm text-vault-text-secondary bg-vault-primary-muted p-3 rounded-xl border border-vault-primary/10">
                     {selectedVideo.notes}
                   </div>

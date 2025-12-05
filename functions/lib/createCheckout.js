@@ -52,10 +52,16 @@ exports.createCheckout = functions.https.onCall(async (data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated to create a checkout session');
     }
-    const { priceId, userId, userEmail, applyCoupon } = data;
+    const { priceId, applyCoupon } = data;
+    // Use authenticated user's ID (more secure than client-provided)
+    const userId = context.auth.uid;
+    const userEmail = data.userEmail || context.auth.token.email;
     // Validate input
-    if (!priceId || !userId || !userEmail) {
-        throw new functions.https.HttpsError('invalid-argument', 'Missing required fields: priceId, userId, userEmail');
+    if (!priceId) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing required field: priceId');
+    }
+    if (!userEmail) {
+        throw new functions.https.HttpsError('invalid-argument', 'User email is required');
     }
     // Map price ID to actual Stripe price ID
     const stripePriceId = priceId === 'monthly' ? MONTHLY_PRICE_ID : YEARLY_PRICE_ID;

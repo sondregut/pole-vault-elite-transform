@@ -36,6 +36,7 @@ import VaultSessionDetail from "./pages/VaultSessionDetail";
 import VaultInvite from "./pages/VaultInvite";
 import VaultProfile from "./pages/VaultProfile";
 import VaultAnalytics from "./pages/VaultAnalytics";
+import VaultChat from "./pages/VaultChat";
 import VaultVideos from "./pages/VaultVideos";
 import VaultVideoTest from "./pages/VaultVideoTest";
 import VaultDashboardLayout from "./pages/VaultDashboardLayout";
@@ -111,6 +112,7 @@ const App = () => (
               <Route path="video-test" element={<VaultVideoTest />} />
               <Route path="profile" element={<VaultProfile />} />
               <Route path="analytics" element={<VaultAnalytics />} />
+              <Route path="chat" element={<VaultChat />} />
             </Route>
             <Route path="/vault/admin" element={<VaultAdmin />}>
               <Route index element={<VaultAdminOverview />} />

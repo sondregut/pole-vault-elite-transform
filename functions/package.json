@@ -16,8 +16,11 @@
     "node": "20"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@google/generative-ai": "^0.24.1",
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.5.0",
+    "openai": "^4.73.0",
     "stripe": "^14.10.0"
   },
   "devDependencies": {
