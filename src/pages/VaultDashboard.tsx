@@ -22,10 +22,10 @@ import {
   Download,
   Smartphone,
   Activity,
-  Clock,
   PartyPopper,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  ChevronRight
 } from 'lucide-react';
 
 const VaultDashboard = () => {
@@ -223,27 +223,20 @@ const VaultDashboard = () => {
               <div className="p-6">
                 <div className="space-y-4">
                   {loading ? (
-                    // Loading skeleton for sessions
+                    // Loading skeleton - simple design
                     Array.from({ length: 3 }).map((_, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 rounded-xl border border-vault-border-light animate-pulse">
-                        <div className="flex-1">
-                          <div className="h-4 bg-vault-primary-muted rounded w-24 mb-2"></div>
-                          <div className="h-3 bg-vault-primary-muted rounded w-32"></div>
-                        </div>
-                        <div className="flex items-center gap-6">
-                          <div className="text-right">
-                            <div className="h-3 bg-vault-primary-muted rounded w-8 mb-2"></div>
-                            <div className="h-4 bg-vault-primary-muted rounded w-12"></div>
+                      <div key={index} className="p-4 rounded-xl border border-vault-border-light bg-white animate-pulse">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-3">
+                            <div className="h-4 bg-vault-primary-muted rounded w-24" />
+                            <div className="h-5 bg-vault-primary-muted rounded w-16" />
                           </div>
-                          <div className="text-right">
-                            <div className="h-3 bg-vault-primary-muted rounded w-10 mb-2"></div>
-                            <div className="h-4 bg-vault-primary-muted rounded w-8"></div>
-                          </div>
-                          <div className="text-right">
-                            <div className="h-3 bg-vault-primary-muted rounded w-8 mb-2"></div>
-                            <div className="h-4 bg-vault-primary-muted rounded w-10"></div>
+                          <div className="flex items-center gap-4">
+                            <div className="h-4 bg-vault-primary-muted rounded w-12" />
+                            <div className="h-4 bg-vault-primary-muted rounded w-16" />
                           </div>
                         </div>
+                        <div className="h-3 bg-vault-primary-muted rounded w-32" />
                       </div>
                     ))
                   ) : sessions.length === 0 ? (
@@ -266,20 +259,24 @@ const VaultDashboard = () => {
                       </div>
                     </div>
                   ) : (
-                    // Recent sessions
+                    // Recent sessions - Clean, minimal design
                     sessions.slice(0, 5).map((session, index) => {
                       const sessionDate = new Date(session.date);
                       const today = new Date();
                       const yesterday = new Date(today);
                       yesterday.setDate(yesterday.getDate() - 1);
 
+                      // Format date
+                      const dayOfWeek = sessionDate.toLocaleDateString('en-US', { weekday: 'short' });
+                      const monthDay = sessionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
                       let dateLabel;
                       if (sessionDate.toDateString() === today.toDateString()) {
-                        dateLabel = 'Today';
+                        dateLabel = `Today, ${dayOfWeek}`;
                       } else if (sessionDate.toDateString() === yesterday.toDateString()) {
-                        dateLabel = 'Yesterday';
+                        dateLabel = `Yesterday, ${dayOfWeek}`;
                       } else {
-                        dateLabel = formatDate(session.date);
+                        dateLabel = `${monthDay}, ${dayOfWeek}`;
                       }
 
                       const jumps = session.jumps || [];
@@ -296,48 +293,56 @@ const VaultDashboard = () => {
                         ? Math.round((successfulJumps.length / jumps.length) * 100)
                         : 0;
 
+                      const isCompetition = session.sessionType?.toLowerCase() === 'competition';
+
                       return (
                         <Link
                           key={session.id || index}
                           to={`/vault/sessions/${session.id}`}
-                          className="block"
+                          className="block group"
                         >
-                          <div className="flex items-center justify-between p-4 rounded-xl border border-vault-border-light hover:bg-vault-primary-muted/50 hover:border-vault-primary/20 transition-all">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-1">
-                                <p className="font-semibold text-vault-text">{dateLabel}</p>
+                          <div className="p-4 rounded-xl border border-vault-border-light bg-white hover:bg-slate-50 hover:border-vault-primary/20 transition-colors">
+                            {/* Top row */}
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center gap-3">
+                                <span className="font-medium text-vault-text">{dateLabel}</span>
                                 {session.sessionType && (
-                                  <Badge variant="outline" className="text-xs border-vault-primary/30 text-vault-primary bg-vault-primary-muted">
+                                  <Badge
+                                    variant="outline"
+                                    className={`text-xs px-2 py-0.5 font-medium ${
+                                      isCompetition
+                                        ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                        : 'bg-vault-primary-muted text-vault-primary border-vault-primary/20'
+                                    }`}
+                                  >
                                     {session.sessionType}
                                   </Badge>
                                 )}
                               </div>
-                              {session.location && (
-                                <p className="text-sm text-vault-text-secondary">{session.location}</p>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-6 text-right">
-                              <div>
-                                <p className="text-sm text-vault-text-muted">Best</p>
-                                {bestJump ? (
-                                  <p className="font-semibold text-vault-text">
+                              <div className="flex items-center gap-4 text-sm">
+                                {bestJump && (
+                                  <span className="font-semibold text-vault-text">
                                     {formatHeight(bestJump.height, bestJump.barUnits)}
-                                  </p>
-                                ) : (
-                                  <p className="text-sm text-vault-text-muted">-</p>
+                                  </span>
                                 )}
+                                <span className="text-vault-text-muted">
+                                  {jumps.length} {jumps.length === 1 ? 'jump' : 'jumps'}
+                                </span>
+                                {isCompetition && jumps.length > 0 && (
+                                  <span className={`font-medium ${
+                                    makeRate >= 75 ? 'text-green-600' :
+                                    makeRate >= 50 ? 'text-amber-600' : 'text-red-500'
+                                  }`}>
+                                    {makeRate}%
+                                  </span>
+                                )}
+                                <ChevronRight className="w-4 h-4 text-vault-text-muted group-hover:text-vault-primary transition-colors" />
                               </div>
-                              <div>
-                                <p className="text-sm text-vault-text-muted">Jumps</p>
-                                <p className="font-semibold text-vault-text">{jumps.length}</p>
-                              </div>
-                              {session.sessionType?.toLowerCase() !== 'training' && (
-                                <div>
-                                  <p className="text-sm text-vault-text-muted">Rate</p>
-                                  <p className="font-semibold text-vault-text">{makeRate}%</p>
-                                </div>
-                              )}
                             </div>
+                            {/* Location */}
+                            {session.location && (
+                              <p className="text-sm text-vault-text-secondary">{session.location}</p>
+                            )}
                           </div>
                         </Link>
                       );

@@ -174,7 +174,26 @@ function determineSubscriptionStatus(userData: any): Subscription {
     };
   }
 
-  // 5. Default = No access (new user who never subscribed)
+  // 5. User with valid tier = Grant access
+  const validTiers = ['lite', 'pro', 'athlete', 'athlete_plus', 'athletePlus'];
+  if (validTiers.includes(subscriptionTier)) {
+    const isPro = subscriptionTier === 'pro' ||
+                  subscriptionTier === 'athlete' ||
+                  subscriptionTier === 'athlete_plus' ||
+                  subscriptionTier === 'athletePlus';
+    return {
+      tier: isPro ? 'pro' : 'lite',
+      status: subscriptionStatus || 'free',
+      isActive: true, // Allow access based on tier
+      isTrialing: false,
+      trialEndsAt,
+      expiresAt,
+      hasLifetimeAccess: false,
+      hasHadSubscription: false,
+    };
+  }
+
+  // 6. Default = No access (new user who never subscribed)
   return {
     tier: 'lite',
     status: subscriptionStatus === 'pending' ? 'pending' : 'free',

@@ -5,6 +5,14 @@ import { sendChatMessage } from '@/services/chatService';
 
 const STORAGE_KEY = 'vault-chat-messages';
 
+// Initial greeting message from the AI
+const INITIAL_GREETING: ChatMessage = {
+  id: 'greeting-initial',
+  role: 'assistant',
+  content: "Hey! I'm your pole vault coach assistant. I can help you analyze your training, find videos, compare your performance, and give you personalized recommendations. What would you like to know?",
+  timestamp: new Date(),
+};
+
 // Load messages from sessionStorage
 function loadMessages(): ChatMessage[] {
   try {
@@ -12,15 +20,28 @@ function loadMessages(): ChatMessage[] {
     if (stored) {
       const parsed = JSON.parse(stored);
       // Convert timestamp strings back to Date objects
-      return parsed.map((m: any) => ({
+      const messages = parsed.map((m: any) => ({
         ...m,
         timestamp: new Date(m.timestamp)
       }));
+
+      // Ensure greeting is always first if there are messages
+      if (messages.length > 0 && messages[0].id !== 'greeting-initial') {
+        return [INITIAL_GREETING, ...messages];
+      }
+
+      // If empty array stored, return greeting
+      if (messages.length === 0) {
+        return [INITIAL_GREETING];
+      }
+
+      return messages;
     }
   } catch (e) {
     console.error('Failed to load chat messages:', e);
   }
-  return [];
+  // Return initial greeting if no messages stored
+  return [INITIAL_GREETING];
 }
 
 // Save messages to sessionStorage
@@ -130,7 +151,7 @@ export function useVaultChat() {
   }, [messages, isLoading, handleNavigation]);
 
   const clearChat = useCallback(() => {
-    setMessages([]);
+    setMessages([INITIAL_GREETING]);
     setError(null);
     sessionStorage.removeItem(STORAGE_KEY);
   }, []);

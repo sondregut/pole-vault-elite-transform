@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useVaultSessions } from '@/hooks/useVaultData';
-import VaultHeader from '@/components/vault/VaultHeader';
+import VaultSidebar from '@/components/vault/VaultSidebar';
+import { FloatingChatWidget } from '@/components/vault/chat';
+import { Menu } from 'lucide-react';
 
 const VaultDashboardLayout = () => {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ const VaultDashboardLayout = () => {
   const { isAdmin, loading: adminLoading } = useAdminAuth();
   const { subscription, loading: subscriptionLoading } = useSubscription();
   const { sessions, loading: sessionsLoading } = useVaultSessions(user);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const loading = authLoading || adminLoading || subscriptionLoading || sessionsLoading;
 
@@ -45,10 +48,10 @@ const VaultDashboardLayout = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-vault-bg-warm-start to-white flex items-center justify-center font-roboto">
+      <div className="min-h-screen bg-gradient-to-b from-[#f5f0eb] via-[#f8f5f1] to-[#faf8f5] flex items-center justify-center font-roboto">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-vault-primary mx-auto mb-4"></div>
-          <p className="text-vault-text-secondary">Loading your dashboard...</p>
+          <p className="text-gray-600">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -64,13 +67,52 @@ const VaultDashboardLayout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f5f0eb] via-[#f8f5f1] to-[#faf8f5] font-roboto">
-      <VaultHeader />
-      <main className="pt-24 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Outlet />
-        </div>
-      </main>
+    <div className="flex h-screen overflow-hidden font-roboto">
+      {/* Desktop Sidebar - Fixed width */}
+      <div className="w-64 flex-shrink-0 hidden lg:block">
+        <VaultSidebar />
+      </div>
+
+      {/* Mobile Sidebar Drawer */}
+      <VaultSidebar
+        isMobile
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
+      {/* Main Content - Scrollable */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile Header */}
+        <header className="lg:hidden bg-white border-b border-gray-200 flex-shrink-0">
+          <div className="flex items-center justify-between h-16 px-4">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <Link to="/vault" className="flex items-center gap-2">
+              <img
+                src="/images/vault-logo.png"
+                alt="VAULT Logo"
+                className="h-8 w-8 object-contain"
+              />
+              <span className="text-vault-primary font-bold text-xl tracking-tight">VAULT</span>
+            </Link>
+            <div className="w-10" /> {/* Spacer for centering */}
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto bg-gradient-to-b from-[#f5f0eb] via-[#f8f5f1] to-[#faf8f5]">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <Outlet />
+          </div>
+        </main>
+      </div>
+
+      {/* Floating AI Chat Widget */}
+      <FloatingChatWidget />
     </div>
   );
 };

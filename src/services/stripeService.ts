@@ -87,8 +87,8 @@ export const redirectToCheckout = async (
     userEmail,
   });
 
-  // Redirect to Stripe Checkout
-  window.location.href = response.url;
+  // Open Stripe Checkout in new tab
+  window.open(response.url, '_blank');
 
   return {
     couponApplied: response.couponApplied,
@@ -101,5 +101,5 @@ export const redirectToCheckout = async (
  */
 export const redirectToPortal = async (userId: string): Promise<void> => {
   const response = await createPortalSession(userId);
-  window.location.href = response.url;
+  window.open(response.url, '_blank');
 };

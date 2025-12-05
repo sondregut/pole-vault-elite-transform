@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 
 // DEV FLAG: Set to true locally to show AI Chat, false before pushing
-const SHOW_AI_CHAT = false;
+const SHOW_AI_CHAT = true;
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { toast } from 'sonner';
@@ -117,18 +117,6 @@ const VaultHeader = () => {
 
           {/* Right: User Menu */}
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href="/vault#features"
-              className="text-sm text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
-            >
-              Features
-            </a>
-            <a
-              href="/vault#pricing"
-              className="text-sm text-vault-text-secondary font-medium hover:text-vault-primary transition-colors"
-            >
-              Pricing
-            </a>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -215,20 +203,6 @@ const VaultHeader = () => {
             })}
 
             <div className="pt-3 mt-3 border-t border-vault-border space-y-2">
-              <a
-                href="/vault#features"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg transition-all"
-              >
-                Features
-              </a>
-              <a
-                href="/vault#pricing"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-vault-text-secondary hover:text-vault-primary hover:bg-vault-primary-muted rounded-lg transition-all"
-              >
-                Pricing
-              </a>
               <Link
                 to="/vault/profile"
                 onClick={() => setIsMobileMenuOpen(false)}

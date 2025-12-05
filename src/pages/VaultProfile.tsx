@@ -6,7 +6,7 @@ import { redirectToPortal } from '@/services/stripeService';
 import { AdminUser } from '@/types/admin';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { User, Crown, Mail, Smartphone, LogOut, HelpCircle, CreditCard, Loader2, ExternalLink } from 'lucide-react';
+import { User, Crown, Mail, Smartphone, LogOut, HelpCircle, CreditCard, Loader2, ExternalLink, Check, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 const VaultProfile = () => {
@@ -15,6 +15,7 @@ const VaultProfile = () => {
   const [userProfile, setUserProfile] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -87,12 +88,35 @@ const VaultProfile = () => {
     return <Badge variant="outline">Free</Badge>;
   };
 
+  const isProUser = () => {
+    if (!userProfile) return false;
+    const tier = userProfile.subscriptionTier;
+    const status = userProfile.subscriptionStatus;
+    return (
+      tier === 'lifetime' ||
+      userProfile.hasLifetimeAccess ||
+      (status === 'active' && (tier === 'athlete' || tier === 'athlete_plus' || tier === 'pro'))
+    );
+  };
+
+  const handleUpgrade = () => {
+    navigate(`/vault/checkout?plan=${selectedPlan}`);
+  };
+
+  const proFeatures = [
+    'Unlimited jump logging',
+    'Advanced analytics & insights',
+    'Equipment recommendations',
+    'Full video library access',
+    'Progress tracking & goals',
+  ];
+
   if (!user) {
     return null;
   }
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-vault-text">Profile & Settings</h1>
         <p className="text-vault-text-secondary mt-1">
@@ -156,8 +180,72 @@ const VaultProfile = () => {
                   <span className="text-sm font-medium text-vault-text-secondary">Current Plan:</span>
                   {getSubscriptionBadge()}
                 </div>
-                {userProfile?.subscriptionStatus === 'active' && (
-                  // Show Manage Subscription if: platform is 'web' OR has stripeCustomerId (fallback)
+
+                {/* Upgrade Section for Free/Lite Users */}
+                {!isProUser() && (
+                  <div className="mt-6 pt-6 border-t border-vault-border-light">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Sparkles className="w-5 h-5 text-vault-primary" />
+                      <h3 className="font-bold text-vault-text">Upgrade to Pro</h3>
+                    </div>
+
+                    {/* Features List */}
+                    <ul className="space-y-2 mb-6">
+                      {proFeatures.map((feature, index) => (
+                        <li key={index} className="flex items-center gap-2 text-sm text-vault-text-secondary">
+                          <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Plan Toggle */}
+                    <div className="flex gap-3 mb-4">
+                      <button
+                        onClick={() => setSelectedPlan('monthly')}
+                        className={`flex-1 p-4 rounded-xl border-2 transition-all ${
+                          selectedPlan === 'monthly'
+                            ? 'border-vault-primary bg-vault-primary/5'
+                            : 'border-vault-border-light hover:border-vault-primary/50'
+                        }`}
+                      >
+                        <div className="text-sm font-medium text-vault-text-secondary">Monthly</div>
+                        <div className="text-xl font-bold text-vault-text">$9.99</div>
+                        <div className="text-xs text-vault-text-muted">/month</div>
+                      </button>
+                      <button
+                        onClick={() => setSelectedPlan('yearly')}
+                        className={`flex-1 p-4 rounded-xl border-2 transition-all relative ${
+                          selectedPlan === 'yearly'
+                            ? 'border-vault-primary bg-vault-primary/5'
+                            : 'border-vault-border-light hover:border-vault-primary/50'
+                        }`}
+                      >
+                        <div className="absolute -top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                          SAVE 58%
+                        </div>
+                        <div className="text-sm font-medium text-vault-text-secondary">Yearly</div>
+                        <div className="text-xl font-bold text-vault-text">$49.99</div>
+                        <div className="text-xs text-vault-text-muted">/year</div>
+                      </button>
+                    </div>
+
+                    {/* Upgrade Button */}
+                    <Button
+                      onClick={handleUpgrade}
+                      className="w-full bg-vault-primary hover:bg-vault-primary-dark text-white font-bold py-6 rounded-xl transition-all"
+                    >
+                      <Crown className="w-4 h-4 mr-2" />
+                      Upgrade to Pro
+                    </Button>
+                    <p className="text-xs text-vault-text-muted text-center mt-2">
+                      Cancel anytime. Secure payment via Stripe.
+                    </p>
+                  </div>
+                )}
+
+                {/* Manage Subscription for Pro Users */}
+                {userProfile?.subscriptionStatus === 'active' && isProUser() && (
                   (userProfile?.subscriptionPlatform === 'web' || userProfile?.stripeCustomerId) ? (
                     <div className="space-y-2">
                       <Button

@@ -93,6 +93,115 @@ export const toolDefinitions = [
         required: ['destination']
       }
     }
+  },
+  {
+    type: 'function' as const,
+    function: {
+      name: 'compare_performance',
+      description: 'Compare performance between two time periods, locations, or session types. Use for "how did I do this month vs last month", "am I better indoors or outdoors", "compare my training vs competition" queries.',
+      parameters: {
+        type: 'object',
+        properties: {
+          compareBy: {
+            type: 'string',
+            enum: ['time_period', 'location', 'session_type', 'indoor_outdoor'],
+            description: 'What to compare by: time_period (two date ranges), location (two locations), session_type (training vs competition), indoor_outdoor.'
+          },
+          period1: {
+            type: 'object',
+            properties: {
+              dateFrom: { type: 'string', description: 'Start date ISO format' },
+              dateTo: { type: 'string', description: 'End date ISO format' },
+              location: { type: 'string', description: 'Location name for location comparison' },
+              sessionType: { type: 'string', enum: ['Training', 'Competition'] },
+              isIndoor: { type: 'boolean', description: 'For indoor/outdoor comparison' }
+            },
+            description: 'First period/group to compare'
+          },
+          period2: {
+            type: 'object',
+            properties: {
+              dateFrom: { type: 'string', description: 'Start date ISO format' },
+              dateTo: { type: 'string', description: 'End date ISO format' },
+              location: { type: 'string', description: 'Location name for location comparison' },
+              sessionType: { type: 'string', enum: ['Training', 'Competition'] },
+              isIndoor: { type: 'boolean', description: 'For indoor/outdoor comparison' }
+            },
+            description: 'Second period/group to compare'
+          }
+        },
+        required: ['compareBy', 'period1', 'period2']
+      }
+    }
+  },
+  {
+    type: 'function' as const,
+    function: {
+      name: 'get_pole_analysis',
+      description: 'Analyze pole performance - which poles work best at different heights, success rates by pole, recommendations. Use for "which pole for 4.50m", "my best pole", "success rate on Spirit 15" queries.',
+      parameters: {
+        type: 'object',
+        properties: {
+          poleBrand: { type: 'string', description: 'Filter by pole brand (e.g., "Spirit", "Pacer", "UCS")' },
+          poleLength: { type: 'string', description: 'Filter by pole length (e.g., "15\'", "4.60m")' },
+          targetHeight: { type: 'number', description: 'Target bar height in meters to find best pole for' },
+          analyzeAll: { type: 'boolean', description: 'Set true to analyze all poles and compare them' }
+        }
+      }
+    }
+  },
+  {
+    type: 'function' as const,
+    function: {
+      name: 'get_height_progression',
+      description: 'Track progression at specific heights over time. Shows attempts, success rate trend, and readiness. Use for "progress at 4.60m", "how close to 4.80m", "height progression" queries.',
+      parameters: {
+        type: 'object',
+        properties: {
+          height: { type: 'string', description: 'Target height to track (e.g., "4.60m", "15\'0")' },
+          includeNearby: { type: 'boolean', description: 'Include heights within 10cm of target' }
+        },
+        required: ['height']
+      }
+    }
+  },
+  {
+    type: 'function' as const,
+    function: {
+      name: 'analyze_technique',
+      description: 'Analyze technical patterns - grip height, steps, takeoff, standards correlations with success. Use for "best grip height", "6 vs 8 step", "optimal takeoff", "technique analysis" queries.',
+      parameters: {
+        type: 'object',
+        properties: {
+          aspect: {
+            type: 'string',
+            enum: ['grip', 'steps', 'takeoff', 'standards', 'all'],
+            description: 'Which technical aspect to analyze: grip (grip height), steps (approach count), takeoff (takeoff point), standards (standard settings), all (comprehensive analysis).'
+          },
+          atHeight: { type: 'string', description: 'Analyze technique at a specific height (optional)' }
+        },
+        required: ['aspect']
+      }
+    }
+  },
+  {
+    type: 'function' as const,
+    function: {
+      name: 'get_training_recommendations',
+      description: 'Get AI-driven training recommendations based on performance data. Analyzes patterns to suggest focus areas. Use for "what should I work on", "why am I missing at X", "training advice" queries.',
+      parameters: {
+        type: 'object',
+        properties: {
+          focusArea: {
+            type: 'string',
+            enum: ['next_session', 'height_barrier', 'consistency', 'competition_prep', 'general'],
+            description: 'Focus area: next_session (immediate next session), height_barrier (breaking through a height), consistency (improving success rate), competition_prep (competition readiness), general (overall advice).'
+          },
+          targetHeight: { type: 'string', description: 'Specific height to focus on (for height_barrier)' }
+        },
+        required: ['focusArea']
+      }
+    }
   }
 ];
 
@@ -448,6 +557,529 @@ export async function getUserStats(
   };
 }
 
+// Compare performance between two periods/groups
+export async function comparePerformance(
+  userId: string,
+  params: {
+    compareBy: 'time_period' | 'location' | 'session_type' | 'indoor_outdoor';
+    period1: any;
+    period2: any;
+  }
+) {
+  const db = admin.firestore();
+  const sessionsRef = db.collection('users').doc(userId).collection('sessions');
+  const snapshot = await sessionsRef.orderBy('date', 'desc').get();
+
+  const sessions: SessionData[] = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  } as SessionData));
+
+  // Filter function based on criteria
+  const filterSessions = (criteria: any) => {
+    return sessions.filter(s => {
+      const sessionDate = s.date?.toDate ? s.date.toDate() : new Date(s.date);
+
+      if (criteria.dateFrom) {
+        if (sessionDate < new Date(criteria.dateFrom)) return false;
+      }
+      if (criteria.dateTo) {
+        const toDate = new Date(criteria.dateTo);
+        toDate.setHours(23, 59, 59, 999);
+        if (sessionDate > toDate) return false;
+      }
+      if (criteria.location) {
+        if (!s.location?.toLowerCase().includes(criteria.location.toLowerCase())) return false;
+      }
+      if (criteria.sessionType) {
+        if (s.sessionType?.toLowerCase() !== criteria.sessionType.toLowerCase()) return false;
+      }
+      if (criteria.isIndoor !== undefined) {
+        if (s.isIndoor !== criteria.isIndoor) return false;
+      }
+      return true;
+    });
+  };
+
+  // Calculate stats for a group
+  const calculateStats = (filteredSessions: SessionData[]) => {
+    let totalJumps = 0;
+    let makes = 0;
+    let bestHeight = 0;
+    const heights: number[] = [];
+
+    filteredSessions.forEach(s => {
+      const jumps = s.jumps || [];
+      jumps.forEach((j: any) => {
+        totalJumps++;
+        const height = parseHeight(j.height);
+        if (j.result === 'make') {
+          makes++;
+          if (height > bestHeight) bestHeight = height;
+        }
+        heights.push(height);
+      });
+    });
+
+    const avgHeight = heights.length > 0 ? heights.reduce((a, b) => a + b, 0) / heights.length : 0;
+    const successRate = totalJumps > 0 ? Math.round((makes / totalJumps) * 100) : 0;
+
+    return {
+      sessions: filteredSessions.length,
+      totalJumps,
+      makes,
+      successRate,
+      bestHeight: bestHeight > 0 ? `${bestHeight.toFixed(2)}m` : null,
+      avgHeight: avgHeight > 0 ? `${avgHeight.toFixed(2)}m` : null
+    };
+  };
+
+  const group1Sessions = filterSessions(params.period1);
+  const group2Sessions = filterSessions(params.period2);
+
+  const stats1 = calculateStats(group1Sessions);
+  const stats2 = calculateStats(group2Sessions);
+
+  // Determine labels based on comparison type
+  let label1 = 'Period 1';
+  let label2 = 'Period 2';
+
+  if (params.compareBy === 'time_period') {
+    label1 = params.period1.dateFrom ? `From ${params.period1.dateFrom}` : 'Earlier';
+    label2 = params.period2.dateFrom ? `From ${params.period2.dateFrom}` : 'Later';
+  } else if (params.compareBy === 'session_type') {
+    label1 = params.period1.sessionType || 'Training';
+    label2 = params.period2.sessionType || 'Competition';
+  } else if (params.compareBy === 'indoor_outdoor') {
+    label1 = params.period1.isIndoor ? 'Indoor' : 'Outdoor';
+    label2 = params.period2.isIndoor ? 'Indoor' : 'Outdoor';
+  } else if (params.compareBy === 'location') {
+    label1 = params.period1.location || 'Location 1';
+    label2 = params.period2.location || 'Location 2';
+  }
+
+  return {
+    comparison: params.compareBy,
+    group1: { label: label1, ...stats1 },
+    group2: { label: label2, ...stats2 },
+    analysis: {
+      successRateDiff: stats1.successRate - stats2.successRate,
+      betterGroup: stats1.successRate > stats2.successRate ? label1 :
+                   stats2.successRate > stats1.successRate ? label2 : 'Equal',
+      moreVolume: stats1.totalJumps > stats2.totalJumps ? label1 : label2
+    }
+  };
+}
+
+// Analyze pole performance
+export async function getPoleAnalysis(
+  userId: string,
+  params: {
+    poleBrand?: string;
+    poleLength?: string;
+    targetHeight?: number;
+    analyzeAll?: boolean;
+  }
+) {
+  const db = admin.firestore();
+  const sessionsRef = db.collection('users').doc(userId).collection('sessions');
+  const snapshot = await sessionsRef.get();
+
+  const poleStats: Record<string, {
+    name: string;
+    brand: string;
+    length: string;
+    weight: string;
+    attempts: number;
+    makes: number;
+    heights: number[];
+    bestHeight: number;
+  }> = {};
+
+  snapshot.docs.forEach(doc => {
+    const session = doc.data();
+    const jumps = session.jumps || [];
+
+    jumps.forEach((jump: any) => {
+      const poleDetails = jump.poleDetails;
+      if (!poleDetails) return;
+
+      const poleKey = `${poleDetails.brand}-${poleDetails.length}-${poleDetails.pounds}`;
+      const poleName = `${poleDetails.brand} ${poleDetails.length} ${poleDetails.pounds}lbs`;
+
+      // Apply filters
+      if (params.poleBrand && !poleDetails.brand?.toLowerCase().includes(params.poleBrand.toLowerCase())) return;
+      if (params.poleLength && !poleDetails.length?.includes(params.poleLength)) return;
+
+      if (!poleStats[poleKey]) {
+        poleStats[poleKey] = {
+          name: poleName,
+          brand: poleDetails.brand,
+          length: poleDetails.length,
+          weight: `${poleDetails.pounds}lbs`,
+          attempts: 0,
+          makes: 0,
+          heights: [],
+          bestHeight: 0
+        };
+      }
+
+      const height = parseHeight(jump.height);
+      poleStats[poleKey].attempts++;
+      poleStats[poleKey].heights.push(height);
+
+      if (jump.result === 'make') {
+        poleStats[poleKey].makes++;
+        if (height > poleStats[poleKey].bestHeight) {
+          poleStats[poleKey].bestHeight = height;
+        }
+      }
+    });
+  });
+
+  // Convert to array and calculate rates
+  let poles = Object.values(poleStats).map(pole => ({
+    ...pole,
+    successRate: pole.attempts > 0 ? Math.round((pole.makes / pole.attempts) * 100) : 0,
+    avgHeight: pole.heights.length > 0
+      ? `${(pole.heights.reduce((a, b) => a + b, 0) / pole.heights.length).toFixed(2)}m`
+      : null,
+    bestHeight: pole.bestHeight > 0 ? `${pole.bestHeight.toFixed(2)}m` : null
+  }));
+
+  // Sort by success rate
+  poles.sort((a, b) => b.successRate - a.successRate);
+
+  // Find best pole for target height if specified
+  let recommendedPole = null;
+  if (params.targetHeight) {
+    const polesAtHeight = poles.filter(p =>
+      p.heights.some(h => Math.abs(h - params.targetHeight!) < 0.15) // Within 15cm
+    );
+    if (polesAtHeight.length > 0) {
+      recommendedPole = polesAtHeight[0];
+    }
+  }
+
+  return {
+    poles: poles.slice(0, 10),
+    totalPolesUsed: poles.length,
+    recommendedForHeight: recommendedPole ? {
+      pole: recommendedPole.name,
+      successRate: recommendedPole.successRate,
+      attemptsAtHeight: recommendedPole.heights.filter(h =>
+        Math.abs(h - (params.targetHeight || 0)) < 0.15
+      ).length
+    } : null,
+    bestOverall: poles[0] ? {
+      pole: poles[0].name,
+      successRate: poles[0].successRate,
+      bestHeight: poles[0].bestHeight
+    } : null
+  };
+}
+
+// Track height progression
+export async function getHeightProgression(
+  userId: string,
+  params: {
+    height: string;
+    includeNearby?: boolean;
+  }
+) {
+  const db = admin.firestore();
+  const sessionsRef = db.collection('users').doc(userId).collection('sessions');
+  const snapshot = await sessionsRef.orderBy('date', 'asc').get();
+
+  const targetHeight = parseHeight(params.height);
+  const tolerance = params.includeNearby ? 0.10 : 0.02; // 10cm or 2cm
+
+  interface AttemptData {
+    date: string;
+    sessionId: string;
+    result: string;
+    rating: string;
+    height: number;
+  }
+
+  const attempts: AttemptData[] = [];
+  let firstMake: AttemptData | null = null;
+  let lastMake: AttemptData | null = null;
+
+  snapshot.docs.forEach(doc => {
+    const session = doc.data();
+    const sessionDate = session.date?.toDate ? session.date.toDate().toISOString() : session.date;
+    const jumps = session.jumps || [];
+
+    jumps.forEach((jump: any) => {
+      const height = parseHeight(jump.height);
+      if (Math.abs(height - targetHeight) <= tolerance) {
+        const attempt: AttemptData = {
+          date: sessionDate,
+          sessionId: doc.id,
+          result: jump.result || 'no-make',
+          rating: jump.rating,
+          height
+        };
+        attempts.push(attempt);
+
+        if (jump.result === 'make') {
+          if (!firstMake) firstMake = attempt;
+          lastMake = attempt;
+        }
+      }
+    });
+  });
+
+  // Calculate stats
+  const makes = attempts.filter(a => a.result === 'make').length;
+  const successRate = attempts.length > 0 ? Math.round((makes / attempts.length) * 100) : 0;
+
+  // Calculate trend (last 5 vs first 5 attempts)
+  let trend = 'stable';
+  if (attempts.length >= 10) {
+    const first5 = attempts.slice(0, 5);
+    const last5 = attempts.slice(-5);
+    const first5Rate = first5.filter(a => a.result === 'make').length / 5;
+    const last5Rate = last5.filter(a => a.result === 'make').length / 5;
+    if (last5Rate > first5Rate + 0.1) trend = 'improving';
+    else if (last5Rate < first5Rate - 0.1) trend = 'declining';
+  }
+
+  // Readiness assessment
+  let readiness = 'not_ready';
+  if (successRate >= 66) readiness = 'ready_to_move_up';
+  else if (successRate >= 50) readiness = 'close';
+  else if (successRate >= 33) readiness = 'developing';
+
+  return {
+    targetHeight: params.height,
+    totalAttempts: attempts.length,
+    makes,
+    successRate,
+    trend,
+    readiness,
+    firstMake: firstMake ? { date: firstMake.date } : null,
+    lastMake: lastMake ? { date: lastMake.date } : null,
+    recentAttempts: attempts.slice(-5).reverse().map(a => ({
+      date: a.date,
+      result: a.result,
+      rating: a.rating
+    }))
+  };
+}
+
+// Analyze technique patterns
+export async function analyzeTechnique(
+  userId: string,
+  params: {
+    aspect: 'grip' | 'steps' | 'takeoff' | 'standards' | 'all';
+    atHeight?: string;
+  }
+) {
+  const db = admin.firestore();
+  const sessionsRef = db.collection('users').doc(userId).collection('sessions');
+  const snapshot = await sessionsRef.get();
+
+  const targetHeight = params.atHeight ? parseHeight(params.atHeight) : null;
+  const heightTolerance = 0.10;
+
+  interface TechniqueData {
+    gripHeights: { value: string; makes: number; attempts: number }[];
+    steps: { value: number; makes: number; attempts: number }[];
+    takeoffs: { value: string; makes: number; attempts: number }[];
+    standards: { value: string; makes: number; attempts: number }[];
+  }
+
+  const data: TechniqueData = {
+    gripHeights: [],
+    steps: [],
+    takeoffs: [],
+    standards: []
+  };
+
+  const gripMap: Record<string, { makes: number; attempts: number }> = {};
+  const stepsMap: Record<number, { makes: number; attempts: number }> = {};
+  const takeoffMap: Record<string, { makes: number; attempts: number }> = {};
+  const standardsMap: Record<string, { makes: number; attempts: number }> = {};
+
+  snapshot.docs.forEach(doc => {
+    const session = doc.data();
+    const jumps = session.jumps || [];
+
+    jumps.forEach((jump: any) => {
+      const height = parseHeight(jump.height);
+      if (targetHeight && Math.abs(height - targetHeight) > heightTolerance) return;
+
+      const isMake = jump.result === 'make';
+
+      // Grip height
+      if (jump.gripHeight) {
+        if (!gripMap[jump.gripHeight]) gripMap[jump.gripHeight] = { makes: 0, attempts: 0 };
+        gripMap[jump.gripHeight].attempts++;
+        if (isMake) gripMap[jump.gripHeight].makes++;
+      }
+
+      // Steps
+      if (jump.steps) {
+        const stepCount = parseInt(jump.steps);
+        if (!isNaN(stepCount)) {
+          if (!stepsMap[stepCount]) stepsMap[stepCount] = { makes: 0, attempts: 0 };
+          stepsMap[stepCount].attempts++;
+          if (isMake) stepsMap[stepCount].makes++;
+        }
+      }
+
+      // Takeoff
+      if (jump.takeOff) {
+        if (!takeoffMap[jump.takeOff]) takeoffMap[jump.takeOff] = { makes: 0, attempts: 0 };
+        takeoffMap[jump.takeOff].attempts++;
+        if (isMake) takeoffMap[jump.takeOff].makes++;
+      }
+
+      // Standards
+      if (jump.standards) {
+        if (!standardsMap[jump.standards]) standardsMap[jump.standards] = { makes: 0, attempts: 0 };
+        standardsMap[jump.standards].attempts++;
+        if (isMake) standardsMap[jump.standards].makes++;
+      }
+    });
+  });
+
+  // Convert maps to sorted arrays
+  const toSortedArray = (map: Record<string | number, { makes: number; attempts: number }>) => {
+    return Object.entries(map)
+      .filter(([_, stats]) => stats.attempts >= 3)
+      .map(([value, stats]) => ({
+        value,
+        makes: stats.makes,
+        attempts: stats.attempts,
+        successRate: Math.round((stats.makes / stats.attempts) * 100)
+      }))
+      .sort((a, b) => b.successRate - a.successRate);
+  };
+
+  const result: any = {};
+
+  if (params.aspect === 'grip' || params.aspect === 'all') {
+    result.gripAnalysis = toSortedArray(gripMap).slice(0, 5);
+    result.bestGrip = result.gripAnalysis[0] || null;
+  }
+
+  if (params.aspect === 'steps' || params.aspect === 'all') {
+    result.stepsAnalysis = toSortedArray(stepsMap).slice(0, 5);
+    result.bestSteps = result.stepsAnalysis[0] || null;
+  }
+
+  if (params.aspect === 'takeoff' || params.aspect === 'all') {
+    result.takeoffAnalysis = toSortedArray(takeoffMap).slice(0, 5);
+    result.bestTakeoff = result.takeoffAnalysis[0] || null;
+  }
+
+  if (params.aspect === 'standards' || params.aspect === 'all') {
+    result.standardsAnalysis = toSortedArray(standardsMap).slice(0, 5);
+    result.bestStandards = result.standardsAnalysis[0] || null;
+  }
+
+  result.atHeight = params.atHeight || 'all heights';
+
+  return result;
+}
+
+// Get training recommendations
+export async function getTrainingRecommendations(
+  userId: string,
+  params: {
+    focusArea: 'next_session' | 'height_barrier' | 'consistency' | 'competition_prep' | 'general';
+    targetHeight?: string;
+  }
+) {
+  // Gather all relevant data
+  const stats = await getUserStats(userId, { timeframe: 'month' });
+  const allTimeStats = await getUserStats(userId, { timeframe: 'all' });
+  const technique = await analyzeTechnique(userId, { aspect: 'all' });
+
+  const recommendations: string[] = [];
+  const insights: any = {
+    currentStats: stats,
+    focusArea: params.focusArea
+  };
+
+  // General analysis
+  if (stats.successRate < 40) {
+    recommendations.push('Focus on consistency at comfortable heights before pushing higher');
+  }
+
+  if (params.focusArea === 'height_barrier' && params.targetHeight) {
+    const progression = await getHeightProgression(userId, { height: params.targetHeight });
+    insights.heightProgression = progression;
+
+    if (progression.successRate < 33) {
+      recommendations.push(`Build more volume at heights 10-20cm below ${params.targetHeight}`);
+      recommendations.push('Focus on technical consistency before attempting this height');
+    } else if (progression.successRate < 66) {
+      recommendations.push(`You're making progress at ${params.targetHeight} - keep building attempts`);
+      if (progression.trend === 'improving') {
+        recommendations.push('Your trend is improving - maintain current approach');
+      }
+    } else {
+      recommendations.push(`You're clearing ${params.targetHeight} consistently - ready to move up!`);
+    }
+  }
+
+  if (params.focusArea === 'consistency') {
+    if (technique.bestGrip) {
+      recommendations.push(`Your best grip height is ${technique.bestGrip.value} (${technique.bestGrip.successRate}% success)`);
+    }
+    if (technique.bestSteps) {
+      recommendations.push(`${technique.bestSteps.value}-step approach works best (${technique.bestSteps.successRate}% success)`);
+    }
+  }
+
+  if (params.focusArea === 'competition_prep') {
+    const comparisonResult = await comparePerformance(userId, {
+      compareBy: 'session_type',
+      period1: { sessionType: 'Training' },
+      period2: { sessionType: 'Competition' }
+    });
+    insights.trainingVsCompetition = comparisonResult;
+
+    if (comparisonResult.group1.successRate > comparisonResult.group2.successRate + 10) {
+      recommendations.push('Your training success rate is higher than competition - work on competition nerves');
+      recommendations.push('Practice competition-like pressure in training');
+    } else if (comparisonResult.group2.successRate > comparisonResult.group1.successRate) {
+      recommendations.push('You perform better in competition - great competition mindset!');
+    }
+  }
+
+  if (params.focusArea === 'next_session') {
+    recommendations.push(`Current PB: ${allTimeStats.personalBest || 'Not set'}`);
+    recommendations.push(`Recent success rate: ${stats.successRate}%`);
+    if (stats.successRate >= 60) {
+      recommendations.push('Consider challenging yourself with slightly higher bars');
+    } else {
+      recommendations.push('Focus on building consistency before pushing heights');
+    }
+  }
+
+  if (params.focusArea === 'general') {
+    recommendations.push(`You've logged ${allTimeStats.totalJumps} jumps across ${allTimeStats.totalSessions} sessions`);
+    if (allTimeStats.personalBest) {
+      recommendations.push(`Personal best: ${allTimeStats.personalBest}`);
+    }
+    if (technique.bestGrip && technique.bestSteps) {
+      recommendations.push(`Optimal setup: ${technique.bestSteps.value} steps, ${technique.bestGrip.value} grip`);
+    }
+  }
+
+  return {
+    focusArea: params.focusArea,
+    targetHeight: params.targetHeight || null,
+    recommendations,
+    insights
+  };
+}
+
 // Execute a tool call
 export async function executeTool(
   userId: string,
@@ -466,6 +1098,16 @@ export async function executeTool(
     case 'navigate_to':
       // Navigation is handled client-side, just return the intent
       return { navigation: args };
+    case 'compare_performance':
+      return comparePerformance(userId, args);
+    case 'get_pole_analysis':
+      return getPoleAnalysis(userId, args);
+    case 'get_height_progression':
+      return getHeightProgression(userId, args);
+    case 'analyze_technique':
+      return analyzeTechnique(userId, args);
+    case 'get_training_recommendations':
+      return getTrainingRecommendations(userId, args);
     default:
       return { error: `Unknown tool: ${toolName}` };
   }

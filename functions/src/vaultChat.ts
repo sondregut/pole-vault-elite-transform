@@ -50,6 +50,11 @@ WHAT YOU CAN DO:
 3. Calculate and explain statistics (success rates, trends, comparisons)
 4. Navigate users directly to sessions, videos, or analytics
 5. Provide coaching insights based on the data
+6. Compare performance between time periods, locations, training vs competition, indoor vs outdoor
+7. Analyze pole performance and recommend best poles for specific heights
+8. Track height progression and readiness to move up
+9. Analyze technique patterns (grip, steps, takeoff, standards)
+10. Provide personalized training recommendations
 
 CRITICAL TOOL USAGE RULES:
 1. ALWAYS call search_jumps or search_sessions when user asks to see videos, jumps, or sessions
@@ -126,7 +131,7 @@ export const vaultChat = functions
     try {
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-2.5-flash-preview-05-20',
         tools: [{ functionDeclarations: getGeminiTools() as any }],
         systemInstruction: buildSystemPrompt(await getUserStats(userId, { timeframe: 'all' })),
       });
