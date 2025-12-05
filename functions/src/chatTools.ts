@@ -28,7 +28,7 @@ export const toolDefinitions = [
     type: 'function' as const,
     function: {
       name: 'search_jumps',
-      description: 'Search individual jumps across all sessions. Returns jumps sorted by date (most recent first) with full details. You can filter by height, rating, result, or video. After getting results, YOU decide which jump best answers the user query based on dates, heights, etc.',
+      description: 'Search individual jumps across all sessions. You can filter by height, rating, result, or video. Use sortBy to control result order. Use limit=1 when user asks for ONE specific jump (e.g., "lowest", "highest", "most recent").',
       parameters: {
         type: 'object',
         properties: {
@@ -38,7 +38,12 @@ export const toolDefinitions = [
           result: { type: 'string', description: 'Filter by result: make or no-make.' },
           hasVideo: { type: 'boolean', description: 'Set true to only get jumps with video.' },
           isFavorite: { type: 'boolean', description: 'Set true for favorited jumps only.' },
-          limit: { type: 'number', description: 'Max results to return (default 10).' }
+          sortBy: {
+            type: 'string',
+            enum: ['date_desc', 'date_asc', 'height_desc', 'height_asc'],
+            description: 'Sort order: date_desc (most recent first, default), date_asc (oldest first), height_desc (highest first), height_asc (lowest first). Use height_asc for "lowest jump", height_desc for "highest jump".'
+          },
+          limit: { type: 'number', description: 'Max results to return (default 10). Use limit=1 for "show me THE lowest/highest/etc".' }
         }
       }
     }
@@ -327,6 +332,7 @@ export async function searchJumps(
     result?: string;
     hasVideo?: boolean;
     isFavorite?: boolean;
+    sortBy?: 'date_desc' | 'date_asc' | 'height_desc' | 'height_asc';
     limit?: number;
   }
 ) {
@@ -394,10 +400,25 @@ export async function searchJumps(
     });
   });
 
-  // Always sort by date descending (most recent first) - let AI reason about which to pick
-  allJumps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  // Sort based on sortBy parameter
+  const sortBy = params.sortBy || 'date_desc';
+  switch (sortBy) {
+    case 'date_asc':
+      allJumps.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      break;
+    case 'height_desc':
+      allJumps.sort((a, b) => b.heightMeters - a.heightMeters);
+      break;
+    case 'height_asc':
+      allJumps.sort((a, b) => a.heightMeters - b.heightMeters);
+      break;
+    case 'date_desc':
+    default:
+      allJumps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      break;
+  }
 
-  // Return up to 10 jumps for display
+  // Return up to limit jumps for display
   const limit = params.limit || 10;
   return allJumps.slice(0, limit);
 }
@@ -506,7 +527,15 @@ export async function getUserStats(
   let totalJumps = 0;
   let makes = 0;
   let personalBest = 0;
+  let jumpsWithVideo = 0;
   const heightStats: Record<string, { attempts: number; makes: number }> = {};
+  const ratingCounts: Record<string, number> = {
+    great: 0,
+    good: 0,
+    ok: 0,
+    glider: 0,
+    runthru: 0
+  };
 
   snapshot.docs.forEach(doc => {
     const session = doc.data();
@@ -522,6 +551,17 @@ export async function getUserStats(
 
       if (jump.result === 'make') {
         makes++;
+      }
+
+      // Track videos
+      if (jump.videoUrl || jump.videoLocalUri) {
+        jumpsWithVideo++;
+      }
+
+      // Track ratings
+      const rating = jump.rating?.toLowerCase();
+      if (rating && ratingCounts.hasOwnProperty(rating)) {
+        ratingCounts[rating]++;
       }
 
       // Track by height
@@ -553,6 +593,10 @@ export async function getUserStats(
     totalJumps,
     personalBest: personalBest > 0 ? `${personalBest.toFixed(2)}m` : null,
     successRate: Math.round(successRate),
+    makes,
+    misses: totalJumps - makes,
+    jumpsWithVideo,
+    ratingBreakdown: ratingCounts,
     heightSuccessRate: heightSuccessRate.slice(0, 5) // Top 5 heights
   };
 }

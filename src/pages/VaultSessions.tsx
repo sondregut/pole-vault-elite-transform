@@ -218,6 +218,16 @@ const VaultSessions = () => {
       return !!(jump.videoUrl || jump.videoLocalUri);
     }
 
+    // Check for single height value (e.g., "5.9", "5.90", "5.9m")
+    // This handles numeric equivalence so "5.9" and "5.90" both match "5.90m"
+    const heightMatch = searchLower.match(/^(\d+\.?\d*)\s*m?$/);
+    if (heightMatch) {
+      const searchHeight = parseFloat(heightMatch[1]);
+      if (!isNaN(searchHeight) && Math.abs(jumpHeight - searchHeight) < 0.001) {
+        return true;
+      }
+    }
+
     // Default: search across multiple text fields
     const searchableText = [
       jump.height,
@@ -396,6 +406,19 @@ const VaultSessions = () => {
     // Check for video search
     if (['video', 'videos', 'has video', 'with video'].includes(searchLower)) {
       return (session.jumps || []).some(jump => jump.videoUrl || jump.videoLocalUri);
+    }
+
+    // Check for single height value (e.g., "5.9", "5.90", "5.9m")
+    // Matches sessions that have ANY jump at this height
+    const heightMatch = searchLower.match(/^(\d+\.?\d*)\s*m?$/);
+    if (heightMatch) {
+      const searchHeight = parseFloat(heightMatch[1]);
+      if (!isNaN(searchHeight)) {
+        return (session.jumps || []).some(jump => {
+          const jumpHeight = parseFloat(jump.height) || 0;
+          return Math.abs(jumpHeight - searchHeight) < 0.001;
+        });
+      }
     }
 
     // Build searchable text from all session fields
