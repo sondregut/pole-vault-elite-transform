@@ -51,11 +51,12 @@ const VaultDashboard = () => {
     }
   }, [user]);
 
-  const handleCloseWelcome = () => {
-    if (user) {
+  const handleCloseWelcome = (open: boolean) => {
+    if (!open && user) {
+      // Save to localStorage whenever dialog closes (X button, clicking outside, or "Let's Go!")
       localStorage.setItem(`vault_welcome_shown_${user.uid}`, 'true');
     }
-    setShowWelcome(false);
+    setShowWelcome(open);
   };
 
   const dashboardStats = stats ? [
@@ -100,7 +101,7 @@ const VaultDashboard = () => {
   return (
     <div>
       {/* Welcome Dialog for First-Time Users */}
-      <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
+      <Dialog open={showWelcome} onOpenChange={handleCloseWelcome}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader className="text-center">
             <div className="flex justify-center mb-4">
@@ -141,7 +142,7 @@ const VaultDashboard = () => {
           </div>
 
           <Button
-            onClick={handleCloseWelcome}
+            onClick={() => handleCloseWelcome(false)}
             className="w-full bg-gradient-to-r from-vault-primary-dark to-vault-primary text-white font-semibold py-6 rounded-xl hover:shadow-vault-md transition-all"
           >
             Let's Go!

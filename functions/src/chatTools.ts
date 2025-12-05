@@ -852,6 +852,10 @@ export async function getHeightProgression(
   else if (successRate >= 50) readiness = 'close';
   else if (successRate >= 33) readiness = 'developing';
 
+  // Cast to resolve TypeScript narrowing issue with closures
+  const firstMakeResult = firstMake as AttemptData | null;
+  const lastMakeResult = lastMake as AttemptData | null;
+
   return {
     targetHeight: params.height,
     totalAttempts: attempts.length,
@@ -859,9 +863,9 @@ export async function getHeightProgression(
     successRate,
     trend,
     readiness,
-    firstMake: firstMake ? { date: firstMake.date } : null,
-    lastMake: lastMake ? { date: lastMake.date } : null,
-    recentAttempts: attempts.slice(-5).reverse().map(a => ({
+    firstMake: firstMakeResult ? { date: firstMakeResult.date } : null,
+    lastMake: lastMakeResult ? { date: lastMakeResult.date } : null,
+    recentAttempts: attempts.slice(-5).reverse().map((a: AttemptData) => ({
       date: a.date,
       result: a.result,
       rating: a.rating
@@ -883,20 +887,6 @@ export async function analyzeTechnique(
 
   const targetHeight = params.atHeight ? parseHeight(params.atHeight) : null;
   const heightTolerance = 0.10;
-
-  interface TechniqueData {
-    gripHeights: { value: string; makes: number; attempts: number }[];
-    steps: { value: number; makes: number; attempts: number }[];
-    takeoffs: { value: string; makes: number; attempts: number }[];
-    standards: { value: string; makes: number; attempts: number }[];
-  }
-
-  const data: TechniqueData = {
-    gripHeights: [],
-    steps: [],
-    takeoffs: [],
-    standards: []
-  };
 
   const gripMap: Record<string, { makes: number; attempts: number }> = {};
   const stepsMap: Record<number, { makes: number; attempts: number }> = {};

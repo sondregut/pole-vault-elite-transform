@@ -9,9 +9,27 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 export function FloatingChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [lastSeenCount, setLastSeenCount] = useState(() => {
+    // Load from sessionStorage to persist across page navigations
+    const stored = sessionStorage.getItem('vault-chat-seen-count');
+    return stored ? parseInt(stored, 10) : 1; // Start at 1 to account for initial greeting
+  });
   const { messages, isLoading, sendMessage, clearChat } = useVaultChat();
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Calculate unread messages (new assistant messages since last seen)
+  const assistantMessages = messages.filter(m => m.role === 'assistant');
+  const unreadCount = Math.max(0, assistantMessages.length - lastSeenCount);
+
+  // Mark messages as seen when chat is opened
+  useEffect(() => {
+    if (isOpen) {
+      const count = assistantMessages.length;
+      setLastSeenCount(count);
+      sessionStorage.setItem('vault-chat-seen-count', count.toString());
+    }
+  }, [isOpen, assistantMessages.length]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -41,10 +59,10 @@ export function FloatingChatWidget() {
             className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-vault-primary shadow-lg hover:bg-vault-primary-dark transition-colors flex items-center justify-center"
           >
             <Sparkles className="w-6 h-6 text-white" />
-            {/* Unread indicator */}
-            {messages.length > 0 && (
+            {/* Unread indicator - only show when there are new messages */}
+            {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center font-medium">
-                {messages.filter(m => m.role === 'assistant').length}
+                {unreadCount}
               </span>
             )}
           </motion.button>
@@ -84,11 +102,15 @@ export function FloatingChatWidget() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  {messages.length > 0 && (
+                  {messages.length > 1 && (
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={clearChat}
+                      onClick={() => {
+                        clearChat();
+                        setLastSeenCount(1); // Reset to 1 for the greeting
+                        sessionStorage.setItem('vault-chat-seen-count', '1');
+                      }}
                       className="text-white/70 hover:text-white hover:bg-white/10 h-8 w-8 p-0"
                     >
                       <Trash2 className="w-4 h-4" />

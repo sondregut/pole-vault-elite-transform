@@ -131,13 +131,25 @@ export const vaultChat = functions
     try {
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({
-        model: 'gemini-2.5-flash-preview-05-20',
+        model: 'gemini-2.5-flash',
         tools: [{ functionDeclarations: getGeminiTools() as any }],
         systemInstruction: buildSystemPrompt(await getUserStats(userId, { timeframe: 'all' })),
       });
 
-      // Build chat history
-      const history: any[] = conversationHistory.slice(-10).map(msg => ({
+      // Build chat history - filter to ensure it starts with a user message
+      // Gemini requires the first message in history to be from 'user', not 'model'
+      let filteredHistory = conversationHistory.slice(-10);
+
+      // Find the first user message and start from there
+      const firstUserIndex = filteredHistory.findIndex(msg => msg.role === 'user');
+      if (firstUserIndex > 0) {
+        filteredHistory = filteredHistory.slice(firstUserIndex);
+      } else if (firstUserIndex === -1) {
+        // No user messages in history, start fresh
+        filteredHistory = [];
+      }
+
+      const history: any[] = filteredHistory.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : 'user',
         parts: [{ text: msg.content }],
       }));

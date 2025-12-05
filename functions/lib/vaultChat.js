@@ -75,6 +75,11 @@ WHAT YOU CAN DO:
 3. Calculate and explain statistics (success rates, trends, comparisons)
 4. Navigate users directly to sessions, videos, or analytics
 5. Provide coaching insights based on the data
+6. Compare performance between time periods, locations, training vs competition, indoor vs outdoor
+7. Analyze pole performance and recommend best poles for specific heights
+8. Track height progression and readiness to move up
+9. Analyze technique patterns (grip, steps, takeoff, standards)
+10. Provide personalized training recommendations
 
 CRITICAL TOOL USAGE RULES:
 1. ALWAYS call search_jumps or search_sessions when user asks to see videos, jumps, or sessions
@@ -133,12 +138,23 @@ exports.vaultChat = functions
     try {
         const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash-exp',
+            model: 'gemini-2.5-flash',
             tools: [{ functionDeclarations: getGeminiTools() }],
             systemInstruction: buildSystemPrompt(await (0, chatTools_1.getUserStats)(userId, { timeframe: 'all' })),
         });
-        // Build chat history
-        const history = conversationHistory.slice(-10).map(msg => ({
+        // Build chat history - filter to ensure it starts with a user message
+        // Gemini requires the first message in history to be from 'user', not 'model'
+        let filteredHistory = conversationHistory.slice(-10);
+        // Find the first user message and start from there
+        const firstUserIndex = filteredHistory.findIndex(msg => msg.role === 'user');
+        if (firstUserIndex > 0) {
+            filteredHistory = filteredHistory.slice(firstUserIndex);
+        }
+        else if (firstUserIndex === -1) {
+            // No user messages in history, start fresh
+            filteredHistory = [];
+        }
+        const history = filteredHistory.map(msg => ({
             role: msg.role === 'assistant' ? 'model' : 'user',
             parts: [{ text: msg.content }],
         }));
