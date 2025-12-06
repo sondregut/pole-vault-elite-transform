@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link, useParams } from 'react-router-dom';
+import { useNavigate, Link, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -36,6 +36,7 @@ import {
 
 const VaultSessionDetail = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useFirebaseAuth();
   const { poles } = useVaultPoles(user);
   const [session, setSession] = useState<Session | null>(null);
@@ -69,6 +70,21 @@ const VaultSessionDetail = () => {
 
     fetchSession();
   }, [user, sessionId, navigate]);
+
+  // Auto-open jump modal from URL params (e.g., ?jump=3&autoplay=true)
+  useEffect(() => {
+    if (!session || !session.jumps) return;
+
+    const jumpIndexParam = searchParams.get('jump');
+    if (jumpIndexParam !== null) {
+      const jumpIndex = parseInt(jumpIndexParam, 10);
+      if (!isNaN(jumpIndex) && jumpIndex >= 0 && jumpIndex < session.jumps.length) {
+        setSelectedJump(session.jumps[jumpIndex]);
+        // Clear the URL params after opening the modal so closing doesn't re-open it
+        setSearchParams({}, { replace: true });
+      }
+    }
+  }, [session, searchParams, setSearchParams]);
 
   // Keyboard shortcuts - must be defined before early returns
   useEffect(() => {
