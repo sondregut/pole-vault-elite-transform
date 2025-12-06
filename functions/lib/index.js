@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.vaultChat = exports.checkCouponAvailability = exports.customerPortal = exports.stripeWebhook = exports.createCheckout = void 0;
+exports.generateGreeting = exports.vaultChat = exports.checkCouponAvailability = exports.customerPortal = exports.stripeWebhook = exports.createCheckout = void 0;
 const admin = __importStar(require("firebase-admin"));
 // Initialize Firebase Admin
 admin.initializeApp();
@@ -48,4 +48,6 @@ var checkCouponAvailability_1 = require("./checkCouponAvailability");
 Object.defineProperty(exports, "checkCouponAvailability", { enumerable: true, get: function () { return checkCouponAvailability_1.checkCouponAvailability; } });
 var vaultChat_1 = require("./vaultChat");
 Object.defineProperty(exports, "vaultChat", { enumerable: true, get: function () { return vaultChat_1.vaultChat; } });
+var generateGreeting_1 = require("./generateGreeting");
+Object.defineProperty(exports, "generateGreeting", { enumerable: true, get: function () { return generateGreeting_1.generateGreeting; } });
 //# sourceMappingURL=index.js.map

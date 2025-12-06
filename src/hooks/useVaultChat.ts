@@ -1,17 +1,14 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChatMessage, NavigationIntent } from '@/types/chat';
-import { sendChatMessage } from '@/services/chatService';
+import { sendChatMessage, fetchGreeting } from '@/services/chatService';
 
 const STORAGE_KEY = 'vault-chat-messages';
+const GREETING_CACHE_KEY = 'vault-chat-greeting';
+const GREETING_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-// Initial greeting message from the AI
-const INITIAL_GREETING: ChatMessage = {
-  id: 'greeting-initial',
-  role: 'assistant',
-  content: "Hey! I'm your pole vault coach assistant. I can help you analyze your training, find videos, compare your performance, and give you personalized recommendations. What would you like to know?",
-  timestamp: new Date(),
-};
+// Fallback greeting (shown briefly while loading)
+const FALLBACK_GREETING = "Hey! I'm here to help with your pole vault training. What would you like to know?";
 
 // Load messages from sessionStorage
 function loadMessages(): ChatMessage[] {
@@ -25,23 +22,44 @@ function loadMessages(): ChatMessage[] {
         timestamp: new Date(m.timestamp)
       }));
 
-      // Ensure greeting is always first if there are messages
-      if (messages.length > 0 && messages[0].id !== 'greeting-initial') {
-        return [INITIAL_GREETING, ...messages];
+      // If we have messages with a greeting, return them
+      if (messages.length > 0) {
+        return messages;
       }
-
-      // If empty array stored, return greeting
-      if (messages.length === 0) {
-        return [INITIAL_GREETING];
-      }
-
-      return messages;
     }
   } catch (e) {
     console.error('Failed to load chat messages:', e);
   }
-  // Return initial greeting if no messages stored
-  return [INITIAL_GREETING];
+  // Return empty - greeting will be fetched
+  return [];
+}
+
+// Check if cached greeting is still valid
+function getCachedGreeting(): string | null {
+  try {
+    const cached = sessionStorage.getItem(GREETING_CACHE_KEY);
+    if (cached) {
+      const { greeting, timestamp } = JSON.parse(cached);
+      if (Date.now() - timestamp < GREETING_CACHE_DURATION) {
+        return greeting;
+      }
+    }
+  } catch (e) {
+    // Ignore cache errors
+  }
+  return null;
+}
+
+// Save greeting to cache
+function cacheGreeting(greeting: string) {
+  try {
+    sessionStorage.setItem(GREETING_CACHE_KEY, JSON.stringify({
+      greeting,
+      timestamp: Date.now(),
+    }));
+  } catch (e) {
+    // Ignore cache errors
+  }
 }
 
 // Save messages to sessionStorage
@@ -56,12 +74,63 @@ function saveMessages(messages: ChatMessage[]) {
 export function useVaultChat() {
   const [messages, setMessages] = useState<ChatMessage[]>(loadMessages);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingGreeting, setIsLoadingGreeting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const greetingFetchedRef = useRef(false);
+
+  // Fetch personalized greeting on first load (if no messages exist)
+  useEffect(() => {
+    if (messages.length > 0 || greetingFetchedRef.current) return;
+    greetingFetchedRef.current = true;
+
+    const loadGreeting = async () => {
+      // Check cache first
+      const cached = getCachedGreeting();
+      if (cached) {
+        setMessages([{
+          id: 'greeting-initial',
+          role: 'assistant',
+          content: cached,
+          timestamp: new Date(),
+        }]);
+        return;
+      }
+
+      // Show loading state
+      setIsLoadingGreeting(true);
+
+      try {
+        const greeting = await fetchGreeting();
+        cacheGreeting(greeting);
+        setMessages([{
+          id: 'greeting-initial',
+          role: 'assistant',
+          content: greeting,
+          timestamp: new Date(),
+        }]);
+      } catch (e) {
+        console.error('Failed to fetch greeting:', e);
+        // Use fallback greeting
+        setMessages([{
+          id: 'greeting-initial',
+          role: 'assistant',
+          content: FALLBACK_GREETING,
+          timestamp: new Date(),
+        }]);
+      } finally {
+        setIsLoadingGreeting(false);
+      }
+    };
+
+    loadGreeting();
+  }, [messages.length]);
 
   // Save messages whenever they change
   useEffect(() => {
-    saveMessages(messages);
+    if (messages.length > 0) {
+      saveMessages(messages);
+    }
   }, [messages]);
 
   const handleNavigation = useCallback((intent: NavigationIntent) => {
@@ -161,14 +230,18 @@ export function useVaultChat() {
   }, [messages, isLoading, handleNavigation]);
 
   const clearChat = useCallback(() => {
-    setMessages([INITIAL_GREETING]);
+    // Clear messages and cache, then refetch greeting
+    setMessages([]);
     setError(null);
     sessionStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(GREETING_CACHE_KEY);
+    greetingFetchedRef.current = false;
   }, []);
 
   return {
     messages,
     isLoading,
+    isLoadingGreeting,
     error,
     sendMessage,
     handleNavigation,

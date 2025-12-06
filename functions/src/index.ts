@@ -9,3 +9,4 @@ export { stripeWebhook } from './stripeWebhook';
 export { customerPortal } from './customerPortal';
 export { checkCouponAvailability } from './checkCouponAvailability';
 export { vaultChat } from './vaultChat';
+export { generateGreeting } from './generateGreeting';

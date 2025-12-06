@@ -17,6 +17,7 @@ if (import.meta.env.DEV && !emulatorConnected) {
 }
 
 const vaultChatFn = httpsCallable<ChatRequest, ChatResponse>(functions, 'vaultChat');
+const generateGreetingFn = httpsCallable<void, { greeting: string }>(functions, 'generateGreeting');
 
 export async function sendChatMessage(
   message: string,
@@ -24,4 +25,9 @@ export async function sendChatMessage(
 ): Promise<ChatResponse> {
   const result = await vaultChatFn({ message, conversationHistory });
   return result.data;
+}
+
+export async function fetchGreeting(): Promise<string> {
+  const result = await generateGreetingFn();
+  return result.data.greeting;
 }

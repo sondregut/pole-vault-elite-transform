@@ -14,7 +14,7 @@ export function FloatingChatWidget() {
     const stored = sessionStorage.getItem('vault-chat-seen-count');
     return stored ? parseInt(stored, 10) : 1; // Start at 1 to account for initial greeting
   });
-  const { messages, isLoading, sendMessage, clearChat } = useVaultChat();
+  const { messages, isLoading, isLoadingGreeting, sendMessage, clearChat } = useVaultChat();
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -130,8 +130,8 @@ export function FloatingChatWidget() {
               {/* Messages Area */}
               <ScrollArea className="flex-1 px-4" ref={scrollRef}>
                 <div className="py-4 space-y-4">
-                  {messages.length === 0 ? (
-                    // Welcome State
+                  {messages.length === 0 && !isLoadingGreeting ? (
+                    // Welcome State (fallback - should rarely show)
                     <div className="flex flex-col items-center justify-center py-8 text-center">
                       <div className="w-12 h-12 rounded-xl bg-vault-primary-muted flex items-center justify-center mb-3">
                         <Bot className="w-6 h-6 text-vault-primary" />
@@ -155,7 +155,23 @@ export function FloatingChatWidget() {
                     ))
                   )}
 
-                  {/* Loading Indicator */}
+                  {/* Loading Indicator for greeting */}
+                  {isLoadingGreeting && (
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-vault-primary-muted flex items-center justify-center">
+                        <Bot className="w-4 h-4 text-vault-primary" />
+                      </div>
+                      <div className="bg-white border border-vault-border-light rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
+                        <div className="flex gap-1">
+                          <span className="w-2 h-2 bg-vault-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-2 h-2 bg-vault-primary/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-2 h-2 bg-vault-primary/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Loading Indicator for messages */}
                   {isLoading && (
                     <div className="flex gap-3">
                       <div className="w-8 h-8 rounded-full bg-vault-primary-muted flex items-center justify-center">
